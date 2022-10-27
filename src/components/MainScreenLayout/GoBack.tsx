@@ -1,27 +1,47 @@
-import React, { memo } from 'react'
-import { arrow, greaterThan } from '../../assets/svgs'
+import { arrow } from 'Assets/svgs'
+import React, { memo, useEffect, useState } from 'react'
+import BreadCrumb from './Goback/BreadCrumb'
 
-const GoBack = memo(() => {
+export const sampleBreadCrumbs = [
+  {
+    text: 'CONFIGURATION ENGINE',
+    link: '/config',
+  },
+  {
+    text: 'FORMS CONFIGURATIONS',
+    link: '/form',
+  },
+]
+
+export type BreadCrumbsListItemType = {
+  text: string
+  link: string
+}
+
+type Props = {
+  headerText: string
+  breadCrumbsList: Array<BreadCrumbsListItemType>
+}
+
+const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
+  const [breadCrumbsListLength, setBreadCrumbsListLength] = useState<number>(null)
+
+  useEffect(() => {
+    setBreadCrumbsListLength(breadCrumbsList.length - 1)
+  }, [breadCrumbsList])
+
   return (
-    <div className='flex items-center gap-4'>
-      <a href='#' className='h-3 w-4'>
-        <img src={arrow} alt='Go back' width={16} height={12} />
-      </a>
-      <a href='#' className='text-base font-medium leading-4.5 text-text-nav-link whitespace-nowrap'>
-        CONFIGURATION ENGINE
-      </a>
-      <div className='w-2 h-4'>
-        <img src={greaterThan} width={7} height={14} />
+    <div className='px-8  flex flex-col justify-center gap-4  h-28 lg:h-32'>
+      <h1 className='text-xl font-bold leading-8 uppercase text-[#747373]'>{headerText}</h1>
+
+      <div className='flex gap-4'>
+        <button>
+          <img src={arrow} title='Go back' />
+        </button>
+        {breadCrumbsList?.map((item: BreadCrumbsListItemType, index: number) => {
+          return <BreadCrumb link={item.link} text={item.text} isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false} />
+        })}
       </div>
-      <a href='#' className='text-base font-medium leading-4.5 text-text-nav-link  whitespace-nowrap'>
-        FORMS CONFIGURATIONS
-      </a>
-      <div>
-        <img src={greaterThan} />
-      </div>
-      <a href='#' className='text-base font-medium leading-4.5 text-text-nav-link  whitespace-nowrap'>
-        CUSTOMER MANAGEMENT FORM SETUP
-      </a>
     </div>
   )
 })

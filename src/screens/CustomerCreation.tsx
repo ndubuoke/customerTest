@@ -1,4 +1,3 @@
-import { GoBack } from 'Components/MainScreenLayout'
 import React from 'react'
 
 type Props = {
@@ -8,9 +7,7 @@ type Props = {
 const CustomerCreation = (props: Props) => {
   return (
     <>
-      <nav>
-        <GoBack />
-      </nav>
+      <nav>{/* <GoBac /> */}</nav>
 
       <main>
         <h1>In customer creation</h1>
