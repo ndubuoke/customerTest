@@ -1,6 +1,7 @@
-// This is the customer_management_base_route
+/**  This is the customer_management_base_route */
 export const CMR = '/customer-management'
 
+/**This is the route used generally in the app */
 export const AppRoutes = {
   mainScreen: CMR + '/',
   individualCustomerCreationScreen: CMR + '/individual-customer-creation',
