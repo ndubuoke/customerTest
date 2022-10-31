@@ -35,6 +35,7 @@ module.exports = {
         'text-title': '#AAAAAA',
         'text-nav-link': ' #8F8F8F',
 
+        'background-dash': '#E5E5E5',
         'background-paper': '#fff',
         'background-default': '#F7F7F7',
         'background-dark': '#EBE9E9',
