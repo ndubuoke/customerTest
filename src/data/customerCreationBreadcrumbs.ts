@@ -10,3 +10,13 @@ export const individualCustomerCreationData = [
     link: AppRoutes.individualCustomerCreationScreen,
   },
 ]
+export const smeCustomerCreationData = [
+  {
+    text: 'CUSTOMER MANAGEMENT',
+    link: AppRoutes.mainScreen,
+  },
+  {
+    text: 'SME CUSTOMER CREATION',
+    link: AppRoutes.individualCustomerCreationScreen,
+  },
+]
