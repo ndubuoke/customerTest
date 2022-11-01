@@ -4,6 +4,7 @@ import { individualCustomerCreationData, smeCustomerCreationData } from '../data
 import SwitchToFormType from 'Components/Shareables/SwitchToFormType'
 import WizardChanger from 'Components/Shareables/WizardChanger'
 import CreationMode from 'Components/Shareables/CreationMode'
+import CustomerCreationBox from 'Components/Shareables/CustomerCreation'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -28,7 +29,9 @@ const CustomerCreation = ({ customerType }: Props) => {
           <SwitchToFormType mode={formMode} setFormMode={setFormMode} />
           <WizardChanger formMode={formMode} creationMode={creationMode} />
           {formMode === 'accelerated' ? <CreationMode mode={creationMode} setCreationMode={setCreationMode} /> : null}
-          <section>{/* <h1>In customer creation</h1> */}</section>
+          <section>
+            <CustomerCreationBox />
+          </section>
         </div>
       </main>
     </>
