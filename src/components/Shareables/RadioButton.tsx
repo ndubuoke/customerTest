@@ -11,7 +11,7 @@ const RadioButton = ({ text, setValue, trackingName, checked }: Props) => {
   return (
     <div className='form-check font-roboto'>
       <input
-        className='form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-[#CF2A2A] checked:border-[#CF2A2A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-4'
+        className='form-check-input appearance-none rounded-full h-4 w-4 border border-[#CF2A2A] bg-white checked:bg-[#CF2A2A] checked:border-[#CF2A2A] focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-4'
         name={trackingName}
         type='radio'
         onChange={(e) => {

@@ -4,18 +4,18 @@ import { formTypeSwitch as formTypeSwitchImage } from 'Assets/svgs'
 
 type Props = {
   mode: FormModeType
-  setFormMode: (mode: FormModeType) => void
+  onSetFormMode: (mode: FormModeType) => void
 }
 
-const SwitchToFormType = ({ mode, setFormMode }: Props) => {
+const SwitchToFormType = ({ mode, onSetFormMode }: Props) => {
   const handleSetFormType = (formMode: FormModeType) => {
     if (formMode === 'legacy') {
-      setFormMode(formMode)
+      onSetFormMode(formMode)
       return
     }
 
     if (formMode === 'accelerated') {
-      setFormMode(formMode)
+      onSetFormMode(formMode)
       return
     }
   }
