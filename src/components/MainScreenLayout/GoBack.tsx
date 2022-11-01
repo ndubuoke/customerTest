@@ -44,7 +44,9 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
           <img src={arrow} title='Go back' />
         </button>
         {breadCrumbsList?.map((item: BreadCrumbsListItemType, index: number) => {
-          return <BreadCrumb link={item.link} text={item.text} isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false} />
+          return (
+            <BreadCrumb link={item.link} text={item.text} isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false} key={item.link} />
+          )
         })}
       </div>
     </div>
