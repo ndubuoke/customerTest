@@ -9,6 +9,10 @@ type Props = {
 
 const SwitchToFormType = ({ mode, setFormMode }: Props) => {
   const handleSetFormType = (formMode: FormModeType) => {
+    const theMode = formMode === 'accelerated' ? 'legacy' : 'accelerated'
+    if (!window.confirm(`Switch to ${theMode} form? The information captured so far will be transferred to the ${theMode} form`)) {
+      return
+    }
     if (formMode === 'legacy') {
       setFormMode(formMode)
       return
