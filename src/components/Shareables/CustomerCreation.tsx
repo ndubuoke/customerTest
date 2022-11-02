@@ -2,40 +2,44 @@ import { useState, ChangeEvent, useEffect } from 'react'
 import { BulkCreation } from 'Components/BulkCreation'
 import { CreationModeType } from 'Screens/CustomerCreation'
 import { CreationModeEnum } from 'Utilities/enums'
+import IdentificationTypeAndNumber from './IdentificationTypeAndNumber'
 
 type Props = {
   mode: CreationModeType
+  customerType: 'sme' | 'individual'
 }
 
-const CustomerCreationBox = ({ mode }: Props) => {
-  const [verificationMode, setVerificationMode] = useState('bvn')
+const CustomerCreationBox = ({ mode, customerType }: Props) => {
+  //   const [verificationMode, setVerificationMode] = useState('bvn')
   const [singleMode, setSingleMode] = useState<boolean>(true)
   const [bulkMode, setBulkMode] = useState<boolean>(false)
-  const [text, setText] = useState('')
-  const handleVerification = (ev: ChangeEvent<HTMLInputElement>) => {
-    setText(ev.target.value)
-    if (ev.target.value.length === 20) {
-      console.log('completed - verify ' + verificationMode)
-    }
-  }
+  //   const [text, setText] = useState('')
+  //   const handleVerification = (ev: ChangeEvent<HTMLInputElement>) => {
+  //     setText(ev.target.value)
+  //     if (ev.target.value.length === 20) {
+  //       console.log('completed - verify ' + verificationMode)
+  //     }
+  //   }
   useEffect(() => {
     switch (mode) {
       case CreationModeEnum.Single:
         setSingleMode(true)
         setBulkMode(false)
-        break;
+        break
       case CreationModeEnum.Bulk:
         setSingleMode(false)
         setBulkMode(true)
-        break;
+        break
     }
   }, [mode])
 
   return (
     <>
-      {singleMode ? (<div className='flex justify-center gap-5 text-[#636363] mt-20 '>
-        <div className='flex flex-col justify-center '>
-          <div className='flex items-center mb-10 self-end'>
+      {singleMode ? (
+        <div className='flex justify-center gap-5 text-[#636363] mt-20 '>
+          <div className='flex flex-col justify-center '>
+            <IdentificationTypeAndNumber customerType={customerType} />
+            {/* <div className='flex items-center mb-10 self-end'>
             Identification Type{' '}
             <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
               <path
@@ -58,8 +62,8 @@ const CustomerCreationBox = ({ mode }: Props) => {
               <option value='bvn'>BVN</option>
               <option value='nin'>NIN</option>
             </select>
-          </div>
-          <div className='flex items-center'>
+          </div> */}
+            {/* <div className='flex items-center'>
             Identification Number{' '}
             <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
               <path
@@ -79,41 +83,35 @@ const CustomerCreationBox = ({ mode }: Props) => {
                 className='w-full'
               />
             </div>
+          </div> */}
+          </div>
+          <div className='border-r border-[#8F8F8F]'></div>
+          <div>
+            <div className='flex flex-col items-center justify-center py-20 px-28  border'>
+              <svg
+                aria-hidden='true'
+                className='w-10 h-10 mb-3 text-gray-400'
+                fill='none'
+                stroke='currentColor'
+                viewBox='0 0 24 24'
+                xmlns='http://www.w3.org/2000/svg'
+              >
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
+                ></path>
+              </svg>
+              <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900'>
+                <span className='font-semibold text-[red]'>Click to upload</span> or drag and drop
+              </p>
+            </div>
           </div>
         </div>
-        <div className='border-r border-[#8F8F8F]'></div>
-        <div>
-          <div className='flex flex-col items-center justify-center py-20 px-28  border'>
-            <svg
-              aria-hidden='true'
-              className='w-10 h-10 mb-3 text-gray-400'
-              fill='none'
-              stroke='currentColor'
-              viewBox='0 0 24 24'
-              xmlns='http://www.w3.org/2000/svg'
-            >
-              <path
-                strokeLinecap='round'
-                strokeLinejoin='round'
-                strokeWidth='2'
-                d='M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12'
-              ></path>
-            </svg>
-            <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900'>
-              <span className='font-semibold text-[red]'>Click to upload</span> or drag and drop
-            </p>
-          </div>
-        </div>
-      </div>)
-        : null
-      }
-      {bulkMode ? (
-        <BulkCreation />
-      )
-        : null
-      }
+      ) : null}
+      {bulkMode ? <BulkCreation /> : null}
     </>
-
   )
 }
 

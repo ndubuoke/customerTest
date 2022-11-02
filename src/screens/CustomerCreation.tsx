@@ -19,10 +19,13 @@ const CustomerCreation = ({ customerType }: Props) => {
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
   const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
 
-  const onSetFormMode = useCallback((value) => {
-    setFormMode(value)
-    setCreationMode(CreationModeEnum.Single)
-  }, [formMode, creationMode])
+  const onSetFormMode = useCallback(
+    (value) => {
+      setFormMode(value)
+      setCreationMode(CreationModeEnum.Single)
+    },
+    [formMode, creationMode]
+  )
 
   return (
     <>
@@ -36,7 +39,7 @@ const CustomerCreation = ({ customerType }: Props) => {
           <WizardChanger formMode={formMode} creationMode={creationMode} />
           {formMode === 'accelerated' ? <CreationMode mode={creationMode} setCreationMode={setCreationMode} /> : null}
           <section>
-            <CustomerCreationBox mode={creationMode} />
+            <CustomerCreationBox mode={creationMode} customerType={customerType} />
           </section>
         </div>
       </main>
