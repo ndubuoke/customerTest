@@ -3,7 +3,7 @@
   "scripts": {
     "start": "webpack serve",
     "dev": "concurrently \"npm run gen:tw\" \"npm run start:standalone\"",
-    "gen:tw": "npx tailwindcss -i ./src/styles/start.css -o ./src/styles/final.css --watch",
+    "gen:tw": "npx tailwindcss build -i ./src/styles/start.css -o ./src/styles/final.css --watch",
     "start:standalone": "webpack serve --env standalone",
     "build": "concurrently yarn:build:*",
     "build:webpack": "webpack --mode=production",
@@ -73,6 +73,7 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-drag-drop-files": "^2.3.7",
+    "react-dropzone": "^14.2.3",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-toastify": "^9.0.8",

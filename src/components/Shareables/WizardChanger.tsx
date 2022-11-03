@@ -26,7 +26,18 @@ const WizardChanger = ({ formMode, creationMode }: Props) => {
           </div>
         </div>
       ) : (
-        <div>For bulk</div>
+        <div className='mt-10 max-w-[770px]   m-auto  flex flex-col justify-center items-center font-roboto'>
+          <h2 className='font-bold text-lg text-[#636363]  h-[62px]'>
+            Welcome to the Accelerated Bulk Customer Creation Wizard
+          </h2>
+
+          <div className='flex items-center gap-3'>
+            <p className='text-18 font-normal text-[#8F8F8F] text-center'>
+              Please download and complete the provided bulk customer creation template and upload the file in the field below to proceed
+            </p>
+          </div>
+        </div>
+
       )}
     </>
   )
