@@ -17,7 +17,7 @@ export type CreationModeType = 'single' | 'bulk'
 const CustomerCreation = ({ customerType }: Props) => {
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
 
   const onSetFormMode = useCallback(
     (value) => {

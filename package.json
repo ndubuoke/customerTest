@@ -74,6 +74,7 @@
     "react-dom": "^17.0.2",
     "react-drag-drop-files": "^2.3.7",
     "react-dropzone": "^14.2.3",
+    "react-html-table-to-excel": "^2.0.0",
     "react-redux": "^8.0.4",
     "react-router-dom": "^6.4.2",
     "react-toastify": "^9.0.8",
@@ -83,7 +84,8 @@
     "redux-thunk": "^2.4.1",
     "single-spa": "^5.9.3",
     "single-spa-react": "^4.3.1",
-    "typeface-roboto": "^1.1.13"
+    "typeface-roboto": "^1.1.13",
+    "webpack-xlsx-loader": "^1.0.0"
   },
   "resolutions": {
     "@types/react": "17.0.51"
