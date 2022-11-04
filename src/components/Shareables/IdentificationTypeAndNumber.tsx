@@ -1,7 +1,11 @@
-import React, { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
+import { info } from 'Assets/svgs'
+import { CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
+import DropDown from './DropDown'
 
 type Props = {
-  customerType: 'sme' | 'individual'
+  customerType: CustomerType
+  setIdentificationDetails: (value: IdentificationDetailsType) => void
 }
 
 enum VerificationModeEnum {
@@ -11,83 +15,55 @@ enum VerificationModeEnum {
   TIN = 'tin',
 }
 
-const IdentificationTypeAndNumber = (props: Props) => {
-  const [verificationMode, setVerificationMode] = useState('')
-  const [singleMode, setSingleMode] = useState<boolean>(true)
-  const [bulkMode, setBulkMode] = useState<boolean>(false)
-  const [text, setText] = useState('')
-  const dataSource = {
-    bvn: {
-      textLength: 20,
-      handler: (val: string) => val,
-    },
-    nin: {
-      textLength: 20,
-      handler: (val: string) => val,
-    },
-    cac: {
-      textLength: 20,
-      handler: (val: string) => val,
-    },
-    tin: {
-      textLength: 20,
-      handler: (val: string) => val,
-    },
-  }
-  const options = {
-    sme: [VerificationModeEnum.CAC, VerificationModeEnum.TIN],
-    individual: [VerificationModeEnum.BVN, VerificationModeEnum.NIN],
-  }
-  const handleVerification = (ev: ChangeEvent<HTMLInputElement>) => {
-    setText(ev.target.value)
-    if (ev.target.value.length === dataSource[verificationMode].textLength) {
-      console.log('completed - verify ' + verificationMode)
-      dataSource[verificationMode].handler(ev.target.value)
-    }
-  }
+export type IdentificationTypeType = 'bvn' | 'nin' | 'cac' | 'tin' | null
+export type IdentificationNumberType = string | null
+
+const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }: Props) => {
+  const [selectedIdentificationType, setSelectedIdentificationType] = useState<IdentificationTypeType>(null)
+  const [identificationNumber, setIdentificationNumber] = useState<IdentificationNumberType>(null)
 
   return (
-    <>
-      <div className='flex items-center mb-10 self-end'>
-        Identification Type{' '}
-        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
-          <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'></path>
-        </svg>
-        <select
-          name='ll'
-          id='select'
-          onChange={(ev) => {
-            setVerificationMode(ev.target.value)
-            setText('')
-          }}
-          className=' w-[250px] ml-10 '
-        >
-          <option value=''>select one</option>
-          {options[props.customerType].map((item) => (
-            <option key={item} value={item}>
-              {item.toUpperCase()}
-            </option>
-          ))}
-        </select>
+    <div className='flex flex-col gap-8 whitespace-nowrap w-full xl:ml-5 px-8'>
+      <div className='flex gap-10  '>
+        <div className='flex justify-end gap-3 min-w-[200px] items-center'>
+          {customerType === 'sme' ? <span>Identification Type</span> : null}
+          {customerType === 'individual' ? <span>Customer's Identification Type</span> : null}
+          {customerType === 'sme' ? (
+            <div>
+              <img src={info} />
+            </div>
+          ) : null}
+        </div>
+        <div className='max-w-[318px] w-full '>
+          {customerType === 'individual' ? <DropDown options={['bvn', 'nin']} getValue={setSelectedIdentificationType} /> : null}
+          {customerType === 'sme' ? <DropDown options={['cac', 'tin']} getValue={setSelectedIdentificationType} /> : null}
+        </div>
       </div>
-      <div className='flex items-center'>
-        Identification Number{' '}
-        <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
-          <path stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'></path>
-        </svg>
-        <div className='flex  border-b border-y-[#8F8F8F] ml-10 w-[250px]'>
+      <div className='flex gap-10'>
+        <div className='flex  gap-3 justify-end min-w-[200px] items-center'>
+          <span>Identification Number</span>
+          {customerType === 'sme' ? (
+            <div>
+              <img src={info} />
+            </div>
+          ) : null}
+        </div>
+        <div className='w-full flex justify-between py-2 leading-6 border-b-2 border-[#8F8F8F] text-text-disabled max-w-[318px]'>
           <input
             type='text'
-            value={text}
-            placeholder={`Enter your ${verificationMode}`}
-            onChange={handleVerification}
-            maxLength={dataSource[verificationMode]?.textLength || 0}
-            className='w-full'
-            disabled={!verificationMode}
+            placeholder='Enter text'
+            onChange={(e) => {
+              setIdentificationNumber(e.target.value.trim())
+              setIdentificationDetails({
+                identificationType: selectedIdentificationType,
+                identificationNumber: e.target.value.trim(),
+              })
+            }}
+            readOnly={!selectedIdentificationType}
           />
         </div>
       </div>
-    </>
+    </div>
   )
 }
 

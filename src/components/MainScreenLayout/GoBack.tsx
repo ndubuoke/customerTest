@@ -1,5 +1,7 @@
 import { arrow } from 'Assets/svgs'
 import React, { memo, useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
+import { AppRoutes } from '../../routes'
 import BreadCrumb from './Goback/BreadCrumb'
 
 export const sampleBreadCrumbs = [
@@ -40,9 +42,9 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
       <h1 className='text-xl font-bold leading-8 uppercase text-[#747373]'>{headerText}</h1>
 
       <div className='flex gap-4'>
-        <button>
+        <Link to={AppRoutes.mainScreen}>
           <img src={arrow} title='Go back' />
-        </button>
+        </Link>
         {breadCrumbsList?.map((item: BreadCrumbsListItemType, index: number) => {
           return (
             <BreadCrumb link={item.link} text={item.text} isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false} key={item.link} />
