@@ -4,7 +4,7 @@ import { caret } from 'Assets/svgs'
 type Props = {
   options: Array<string>
   defaultOption?: string
-  getValue: (val: string) => void
+  getValue: (val: any) => void
 }
 
 const DropDown = ({ options, defaultOption = '', getValue }: Props) => {

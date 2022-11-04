@@ -29,7 +29,6 @@ const FileUploader = (props: Props) => {
           <span> or drag and drop</span>
           <span className='block text-center'>customer's documents</span>
           <span className='block text-center'>.pdf .jpeg .png</span>
-          {/* <small>.xls and .xlsx</small> */}
         </p>
       </div>
     </div>

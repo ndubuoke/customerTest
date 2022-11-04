@@ -1,6 +1,6 @@
 import { useState, ChangeEvent, useEffect } from 'react'
 import { BulkCreation } from 'Components/BulkCreation'
-import { CreationModeType, CustomerType } from 'Screens/CustomerCreation'
+import { CreationModeType, CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
 import { CreationModeEnum } from 'Utilities/enums'
 import IdentificationTypeAndNumber from './IdentificationTypeAndNumber'
 import FileUploader from './FileUploader'
@@ -8,15 +8,16 @@ import FileUploader from './FileUploader'
 type Props = {
   creationMode: CreationModeType
   customerType: CustomerType
+  setIdentificationDetails: (value: IdentificationDetailsType) => void
 }
 
-const CustomerCreationBox = ({ creationMode, customerType }: Props) => {
+const CustomerCreationBox = ({ creationMode, customerType, setIdentificationDetails }: Props) => {
   return (
     <>
       {creationMode === 'single' ? (
         <div className=' text-[#636363] mt-20 flex '>
           <div className='flex flex-col justify-center items-center flex-1'>
-            <IdentificationTypeAndNumber customerType={customerType} />
+            <IdentificationTypeAndNumber customerType={customerType} setIdentificationDetails={setIdentificationDetails} />
           </div>
 
           <div className='flex-1 flex gap-10 justify-between items-center'>
