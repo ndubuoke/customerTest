@@ -11,6 +11,7 @@ type Props = {
   customerType: 'sme' | 'individual'
 }
 
+export type CustomerType = 'sme' | 'individual'
 export type FormModeType = 'accelerated' | 'legacy'
 export type CreationModeType = 'single' | 'bulk'
 
@@ -33,13 +34,15 @@ const CustomerCreation = ({ customerType }: Props) => {
         <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
       </nav>
 
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]  max-h-1117 min-h-50 '>
+      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]  max-h-1117 min-h-50'>
         <div className='h-[845px] min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative'>
           <SwitchToFormType mode={formMode} onSetFormMode={onSetFormMode} />
-          <WizardChanger formMode={formMode} creationMode={creationMode} />
-          {formMode === 'accelerated' ? <CreationMode mode={creationMode} setCreationMode={setCreationMode} /> : null}
+          <WizardChanger formMode={formMode} creationMode={creationMode} customerType={customerType} />
+          {customerType === 'individual' && formMode === 'accelerated' ? (
+            <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
+          ) : null}
           <section>
-            <CustomerCreationBox mode={creationMode} customerType={customerType} />
+            <CustomerCreationBox creationMode={creationMode} customerType={customerType} />
           </section>
         </div>
       </main>
