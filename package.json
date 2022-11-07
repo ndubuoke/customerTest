@@ -85,7 +85,7 @@
     "typeface-roboto": "^1.1.13"
   },
   "resolutions": {
-    "@types/react": "17.0.51"
+    "@types/react": "17.0.52"
   },
   "types": "dist/Sterling-customer-management.d.ts",
   "private": true
