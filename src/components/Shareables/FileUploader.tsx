@@ -55,12 +55,12 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
         </div>
       ) : (
         <div className='flex flex-col justify-between  p-2 border h-full overflow-y-auto'>
-          <div className='flex gap-3  flex-wrap w-[95%] mx-auto'>
+          <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
             {uploadedFiles.map((file: File, index) => {
               return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
             })}
-            <div className='flex items-end border'>
-              <button className='flex items-end'>
+            <div className='flex items-end mt-auto'>
+              <button className='flex items-end ' style={{ marginTop: 'auto' }}>
                 <img src={add} className='mr-1 inline' /> Add more files
               </button>
             </div>
