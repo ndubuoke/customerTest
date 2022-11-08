@@ -32,6 +32,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
   })
 
+  const [localUpload, setLocalUpload] = useState<Array<File>>([])
+
   const onSetFormMode = useCallback(
     (value) => {
       setFormMode(value)
@@ -42,9 +44,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const handleProceed = () => {}
 
-  useEffect(() => {
-    console.log(identificationDetails)
-  }, [identificationDetails])
+  // useEffect(() => {
+  //   // console.log(identificationDetails)
+  // }, [identificationDetails])
 
   return (
     <>
@@ -65,6 +67,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               customerType={customerType}
               setIdentificationDetails={setIdentificationDetails}
               identificationDetails={identificationDetails}
+              setLocalUpload={setLocalUpload}
             />
 
             <div className='flex  justify-center relative  gap-1'>
@@ -73,7 +76,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               </div>
               <Button
                 text='Proceed'
-                disabled={!identificationDetails.identificationNumber && !identificationDetails.identificationType}
+                disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
                 onClick={() => handleProceed()}
               />
             </div>

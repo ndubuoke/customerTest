@@ -7,13 +7,15 @@ import IndividualFile from './IndividualFile'
 
 type Props = {
   identificationDetails: IdentificationDetailsType
+  setLocalUpload: (file: any) => void
 }
 
-const FileUploader = memo(({ identificationDetails }: Props) => {
+const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<File>>([])
 
   const onDrop = useCallback((acceptedFiles: Array<File>) => {
     setuploadedFiles((prev) => [...prev, ...acceptedFiles])
+    setLocalUpload((prev) => [...prev, ...acceptedFiles])
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -30,6 +32,7 @@ const FileUploader = memo(({ identificationDetails }: Props) => {
     const newFiles = uploadedFiles.filter((item, i) => i !== index)
 
     setuploadedFiles((prev) => newFiles)
+    setLocalUpload((prev) => newFiles)
   }
 
   return (

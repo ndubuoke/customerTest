@@ -10,9 +10,10 @@ type Props = {
   customerType: CustomerType
   setIdentificationDetails: (value: IdentificationDetailsType) => void
   identificationDetails: IdentificationDetailsType
+  setLocalUpload: (files: any) => void
 }
 
-const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificationDetails, identificationDetails }: Props) => {
+const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificationDetails, identificationDetails, setLocalUpload }: Props) => {
   return (
     <>
       {creationMode === 'single' ? (
@@ -24,7 +25,7 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
           <div className='flex-1 flex gap-10 justify-between items-center'>
             <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
             <div className='flex-1'>
-              <FileUploader identificationDetails={identificationDetails} />
+              <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
             </div>
           </div>
         </div>
