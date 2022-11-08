@@ -2,7 +2,7 @@
   "name": "@Sterling/customer-management",
   "scripts": {
     "start": "webpack serve",
-    "dev": "concurrently \"npm run gen:tw\" \"npm run start:standalone\"",
+    "dev": "npm run start:standalone",
     "gen:tw": "npx tailwindcss build -i ./src/styles/start.css -o ./src/styles/final.css --watch",
     "start:standalone": "webpack serve --env standalone",
     "build": "concurrently yarn:build:*",

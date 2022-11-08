@@ -1,11 +1,14 @@
 import { useCallback, useRef, useState } from 'react'
-import { BubbleLoader, bulkTemplate, GreenCheck } from 'Assets/svgs'
+import { BubbleLoader, bulkTemplate, DownloadIcon, GreenCheck } from 'Assets/svgs'
 import { Dropzone } from '../Dropzone'
 import readXlsxFile from 'read-excel-file'
 import uploadTemplate from '../../../assets/files/bulk_customer_upload_template.xlsx'
 // /assets/files/bulk_customer_upload_template.xlsx'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
 import { bulkCreationColumns } from 'Utilities/columns'
+import { EditIcon } from 'Assets/svgs/EditIcon'
+import { RemoveIcon } from 'Assets/svgs/RemoveIcon'
+import { Search } from 'Components/Search'
 
 export const BulkCreation = () => {
   const [uploadedFile, setUploadedFile] = useState([])
@@ -58,7 +61,7 @@ export const BulkCreation = () => {
           city_town: det[12],
           lga: det[13],
           mobileNumber: det[14],
-          status: 'Successful',
+          status: Number((det[8]).toString()[0]) !== 8 ? 0 : 1,
           statusDescription: 'n/a',
         }])
       })
@@ -197,74 +200,114 @@ export const BulkCreation = () => {
 
             </div>
             {/* search and download */}
-            <div className={`flex w-fit border-2 gap-x-2 justify-between`}>
+            <div className={`flex w-fit border-r-2 gap-x-2 justify-between`}>
               <div className={`w-[150px]`}>
-                <input type="text" className='w-full border-2' />
+                <Search />
               </div>
               <div className={`w-[150px]`}>
                 <ReactHTMLTableToExcel
                   id='test-table-xls-button'
                   className='w-full download-table-xls-button rounded'
-                  table='table-to-xls'
-                  filename='amazon stocks'
-                  sheet='tablexls'
-                  buttonText='Download'
+                  table='table-to-xlsx'
+                  filename='Bulk Customer Validation Profile'
+                  sheet='Bulk Customer Validation Profile'
+                  buttonText={<div className={`flex items-center gap-x-2`}><DownloadIcon />Download</div>}
                 />
               </div>
             </div>
           </div>
-          <table id='table-to-xls' className={`min-w-full divide-y divide-gray-200`}>
-            <thead className={`bg-gray-50`}>
-              <tr>
-                {bulkCreationColumns.map((column, index) => (
-                  <th
-                    key={index}
-                    scope="col"
-                    className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider"
-                  >
-                    {column.header}
-                    <span>
-                      {column?.isSorted
-                        ? column?.isSortedDesc
-                          ? " ▼"
-                          : " ▲"
-                        : ""}
-                    </span>
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {
-                uploadedFile?.length ? uploadedFile?.map((row, i) => (
-                  <tr key={`${row}_BEN`}>
-                    <td>{i + 1}</td>
-                    <td>{row.surname}</td>
-                    <td>{row.firstName}</td>
-                    <td>{row.otherNames}</td>
-                    <td>{row.idType}</td>
-                    <td>{row.id}</td>
-                    <td>{row.status}</td>
-                    <td>{row.statusDescription}</td>
-                    <td>
-                      edit/delete
-                    </td>
-                  </tr>
-                )) : null
-              }
-            </tbody>
+          <div className="shadow overflow-x-auto border-b border-gray-200 mt-10">
+            <table id='table-to-xlsx' className={`min-w-full divide-y divide-x divide-gray-200`}>
+              <thead className={`bg-gray-50`}>
+                <tr className={``}>
+                  {bulkCreationColumns.map((column, index) => (
+                    <th
+                      key={index}
+                      scope="col"
+                      className="h-[60px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer"
+                    >
+                      <div className={`flex`}>
+                        {column.header}
+                        <span>
+                          {column?.isSorted
+                            ? column?.isSortedDesc
+                              ? "▼"
+                              : "▲"
+                            : ""}
+                        </span>
+                      </div>
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody className={`divide-y divide-gray-200`}>
+                {uploadedFile?.length ? uploadedFile?.map((row, i) => {
+                  return (
+                    <tr key={i} className={`bg-[#db353905] h-[60px]`}>
+                      {bulkCreationColumns.map((cell, index) => {
+                        if (cell.accessor == "") {
+                          return (
+                            <td
+                              key={index}
+                              className={`h-[60px] px-6 py-4 whitespace-nowrap flex items-center justify-between gap-x-1`}
+                            >
+                              {row.status === 0 ?
+                                <button
+                                  onClick={() => { }}
+                                  // 0px 2px 8px rgba(0, 0, 0, 0.25);
+                                  className={`w-[30px] h-[30px] rounded bg-white shadow-lg flex justify-center items-center`}
+                                >
+                                  <EditIcon />
+                                </button>
+                                : <button></button>
+                              }
 
-          </table>
+                              <button
+                                // onClick={() => onUserDelete(row?.id)}
+                                className={`w-[30px] h-[30px] rounded bg-white shadow-lg flex justify-center items-center`}
+                              >
+                                <RemoveIcon />
+                              </button>
+
+                            </td>
+                          );
+                        }
+                        if (cell.mapping) {
+                          return (
+                            <td
+                              key={index}
+                              className="h-[60px] px-6 py-4 whitespace-nowrap"
+                            >
+                              {cell.mapping[row[cell.accessor]]}
+                            </td>
+                          );
+                        }
+                        if (cell.accessor === 'serial') {
+                          return (
+                            <td
+                              key={index}
+                              className=" h-[60px] px-6 py-4 whitespace-nowrap"
+                            >
+                              {i + 1}
+                            </td>
+                          );
+                        }
+                        return (
+                          <td key={index} className=" h-[60px] px-6 py-4 whitespace-nowrap">
+                            {row[cell.accessor]}
+                          </td>
+                        );
+                      })}
+                    </tr>
+                  );
+                })
+                  : null
+                }
+              </tbody>
+
+            </table>
+          </div>
         </div> : null}
     </div>
   )
 }
-
-{/* <ReactHTMLTableToExcel
-id='test-table-xls-button'
-className='download-table-xls-button p-2 px-4 rounded text-white bg-blue-500'
-table='table-to-xls'
-filename='amazon stocks'
-sheet='tablexls'
-buttonText='Export'
-/> */}
