@@ -1,4 +1,4 @@
-import { useState, ChangeEvent, useEffect } from 'react'
+import { useState, ChangeEvent, useEffect, memo } from 'react'
 import { BulkCreation } from 'Components/BulkCreation'
 import { CreationModeType, CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
 import { CreationModeEnum } from 'Utilities/enums'
@@ -9,9 +9,11 @@ type Props = {
   creationMode: CreationModeType
   customerType: CustomerType
   setIdentificationDetails: (value: IdentificationDetailsType) => void
+  identificationDetails: IdentificationDetailsType
+  setLocalUpload: (files: any) => void
 }
 
-const CustomerCreationBox = ({ creationMode, customerType, setIdentificationDetails }: Props) => {
+const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificationDetails, identificationDetails, setLocalUpload }: Props) => {
   return (
     <>
       {creationMode === 'single' ? (
@@ -23,7 +25,7 @@ const CustomerCreationBox = ({ creationMode, customerType, setIdentificationDeta
           <div className='flex-1 flex gap-10 justify-between items-center'>
             <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
             <div className='flex-1'>
-              <FileUploader />
+              <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
             </div>
           </div>
         </div>
@@ -31,6 +33,6 @@ const CustomerCreationBox = ({ creationMode, customerType, setIdentificationDeta
       {creationMode === 'bulk' ? <BulkCreation /> : null}
     </>
   )
-}
+})
 
 export default CustomerCreationBox

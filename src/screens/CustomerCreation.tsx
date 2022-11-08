@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react'
+import { useState, useCallback, useEffect, memo } from 'react'
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import { individualCustomerCreationData, smeCustomerCreationData } from '../data/customerCreationBreadcrumbs'
 import SwitchToFormType from 'Components/Shareables/SwitchToFormType'
@@ -22,7 +22,7 @@ export type IdentificationDetailsType = {
   identificationNumber: IdentificationNumberType
 }
 
-const CustomerCreation = ({ customerType }: Props) => {
+const CustomerCreation = memo(({ customerType }: Props) => {
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
   const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
@@ -31,6 +31,8 @@ const CustomerCreation = ({ customerType }: Props) => {
     identificationType: null,
     identificationNumber: null,
   })
+
+  const [localUpload, setLocalUpload] = useState<Array<File>>([])
 
   const onSetFormMode = useCallback(
     (value) => {
@@ -42,9 +44,9 @@ const CustomerCreation = ({ customerType }: Props) => {
 
   const handleProceed = () => {}
 
-  useEffect(() => {
-    console.log(identificationDetails)
-  }, [identificationDetails])
+  // useEffect(() => {
+  //   // console.log(identificationDetails)
+  // }, [identificationDetails])
 
   return (
     <>
@@ -60,7 +62,13 @@ const CustomerCreation = ({ customerType }: Props) => {
             <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
           ) : null}
           <section className=' h-3/4 flex flex-col justify-between pb-20'>
-            <CustomerCreationBox creationMode={creationMode} customerType={customerType} setIdentificationDetails={setIdentificationDetails} />
+            <CustomerCreationBox
+              creationMode={creationMode}
+              customerType={customerType}
+              setIdentificationDetails={setIdentificationDetails}
+              identificationDetails={identificationDetails}
+              setLocalUpload={setLocalUpload}
+            />
 
             <div className='flex  justify-center relative  gap-1'>
               <div className=' absolute right-3 -top-16'>
@@ -68,7 +76,7 @@ const CustomerCreation = ({ customerType }: Props) => {
               </div>
               <Button
                 text='Proceed'
-                disabled={!identificationDetails.identificationNumber && !identificationDetails.identificationType}
+                disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
                 onClick={() => handleProceed()}
               />
             </div>
@@ -77,6 +85,6 @@ const CustomerCreation = ({ customerType }: Props) => {
       </main>
     </>
   )
-}
+})
 
 export default CustomerCreation
