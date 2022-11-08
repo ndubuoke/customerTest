@@ -1,7 +1,7 @@
 import React, { useCallback, useState, useEffect, memo } from 'react'
 import { useDropzone } from 'react-dropzone'
 
-import { upload } from 'Assets/svgs'
+import { add, upload, deleteBtn } from 'Assets/svgs'
 import { IdentificationDetailsType } from 'Screens/CustomerCreation'
 import IndividualFile from './IndividualFile'
 
@@ -54,11 +54,31 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
           </p>
         </div>
       ) : (
-        <div className='  py-2 border h-full overflow-y-auto'>
-          <div className='flex gap-2 flex-wrap w-[95%] mx-auto'>
+        <div className='flex flex-col justify-between  p-2 border h-full overflow-y-auto'>
+          <div className='flex gap-3  flex-wrap w-[95%] mx-auto'>
             {uploadedFiles.map((file: File, index) => {
               return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
             })}
+            <div className='flex items-end border'>
+              <button className='flex items-end'>
+                <img src={add} className='mr-1 inline' /> Add more files
+              </button>
+            </div>
+          </div>
+          <div className='flex justify-between'>
+            <p onClick={(e) => e.stopPropagation()}>{uploadedFiles.length} files uploaded</p>
+
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setLocalUpload([])
+                setuploadedFiles([])
+              }}
+              className='flex gap-3'
+            >
+              <img src={deleteBtn} />
+              Delete all
+            </button>
           </div>
         </div>
       )}
