@@ -38,7 +38,7 @@ const AlertModal = ({
         } bg-white p-6 rounded-2xl `}
       >
         {loading && (
-          <div className=' text-text-secondary w-fit h-fit flex flex-col justify-center items-center p-2 '>
+          <div className='flex flex-col items-center justify-center p-2 text-text-secondary w-fit h-fit'>
             <Spinner size='large' />
             <h6 className='m-auto'>Saving...</h6>
           </div>
@@ -46,35 +46,35 @@ const AlertModal = ({
 
         {!loading && (
           <div className=' w-full  min-h-[300px] flex flex-col justify-between'>
-            <div className='flex  justify-end'>
+            <div className='flex justify-end'>
               <button onClick={closeModal}>
                 <img src={Close} />
               </button>
             </div>
 
             {status && (
-              <div className=' flex items-center justify-center '>
+              <div className='flex items-center justify-center '>
                 {status === 'success' ? <img src={Success} alt='' /> : null}
                 {status === 'error' ? <img width={'100'} src={error} alt='' /> : null}
                 {status === 'warning' ? <img width={'100'} src={warning} alt='' /> : null}
               </div>
             )}
-            <div className='text-text-secondary font-light  flex items-center justify-center'>
+            <div className='flex items-center justify-center font-light text-text-secondary'>
               <h6>{message}</h6>
             </div>
 
-            <div className='text-text-secondary font-light  flex items-center justify-center'>
+            <div className='flex items-center justify-center font-light text-text-secondary'>
               <h6>
                 DATE AND TIME: {new Date().toDateString()}[{new Date().toLocaleTimeString('en-US', { hour12: true })}]
               </h6>
             </div>
 
             <div className='flex justify-between text-text-secondary'>
-              <button className='flex justify-center items-center' onClick={leftClick}>
+              <button className='flex items-center justify-center' onClick={leftClick}>
                 <img src={leftArrow} alt='' className='mr-2' />
                 <span>{leftClickText}</span>
               </button>
-              <button className='flex justify-center items-center' onClick={rightClick}>
+              <button className='flex items-center justify-center' onClick={rightClick}>
                 {rightClickText}
                 <img className='ml-2' src={rightArrow} alt='' />
               </button>

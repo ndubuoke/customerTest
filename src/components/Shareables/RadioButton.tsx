@@ -23,7 +23,7 @@ const RadioButton = ({ text, setValue, trackingName, checked }: Props) => {
         }}
         checked={checked}
       />
-      <label className='form-check-label inline-block text-gray-800 opacity-50 capitalize' htmlFor={text}>
+      <label className='inline-block text-gray-800 capitalize opacity-50 form-check-label' htmlFor={text}>
         {text}
       </label>
     </div>
