@@ -3,9 +3,11 @@ import { useDropzone } from 'react-dropzone'
 
 import { upload } from 'Assets/svgs'
 
-type Props = {}
+type Props = {
+  height?:string
+}
 
-const FileUploader = (props: Props) => {
+const FileUploader = ({height}: Props) => {
   const onDrop = useCallback((acceptedFiles) => {}, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -18,7 +20,7 @@ const FileUploader = (props: Props) => {
   })
 
   return (
-    <div {...getRootProps()} className='border rounded-md max-w-[599px] h-[312px] cursor-pointer'>
+    <div {...getRootProps()} className={`border rounded-md max-w-[599px] h-[${height ? height:"312px"}] cursor-pointer`}>
       <input type={`file`} hidden {...getInputProps()} />
       <div className='flex flex-col items-center justify-center pt-3 pb-3 h-full'>
         <div>
