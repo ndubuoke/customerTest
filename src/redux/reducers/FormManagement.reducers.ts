@@ -1,3 +1,4 @@
+import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
 import { GET_FORM_FAIL, GET_FORM_REQUEST, GET_FORM_SUCCESS } from 'Redux/constants/FormManagement.constants'
 
 export type ResponseType = {
@@ -29,6 +30,7 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
 
     case GET_FORM_SUCCESS:
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }

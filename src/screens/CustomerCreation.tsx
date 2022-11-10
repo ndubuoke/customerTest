@@ -10,6 +10,9 @@ import { IdentificationNumberType, IdentificationTypeType } from 'Components/Sha
 import Button from 'Components/Shareables/Button'
 import SkipToForm from 'Components/Shareables/SkipToForm'
 import Form from 'Components/Form'
+import { useDispatch } from 'react-redux'
+import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -24,6 +27,8 @@ export type IdentificationDetailsType = {
 }
 
 const CustomerCreation = memo(({ customerType }: Props) => {
+  const dispatch = useDispatch()
+
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
   const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
@@ -32,7 +37,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
   })
   const [localUpload, setLocalUpload] = useState<Array<File>>([])
-  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
+  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(true)
 
   const onSetFormMode = useCallback(
     (value) => {
@@ -44,9 +49,11 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const handleProceed = () => {}
 
-  // useEffect(() => {
-  //   // console.log(identificationDetails)
-  // }, [identificationDetails])
+  useEffect(() => {
+    if (formCreationStarted) {
+      dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+    }
+  }, [formCreationStarted])
 
   return (
     <>
@@ -56,7 +63,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
       <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]  max-h-1117 min-h-50'>
         <div className='h-[845px] min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative'>
-          <SwitchToFormType mode={formMode} onSetFormMode={onSetFormMode} />
+          <SwitchToFormType customerType={customerType} formCreationStarted={formCreationStarted} mode={formMode} onSetFormMode={onSetFormMode} />
 
           {!formCreationStarted ? (
             <>
