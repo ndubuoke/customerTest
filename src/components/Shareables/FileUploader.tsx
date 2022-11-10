@@ -41,12 +41,12 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
         <input type={`file`} hidden {...getInputProps()} />
       ) : null}
       {uploadedFiles.length === 0 ? (
-        <div className='flex flex-col items-center justify-center pt-3 pb-3 h-full'>
+        <div className='flex flex-col items-center justify-center h-full pt-3 pb-3'>
           <div>
             <img src={upload} />
           </div>
 
-          <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900  '>
+          <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900 '>
             <span className='font-semibold text-primay-main'>Click to upload</span>
             <span> or drag and drop</span>
             <span className='block text-center'>customer's documents</span>
@@ -54,14 +54,14 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
           </p>
         </div>
       ) : (
-        <div className='flex flex-col justify-between  p-2 border h-full overflow-y-auto'>
+        <div className='flex flex-col justify-between h-full p-2 overflow-y-auto border'>
           <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
             {uploadedFiles.map((file: File, index) => {
               return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
             })}
             <div className='flex items-end mt-auto'>
               <button className='flex items-end ' style={{ marginTop: 'auto' }}>
-                <img src={add} className='mr-1 inline' /> Add more files
+                <img src={add} className='inline mr-1' /> Add more files
               </button>
             </div>
           </div>
