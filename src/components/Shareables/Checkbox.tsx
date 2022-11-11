@@ -2,12 +2,12 @@ import React, { useState } from 'react'
 
 type CheckboxType = {
   onClick?: () => void
+  disabled?: boolean
 }
 
-const Checkbox = ({ onClick }: CheckboxType) => {
+const Checkbox = ({ disabled }: CheckboxType) => {
   const [checked, setChecked] = useState(false)
-  const checkTheBox =()=>{
-    // alert('yes')
+  const checkTheBox = () => {
     setChecked(!checked)
   }
   return (

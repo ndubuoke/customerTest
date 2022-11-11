@@ -11,7 +11,7 @@ import { AppRoutes } from '../routes'
 
 type Props = {}
 
-const options = ['Individual', 'SME']
+const customerTypeoptions = ['Individual', 'SME']
 const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide', 'Sent to me', 'Sent to my team']
 
 const Main = (props: Props) => {
@@ -20,12 +20,17 @@ const Main = (props: Props) => {
   const statusListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
   const filterStateOptionsRef = useRef(initialRef)
+  const filterTypeOptionsRef = useRef(initialRef)
+  const filterInitiatorOptionsRef = useRef(initialRef)
+  const filterRequestStatusOptionsRef = useRef(initialRef)
   const [showLists, setShowLists] = useState(false)
-  const [customermanagementTableType, setCustomerManagementTableType] = useState('All Customers')
+  const [customermanagementTableType, setCustomerManagementTableType] = useState('Requests')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState('')
+  const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
+  const [ShowFilterInitiatorOptions, setShowFilterInitiatorOptions] = useState(false)
+  const [selectedStatus, setSelectedStatus] = useState('Initiated by me')
   const [highLevelButtonId, setHighLevelButtonId] = useState(1)
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
@@ -70,6 +75,12 @@ const Main = (props: Props) => {
       if (ShowFilterStateOptions && filterStateOptionsRef.current && !filterStateOptionsRef.current.contains(e.target)) {
         setShowFilterStateOptions(false)
       }
+      if (ShowFilterTypeOptions && filterTypeOptionsRef.current && !filterTypeOptionsRef.current.contains(e.target)) {
+        setShowFilterTypeOptions(false)
+      }
+      if (ShowFilterInitiatorOptions && filterInitiatorOptionsRef.current && !filterInitiatorOptionsRef.current.contains(e.target)) {
+        setShowFilterInitiatorOptions(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -78,10 +89,10 @@ const Main = (props: Props) => {
       // Cleanup the event listener
       document.removeEventListener('mousedown', checkIfClickedOutside)
     }
-  }, [showStatusLists, showCustomerFunctionOptions, ShowFilterStateOptions])
+  }, [showStatusLists, showCustomerFunctionOptions, ShowFilterStateOptions, ShowFilterTypeOptions, ShowFilterInitiatorOptions])
   return (
     <>
-      {showDeactivationModal && <DeactivationModal />}
+      {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
@@ -102,7 +113,7 @@ const Main = (props: Props) => {
             </button>
             {showLists && (
               <div className='absolute w-full top-0   bg-background-paper  flex flex-col z-20 border rounded-md'>
-                {options?.map((list, index) => {
+                {customerTypeoptions?.map((list, index) => {
                   return (
                     <div key={index} className='hover:bg-lists-background cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
                       {list}
@@ -309,7 +320,7 @@ const Main = (props: Props) => {
                   </div>
                 </div>
 
-                {/* Table */}
+                {/* Customer Managament Table */}
 
                 <CustomerManagementTable
                   customerFunctionListRef={customerFunctionListRef}
@@ -320,6 +331,13 @@ const Main = (props: Props) => {
                   setShowFilterStateOptions={setShowFilterStateOptions}
                   ShowFilterStateOptions={ShowFilterStateOptions}
                   setShowDeactivationModal={setShowDeactivationModalHandler}
+                  ShowFilterTypeOptions={ShowFilterTypeOptions}
+                  filterTypeOptionsRef={filterTypeOptionsRef}
+                  setShowFilterTypeOptions={setShowFilterTypeOptions}
+                  filterInitiatorOptionsRef={filterInitiatorOptionsRef}
+                  setShowFilterInitiatorOptions={setShowFilterInitiatorOptions}
+                  ShowFilterInitiatorOptions={ShowFilterInitiatorOptions}
+                  selectedStatus={selectedStatus}
                 />
               </div>
             </div>

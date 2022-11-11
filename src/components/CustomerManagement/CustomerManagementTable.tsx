@@ -6,19 +6,28 @@ import { useState } from 'react'
 type CustomerManagementTable = {
   tableType: string | 'All Customers' | 'Requests'
   showCustomerFunctionOptions: boolean
-
+  selectedStatus: string
   setShowCustomerFunctionOptions: (e) => void
   customerFunctionListRef: any
   filterStateOptionsRef: any
+  filterTypeOptionsRef: any
+  filterInitiatorOptionsRef: any
   setShowFilterStateOptions: (e) => void
   ShowFilterStateOptions: boolean
+  ShowFilterTypeOptions: boolean
+  ShowFilterInitiatorOptions: boolean
   setShowDeactivationModal: (e) => void
+  setShowFilterTypeOptions: (e) => void
+  setShowFilterInitiatorOptions: (e) => void
 }
 
 const customerTableHeads = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 const requestTableHeads = ['Request', 'TYPE', 'INITIATOR', 'Status', 'updated on']
 const customerFunctionOptions = ['View', 'Modify', 'Deactivate']
 const filterStateOptions = ['Select all', 'Active', 'Inactive']
+const requestType = ['Select all', 'Creation', 'Modification', 'Deactivation', 'Reactivation']
+const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
+const user = 'John Smith '
 
 const customers = [
   {
@@ -58,8 +67,14 @@ const CustomerManagementTable = ({
   ShowFilterStateOptions,
   setShowFilterStateOptions,
   filterStateOptionsRef,
-
+  ShowFilterTypeOptions,
+  filterTypeOptionsRef,
+  setShowFilterTypeOptions,
+  filterInitiatorOptionsRef,
+  setShowFilterInitiatorOptions,
+  ShowFilterInitiatorOptions,
   setShowDeactivationModal,
+  selectedStatus,
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
 
@@ -70,6 +85,15 @@ const CustomerManagementTable = ({
   const filterStateHandler = () => {
     setShowFilterStateOptions(true)
   }
+
+  const filterTypeHandler = () => {
+    setShowFilterTypeOptions(true)
+  }
+
+  const filterInitiatorHandler = () => {
+    setShowFilterInitiatorOptions(true)
+  }
+  
   const customerFunctionHandler = ({ option, customerId }) => {
     if (option === 'View') {
       //  navigate(AppRoutes.individualCustomerCreationScreen)
@@ -159,8 +183,223 @@ const CustomerManagementTable = ({
               ? requestTableHeads.map((tableHead) => (
                   <th className='py-3 relative   text-common-title'>
                     <span className='border-l border-common-title px-2'>{tableHead}</span>
-                    {tableHead === 'TYPE' ? <img src={Filter} alt='' className='absolute right-0 top-[35%] mr-2' /> : null}
-                    {tableHead === 'INITIATOR' ? <img src={Filter} alt='' className='absolute right-0 top-[35%] mr-2' /> : null}
+                    {tableHead === 'TYPE' ? (
+                      <img src={Filter} alt='' onClick={filterTypeHandler} className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
+                    ) : null}
+                    {ShowFilterTypeOptions && tableHead === 'TYPE' && (
+                      <div
+                        ref={filterTypeOptionsRef}
+                        className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                      >
+                        {requestType?.map((option, index) => {
+                          if (option === 'Select all') {
+                            return (
+                              <div
+                                key={index}
+                                className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                // onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  [ Select all]
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Creation') {
+                            return (
+                              <div
+                                key={index}
+                                className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Creation
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Modification') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Modification
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Deactivation') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Deactivation
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Reactivation') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Reactivation
+                                </span>
+                              </div>
+                            )
+                          }
+                        })}
+                      </div>
+                    )}
+                    {tableHead === 'INITIATOR' ? (
+                      <img src={Filter} alt='' onClick={filterInitiatorHandler} className='absolute cursor-pointer right-0 top-[35%] mr-2' />
+                    ) : null}
+                    {ShowFilterInitiatorOptions && tableHead === 'INITIATOR' && (
+                      <div
+                        ref={filterInitiatorOptionsRef}
+                        className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                      >
+                        {selectedStatus === 'Initiated by me' && (
+                          <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                            <span className='flex w-full  '>
+                              {' '}
+                              <span className='mr-2'>
+                                <Checkbox disabled={true} />
+                              </span>
+                              {user}[ME]
+                            </span>
+                          </div>
+                        )}
+
+                        {selectedStatus === 'Initiated by my team' && (
+                          <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                            <span className='flex w-full  '>
+                              {' '}
+                              <span className='mr-2'>
+                                <Checkbox disabled={true} />
+                              </span>
+                            Teams
+                            </span>
+                          </div>
+                        )}
+                        {/* {requestType?.map((option, index) => {
+                          if (option === 'Select all') {
+                            return (
+                              <div
+                                key={index}
+                                className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                // onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  [ Select all]
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Creation') {
+                            return (
+                              <div
+                                key={index}
+                                className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Creation
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Modification') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Modification
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Deactivation') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Deactivation
+                                </span>
+                              </div>
+                            )
+                          }
+                          if (option == 'Reactivation') {
+                            return (
+                              <div
+                                key={index}
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                onClick={filterStateHandler.bind(null, option)}
+                              >
+                                <span className='flex w-full  '>
+                                  {' '}
+                                  <span className='mr-2'>
+                                    <Checkbox />
+                                  </span>
+                                  Reactivation
+                                </span>
+                              </div>
+                            )
+                          }
+                        })} */}
+                      </div>
+                    )}
                     {tableHead === 'Status' ? <img src={Filter} alt='' className='absolute right-0 top-[35%] mr-2' /> : null}
                     {tableHead === 'updated on' ? <img src={Filter} alt='' className='absolute right-14 top-[35%] mr-2' /> : null}
                   </th>
