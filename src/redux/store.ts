@@ -1,13 +1,14 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
+import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
 
 export type ReducersType = {
-  // activeFormPage: PageInstance
+  publishedForm: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
-  // activeFormPage: activeFormPageReducer,
+  publishedForm: getFormReducer,
 })
 
 const middleware = [thunk]

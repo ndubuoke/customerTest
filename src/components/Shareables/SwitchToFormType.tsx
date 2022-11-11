@@ -1,25 +1,39 @@
 import React from 'react'
-import { FormModeType } from 'Screens/CustomerCreation'
+import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
 import { formTypeSwitch as formTypeSwitchImage } from 'Assets/svgs'
+import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
+import { useDispatch } from 'react-redux'
 
 type Props = {
   mode: FormModeType
   onSetFormMode: (mode: FormModeType) => void
+  customerType: CustomerType
+  formCreationStarted: boolean
 }
 
-const SwitchToFormType = ({ mode, onSetFormMode }: Props) => {
+const SwitchToFormType = ({ mode, onSetFormMode, customerType, formCreationStarted }: Props) => {
+  const dispatch = useDispatch()
+
   const handleSetFormType = (formMode: FormModeType) => {
-    const theMode = formMode === 'accelerated' ? 'legacy' : 'accelerated'
-    if (!window.confirm(`Switch to ${theMode} form? The information captured so far will be transferred to the ${theMode} form`)) {
+    // const theMode = formMode === 'accelerated' ? 'legacy' : 'accelerated'
+    if (!window.confirm(`Switch to ${formMode} form? The information captured so far will be transferred to the ${formMode} form`)) {
       return
     }
     if (formMode === 'legacy') {
       onSetFormMode(formMode)
+
+      if (formCreationStarted) {
+        dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+      }
       return
     }
 
     if (formMode === 'accelerated') {
       onSetFormMode(formMode)
+      if (formCreationStarted) {
+        dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+      }
       return
     }
   }

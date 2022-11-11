@@ -9,7 +9,7 @@ const RemoveButton = memo(({ showRemoveButton, onClick }: RemoveButtonProps) => 
   return (
     <>
       {showRemoveButton && (
-        <button className='absolute -right-1 top-0 z-10' onClick={onClick}>
+        <button className='absolute top-0 z-10 -right-1' onClick={onClick}>
           <img src={times} alt='' width={25} height={25} />
         </button>
       )}
