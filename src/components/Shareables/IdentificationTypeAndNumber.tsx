@@ -23,8 +23,8 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const [identificationNumber, setIdentificationNumber] = useState<IdentificationNumberType>(null)
 
   return (
-    <div className='flex flex-col gap-8 whitespace-nowrap w-full xl:ml-5 px-8'>
-      <div className='flex gap-10  '>
+    <div className='flex flex-col w-full gap-8 px-8 whitespace-nowrap xl:ml-5'>
+      <div className='flex gap-10 '>
         <div className='flex justify-end gap-3 min-w-[200px] items-center'>
           {customerType === 'sme' ? <span>Identification Type</span> : null}
           {customerType === 'individual' ? <span>Customer's Identification Type</span> : null}
