@@ -28,6 +28,7 @@ const Steps = ({ setActivePageState }: Props) => {
 
   useEffect(() => {
     if (publishedForm) {
+      setActivePage(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0])
       setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0])
     }
   }, [publishedForm])
