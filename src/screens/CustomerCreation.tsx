@@ -73,7 +73,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                   setLocalUpload={setLocalUpload}
                 />
 
-                <div className='flex  justify-center relative  gap-1'>
+                {creationMode === CreationModeEnum.Single ? <div className='flex  justify-center relative  gap-1'>
                   <div className=' absolute right-3 -top-16'>
                     <SkipToForm onClick={() => setFormCreationStarted(true)} />
                   </div>
@@ -82,7 +82,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                     disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
                     onClick={() => handleProceed()}
                   />
-                </div>
+                </div> : null}
               </section>
             </>
           ) : (
