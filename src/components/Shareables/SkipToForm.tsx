@@ -11,7 +11,7 @@ const SkipToForm = ({ onClick }: Props) => {
       <p className='flex gap-2'>
         <img src={info} /> <span>To skip both options, click "Skip to form"</span>
       </p>
-      <button className='flex justify-end items-center gap-2'>
+      <button className='flex items-center justify-end gap-2'>
         Skip to form
         <img src={skip} />
       </button>
