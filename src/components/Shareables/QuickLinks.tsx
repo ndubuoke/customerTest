@@ -1,5 +1,6 @@
 import { Close, quicklink, times } from 'Assets/svgs'
 import React from 'react'
+import { Link } from 'react-router-dom';
 type quickLinksProps = {
   links: { urlName: string; url: string }[]
 }
@@ -20,7 +21,7 @@ const QuickLinks = ({ links }: quickLinksProps) => {
       </div>
       <div className=' flex flex-wrap justify-between py-2 px-6 gap-4'>
         {links.map((link) => (
-          <div className=' flex flex-col justify-center items-center'>
+          <div key={link.urlName} className=' flex flex-col justify-center items-center'>
             <img src={quicklink} alt='' className='w-20' />
             <span>{link.urlName}</span>
           </div>

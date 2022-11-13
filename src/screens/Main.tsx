@@ -8,6 +8,10 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '../routes'
+import { useDispatch, useSelector } from 'react-redux'
+import { getCustomersAction } from '../redux/actions/CustomerManagement.actions'
+import { ReducersType } from '../redux/store'
+import { customersResponseType } from '../redux/reducers/CustomerManagement.reducer'
 
 type Props = {}
 
@@ -16,6 +20,7 @@ const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated sys
 
 const Main = (props: Props) => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const initialRef: any = null
   const statusListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
@@ -23,8 +28,10 @@ const Main = (props: Props) => {
   const filterTypeOptionsRef = useRef(initialRef)
   const filterInitiatorOptionsRef = useRef(initialRef)
   const filterRequestStatusOptionsRef = useRef(initialRef)
+  const AllCustomers = useSelector<ReducersType>((state: ReducersType) => state?.allCustomers) as customersResponseType
+
   const [showLists, setShowLists] = useState(false)
-  const [customermanagementTableType, setCustomerManagementTableType] = useState('Requests')
+  const [customermanagementTableType, setCustomerManagementTableType] = useState('All Customers')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
@@ -34,6 +41,8 @@ const Main = (props: Props) => {
   const [highLevelButtonId, setHighLevelButtonId] = useState(1)
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
+  const [customerType, setCustomerType] = useState('Individual')
+  const customerStatusResponsedata = AllCustomers?.serverResponse?.data
   const handleSelectForm = (list) => {
     if (list === 'Individual') {
       navigate(AppRoutes.individualCustomerCreationScreen)
@@ -48,6 +57,14 @@ const Main = (props: Props) => {
   }
   const highLevelButtonHandler = (id) => {
     setHighLevelButtonId(id)
+    if (id === 1) {
+      setCustomerType('Individual')
+      dispatch(getCustomersAction(customerType) as any)
+    }
+    if (id === 2) {
+      setCustomerType('SME')
+      dispatch(getCustomersAction(customerType) as any)
+    }
   }
   const nextLevelButtonHandler = (id) => {
     setNextLevelButtonId(id)
@@ -90,6 +107,16 @@ const Main = (props: Props) => {
       document.removeEventListener('mousedown', checkIfClickedOutside)
     }
   }, [showStatusLists, showCustomerFunctionOptions, ShowFilterStateOptions, ShowFilterTypeOptions, ShowFilterInitiatorOptions])
+
+  useEffect(() => {
+    if (customermanagementTableType === 'All Customers') {
+      dispatch(getCustomersAction(customerType) as any)
+    }
+    if (customermanagementTableType === 'Requests') {
+      // dispatch(getCustomersAction(customerType) as any)
+    }
+  }, [customerType, customermanagementTableType])
+  console.log(AllCustomers)
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
@@ -227,21 +254,21 @@ const Main = (props: Props) => {
                     <div className=' '>
                       {nextLevelButtonId === 1 ? (
                         <div className=' flex gap-2 '>
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div className='flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] font-bold'>All</span>
-                            <h3 className='font-bold text-[24px]'>187</h3>
+                            <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.customer.length}</h3>
                           </div>
                           <div className='border'></div>
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div className=' flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Active</span>
-                            <h3 className='font-bold text-[24px]'>168</h3>
+                            <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.active}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
-                            <span className='text-[14px] text-[#AAAAAA]'>inactive</span>
-                            <h3 className='font-bold text-[24px]'>15</h3>
+                          <div className=' py-1 flex flex-col items-center justify-center px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                            <span className='text-[14px] text-[#AAAAAA]'>inActive</span>
+                            <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.inactive}</h3>
                           </div>
                         </div>
                       ) : null}
@@ -338,6 +365,7 @@ const Main = (props: Props) => {
                   setShowFilterInitiatorOptions={setShowFilterInitiatorOptions}
                   ShowFilterInitiatorOptions={ShowFilterInitiatorOptions}
                   selectedStatus={selectedStatus}
+                  AllCustomers={AllCustomers}
                 />
               </div>
             </div>

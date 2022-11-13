@@ -1,10 +1,15 @@
 import { Disable, Edit, Eye, Filter, Menu } from 'Assets/svgs'
 import { Checkbox } from 'Components/Shareables'
+import Spinner from 'Components/Shareables/Spinner'
 import React from 'react'
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
+import { customersResponseType } from 'Redux/reducers/CustomerManagement.reducer'
+import { ReducersType } from '../../redux/store'
 
 type CustomerManagementTable = {
   tableType: string | 'All Customers' | 'Requests'
+  AllCustomers: any
   showCustomerFunctionOptions: boolean
   selectedStatus: string
   setShowCustomerFunctionOptions: (e) => void
@@ -29,36 +34,6 @@ const requestType = ['Select all', 'Creation', 'Modification', 'Deactivation', '
 const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 const user = 'John Smith '
 
-const customers = [
-  {
-    id: 1,
-    name: 'Temitope Yusuf Chukwuma',
-    accNo: '20067754632',
-    phone: '09012345678',
-    email: 'temiyusuf@email.com',
-    status: 'Active',
-    updatedOn: '22 Feb 2022, 10:22 AM',
-  },
-  {
-    id: 2,
-    name: 'Alex Andrea',
-    accNo: '20067754632',
-    phone: '09012345678',
-    email: 'temiyusuf@email.com',
-    status: 'Inactive',
-    updatedOn: '22 Feb 2022, 10:22 AM',
-  },
-  {
-    id: 3,
-    name: 'Achifu Charles',
-    accNo: '20067754632',
-    phone: '09012345678',
-    email: 'temiyusuf@email.com',
-    status: 'Active',
-    updatedOn: '22 Feb 2022, 10:22 AM',
-  },
-]
-
 const CustomerManagementTable = ({
   tableType,
   customerFunctionListRef,
@@ -75,6 +50,7 @@ const CustomerManagementTable = ({
   ShowFilterInitiatorOptions,
   setShowDeactivationModal,
   selectedStatus,
+  AllCustomers,
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
 
@@ -93,7 +69,7 @@ const CustomerManagementTable = ({
   const filterInitiatorHandler = () => {
     setShowFilterInitiatorOptions(true)
   }
-  
+
   const customerFunctionHandler = ({ option, customerId }) => {
     if (option === 'View') {
       //  navigate(AppRoutes.individualCustomerCreationScreen)
@@ -103,6 +79,36 @@ const CustomerManagementTable = ({
       setShowDeactivationModal(customerId)
     }
   }
+  const customers = AllCustomers?.serverResponse?.data?.customer
+
+  const getCustomerDetail = (customer, field) => {
+    if (field === 'surname') {
+      return customer.customer_profiles.map((profile) => {
+        return profile.surname
+      })
+    }
+    if (field === 'mobileNumber') {
+      return customer.customer_profiles.map((profile) => {
+        return profile.mobileNumber
+      })
+    }
+    if (field === 'firstName') {
+      return customer.customer_profiles.map((profile) => {
+        return profile.firstName
+      })
+    }
+    if (field === 'emailAddress') {
+      return customer.customer_profiles.map((profile) => {
+        return profile.emailAddress
+      })
+    }
+    if (field === 'customerEntityId') {
+      return customer.customer_profiles.map((profile) => {
+        return profile.customerEntityId
+      })
+    }
+  }
+
   return (
     <div className=' relative mt-[3%]  mx-4 overflow-auto max-h-[300px]  '>
       <table className='w-full text-sm text-left table-auto '>
@@ -110,7 +116,7 @@ const CustomerManagementTable = ({
           <tr className='  '>
             {tableType === 'All Customers'
               ? customerTableHeads.map((tableHead) => (
-                  <th className='py-3 relative   text-common-title'>
+                  <th key={tableHead} className='py-3 relative   text-common-title'>
                     <span className='border-l border-common-title px-2'>{tableHead}</span>
                     {tableHead === 'State' ? (
                       <img src={Filter} onClick={filterStateHandler} alt='' className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
@@ -181,7 +187,7 @@ const CustomerManagementTable = ({
               : null}
             {tableType === 'Requests'
               ? requestTableHeads.map((tableHead) => (
-                  <th className='py-3 relative   text-common-title'>
+                  <th key={tableHead} className='py-3 relative   text-common-title'>
                     <span className='border-l border-common-title px-2'>{tableHead}</span>
                     {tableHead === 'TYPE' ? (
                       <img src={Filter} alt='' onClick={filterTypeHandler} className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
@@ -307,7 +313,7 @@ const CustomerManagementTable = ({
                               <span className='mr-2'>
                                 <Checkbox disabled={true} />
                               </span>
-                            Teams
+                              Teams
                             </span>
                           </div>
                         )}
@@ -407,85 +413,98 @@ const CustomerManagementTable = ({
               : null}
           </tr>
         </thead>
-        <tbody className=' '>
-          {customers.map((customer) => (
-            <tr className='bg-background-lightRed border-b text-text-secondary   '>
-              <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
-                {customer.name}
-                <span className='text-common-title'>{customer.accNo}</span>
-              </td>
-              <td className='py-2 px-2'>{customer.phone}</td>
-              <td className='py-2 px-2'>{customer.email}</td>
-              <td className='py-2 px-2 text-[#1E0A3C]'>
-                <span
-                  className={` ${
-                    customer.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
-                  } p-1 rounded font-medium`}
-                >
-                  {customer.status}
-                </span>
-              </td>
-              <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-                22 Feb 2022, 10:22 AM
-                <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} />
-                {showCustomerFunctionOptions && customer.id === customerId && (
-                  <div
-                    ref={customerFunctionListRef}
-                    className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
-                  >
-                    {customerFunctionOptions?.map((option, index) => {
-                      if (option === 'View') {
-                        return (
-                          <div
-                            key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                            onClick={customerFunctionHandler.bind(null, option)}
-                          >
-                            <span className='flex w-full  '>
-                              {' '}
-                              <img className='mr-2' src={Eye} />
-                              View
-                            </span>
-                          </div>
-                        )
-                      }
-                      if (option == 'Modify') {
-                        return (
-                          <div
-                            key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                            onClick={customerFunctionHandler.bind(null, option)}
-                          >
-                            <span className='flex w-full  '>
-                              {' '}
-                              <img className='mr-2' src={Edit} />
-                              Modify
-                            </span>
-                          </div>
-                        )
-                      }
-                      if (option == 'Deactivate') {
-                        return (
-                          <div
-                            key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                            onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
-                          >
-                            <span className='flex w-full  '>
-                              {' '}
-                              <img className='mr-2' src={Disable} />
-                              Deactivate
-                            </span>
-                          </div>
-                        )
-                      }
-                    })}
-                  </div>
-                )}
+        {AllCustomers?.loading ? (
+          <tbody className=' '>
+            <tr className=' min-h-[300px] border flex items-center justify-center'>
+              <td>
+                <Spinner size='large' />
               </td>
             </tr>
-          ))}
-        </tbody>
+          </tbody>
+        ) : (
+          <>
+            <tbody className=' '>
+              {tableType === 'All Customers' && customers &&
+                customers.map((customer) => (
+                  <tr key={customer.id} className='bg-background-lightRed border-b text-text-secondary   '>
+                    <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
+                      {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
+                      <span className='text-common-title'>{getCustomerDetail(customer, 'customerEntityId')}</span>
+                    </td>
+                    <td className='py-2 px-2'>{getCustomerDetail(customer, 'mobileNumber')}</td>
+                    <td className='py-2 px-2'>{getCustomerDetail(customer, 'emailAddress')}</td>
+                    <td className='py-2 px-2 text-[#1E0A3C]'>
+                      <span
+                        className={` ${
+                          customer.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
+                        } p-1 rounded font-medium`}
+                      >
+                        {customer.status}
+                      </span>
+                    </td>
+                    <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
+                      {customer.updatedAt}
+                      <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} />
+                      {showCustomerFunctionOptions && customer.id === customerId && (
+                        <div
+                          ref={customerFunctionListRef}
+                          className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                        >
+                          {customerFunctionOptions?.map((option, index) => {
+                            if (option === 'View') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, option)}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Eye} />
+                                    View
+                                  </span>
+                                </div>
+                              )
+                            }
+                            if (option == 'Modify') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, option)}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Edit} />
+                                    Modify
+                                  </span>
+                                </div>
+                              )
+                            }
+                            if (option == 'Deactivate') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Disable} />
+                                    Deactivate
+                                  </span>
+                                </div>
+                              )
+                            }
+                          })}
+                        </div>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </>
+        )}
       </table>
     </div>
   )
