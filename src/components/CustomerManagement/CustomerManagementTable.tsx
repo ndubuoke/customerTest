@@ -27,8 +27,8 @@ type CustomerManagementTable = {
   setShowFilterTypeOptions: (e) => void
   setShowFilterInitiatorOptions: (e) => void
 }
-
-const customerTableHeads = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
+type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
+const customerTableHeads: customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 const requestTableHeads = ['Request', 'TYPE', 'INITIATOR', 'Status', 'updated on']
 const customerFunctionOptions = ['View', 'Modify', 'Deactivate']
 const filterStateOptions = ['Select all', 'Active', 'Inactive']
@@ -122,7 +122,18 @@ const CustomerManagementTable = ({
             {tableType === 'All Customers'
               ? customerTableHeads.map((tableHead) => (
                   <th key={tableHead} className='py-3 relative   text-common-title'>
-                    <span className='border-l border-common-title px-2'>{tableHead}</span>
+                    {tableHead === 'NAME/ID' ? (
+                      <span
+                        onClick={() => {
+                          alert('yes')
+                        }}
+                        className='border-l border-common-title px-2 cursor-pointer'
+                      >
+                        {tableHead}
+                      </span>
+                    ) : (
+                      <span className='border-l border-common-title px-2'>{tableHead}</span>
+                    )}
                     {tableHead === 'State' ? (
                       <img src={Filter} onClick={filterStateHandler} alt='' className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
                     ) : null}
@@ -527,33 +538,31 @@ const CustomerManagementTable = ({
           </tbody>
         ) : (
           <>
-              <tbody>
-
-
-            {tableType === 'Requests' &&
-              requests &&
-              requests.map((request) => {
-                if (request.customerType === customerType) {
-                  return (
-                    <tr key={request.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
-                      <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
-                        {request.requestTitle}
-                      </td>
-                      <td className='py-2 px-2'>{request.requestType}</td>
-                      <td className='py-2 px-2'>{request.initiator}</td>
-                      <td className='py-2 px-2 text-[#1E0A3C]'>
-                        <span
-                          className={` ${request.status === 'Approved' ? 'bg-[#D4F7DC] text-[#15692A]' : null} ${
-                            request.status === 'In-Review' ? 'bg-[#F0F5FF] text-[#0050C8]' : null
-                          } p-1 rounded font-medium`}
-                        >
-                          {request.status}
-                        </span>
-                      </td>
-                      <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-                        {request.updatedAt}
-                        {/* <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} /> */}
-                        {/* {showCustomerFunctionOptions && customer.id === customerId && (
+            <tbody>
+              {tableType === 'Requests' &&
+                requests &&
+                requests.map((request) => {
+                  if (request.customerType === customerType) {
+                    return (
+                      <tr key={request.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
+                        <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
+                          {request.requestTitle}
+                        </td>
+                        <td className='py-2 px-2'>{request.requestType}</td>
+                        <td className='py-2 px-2'>{request.initiator}</td>
+                        <td className='py-2 px-2 text-[#1E0A3C]'>
+                          <span
+                            className={` ${request.status === 'Approved' ? 'bg-[#D4F7DC] text-[#15692A]' : null} ${
+                              request.status === 'In-Review' ? 'bg-[#F0F5FF] text-[#0050C8]' : null
+                            } p-1 rounded font-medium`}
+                          >
+                            {request.status}
+                          </span>
+                        </td>
+                        <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
+                          {request.updatedAt}
+                          {/* <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} /> */}
+                          {/* {showCustomerFunctionOptions && customer.id === customerId && (
                         <div
                           ref={customerFunctionListRef}
                           className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
@@ -607,12 +616,12 @@ const CustomerManagementTable = ({
                           })}
                         </div>
                       )} */}
-                      </td>
-                    </tr>
-                  )
-                }
-              })}
-              </tbody>
+                        </td>
+                      </tr>
+                    )
+                  }
+                })}
+            </tbody>
           </>
         )}
       </table>

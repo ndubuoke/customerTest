@@ -9,6 +9,11 @@ import {
   GET_REQUESTS_SUCCESS,
 } from '../constants/CustomerManagement.constants'
 import { ReducersType } from 'Redux/store'
+import {
+  SORT_CUSTOMERS_ALPHABETICALLY_REQUEST,
+  SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS,
+  SORT_CUSTOMERS_ALPHABETICALLY_FAIL,
+} from '../constants/CustomerManagement.constants'
 
 const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/v1'
 
@@ -35,23 +40,42 @@ export const getCustomersAction =
     }
   }
 
-export const getCustomersRequestsAction = (customerType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
-  try {
-    dispatch({ type: GET_REQUESTS_REQUEST })
+export const getCustomersRequestsAction =
+  (customerType: string, requestStatus: string = '') =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: GET_REQUESTS_REQUEST })
 
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-      },
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/request/customer/${customerType}?filter=${requestStatus}`, config)
+
+      dispatch({ type: GET_REQUESTS_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_REQUESTS_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
     }
+  }
 
-    const { data } = await axios.get(`${SERVER_URL}/request/customer/${customerType}`, config)
+export const sortCustomersAlphabetically = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: SORT_CUSTOMERS_ALPHABETICALLY_REQUEST })
 
-    dispatch({ type: GET_REQUESTS_SUCCESS, payload: data })
+    //  getState()
+
+    let data = []
+
+    dispatch({ type: SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
-      type: GET_REQUESTS_FAIL,
-      payload: error?.response && error?.response?.data?.message,
+      type: SORT_CUSTOMERS_ALPHABETICALLY_FAIL,
+      payload: 'Could Not Sort Data',
     })
   }
 }

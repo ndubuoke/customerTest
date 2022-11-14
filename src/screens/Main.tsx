@@ -18,9 +18,11 @@ type Props = {}
 const customerTypeoptions = ['Individual', 'SME']
 const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide', 'Sent to me', 'Sent to my team']
 type customerStatus = 'All' | 'Active' | 'Inactive'
+type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft'
 type customerType = 'Individual' | 'SME'
+// const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 
-const Main = memo((props: Props) => {
+const Main = (props: Props) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const initialRef: any = null
@@ -37,6 +39,7 @@ const Main = memo((props: Props) => {
   const [showLists, setShowLists] = useState(false)
   const [customermanagementTableType, setCustomerManagementTableType] = useState('All Customers')
   const [customerStatus, setCustomerStatus] = useState<customerStatus>('All')
+  const [requestStatus, setRequestStatus] = useState<requestStatusType>('All')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
@@ -60,6 +63,8 @@ const Main = memo((props: Props) => {
     setShowStatusLists(false)
   }
   const highLevelButtonHandler = (customerType) => {
+    setCustomerStatus('All')
+    setRequestStatus('All')
     if (customerType === 'Individual') {
       setCustomerType('Individual')
       dispatch(getCustomersAction(customerType) as any)
@@ -113,25 +118,60 @@ const Main = memo((props: Props) => {
 
   const refreshTableHandler = () => {
     if (customermanagementTableType === 'All Customers') {
+      if (customerStatus === 'All') {
+        return dispatch(getCustomersAction(customerType) as any)
+      }
       dispatch(getCustomersAction(customerType, customerStatus) as any)
     }
     if (customermanagementTableType === 'Requests') {
-      dispatch(getCustomersRequestsAction(customerType) as any)
+      if (requestStatus === 'All') {
+        return dispatch(getCustomersRequestsAction(customerType) as any)
+      }
+      dispatch(getCustomersRequestsAction(customerType, requestStatus) as any)
     }
   }
 
-  const customerStatusHandler = (status) => {
+  const customerStatusHandler = (status: customerStatus) => {
     if (status === 'All') {
-      setCustomerStatus('All')
+      setCustomerStatus(status)
       dispatch(getCustomersAction(customerType) as any)
     }
     if (status === 'Active') {
-      setCustomerStatus('Active')
+      setCustomerStatus(status)
       dispatch(getCustomersAction(customerType, 'Active') as any)
     }
     if (status === 'Inactive') {
-      setCustomerStatus('Inactive')
+      setCustomerStatus(status)
       dispatch(getCustomersAction(customerType, 'Inactive') as any)
+    }
+  }
+
+  const requestStatusHandler = (status: requestStatusType) => {
+    if (status === 'All') {
+      setRequestStatus(status)
+      return dispatch(getCustomersRequestsAction(customerType) as any)
+    }
+    if (status === 'Approved') {
+      setRequestStatus(status)
+
+      return dispatch(getCustomersRequestsAction(customerType, 'Approved') as any)
+    }
+    if (status === 'Draft') {
+      setRequestStatus(status)
+      return dispatch(getCustomersRequestsAction(customerType, 'Draft') as any)
+    }
+    if (status === 'In Issue') {
+      setRequestStatus(status)
+      return dispatch(getCustomersRequestsAction(customerType, 'In Issue') as any)
+    }
+
+    if (status === 'In-Review') {
+      setRequestStatus(status)
+      return dispatch(getCustomersRequestsAction(customerType, 'In-Review') as any)
+    }
+    if (status === 'Interim Approval') {
+      setRequestStatus(status)
+      return dispatch(getCustomersRequestsAction(customerType, 'Interim Approval') as any)
     }
   }
 
@@ -143,7 +183,8 @@ const Main = memo((props: Props) => {
       dispatch(getCustomersRequestsAction(customerType) as any)
     }
   }, [customerType, customermanagementTableType])
-  console.log(AllCustomers)
+  // console.log(AllCustomers)
+  // console.log(allRequests)
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
@@ -283,7 +324,7 @@ const Main = memo((props: Props) => {
                         <div className=' flex gap-2 '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
                               customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
@@ -295,7 +336,7 @@ const Main = memo((props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={customerStatusHandler.bind(null, 'Active')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${
                               customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
@@ -307,7 +348,7 @@ const Main = memo((props: Props) => {
 
                           <div
                             onClick={customerStatusHandler.bind(null, 'Inactive')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
                               customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
@@ -318,37 +359,67 @@ const Main = memo((props: Props) => {
                       ) : null}
                       {nextLevelButtonId === 2 && customermanagementTableType === 'Requests' ? (
                         <div className=' flex gap-2 '>
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'All')}
+                            className={` py-1 px-4 cursor-pointer hover:border rounded-md hover:border-[#EFEFEF] ${
+                              requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             <span className='text-[14px] font-bold'>All</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.total}</h3>
                           </div>
                           <div className='border'></div>
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'Approved')}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Approved</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Approved}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'In-Review')}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             <span className='text-[14px] text-[#3FA2F7]'>in-Review</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InReview}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'Interim Approval')}
+                            className={` ${
+                              requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                          >
                             <span className='text-[14px] text-[#D4A62F]'>interim Approval</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InterimApproval}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'In Issue')}
+                            className={` ${
+                              requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                          >
                             <span className='text-[14px] text-[#CF2A2A]'>in-issue</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={requestStatusHandler.bind(null, 'Draft')}
+                            className={` ${
+                              requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                          >
                             <span className='text-[14px] text-[#AAAAAA]'>Draft</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Draft}</h3>
                           </div>
@@ -428,6 +499,6 @@ const Main = memo((props: Props) => {
       </div>
     </>
   )
-})
+}
 
 export default Main

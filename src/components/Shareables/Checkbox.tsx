@@ -3,12 +3,14 @@ import React, { useState } from 'react'
 type CheckboxType = {
   onClick?: () => void
   disabled?: boolean
+  externalFunctionToDoSomething?: () => void
 }
 
-const Checkbox = ({ disabled }: CheckboxType) => {
+const Checkbox = ({ disabled, externalFunctionToDoSomething }: CheckboxType) => {
   const [checked, setChecked] = useState(false)
   const checkTheBox = () => {
     setChecked(!checked)
+    externalFunctionToDoSomething()
   }
   return (
     <div className='flex items-center  mb-2'>

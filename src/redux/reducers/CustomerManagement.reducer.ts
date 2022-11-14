@@ -30,7 +30,7 @@ export const initialStateRequest = {
 
 export const getCustomersReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
-    case GET_CUSTOMERS_REQUEST:
+    case GET_CUSTOMERS_REQUEST :
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_CUSTOMERS_SUCCESS:
