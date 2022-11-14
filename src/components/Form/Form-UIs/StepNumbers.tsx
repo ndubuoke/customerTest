@@ -21,7 +21,7 @@ const StepNumbers = ({ page, index, last, onClick, isActive }: Props) => {
     >
       <div
         className={` w-[30px] h-[30px] rounded-full  text-[#636363]  border-4 ${
-          isActive ? ' border-[#636363]' : ''
+          isActive ? ' border-[#636363]' : 'border-green-700'
         }  flex justify-center items-center bg-white`}
       >
         {index + 1}
