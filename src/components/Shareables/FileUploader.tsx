@@ -12,7 +12,7 @@ export type UploadFile = {
 }
 
 type Props = {
-  identificationDetails: IdentificationDetailsType
+  identificationDetails?: IdentificationDetailsType
   setLocalUpload: (file: any) => void
 }
 
@@ -58,8 +58,8 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
   }
 
   return (
-    <div {...getRootProps()} className='border rounded-md max-w-[599px] h-[312px] cursor-pointer'>
-      {identificationDetails.identificationNumber && identificationDetails.identificationType ? (
+    <div {...getRootProps()} className={`border rounded-md max-w-[599px] h-[312px] cursor-pointer`}>
+      {identificationDetails?.identificationNumber && identificationDetails?.identificationType ? (
         <input type={`file`} hidden {...getInputProps()} />
       ) : null}
       {uploadedFiles.length === 0 ? (
