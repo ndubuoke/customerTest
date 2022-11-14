@@ -2,16 +2,18 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
-import { getCustomersReducer, customersResponseType } from './reducers/CustomerManagement.reducer'
+import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer';
 
 export type ReducersType = {
   publishedForm: ResponseType
-  allCustomers: customersResponseType
+  allCustomers: customersManagementResponseType,
+  allRequests:customersManagementResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
   allCustomers: getCustomersReducer,
+  allRequests:getCustomersRequestReducer
 })
 
 const middleware = [thunk]

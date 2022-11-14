@@ -3,22 +3,24 @@ import CustomerManagementTable from 'Components/CustomerManagement/CustomerManag
 import DeactivationModal from 'Components/CustomerManagement/DeactivationModal'
 import { QuickLinks } from 'Components/Shareables'
 
-import React, { useEffect, useRef } from 'react'
+import React, { memo, useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 import { AppRoutes } from '../routes'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCustomersAction } from '../redux/actions/CustomerManagement.actions'
+import { getCustomersAction, getCustomersRequestsAction } from '../redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../redux/store'
-import { customersResponseType } from '../redux/reducers/CustomerManagement.reducer'
+import { customersManagementResponseType } from '../redux/reducers/CustomerManagement.reducer'
 
 type Props = {}
 
 const customerTypeoptions = ['Individual', 'SME']
 const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide', 'Sent to me', 'Sent to my team']
+type customerStatus = 'All' | 'Active' | 'Inactive'
+type customerType = 'Individual' | 'SME'
 
-const Main = (props: Props) => {
+const Main = memo((props: Props) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const initialRef: any = null
@@ -28,20 +30,22 @@ const Main = (props: Props) => {
   const filterTypeOptionsRef = useRef(initialRef)
   const filterInitiatorOptionsRef = useRef(initialRef)
   const filterRequestStatusOptionsRef = useRef(initialRef)
-  const AllCustomers = useSelector<ReducersType>((state: ReducersType) => state?.allCustomers) as customersResponseType
+  const AllCustomers = useSelector<ReducersType>((state: ReducersType) => state?.allCustomers) as customersManagementResponseType
+
+  const allRequests = useSelector<ReducersType>((state: ReducersType) => state?.allRequests) as customersManagementResponseType
 
   const [showLists, setShowLists] = useState(false)
   const [customermanagementTableType, setCustomerManagementTableType] = useState('All Customers')
+  const [customerStatus, setCustomerStatus] = useState<customerStatus>('All')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
   const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
   const [ShowFilterInitiatorOptions, setShowFilterInitiatorOptions] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState('Initiated by me')
-  const [highLevelButtonId, setHighLevelButtonId] = useState(1)
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
-  const [customerType, setCustomerType] = useState('Individual')
+  const [customerType, setCustomerType] = useState<customerType>('Individual')
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
   const handleSelectForm = (list) => {
     if (list === 'Individual') {
@@ -55,13 +59,12 @@ const Main = (props: Props) => {
     setSelectedStatus(list)
     setShowStatusLists(false)
   }
-  const highLevelButtonHandler = (id) => {
-    setHighLevelButtonId(id)
-    if (id === 1) {
+  const highLevelButtonHandler = (customerType) => {
+    if (customerType === 'Individual') {
       setCustomerType('Individual')
       dispatch(getCustomersAction(customerType) as any)
     }
-    if (id === 2) {
+    if (customerType === 'SME') {
       setCustomerType('SME')
       dispatch(getCustomersAction(customerType) as any)
     }
@@ -108,12 +111,36 @@ const Main = (props: Props) => {
     }
   }, [showStatusLists, showCustomerFunctionOptions, ShowFilterStateOptions, ShowFilterTypeOptions, ShowFilterInitiatorOptions])
 
+  const refreshTableHandler = () => {
+    if (customermanagementTableType === 'All Customers') {
+      dispatch(getCustomersAction(customerType, customerStatus) as any)
+    }
+    if (customermanagementTableType === 'Requests') {
+      dispatch(getCustomersRequestsAction(customerType) as any)
+    }
+  }
+
+  const customerStatusHandler = (status) => {
+    if (status === 'All') {
+      setCustomerStatus('All')
+      dispatch(getCustomersAction(customerType) as any)
+    }
+    if (status === 'Active') {
+      setCustomerStatus('Active')
+      dispatch(getCustomersAction(customerType, 'Active') as any)
+    }
+    if (status === 'Inactive') {
+      setCustomerStatus('Inactive')
+      dispatch(getCustomersAction(customerType, 'Inactive') as any)
+    }
+  }
+
   useEffect(() => {
     if (customermanagementTableType === 'All Customers') {
       dispatch(getCustomersAction(customerType) as any)
     }
     if (customermanagementTableType === 'Requests') {
-      // dispatch(getCustomersAction(customerType) as any)
+      dispatch(getCustomersRequestsAction(customerType) as any)
     }
   }, [customerType, customermanagementTableType])
   console.log(AllCustomers)
@@ -156,17 +183,17 @@ const Main = (props: Props) => {
           <div>
             <button
               className={` ${
-                highLevelButtonId === 1 ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
               } `}
-              onClick={highLevelButtonHandler.bind(null, 1)}
+              onClick={highLevelButtonHandler.bind(null, 'Individual')}
             >
               Individual Customers
             </button>
             <button
               className={` ${
-                highLevelButtonId === 2 ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
               } ml-4`}
-              onClick={highLevelButtonHandler.bind(null, 2)}
+              onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
               SMEs
             </button>
@@ -252,61 +279,78 @@ const Main = (props: Props) => {
                       </div>
                     </div>
                     <div className=' '>
-                      {nextLevelButtonId === 1 ? (
+                      {nextLevelButtonId === 1 && customermanagementTableType === 'All Customers' ? (
                         <div className=' flex gap-2 '>
-                          <div className='flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={customerStatusHandler.bind(null, 'All')}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                              customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             <span className='text-[14px] font-bold'>All</span>
-                            <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.customer.length}</h3>
+                            <h3 className='font-bold text-[24px]'>
+                              {customerStatusResponsedata ? customerStatusResponsedata?.active + customerStatusResponsedata?.inactive : ''}
+                            </h3>
                           </div>
                           <div className='border'></div>
-                          <div className=' flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={customerStatusHandler.bind(null, 'Active')}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                              customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Active</span>
                             <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.active}</h3>
                           </div>
                           <div className='border'></div>
 
-                          <div className=' py-1 flex flex-col items-center justify-center px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
+                          <div
+                            onClick={customerStatusHandler.bind(null, 'Inactive')}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF] ${
+                              customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
+                            }`}
+                          >
                             <span className='text-[14px] text-[#AAAAAA]'>inActive</span>
                             <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.inactive}</h3>
                           </div>
                         </div>
                       ) : null}
-                      {nextLevelButtonId === 2 ? (
+                      {nextLevelButtonId === 2 && customermanagementTableType === 'Requests' ? (
                         <div className=' flex gap-2 '>
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] font-bold'>All</span>
-                            <h3 className='font-bold text-[24px]'>950</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.total}</h3>
                           </div>
                           <div className='border'></div>
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Approved</span>
-                            <h3 className='font-bold text-[24px]'>800</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Approved}</h3>
                           </div>
                           <div className='border'></div>
 
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] text-[#3FA2F7]'>in-Review</span>
-                            <h3 className='font-bold text-[24px]'>141</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InReview}</h3>
                           </div>
                           <div className='border'></div>
 
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] text-[#D4A62F]'>interim Approval</span>
-                            <h3 className='font-bold text-[24px]'>15</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InterimApproval}</h3>
                           </div>
                           <div className='border'></div>
 
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] text-[#CF2A2A]'>in-issue</span>
-                            <h3 className='font-bold text-[24px]'>9</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
                           </div>
                           <div className='border'></div>
 
                           <div className=' py-1 px-4 cursor-pointer rounded-md hover:bg-[#EFEFEF]'>
                             <span className='text-[14px] text-[#AAAAAA]'>Draft</span>
-                            <h3 className='font-bold text-[24px]'>15</h3>
+                            <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Draft}</h3>
                           </div>
                         </div>
                       ) : null}
@@ -336,7 +380,7 @@ const Main = (props: Props) => {
                     />
                   </div>
                   <div className='border'></div>
-                  <div className='flex  justify-center items-center px-2 cursor-pointer'>
+                  <div className='flex  justify-center items-center px-2 cursor-pointer' onClick={refreshTableHandler}>
                     <img src={Refresh} />
                     <span className='text-sm text-[#636363]'>Refresh Table</span>
                   </div>
@@ -366,6 +410,8 @@ const Main = (props: Props) => {
                   ShowFilterInitiatorOptions={ShowFilterInitiatorOptions}
                   selectedStatus={selectedStatus}
                   AllCustomers={AllCustomers}
+                  allRequests={allRequests}
+                  customerType={customerType}
                 />
               </div>
             </div>
@@ -382,6 +428,6 @@ const Main = (props: Props) => {
       </div>
     </>
   )
-}
+})
 
 export default Main

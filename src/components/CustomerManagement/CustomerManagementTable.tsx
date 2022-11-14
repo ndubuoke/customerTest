@@ -4,12 +4,14 @@ import Spinner from 'Components/Shareables/Spinner'
 import React from 'react'
 import { useState } from 'react'
 import { useSelector } from 'react-redux'
-import { customersResponseType } from 'Redux/reducers/CustomerManagement.reducer'
+import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import { ReducersType } from '../../redux/store'
 
 type CustomerManagementTable = {
   tableType: string | 'All Customers' | 'Requests'
+  customerType: string | 'Individual' | 'SME'
   AllCustomers: any
+  allRequests: any
   showCustomerFunctionOptions: boolean
   selectedStatus: string
   setShowCustomerFunctionOptions: (e) => void
@@ -51,6 +53,8 @@ const CustomerManagementTable = ({
   setShowDeactivationModal,
   selectedStatus,
   AllCustomers,
+  allRequests,
+  customerType,
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
 
@@ -80,6 +84,7 @@ const CustomerManagementTable = ({
     }
   }
   const customers = AllCustomers?.serverResponse?.data?.customer
+  const requests = allRequests?.serverResponse?.data?.res
 
   const getCustomerDetail = (customer, field) => {
     if (field === 'surname') {
@@ -415,16 +420,19 @@ const CustomerManagementTable = ({
         </thead>
         {AllCustomers?.loading ? (
           <tbody className=' '>
-            <tr className=' min-h-[300px] border flex items-center justify-center'>
-              <td>
-                <Spinner size='large' />
+            <tr className=' min-h-[300px]  flex items-center justify-center'>
+              <td className=' w-full '>
+                <span className=' w-full'>
+                  <Spinner size='large' />
+                </span>
               </td>
             </tr>
           </tbody>
         ) : (
           <>
             <tbody className=' '>
-              {tableType === 'All Customers' && customers &&
+              {tableType === 'All Customers' &&
+                customers &&
                 customers.map((customer) => (
                   <tr key={customer.id} className='bg-background-lightRed border-b text-text-secondary   '>
                     <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
@@ -503,6 +511,108 @@ const CustomerManagementTable = ({
                   </tr>
                 ))}
             </tbody>
+          </>
+        )}
+
+        {/* Requests */}
+        {allRequests?.loading ? (
+          <tbody className=' '>
+            <tr className=' min-h-[300px]  flex items-center justify-center'>
+              <td className=' w-full '>
+                <span className=' w-full'>
+                  <Spinner size='large' />
+                </span>
+              </td>
+            </tr>
+          </tbody>
+        ) : (
+          <>
+              <tbody>
+
+
+            {tableType === 'Requests' &&
+              requests &&
+              requests.map((request) => {
+                if (request.customerType === customerType) {
+                  return (
+                    <tr key={request.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
+                      <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
+                        {request.requestTitle}
+                      </td>
+                      <td className='py-2 px-2'>{request.requestType}</td>
+                      <td className='py-2 px-2'>{request.initiator}</td>
+                      <td className='py-2 px-2 text-[#1E0A3C]'>
+                        <span
+                          className={` ${request.status === 'Approved' ? 'bg-[#D4F7DC] text-[#15692A]' : null} ${
+                            request.status === 'In-Review' ? 'bg-[#F0F5FF] text-[#0050C8]' : null
+                          } p-1 rounded font-medium`}
+                        >
+                          {request.status}
+                        </span>
+                      </td>
+                      <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
+                        {request.updatedAt}
+                        {/* <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} /> */}
+                        {/* {showCustomerFunctionOptions && customer.id === customerId && (
+                        <div
+                          ref={customerFunctionListRef}
+                          className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                        >
+                          {customerFunctionOptions?.map((option, index) => {
+                            if (option === 'View') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, option)}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Eye} />
+                                    View
+                                  </span>
+                                </div>
+                              )
+                            }
+                            if (option == 'Modify') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, option)}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Edit} />
+                                    Modify
+                                  </span>
+                                </div>
+                              )
+                            }
+                            if (option == 'Deactivate') {
+                              return (
+                                <div
+                                  key={index}
+                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
+                                >
+                                  <span className='flex w-full  '>
+                                    {' '}
+                                    <img className='mr-2' src={Disable} />
+                                    Deactivate
+                                  </span>
+                                </div>
+                              )
+                            }
+                          })}
+                        </div>
+                      )} */}
+                      </td>
+                    </tr>
+                  )
+                }
+              })}
+              </tbody>
           </>
         )}
       </table>
