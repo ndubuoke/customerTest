@@ -62,8 +62,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
         <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
       </nav>
 
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]  max-h-1117 min-h-50'>
-        <div className='h-[845px] min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative'>
+      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]   min-h-50 '>
+        <div className={`${formCreationStarted ? '' : 'h-[845px]'} min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
           <SwitchToFormType customerType={customerType} formCreationStarted={formCreationStarted} mode={formMode} onSetFormMode={onSetFormMode} />
 
           {!formCreationStarted ? (

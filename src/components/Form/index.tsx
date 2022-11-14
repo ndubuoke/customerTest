@@ -25,18 +25,20 @@ const Form = ({ kind, formFields }: Props) => {
         <div className='w-full min-h-[300px] flex items-center justify-center'>
           <Spinner size='large' />
         </div>
-      ) : (
-        <>
+      ) : null}
+
+      {publishedForm?.serverResponse?.status ? (
+        <div>
           <Steps setActivePageState={setActivePageState} />
-          <div className='min-h-[605px] bg-[rgba(170, 170, 170, 0.07)] flex flex-col gap-1'>
+          <div className='min-h-[605px]  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
             {activePageState?.sections?.length > 0
               ? activePageState?.sections?.map((sects) => {
-                  return <FormLayout isSection={true} item={sects} />
+                  return <FormLayout isSection={true} item={sects} fields={sects.fields} key={sects.id} />
                 })
               : null}
           </div>
-        </>
-      )}
+        </div>
+      ) : null}
     </div>
   )
 }
