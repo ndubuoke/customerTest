@@ -37,7 +37,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
   })
   const [localUpload, setLocalUpload] = useState<Array<File>>([])
-  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(true)
+  // changing state to identification type and file upload(formCreationstarted)
+  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
   const onSetFormMode = useCallback(
     (value) => {
@@ -71,7 +72,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
               ) : null}
-              <section className=' h-3/4 flex flex-col justify-between pb-20'>
+              <section className='flex flex-col justify-between pb-20 h-3/4'>
                 <CustomerCreationBox
                   creationMode={creationMode}
                   customerType={customerType}
@@ -80,8 +81,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                   setLocalUpload={setLocalUpload}
                 />
 
-                <div className='flex  justify-center relative  gap-1'>
-                  <div className=' absolute right-3 -top-16'>
+                <div className='relative flex justify-center gap-1'>
+                  <div className='absolute right-3 -top-16'>
                     <SkipToForm onClick={() => setFormCreationStarted(true)} />
                   </div>
                   <Button

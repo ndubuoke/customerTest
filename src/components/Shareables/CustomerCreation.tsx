@@ -18,11 +18,11 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
     <>
       {creationMode === 'single' ? (
         <div className=' text-[#636363] mt-20 flex '>
-          <div className='flex flex-col justify-center items-center flex-1'>
+          <div className='flex flex-col items-center justify-center flex-1'>
             <IdentificationTypeAndNumber customerType={customerType} setIdentificationDetails={setIdentificationDetails} />
           </div>
 
-          <div className='flex-1 flex gap-10 justify-between items-center'>
+          <div className='flex items-center justify-between flex-1 gap-10'>
             <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
             <div className='flex-1'>
               <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
