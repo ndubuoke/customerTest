@@ -4,6 +4,12 @@ import { useDropzone } from 'react-dropzone'
 import { add, upload, deleteBtn } from 'Assets/svgs'
 import { IdentificationDetailsType } from 'Screens/CustomerCreation'
 import IndividualFile from './IndividualFile'
+import { API } from '../../utilities/api'
+
+export type UploadFile = {
+  file: File
+  key: string
+}
 
 type Props = {
   identificationDetails: IdentificationDetailsType
@@ -11,11 +17,27 @@ type Props = {
 }
 
 const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => {
-  const [uploadedFiles, setuploadedFiles] = useState<Array<File>>([])
+  const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
 
-  const onDrop = useCallback((acceptedFiles: Array<File>) => {
-    setuploadedFiles((prev) => [...prev, ...acceptedFiles])
-    setLocalUpload((prev) => [...prev, ...acceptedFiles])
+  const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
+    const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
+      try {
+        const formdata = new FormData()
+        formdata.append('fileName', file)
+        const response = await API.post('/file/upload', formdata)
+        return {
+          file,
+          key: response.data.data.fileKey,
+        }
+      } catch (err) {
+        console.error(err.message, `failed to upload file - ${file.name}`)
+        return null
+      }
+    })
+    const awaitUploadedFiles = await Promise.all(uploadedFiles)
+    const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
+    setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
+    setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -56,7 +78,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
       ) : (
         <div className='flex flex-col justify-between h-full p-2 overflow-y-auto border'>
           <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
-            {uploadedFiles.map((file: File, index) => {
+            {uploadedFiles.map((file: UploadFile, index) => {
               return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
             })}
             <div className='flex items-end mt-auto'>
