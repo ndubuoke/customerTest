@@ -34,14 +34,10 @@ const Steps = ({ setActivePageState }: Props) => {
   }, [publishedForm])
 
   return (
-    <div className='flex justify-center items-center min-h-[120px] '>
+    <div className=' flex justify-center items-center min-h-[120px] '>
       <div className='max-w-[991px] overflow-auto mx-auto '>
         <div className=' flex justify-end w-fit z-10'>
           {form?.builtFormMetadata?.pages?.map((page: PageInstance, index: number) => {
-            console.log({
-              page,
-              activePage,
-            })
             return (
               <StepNumbers
                 key={index}
