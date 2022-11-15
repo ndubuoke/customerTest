@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, memo } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { useDropzone, FileRejection } from 'react-dropzone'
 
 import { add, upload, deleteBtn } from 'Assets/svgs'
 import { IdentificationDetailsType } from 'Screens/CustomerCreation'
@@ -25,9 +25,24 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
         const formdata = new FormData()
         formdata.append('fileName', file)
         const response = await API.post('/file/upload', formdata)
-        return {
-          file,
-          key: response.data.data.fileKey,
+        try {
+          const signedUrlResponse = await API.get('/file/signedurl/' + response.data.data.fileKey)
+          try {
+            const ocrVerificationResponse = await API.post('/verification/ocr/extraction', {
+              imageUrl: signedUrlResponse.data.data,
+            })
+            console.log('ocrVerificationResponse', ocrVerificationResponse.data)
+            return {
+              file,
+              key: response.data.data.fileKey,
+            }
+          } catch (err) {
+            console.error(err.message, `failed to verify with ocr - ${file.name}`)
+            return null
+          }
+        } catch (err) {
+          console.error(err.message, `failed to get signed url - ${file.name}`)
+          return null
         }
       } catch (err) {
         console.error(err.message, `failed to upload file - ${file.name}`)
@@ -40,8 +55,13 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
     setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
   }, [])
 
+  const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
+    console.log('fileRejections', fileRejections)
+  }, [])
+
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    onDropRejected,
     accept: {
       'image/jpeg': [],
       'image/png': [],
