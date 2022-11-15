@@ -78,3 +78,4 @@ src/components/Sample
 src/index.js
 # playground
 pg.js
+pg.ts

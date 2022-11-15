@@ -3,7 +3,6 @@ import { DownloadIcon, ExclaimateIcon } from 'Assets/svgs'
 
 // /assets/files/bulk_customer_upload_template.xlsx'
 import ReactHTMLTableToExcel from 'react-html-table-to-excel'
-import { bulkCreationColumns } from 'Utilities/columns'
 import { EditIcon } from 'Assets/svgs/EditIcon'
 import { RemoveIcon } from 'Assets/svgs/RemoveIcon'
 import { Search } from 'Components/Search'
@@ -17,9 +16,11 @@ interface Props {
   records: any[],
   onSearchStringChange: (e: ChangeEvent) => void
   searchString: string
+  tableTitle: string
+  bulkTableColumns: any[]
 }
 
-export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation, onDeleteCustomer, hasControls, records, onSearchStringChange, searchString }: Props) => {
+export const BulkTable = ({ uploadedFile, tableTitle, failedValidation, successfulValidation, hasControls, records, searchString, bulkTableColumns, onDeleteCustomer, onSearchStringChange }: Props) => {
 
 
   return (
@@ -28,8 +29,8 @@ export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation
       <div className={`w-full p-20 font-[Inter]`}>
         <div className={`w-full flex justify-between items-end h-[150px]`}>
           <div className={`flex flex-col gap-y-8`}>
-            <div>Bulk Customer Profile Validation Summary</div>
-            <div className={`flex gap-x-2 font-[Inter] text-[12px] font-semibold leading-4 w-fit`}>
+            <div>{tableTitle}</div>
+            {hasControls ? <div className={`flex gap-x-2 font-[Inter] text-[12px] font-semibold leading-4 w-fit`}>
               <div
                 className={`text-[#636363] flex justify-between items-center gap-x-2 w-fit px-2`}>
                 All
@@ -62,7 +63,7 @@ export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation
                 </div>
               </div>
 
-            </div>
+            </div> : <div></div>}
           </div>
           <div>
 
@@ -72,7 +73,7 @@ export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation
             <div className={`w-fit border-r-2 pr-1`}>
               <Search placeholder='Search by Customer Name' onKeyUp={onSearchStringChange} value={searchString} />
             </div>
-            <div className={`w-[150px]`}>
+            {hasControls ? <div className={`w-[150px]`}>
               <ReactHTMLTableToExcel
                 id='test-table-xls-button'
                 className='w-full download-table-xls-button rounded'
@@ -81,14 +82,14 @@ export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation
                 sheet='Bulk Customer Validation Profile'
                 buttonText={<div className={`flex items-center gap-x-2`}><DownloadIcon />Download</div>}
               />
-            </div>
+            </div> : null}
           </div>
         </div>
         <div className="shadow overflow-x-auto border-b border-gray-200 mt-10">
           <table id='table-to-xlsx' className={`min-w-full divide-y divide-x divide-gray-200`}>
             <thead className={`bg-gray-50 h-[60px] w-full`}>
               <tr className={`h-[60px] bg-gray-50`}>
-                {bulkCreationColumns.map((column, index) => {
+                {bulkTableColumns.map((column, index) => {
                   if (column.accessor !== "") {
                     return (
                       <th
@@ -135,7 +136,7 @@ export const BulkTable = ({ uploadedFile, failedValidation, successfulValidation
               {records?.length ? records?.map((row, i) => {
                 return (
                   <tr key={i} className={`bg-[#db353905] h-[60px]`}>
-                    {bulkCreationColumns.map((cell, index) => {
+                    {bulkTableColumns.map((cell, index) => {
                       if (cell.accessor === "" && hasControls) {
                         return (
                           <td
@@ -225,5 +226,6 @@ BulkTable.defaultProps = {
   successfulValidation: 0,
   onDeleteCustomer: undefined,
   hasControls: false,
-  searchString: null
+  searchString: null,
+  tableTitle: null
 }

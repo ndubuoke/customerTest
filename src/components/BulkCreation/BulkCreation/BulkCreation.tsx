@@ -1,12 +1,19 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 import { BubbleLoader, bulkTemplate, ExclaimateIcon, GreenCheck } from 'Assets/svgs'
 import { Dropzone } from '../Dropzone'
 import readXlsxFile from 'read-excel-file'
 import uploadTemplate from '../../../assets/files/bulk_customer_upload_template.xlsx'
 import Button from 'Components/Shareables/Button'
 import { BulkTable } from '../BulkTable'
+import { AppRoutes } from 'Routes/AppRoutes'
+import { bulkCreationColumns } from 'Utilities/columns'
+import { setBulkCreationSummary } from 'Redux/actions/BulkCreation'
 
 export const BulkCreation = () => {
+  const dispatch = useDispatch() as any
+
   const [uploadedFile, setUploadedFile] = useState([])
   const [fileUploaded, setFileUploaded] = useState(false)
   const [fileUploadError, setFileUploadError] = useState(false)
@@ -17,6 +24,8 @@ export const BulkCreation = () => {
   const [records, setRecords] = useState([])
 
   const bulkUploadTemplateRef = useRef(null)
+
+  const navigate = useNavigate()
 
   const accept = {
     "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet": ['.xls', '.xlsx']
@@ -87,11 +96,22 @@ export const BulkCreation = () => {
     const temp = uploadedFile
     temp.splice(index, 1)
     setUploadedFile(() => [...temp])
+    setRecords(temp)
     setFailedValidation(temp.filter((customer) => customer.status === 0).filter(Boolean).length)
     setSuccessfulValidation(temp.filter((customer) => customer.status === 1).filter(Boolean).length)
     if (searchString) {
       setSearchString(null)
     }
+  }, [uploadedFile, successfulValidation, failedValidation, searchString])
+
+  const onCheckout = useCallback(() => {
+    const validatedProfilesOnly = uploadedFile.map((profile) => {
+      if (profile.status === 1) {
+        return profile
+      }
+    }).filter(Boolean)
+    dispatch(setBulkCreationSummary(validatedProfilesOnly))
+    navigate(AppRoutes.bulkCustomerCreationMakerCheckerScreen)
   }, [uploadedFile, successfulValidation, failedValidation, searchString])
 
   const onDownloadTemplate = useCallback(() => {
@@ -216,6 +236,8 @@ export const BulkCreation = () => {
           onSearchStringChange={onSearchStringChange}
           records={records}
           searchString={searchString}
+          tableTitle={`Bulk Customer Profile Validation Summary`}
+          bulkTableColumns={bulkCreationColumns}
         />
           : null
         }
@@ -223,7 +245,7 @@ export const BulkCreation = () => {
           <Button
             text='Proceed'
             disabled={!uploadedFile.length}
-            onClick={undefined}
+            onClick={onCheckout}
           />
         </div>
       </div>

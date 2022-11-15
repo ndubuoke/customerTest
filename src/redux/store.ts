@@ -2,13 +2,16 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
+import { bulkProcessSummaryReducer, bulkProcessSummaryTypes } from './reducers/BulkCreation'
 
 export type ReducersType = {
-  publishedForm: ResponseType
+  publishedForm: ResponseType,
+  bulkProcessSummary: bulkProcessSummaryTypes,
 }
 
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
+  bulkProcessSummary: bulkProcessSummaryReducer,
 })
 
 const middleware = [thunk]

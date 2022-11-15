@@ -12,6 +12,9 @@ module.exports = ( webpackConfigEnv, argv ) => {
   } )
 
   return merge( defaultConfig, {
+    devServer: {
+      port: 8081,
+    },
     resolve: {
       alias: {
         Components: path.normalize( `${ paths.src }/components` ),
@@ -21,6 +24,7 @@ module.exports = ( webpackConfigEnv, argv ) => {
         Utilities: path.normalize( `${ paths.src }/utilities` ),
         Config: path.normalize( `${ paths.src }/config` ),
         Screens: path.normalize( `${ paths.src }/screens` ),
+        Routes: path.normalize( `${ paths.src }/routes` ),
       },
       symlinks: false,
       cacheWithContext: false,

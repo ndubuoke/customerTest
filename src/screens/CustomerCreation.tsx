@@ -37,7 +37,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
   })
   const [localUpload, setLocalUpload] = useState<Array<File>>([])
-  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(true)
+  const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
   const onSetFormMode = useCallback(
     (value) => {
