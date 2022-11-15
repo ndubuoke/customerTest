@@ -41,6 +41,7 @@ module.exports = {
         'background-dark': '#EBE9E9',
         'background-disabled': '#96989A',
         'background-lightYellow': '#D5A62F',
+        'background-lightRed': 'rgba(219, 53, 57, 0.02)',
         'background-red-muted': '#FDC5C5',
         'background-yellow-muted': 'rgba(253, 197, 197, 0.17);',
 
