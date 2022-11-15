@@ -29,8 +29,8 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
-    // return { ...state, ...publishedForm }
+      // return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+      return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }

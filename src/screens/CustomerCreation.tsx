@@ -37,6 +37,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
   })
   const [localUpload, setLocalUpload] = useState<Array<File>>([])
+  // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
   const onSetFormMode = useCallback(
@@ -61,8 +62,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
         <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
       </nav>
 
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]  max-h-1117 min-h-50'>
-        <div className='h-[845px] min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative'>
+      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px]   min-h-50 '>
+        <div className={`${formCreationStarted ? '' : 'h-[845px]'} min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
           <SwitchToFormType customerType={customerType} formCreationStarted={formCreationStarted} mode={formMode} onSetFormMode={onSetFormMode} />
 
           {!formCreationStarted ? (
@@ -71,7 +72,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
               ) : null}
-              <section className=' h-3/4 flex flex-col justify-between pb-20'>
+              <section className='flex flex-col justify-between pb-20 h-3/4'>
                 <CustomerCreationBox
                   creationMode={creationMode}
                   customerType={customerType}

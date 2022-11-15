@@ -159,22 +159,24 @@ export const BulkCreation = () => {
   // console.log(uploadedFile)
   return (
     <>
-      <div className={`max-h-607 overflow-auto w-full`}>
-        <div className='flex justify-center gap-16 text-[#636363] mt-3'>
-          <div className='flex flex-col justify-center w-1/2'>
-            <div className='flex items-center mb-10 self-end mr-[48px]'>
-              <span className={`text-right w-[200px] leadiing-[0px]`}>
-                Upload Bulk Customer
-                Creation File
-              </span>
-              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
-                <path
-                  stroke-linecap='round'
-                  stroke-linejoin='round'
-                  stroke-width='2'
-                  d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                ></path>
-              </svg>
+      <div>
+        <div className={`max-h-607 overflow-auto w-full`}>
+          <div className='flex justify-center gap-16 text-[#636363] mt-3'>
+            <div className='flex flex-col justify-center w-1/2'>
+              <div className='flex items-center mb-10 self-end mr-[48px]'>
+                <span className={`text-right w-[200px] leadiing-[0px]`}>
+                  Upload Bulk Customer
+                  Creation File
+                </span>
+                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+                  <path
+                    stroke-linecap='round'
+                    stroke-linejoin='round'
+                    stroke-width='2'
+                    d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                  ></path>
+                </svg>
+              </div>
             </div>
 
           </div>
@@ -225,30 +227,32 @@ export const BulkCreation = () => {
             {/* <img className={`animate-spin bg-transparent rounded-full`} src={BubbleLoader} alt="BubbleLoader" /> */}
 
           </div>
-        </div>
+          {/* </div> */}
 
-        {uploadedFile?.length ? <BulkTable
-          uploadedFile={uploadedFile}
-          failedValidation={failedValidation}
-          successfulValidation={successfulValidation}
-          onDeleteCustomer={onDeleteCustomer}
-          hasControls={true}
-          onSearchStringChange={onSearchStringChange}
-          records={records}
-          searchString={searchString}
-          tableTitle={`Bulk Customer Profile Validation Summary`}
-          bulkTableColumns={bulkCreationColumns}
-        />
-          : null
-        }
-        <div className='flex  justify-center relative  gap-1'>
-          <Button
-            text='Proceed'
-            disabled={!uploadedFile.length}
-            onClick={onCheckout}
+          {uploadedFile?.length ? <BulkTable
+            uploadedFile={uploadedFile}
+            failedValidation={failedValidation}
+            successfulValidation={successfulValidation}
+            onDeleteCustomer={onDeleteCustomer}
+            hasControls={true}
+            onSearchStringChange={onSearchStringChange}
+            records={records}
+            searchString={searchString}
+            tableTitle={`Bulk Customer Profile Validation Summary`}
+            bulkTableColumns={bulkCreationColumns}
           />
+            : null
+          }
+          <div className='flex  justify-center relative  gap-1'>
+            <Button
+              text='Proceed'
+              disabled={!uploadedFile.length}
+              onClick={onCheckout}
+            />
+          </div>
         </div>
       </div>
     </>
+
   )
 }
