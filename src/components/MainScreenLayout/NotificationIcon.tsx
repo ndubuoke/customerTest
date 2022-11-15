@@ -1,7 +1,7 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
 
-import { AppLinks } from '../../routes'
+import { AppLinks } from '../../routes/AppRoutes'
 import { bell } from '../../assets/svgs'
 
 const NotificationIcon = () => {

@@ -1,7 +1,7 @@
 import { arrow } from 'Assets/svgs'
 import React, { memo, useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { AppRoutes } from '../../routes'
+import { AppRoutes } from '../../routes/AppRoutes'
 import BreadCrumb from './Goback/BreadCrumb'
 
 export const sampleBreadCrumbs = [
