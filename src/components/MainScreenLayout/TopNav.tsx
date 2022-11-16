@@ -6,7 +6,7 @@ import AssignedRoles from './AssignedRoles'
 
 import { threeFriends, questionMark, user } from '../../assets/svgs'
 import NotificationIcon from './NotificationIcon'
-import { AppLinks } from '../../routes'
+import { AppLinks } from '../../routes/AppRoutes'
 
 const TopNav = () => {
   const [majorRole, setMajorRole] = useState<string>('Super Admin')

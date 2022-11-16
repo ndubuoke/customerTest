@@ -1,4 +1,4 @@
-import { AppRoutes, CMR } from '../routes'
+import { AppRoutes, CMR } from '../routes/AppRoutes'
 
 export const individualCustomerCreationData = [
   {
