@@ -8,7 +8,8 @@ import {
   GET_REQUESTS_FAIL,
   GET_REQUESTS_SUCCESS,
 } from '../constants/CustomerManagement.constants'
-import { ReducersType } from 'Redux/store'
+import store, { ReducersType } from 'Redux/store'
+
 import {
   SORT_CUSTOMERS_ALPHABETICALLY_REQUEST,
   SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS,
@@ -16,9 +17,10 @@ import {
 } from '../constants/CustomerManagement.constants'
 
 const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/v1'
+type order = '' | 'ascending' | 'descending'
 
 export const getCustomersAction =
-  (customerType: string, customerStatus: string = '') =>
+  (customerType: string, customerStatus: string = '', ) =>
   async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: GET_CUSTOMERS_REQUEST })
@@ -30,7 +32,7 @@ export const getCustomersAction =
       }
 
       const { data } = await axios.get(`${SERVER_URL}/customer/profile/type/${customerType}?filter=${customerStatus}`, config)
-
+      
       dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data })
     } catch (error) {
       dispatch({
@@ -63,13 +65,12 @@ export const getCustomersRequestsAction =
     }
   }
 
-export const sortCustomersAlphabetically = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const sortCustomersAlphabetically = () => async (dispatch: Dispatch, getState: (store) => ReducersType) => {
   try {
     dispatch({ type: SORT_CUSTOMERS_ALPHABETICALLY_REQUEST })
 
-    //  getState()
-
-    let data = []
+    let response = getState(store)
+    let data = response.allCustomers
 
     dispatch({ type: SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS, payload: data })
   } catch (error) {
