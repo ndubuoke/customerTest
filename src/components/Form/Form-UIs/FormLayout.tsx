@@ -6,6 +6,8 @@ import { FormControlType, FormControlTypeWithSection } from '../Types'
 import FormInput from './FormInput'
 import FormDropdown from './FormDropdown'
 import FormDate from './FormDate'
+import FormTextArea from './FormTextArea'
+import FormSearchAndSelect from './FormSearchAndSelect'
 
 export const fieldsNames = {
   DROPDOWN: 'Dropdown',
@@ -96,7 +98,6 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
           fields?.map((field, index) => {
             if (
               field.name === fieldsNames.INFOTEXT ||
-              field.name === fieldsNames.LONGTEXT ||
               field.name === fieldsNames.NUMBERCOUNTER ||
               field.name === fieldsNames.PASSWORD ||
               field.name === fieldsNames.PHONEINPUT ||
@@ -118,6 +119,14 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
               field.name === fieldsNames.WEEK
             ) {
               return <FormDate item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.LONGTEXT) {
+              return <FormTextArea item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.SEARCHANDSELECT) {
+              return <FormSearchAndSelect item={field} key={field.id} collapsed={collapsed} />
             }
           })}
       </div>
