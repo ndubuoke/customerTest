@@ -7,11 +7,11 @@ import React, { memo, useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
-import { AppRoutes } from '../routes'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCustomersAction, getCustomersRequestsAction } from '../redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../redux/store'
 import { customersManagementResponseType } from '../redux/reducers/CustomerManagement.reducer'
+import { AppRoutes } from 'Routes/AppRoutes'
 
 type Props = {}
 
@@ -237,17 +237,15 @@ const Main = (props: Props) => {
         <div className=' flex justify-between px-6 mt-10'>
           <div>
             <button
-              className={` ${
-                customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
-              } `}
+              className={` ${customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                } `}
               onClick={highLevelButtonHandler.bind(null, 'Individual')}
             >
               Individual Customers
             </button>
             <button
-              className={` ${
-                customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
-              } ml-4`}
+              className={` ${customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                } ml-4`}
               onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
               SMEs
@@ -282,18 +280,16 @@ const Main = (props: Props) => {
               <div className=' bg-white flex h-[130px] '>
                 <div className='flex flex-col  border w-[18%]'>
                   <button
-                    className={`${
-                      nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
-                    } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
+                    className={`${nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
+                      } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
                     onClick={nextLevelButtonHandler.bind(null, 1)}
                   >
                     {nextLevelButtonId === 1 && <img className='  absolute left-1' src={redCaret} />}
                     <span className=' '>All Customers</span>
                   </button>
                   <button
-                    className={`${
-                      nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
-                    } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
+                    className={`${nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
+                      } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
                     onClick={nextLevelButtonHandler.bind(null, 2)}
                   >
                     {nextLevelButtonId === 2 && <img className=' absolute left-1' src={redCaret} />}
@@ -338,9 +334,8 @@ const Main = (props: Props) => {
                         <div className=' flex gap-2 '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
-                              customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             <span className='text-[14px] font-bold'>All</span>
                             <h3 className='font-bold text-[24px]'>
@@ -350,9 +345,8 @@ const Main = (props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={customerStatusHandler.bind(null, 'Active')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${
-                              customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Active</span>
@@ -362,9 +356,8 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={customerStatusHandler.bind(null, 'Inactive')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
-                              customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             <span className='text-[14px] text-[#AAAAAA]'>inActive</span>
                             <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.inactive}</h3>
@@ -375,9 +368,8 @@ const Main = (props: Props) => {
                         <div className=' flex gap-2 '>
                           <div
                             onClick={requestStatusHandler.bind(null, 'All')}
-                            className={` py-1 px-4 cursor-pointer hover:border rounded-md hover:border-[#EFEFEF] ${
-                              requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={` py-1 px-4 cursor-pointer hover:border rounded-md hover:border-[#EFEFEF] ${requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             <span className='text-[14px] font-bold'>All</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.total}</h3>
@@ -385,9 +377,8 @@ const Main = (props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={requestStatusHandler.bind(null, 'Approved')}
-                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
-                              requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Approved</span>
@@ -397,9 +388,8 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'In-Review')}
-                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
-                              requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
-                            }`}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
+                              }`}
                           >
                             <span className='text-[14px] text-[#3FA2F7]'>in-Review</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InReview}</h3>
@@ -408,9 +398,8 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'Interim Approval')}
-                            className={` ${
-                              requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
-                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
+                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#D4A62F]'>interim Approval</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InterimApproval}</h3>
@@ -419,9 +408,8 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'In Issue')}
-                            className={` ${
-                              requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
-                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
+                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#CF2A2A]'>in-issue</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
@@ -430,9 +418,8 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'Draft')}
-                            className={` ${
-                              requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
-                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
+                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#AAAAAA]'>Draft</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Draft}</h3>
