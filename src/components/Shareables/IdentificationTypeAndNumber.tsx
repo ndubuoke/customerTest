@@ -1,5 +1,5 @@
 import { useState, ChangeEvent } from 'react'
-import { info } from 'Assets/svgs'
+import { ExclaimateIcon, GreenCheck, info } from 'Assets/svgs'
 import { CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
 import DropDown from './DropDown'
 import { API } from '../../utilities/api'
@@ -27,7 +27,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const [status, setStatus] = useState<FieldStatus>('default')
   const [isAlreadyACustomer, setIsAlreadyACustomer] = useState(false)
 
-  const MAX_FIELD_LENGTH = 10
+  const MAX_FIELD_LENGTH = 12
 
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target
@@ -92,9 +92,9 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
           ) : null}
         </div>
         <div
-          className={`w-full flex justify-between py-2 leading-6 border-b border-[${
-            status === 'success' ? 'green' : status === 'error' ? 'text-primay-main' : '#8F8F8F'
-          }] text-text-disabled max-w-[318px]`}
+          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${
+            status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
+          }] text-text-disabled  max-w-[318px]`}
         >
           <input
             type='text'
@@ -104,12 +104,19 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             readOnly={!selectedIdentificationType}
             value={identificationNumber}
           />
+          {status === 'success' ? <GreenCheck /> : null}
         </div>
-        {/* 9856409479 */}
       </div>
       {isAlreadyACustomer && (
-        <div className='ml-auto'>
-          Customer profile already exists, <br /> <span className='underline cursor-pointer text-primay-main'>click here</span> to view
+        <div className='flex ml-auto'>
+          <div className='self-center mr-3'>
+            {' '}
+            <ExclaimateIcon />
+          </div>
+          <div className='text-sm'>
+            Customer profile already exists, <br />
+            <span className='underline cursor-pointer text-primay-main'>click here</span> to view
+          </div>
         </div>
       )}
     </div>
