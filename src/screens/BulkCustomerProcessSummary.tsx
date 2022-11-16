@@ -13,7 +13,7 @@ import SkipToForm from 'Components/Shareables/SkipToForm'
 import Form from 'Components/Form'
 import { bulkProcessSummaryColumns } from 'Utilities/columns'
 import { BulkTable } from 'Components/BulkCreation/BulkTable'
-import { bulkProcessSummaryTypes } from 'Redux/reducers/BulkCreation'
+import { BulkProcessSummaryTypes } from 'Redux/reducers/BulkCreation'
 import { ReducersType } from 'Redux/store'
 
 type Props = {
@@ -23,7 +23,7 @@ type Props = {
 
 
 export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Props) => {
-  const { bulkSummary } = useSelector<ReducersType>((state) => state.bulkProcessSummary) as bulkProcessSummaryTypes
+  const { bulkSummary } = useSelector<ReducersType>((state) => state.bulkProcessSummary) as BulkProcessSummaryTypes
   // const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   // const [formMode, setFormMode] = useState<FormModeType>('accelerated')
   // const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
@@ -71,7 +71,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
               Activity Log
               <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
             </div>
-            <div className={`mt-5 min-h-[70%] w-full max-h-[70%] overflow-auto border border-blue-800`}>
+            <div className={`mt-5 min-h-[70%] w-full max-h-[70%] overflow-auto`}>
 
             </div>
           </div>
