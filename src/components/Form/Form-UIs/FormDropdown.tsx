@@ -1,5 +1,5 @@
 import { caret } from 'Assets/svgs'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getProperty } from 'Utilities/getProperty'
 import { FormControlType, FormControlTypeWithSection } from '../Types'
 import FieldLabel from './FieldLabel'
@@ -92,10 +92,23 @@ const FormDropdown = ({ item, collapsed }: Props) => {
     setSelectedDropdownItem(selectedItem)
   }
 
-  const handleMultipleSelectedDropdownItem = (selectedItem) => {
-    console.log(selectedItem)
+  const handleMultipleSelectedDropdownItem = (selectedItem, action: 'remove' | 'add') => {
+    if (action === 'add') {
+      setMultipleSelectedDropdownItems((prev) => [...prev, selectedItem])
+    }
+
+    if (action === 'remove') {
+      setMultipleSelectedDropdownItems((prev) => {
+        return prev.filter((x) => x !== selectedItem)
+      })
+    }
+    // console.log(selectedItem)
     // setSelectedDropdownItem(prev => ([]...prev, }))
   }
+
+  // useEffect(() => {
+  //   console.log(multipleSelectedDropdownItems)
+  // }, [multipleSelectedDropdownItems.length])
 
   return (
     <div
@@ -106,11 +119,14 @@ const FormDropdown = ({ item, collapsed }: Props) => {
       }}
       title={helpText}
     >
-      <FieldLabel fieldItem={item} />
+      <div className='relative w-fit'>
+        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        <FieldLabel fieldItem={item} />
+      </div>
 
       <div className={`relative`}>
         <button
-          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-text-secondary'
+          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]'
           onClick={() => setShowLists((prev) => !prev)}
           title={selectedDropdownItem && selectedDropdownItem}
         >
@@ -156,11 +172,23 @@ const FormDropdown = ({ item, collapsed }: Props) => {
               : null}
             {enableMultipleSelection.toLowerCase() === 'on'
               ? optionsField?.length > 0
-                ? optionsField?.map((selected, index) => {
-                    return <MultipleSelectionItem />
+                ? optionsField?.map((selected: string, index: number) => {
+                    return (
+                      <MultipleSelectionItem
+                        handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
+                        selected={selected}
+                        key={index}
+                      />
+                    )
                   })
-                : sampleList?.map((selected, index) => {
-                    return <MultipleSelectionItem />
+                : sampleList?.map((selected: string, index: number) => {
+                    return (
+                      <MultipleSelectionItem
+                        handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
+                        selected={selected}
+                        key={index}
+                      />
+                    )
                   })
               : null}
           </div>

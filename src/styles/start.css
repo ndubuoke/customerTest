@@ -127,3 +127,13 @@ body {
 .parent-button:hover .show-button {
   display: inline-block;
 }
+
+/* Style Datalist */
+.datalist-input {
+  color: #363636 !important;
+}
+.datalist-input .datalist-active-item {
+  background: #ebe9e9 !important;
+  color: #363636 !important;
+}
+/* End Style datalist */
