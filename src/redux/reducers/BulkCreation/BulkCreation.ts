@@ -1,5 +1,9 @@
 import {
-  SET_BULK_CREATION_SUMMARY
+  SET_BULK_CREATION_SUMMARY,
+  UPDATE_BULK_CUSTOMER_VALIDATION_PROFILE,
+  VALIDATE_BULK_CUSTOMER_FAILED,
+  VALIDATE_BULK_CUSTOMER_REQUEST,
+  VALIDATE_BULK_CUSTOMER_SUCCESS,
 } from 'Redux/constants/BulkCreation'
 
 import {
@@ -12,12 +16,26 @@ const bulkProcessSummaryInitialState = {
   message: '',
   loading: false,
   success: true,
-  error: true,
+  error: false,
+}
+const bulkCustomerValidationProfileInitialState = {
+  bulkCustomersValidatedProfile: [],
+  message: '',
+  loading: false,
+  success: true,
+  error: false,
 }
 
 // export type formBehaviourEdited = boolean;
+export type BulkCustomerValidationProfileTypes = {
+  bulkCustomersValidatedProfile: any[],
+  message?: string,
+  loading?: boolean,
+  success?: boolean,
+  error?: boolean,
+}
 
-export type bulkProcessSummaryTypes = {
+export type BulkProcessSummaryTypes = {
   bulkSummary: any[],
   message?: string;
   loading?: boolean;
@@ -38,7 +56,7 @@ export type bulkProcessSummaryTypes = {
 //   error?: any;
 // };
 
-export const bulkProcessSummaryReducer = (state: bulkProcessSummaryTypes = bulkProcessSummaryInitialState, action: setBulkCreationActionTypes) => {
+export const bulkProcessSummaryReducer = (state: BulkProcessSummaryTypes = bulkProcessSummaryInitialState, action: setBulkCreationActionTypes) => {
   switch (action.type) {
     case SET_BULK_CREATION_SUMMARY:
       return { ...state, bulkSummary: action.payload }
@@ -46,24 +64,20 @@ export const bulkProcessSummaryReducer = (state: bulkProcessSummaryTypes = bulkP
       return state
   }
 }
-// export const formBehaviourDataReducer = (state: formBehaviourDataTypes = formBehaviourDataInitialState, action: setFormBehaviourActionTypes) => {
-//   switch (action.type) {
-//     case BEHAVIOURS_DATA_GET_REQUEST:
-//       return { ...state, loading: true, success: false }
-//     case BEHAVIOURS_DATA_GET_SUCCESS:
-//       return { ...state, loading: false, success: true, formBehavioursData: action.payload }
-//     case BEHAVIOURS_DATA_GET_FAIL:
-//       return { ...state, loading: false, success: false, error: true, message: action.payload }
-//     case SET_FORM_BEHAVIOURS:
-//       const allBehaviours = action.payload
-//       return { ...state, formBehavioursData: allBehaviours }
-//     case SET_FORM_BEHAVIOUR:
-//       const formBehavioursData = [...state.formBehavioursData, action.payload]
-//       return { ...state, formBehavioursData: formBehavioursData }
-//     default:
-//       return state
-//   }
-// }
+export const bulkCustomerValidationProfileReducer = (state: BulkCustomerValidationProfileTypes = bulkCustomerValidationProfileInitialState, action: setBulkCreationActionTypes) => {
+  switch (action.type) {
+    case VALIDATE_BULK_CUSTOMER_REQUEST:
+      return { ...state, loading: true, success: false } as BulkCustomerValidationProfileTypes
+    case VALIDATE_BULK_CUSTOMER_SUCCESS:
+      return { ...state, loading: false, success: true, bulkCustomersValidatedProfile: action.payload } as BulkCustomerValidationProfileTypes
+    case VALIDATE_BULK_CUSTOMER_FAILED:
+      return { ...state, loading: false, success: false, error: true, message: action.payload } as BulkCustomerValidationProfileTypes
+    case UPDATE_BULK_CUSTOMER_VALIDATION_PROFILE:
+      return { ...state, bulkCustomersValidatedProfile: action.payload } as BulkCustomerValidationProfileTypes
+    default:
+      return state as BulkCustomerValidationProfileTypes
+  }
+}
 
 // export const formBehaviourDataSaveReducer = (state: formBehaviourDataSaveTypes = formBehaviourDataSaveInitialState, action: setFormBehaviourActionTypes) => {
 //   switch (action.type) {

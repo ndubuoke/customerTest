@@ -1,6 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { BubbleLoader, bulkTemplate, ExclaimateIcon, GreenCheck } from 'Assets/svgs'
 import { Dropzone } from '../Dropzone'
 import readXlsxFile from 'read-excel-file'
@@ -10,6 +10,9 @@ import { BulkTable } from '../BulkTable'
 import { AppRoutes } from 'Routes/AppRoutes'
 import { bulkCreationColumns } from 'Utilities/columns'
 import { setBulkCreationSummary } from 'Redux/actions/BulkCreation'
+import { updateValidatedCustomers, validateCustomers } from 'Redux/actions/BulkCreation/BulkCreation'
+import { ReducersType } from 'Redux/store'
+import { BulkCustomerValidationProfileTypes } from 'Redux/reducers/BulkCreation'
 
 export const BulkCreation = () => {
   const dispatch = useDispatch() as any
@@ -24,6 +27,7 @@ export const BulkCreation = () => {
   const [records, setRecords] = useState([])
 
   const bulkUploadTemplateRef = useRef(null)
+  const { bulkCustomersValidatedProfile, error, message, success, loading } = useSelector<ReducersType>(state => state.bulkCustomerValidationProfile) as BulkCustomerValidationProfileTypes
 
   const navigate = useNavigate()
 
@@ -48,39 +52,18 @@ export const BulkCreation = () => {
     setFileUploaded(true)
 
     const file = acceptedFiles[0];
+    const formData = new FormData()
 
-    (async () => {
-      const rows = await readXlsxFile(file)
+    const fileReader = new FileReader()
+    fileReader.onload = (() => {
+      return (e) => {
 
-      const details = rows.slice(1)
-      const customerValidation = []
-      details.forEach((det) => {
-        customerValidation.push({
-          surname: det[0],
-          firstName: det[1],
-          otherNames: det[2],
-          gender: det[3],
-          dob: det[4],
-          nationality: det[5],
-          soo: det[6],
-          idType: det[7],
-          id: det[8],
-          residentialAddress: det[9],
-          country: det[10],
-          state: det[11],
-          city_town: det[12],
-          lga: det[13],
-          mobileNumber: det[14],
-          status: Number((det[8]).toString()[0]) !== 8 ? 0 : 1,
-          statusDescription: Number((det[8]).toString()[0]) !== 8 ? `Provided ID not Found in ${det[7]} Database` : `n/a`,
-        })
-      })
-      setUploadedFile(customerValidation)
-      setRecords(customerValidation)
+      }
+    })()
+    fileReader.readAsDataURL(file)
+    formData.append("customers", file)
 
-      setFailedValidation(customerValidation.filter((customer) => customer.status === 0).filter(Boolean).length)
-      setSuccessfulValidation(customerValidation.filter((customer) => customer.status === 1).filter(Boolean).length)
-    })();
+    dispatch(validateCustomers(formData))
 
   }, [fileUploaded, fileUploadError, uploadedFileName, uploadedFile, successfulValidation, failedValidation])
 
@@ -89,30 +72,32 @@ export const BulkCreation = () => {
     setFileUploadError(false)
     setFileUploaded(false)
     setUploadedFileName('')
-    setUploadedFile(() => [])
-  }, [fileUploaded, fileUploadError, uploadedFileName, uploadedFile])
+    // setUploadedFile(() => [])
+    dispatch(updateValidatedCustomers([]))
+  }, [fileUploaded, fileUploadError, uploadedFileName, uploadedFile, bulkCustomersValidatedProfile])
 
   const onDeleteCustomer = useCallback((index) => {
-    const temp = uploadedFile
+    const temp = bulkCustomersValidatedProfile
     temp.splice(index, 1)
-    setUploadedFile(() => [...temp])
+    // setUploadedFile(() => [...temp])
+    dispatch(updateValidatedCustomers(temp))
     setRecords(temp)
     setFailedValidation(temp.filter((customer) => customer.status === 0).filter(Boolean).length)
     setSuccessfulValidation(temp.filter((customer) => customer.status === 1).filter(Boolean).length)
     if (searchString) {
       setSearchString(null)
     }
-  }, [uploadedFile, successfulValidation, failedValidation, searchString])
+  }, [uploadedFile, successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
 
   const onCheckout = useCallback(() => {
-    const validatedProfilesOnly = uploadedFile.map((profile) => {
-      if (profile.status === 1) {
+    const validatedProfilesOnly = bulkCustomersValidatedProfile.map((profile) => {
+      if (Number(profile.status) === 1) {
         return profile
       }
     }).filter(Boolean)
     dispatch(setBulkCreationSummary(validatedProfilesOnly))
     navigate(AppRoutes.bulkCustomerCreationMakerCheckerScreen)
-  }, [uploadedFile, successfulValidation, failedValidation, searchString])
+  }, [uploadedFile, successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
 
   const onDownloadTemplate = useCallback(() => {
     const ext = "xlsx";
@@ -132,8 +117,15 @@ export const BulkCreation = () => {
   }, [searchString])
 
 
-  // useEffect(() => {
-  // }, [])
+  useEffect(() => {
+    console.log(bulkCustomersValidatedProfile)
+    if (bulkCustomersValidatedProfile.length) {
+      setRecords(bulkCustomersValidatedProfile)
+
+      setFailedValidation(bulkCustomersValidatedProfile.filter((customer) => Number(customer.status) === 0).filter(Boolean).length)
+      setSuccessfulValidation(bulkCustomersValidatedProfile.filter((customer) => Number(customer.status) === 1).filter(Boolean).length)
+    }
+  }, [bulkCustomersValidatedProfile])
 
   useEffect(() => {
     if (searchString !== null) {
@@ -144,14 +136,14 @@ export const BulkCreation = () => {
       }
       console.log(searchString, "searchString")
       const search = new RegExp(searchString, 'g')
-      const searchedRecords = uploadedFile.map((record) => {
+      const searchedRecords = bulkCustomersValidatedProfile.map((record) => {
         if (search.test(record?.firstName.toLowerCase()) || search.test(record?.surname.toLowerCase()) || search.test(record?.otherNames.toLowerCase())) {
           return record
         }
       }).filter(Boolean)
       setRecords(() => [...searchedRecords])
     } else {
-      setRecords(() => [...uploadedFile])
+      setRecords(() => [...bulkCustomersValidatedProfile])
     }
   }, [searchString])
 
@@ -159,27 +151,26 @@ export const BulkCreation = () => {
   // console.log(uploadedFile)
   return (
     <>
-      <div>
-        <div className={`max-h-607 overflow-auto w-full`}>
-          <div className='flex justify-center gap-16 text-[#636363] mt-3'>
-            <div className='flex flex-col justify-center w-1/2'>
-              <div className='flex items-center mb-10 self-end mr-[48px]'>
-                <span className={`text-right w-[200px] leadiing-[0px]`}>
-                  Upload Bulk Customer
-                  Creation File
-                </span>
-                <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
-                  <path
-                    stroke-linecap='round'
-                    stroke-linejoin='round'
-                    stroke-width='2'
-                    d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
-                  ></path>
-                </svg>
-              </div>
-            </div>
 
+      <div className={`max-h-607 overflow-auto w-full`}>
+        <div className='flex justify-center gap-16 text-[#636363] mt-3'>
+          <div className='flex flex-col justify-center w-1/2'>
+            <div className='flex items-center mb-10 self-end mr-[48px]'>
+              <span className={`text-right w-[200px] leadiing-[0px]`}>
+                Upload Bulk Customer
+                Creation File
+              </span>
+              <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+                <path
+                  strokeLinecap='round'
+                  strokeLinejoin='round'
+                  strokeWidth='2'
+                  d='M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z'
+                ></path>
+              </svg>
+            </div>
           </div>
+
           {/* <div className='border-r border-[#8F8F8F]'></div> */}
           <div className={`w-1/2`}  >
             <div className='flex flex-col py-20 px-0 gap-y-5 w-fit'>
@@ -199,6 +190,7 @@ export const BulkCreation = () => {
                 </button>
               }
             </div>
+
             {fileUploaded && !fileUploadError ?
 
               <div className={`flex gap-x-2 mb-3`}>
@@ -207,19 +199,19 @@ export const BulkCreation = () => {
               </div>
               : null
             }
-            {uploadedFile?.length ?
+            {bulkCustomersValidatedProfile?.length ?
 
               <div className={`flex gap-x-2 mb-3`}>
                 {failedValidation > 0 ? <ExclaimateIcon /> : <GreenCheck />}
-                <div>{successfulValidation} / {uploadedFile?.length} Indvidual Identification Validated</div>
+                <div>{successfulValidation} / {bulkCustomersValidatedProfile?.length} Indvidual Identification Validated</div>
               </div>
               : null
             }
-            {uploadedFile?.length ?
+            {bulkCustomersValidatedProfile?.length ?
 
               <div className={`flex gap-x-2 mb-3`}>
                 {failedValidation > 0 ? <ExclaimateIcon /> : <GreenCheck />}
-                <div>{successfulValidation} / {uploadedFile?.length} Customer IDs Created</div>
+                <div>{successfulValidation} / {bulkCustomersValidatedProfile?.length} Customer IDs Created</div>
               </div>
               : null
             }
@@ -227,31 +219,32 @@ export const BulkCreation = () => {
             {/* <img className={`animate-spin bg-transparent rounded-full`} src={BubbleLoader} alt="BubbleLoader" /> */}
 
           </div>
-          {/* </div> */}
+        </div>
+        {/* </div> */}
 
-          {uploadedFile?.length ? <BulkTable
-            uploadedFile={uploadedFile}
-            failedValidation={failedValidation}
-            successfulValidation={successfulValidation}
-            onDeleteCustomer={onDeleteCustomer}
-            hasControls={true}
-            onSearchStringChange={onSearchStringChange}
-            records={records}
-            searchString={searchString}
-            tableTitle={`Bulk Customer Profile Validation Summary`}
-            bulkTableColumns={bulkCreationColumns}
+        {bulkCustomersValidatedProfile?.length ? <BulkTable
+          uploadedFile={bulkCustomersValidatedProfile}
+          failedValidation={failedValidation}
+          successfulValidation={successfulValidation}
+          onDeleteCustomer={onDeleteCustomer}
+          hasControls={true}
+          onSearchStringChange={onSearchStringChange}
+          records={records}
+          searchString={searchString}
+          tableTitle={`Bulk Customer Profile Validation Summary`}
+          bulkTableColumns={bulkCreationColumns}
+        />
+          : null
+        }
+        <div className='flex  justify-center relative  gap-1'>
+          <Button
+            text='Proceed'
+            disabled={!bulkCustomersValidatedProfile.length}
+            onClick={onCheckout}
           />
-            : null
-          }
-          <div className='flex  justify-center relative  gap-1'>
-            <Button
-              text='Proceed'
-              disabled={!uploadedFile.length}
-              onClick={onCheckout}
-            />
-          </div>
         </div>
       </div>
+
     </>
 
   )
