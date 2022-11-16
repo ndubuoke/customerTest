@@ -1,1 +1,5 @@
-export { type setBulkCreationActionTypes, setBulkCreationSummary } from './BulkCreation'
+export {
+  type setBulkCreationActionTypes,
+  setBulkCreationSummary,
+  updateValidatedCustomers,
+} from './BulkCreation'
