@@ -12,7 +12,7 @@ export type ReducersType = {
 
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
-  allCustomers: getCustomersReducer,
+  allCustomers: getCustomersReducer ,
   allRequests:getCustomersRequestReducer
 })
 

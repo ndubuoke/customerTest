@@ -1,3 +1,4 @@
+
 import {
   GET_CUSTOMERS_REQUEST,
   GET_CUSTOMERS_FAIL,
@@ -5,6 +6,9 @@ import {
   GET_REQUESTS_FAIL,
   GET_REQUESTS_REQUEST,
   GET_REQUESTS_SUCCESS,
+  SORT_CUSTOMERS_ALPHABETICALLY_REQUEST,
+  SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS,
+  SORT_CUSTOMERS_ALPHABETICALLY_FAIL,
 } from 'Redux/constants/CustomerManagement.constants'
 export type customersManagementResponseType = {
   loading: boolean
@@ -42,6 +46,22 @@ export const getCustomersReducer = (state: customersManagementResponseType = ini
     default:
       return state
   }
+}
+
+export const sortCustomersAlphabetically = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any })=>{
+   switch (action.type) {
+     case SORT_CUSTOMERS_ALPHABETICALLY_REQUEST:
+       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+     case SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS:
+       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+     case SORT_CUSTOMERS_ALPHABETICALLY_FAIL:
+       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+     default:
+       return state
+   }
 }
 
 

@@ -20,6 +20,7 @@ const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated sys
 type customerStatus = 'All' | 'Active' | 'Inactive'
 type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft'
 type customerType = 'Individual' | 'SME'
+type tableType = 'All Customers' | 'Requests'
 // const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 
 const Main = (props: Props) => {
@@ -37,17 +38,19 @@ const Main = (props: Props) => {
   const allRequests = useSelector<ReducersType>((state: ReducersType) => state?.allRequests) as customersManagementResponseType
 
   const [showLists, setShowLists] = useState(false)
-  const [customermanagementTableType, setCustomerManagementTableType] = useState('All Customers')
+  const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>('All Customers')
   const [customerStatus, setCustomerStatus] = useState<customerStatus>('All')
   const [requestStatus, setRequestStatus] = useState<requestStatusType>('All')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
+  const [showFilterRequestStatusOptions, setShowFilterRequestStatusOptions] = useState(false)
   const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
   const [ShowFilterInitiatorOptions, setShowFilterInitiatorOptions] = useState(false)
   const [selectedStatus, setSelectedStatus] = useState('Initiated by me')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
+
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
   const handleSelectForm = (list) => {
@@ -62,7 +65,7 @@ const Main = (props: Props) => {
     setSelectedStatus(list)
     setShowStatusLists(false)
   }
-  const highLevelButtonHandler = (customerType) => {
+  const highLevelButtonHandler = (customerType:customerType) => {
     setCustomerStatus('All')
     setRequestStatus('All')
     if (customerType === 'Individual') {
@@ -106,6 +109,9 @@ const Main = (props: Props) => {
       if (ShowFilterInitiatorOptions && filterInitiatorOptionsRef.current && !filterInitiatorOptionsRef.current.contains(e.target)) {
         setShowFilterInitiatorOptions(false)
       }
+      if (showFilterRequestStatusOptions && filterRequestStatusOptionsRef.current && !filterRequestStatusOptionsRef.current.contains(e.target)) {
+        setShowFilterRequestStatusOptions(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -114,7 +120,14 @@ const Main = (props: Props) => {
       // Cleanup the event listener
       document.removeEventListener('mousedown', checkIfClickedOutside)
     }
-  }, [showStatusLists, showCustomerFunctionOptions, ShowFilterStateOptions, ShowFilterTypeOptions, ShowFilterInitiatorOptions])
+  }, [
+    showStatusLists,
+    showCustomerFunctionOptions,
+    ShowFilterStateOptions,
+    ShowFilterTypeOptions,
+    ShowFilterInitiatorOptions,
+    showFilterRequestStatusOptions,
+  ])
 
   const refreshTableHandler = () => {
     if (customermanagementTableType === 'All Customers') {
@@ -132,6 +145,7 @@ const Main = (props: Props) => {
   }
 
   const customerStatusHandler = (status: customerStatus) => {
+  
     if (status === 'All') {
       setCustomerStatus(status)
       dispatch(getCustomersAction(customerType) as any)
@@ -183,8 +197,8 @@ const Main = (props: Props) => {
       dispatch(getCustomersRequestsAction(customerType) as any)
     }
   }, [customerType, customermanagementTableType])
-  // console.log(AllCustomers)
-  // console.log(allRequests)
+      // console.log(AllCustomers)
+  //  console.log(allRequests)
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
@@ -465,6 +479,9 @@ const Main = (props: Props) => {
                 {/* Customer Managament Table */}
 
                 <CustomerManagementTable
+                  filterRequestStatusOptionsRef={filterRequestStatusOptionsRef}
+                  showFilterRequestStatusOptions={showFilterRequestStatusOptions}
+                  setShowFilterRequestStatusOptions={setShowFilterRequestStatusOptions}
                   customerFunctionListRef={customerFunctionListRef}
                   showCustomerFunctionOptions={showCustomerFunctionOptions}
                   setShowCustomerFunctionOptions={setShowCustomerFunctionOptions}
@@ -483,6 +500,10 @@ const Main = (props: Props) => {
                   AllCustomers={AllCustomers}
                   allRequests={allRequests}
                   customerType={customerType}
+                  customerStatus={customerStatus}
+                  customerStatusHandler={customerStatusHandler}
+                  requestStatusHandler={requestStatusHandler}
+                  requestStatus={requestStatus}
                 />
               </div>
             </div>
