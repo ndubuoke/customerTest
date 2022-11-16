@@ -84,6 +84,13 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
       </div>
       <div className='flex gap-10 '>
         <div className='flex  gap-3 justify-end min-w-[200px] items-center '>
+          <span
+            style={{
+              visibility: 'hidden',
+            }}
+          >
+            Custo{' '}
+          </span>{' '}
           <span>Identification Number</span>
           {customerType === 'sme' ? (
             <div>

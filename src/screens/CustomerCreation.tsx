@@ -31,7 +31,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
   const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
     identificationType: null,
     identificationNumber: null,
@@ -48,7 +48,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     [formMode, creationMode]
   )
 
-  const handleProceed = () => { }
+  const handleProceed = () => {}
 
   useEffect(() => {
     if (formCreationStarted) {
@@ -81,16 +81,18 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                   setLocalUpload={setLocalUpload}
                 />
 
-                {creationMode === CreationModeEnum.Single ? <div className='flex  justify-center relative  gap-1'>
-                  <div className=' absolute right-3 -top-16'>
-                    <SkipToForm onClick={() => setFormCreationStarted(true)} />
+                {creationMode === CreationModeEnum.Single ? (
+                  <div className='flex  justify-center relative  gap-1'>
+                    <div className=' absolute right-3 -top-16'>
+                      <SkipToForm onClick={() => setFormCreationStarted(true)} />
+                    </div>
+                    <Button
+                      text='Proceed'
+                      disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
+                      onClick={() => handleProceed()}
+                    />
                   </div>
-                  <Button
-                    text='Proceed'
-                    disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
-                    onClick={() => handleProceed()}
-                  />
-                </div> : null}
+                ) : null}
               </section>
             </>
           ) : (
