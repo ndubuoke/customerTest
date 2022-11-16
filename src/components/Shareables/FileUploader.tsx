@@ -1,5 +1,5 @@
 import React, { useCallback, useState, useEffect, memo } from 'react'
-import { useDropzone } from 'react-dropzone'
+import { useDropzone, FileRejection } from 'react-dropzone'
 
 import { add, upload, deleteBtn } from 'Assets/svgs'
 import { IdentificationDetailsType } from 'Screens/CustomerCreation'
@@ -18,16 +18,33 @@ type Props = {
 
 const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
+  const [isProcessing, setIsProcessing] = useState(false)
 
   const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
+    setIsProcessing(true)
     const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
       try {
         const formdata = new FormData()
         formdata.append('fileName', file)
         const response = await API.post('/file/upload', formdata)
-        return {
-          file,
-          key: response.data.data.fileKey,
+        try {
+          const signedUrlResponse = await API.get('/file/signedurl/' + response.data.data.fileKey)
+          try {
+            const ocrVerificationResponse = await API.post('/verification/ocr/extraction', {
+              imageUrl: signedUrlResponse.data.data,
+            })
+            console.log('ocrVerificationResponse', ocrVerificationResponse.data)
+            return {
+              file,
+              key: response.data.data.fileKey,
+            }
+          } catch (err) {
+            console.error(err.message, `failed to verify with ocr - ${file.name}`)
+            return null
+          }
+        } catch (err) {
+          console.error(err.message, `failed to get signed url - ${file.name}`)
+          return null
         }
       } catch (err) {
         console.error(err.message, `failed to upload file - ${file.name}`)
@@ -38,10 +55,16 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
     const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
     setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
     setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
+    setIsProcessing(false)
+  }, [])
+
+  const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
+    console.log('fileRejections', fileRejections)
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
+    onDropRejected,
     accept: {
       'image/jpeg': [],
       'image/png': [],
@@ -58,52 +81,75 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
   }
 
   return (
-    <div {...getRootProps()} className={`border rounded-md max-w-[599px] h-[312px] cursor-pointer`}>
-      {identificationDetails?.identificationNumber && identificationDetails?.identificationType ? (
-        <input type={`file`} hidden {...getInputProps()} />
-      ) : null}
-      {uploadedFiles.length === 0 ? (
-        <div className='flex flex-col items-center justify-center h-full pt-3 pb-3'>
-          <div>
-            <img src={upload} />
-          </div>
-
-          <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900 '>
-            <span className='font-semibold text-primay-main'>Click to upload</span>
-            <span> or drag and drop</span>
-            <span className='block text-center'>customer's documents</span>
-            <span className='block text-center'>.pdf .jpeg .png</span>
-          </p>
-        </div>
-      ) : (
-        <div className='flex flex-col justify-between h-full p-2 overflow-y-auto border'>
-          <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
-            {uploadedFiles.map((file: UploadFile, index) => {
-              return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
-            })}
-            <div className='flex items-end mt-auto'>
-              <button className='flex items-end ' style={{ marginTop: 'auto' }}>
-                <img src={add} className='inline mr-1' /> Add more files
-              </button>
+    <div className={`border rounded-md max-w-[599px] h-full `}>
+      <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative min-h-[312px]'>
+        {/* loading overlay  */}
+        {isProcessing && (
+          <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
+            <div className='flex items-center'>
+              <span className='text-3xl mr-4'>Loading</span>
+              {/* loading icon */}
+              <svg className='animate-spin h-5 w-5 text-gray-600' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+                <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle>
+                <path
+                  className='opacity-75'
+                  fill='currentColor'
+                  d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
+                ></path>
+              </svg>
+              {/* end loading icon */}
             </div>
           </div>
-          <div className='flex justify-between'>
-            <p onClick={(e) => e.stopPropagation()}>{uploadedFiles.length} files uploaded</p>
+        )}
 
-            <button
-              onClick={(e) => {
-                e.stopPropagation()
-                setLocalUpload([])
-                setuploadedFiles([])
-              }}
-              className='flex gap-3'
-            >
-              <img src={deleteBtn} />
-              Delete all
-            </button>
-          </div>
+        <div {...getRootProps()} className='cursor-pointer'>
+          {identificationDetails?.identificationNumber && identificationDetails?.identificationType ? (
+            <input type={`file`} hidden {...getInputProps()} />
+          ) : null}
+          {uploadedFiles.length === 0 ? (
+            <div className='flex flex-col items-center justify-center h-full pt-3 pb-3 min-h-[312px]'>
+              <div>
+                <img src={upload} />
+              </div>
+
+              <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 border-b-purple-900 '>
+                <span className='font-semibold text-primay-main'>Click to upload</span>
+                <span> or drag and drop</span>
+                <span className='block text-center'>customer's documents</span>
+                <span className='block text-center'>.pdf .jpeg .png</span>
+              </p>
+            </div>
+          ) : (
+            <div className='flex flex-col justify-between h-full p-2 overflow-y-auto min-h-[312px]'>
+              <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
+                {uploadedFiles.map((file: UploadFile, index) => {
+                  return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
+                })}
+                <div className='flex items-end mt-auto'>
+                  <button className='flex items-end ' style={{ marginTop: 'auto' }}>
+                    <img src={add} className='inline mr-1' /> Add more files
+                  </button>
+                </div>
+              </div>
+              <div className='flex justify-between'>
+                <p onClick={(e) => e.stopPropagation()}>{uploadedFiles.length} files uploaded</p>
+
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    setLocalUpload([])
+                    setuploadedFiles([])
+                  }}
+                  className='flex gap-3'
+                >
+                  <img src={deleteBtn} />
+                  Delete all
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
     </div>
   )
 })
