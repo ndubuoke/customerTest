@@ -1,12 +1,21 @@
 // import axios from 'axios'
+import axios from 'axios'
 import { Dispatch } from 'redux'
 import {
-  SET_BULK_CREATION_SUMMARY
+  SET_BULK_CREATION_SUMMARY,
+  UPDATE_BULK_CUSTOMER_VALIDATION_PROFILE,
+  VALIDATE_BULK_CUSTOMER_FAILED,
+  VALIDATE_BULK_CUSTOMER_REQUEST,
+  VALIDATE_BULK_CUSTOMER_SUCCESS,
 } from 'Redux/constants/BulkCreation'
 
-const SERVER_URL = `https://retailcore-formconfigapi.herokuapp.com`
+const SERVER_URL = `https://retailcore-customerservice.herokuapp.com`
 interface ActionTypes {
   SET_BULK_CREATION_SUMMARY: any
+  VALIDATE_BULK_CUSTOMER_FAILED: any
+  VALIDATE_BULK_CUSTOMER_REQUEST: any
+  VALIDATE_BULK_CUSTOMER_SUCCESS: any
+  UPDATE_BULK_CUSTOMER_VALIDATION_PROFILE: any
 }
 
 interface MessageAction {
@@ -20,6 +29,13 @@ export const setBulkCreationSummary = (summary: any) => (dispatch: Dispatch) => 
   dispatch({
     type: SET_BULK_CREATION_SUMMARY,
     payload: summary,
+  })
+}
+
+export const updateValidatedCustomers = (customers: any) => (dispatch: Dispatch) => {
+  dispatch({
+    type: UPDATE_BULK_CUSTOMER_VALIDATION_PROFILE,
+    payload: customers,
   })
 }
 
@@ -67,41 +83,31 @@ export const setBulkCreationSummary = (summary: any) => (dispatch: Dispatch) => 
 //   }
 // }
 
-// export const getFormBehavioursData = () => async (dispatch: Dispatch) => {
-//   try {
-//     dispatch({
-//       type: BEHAVIOURS_DATA_GET_REQUEST,
-//     })
-//     const formType = sessionStorage.getItem("selectedFormType") ? JSON.parse(sessionStorage.getItem("selectedFormType")).code : "individualAccelerated"
-//     const { data } = await axios.get(`${SERVER_URL}/v1/form-behaviours-data?form=${formType}`)
+export const validateCustomers = (customers: any) => async (dispatch: Dispatch) => {
+  try {
+    dispatch({
+      type: VALIDATE_BULK_CUSTOMER_REQUEST,
+    })
+    const config = {
+      headers: {
 
-//     if (data?.status === 'success') {
-//       const status = localStorage.getItem("formBehaviourStatus") && JSON.parse(localStorage.getItem("formBehaviourStatus"))
+      }
+    }
+    const { data } = await axios.post(`${SERVER_URL}/v1/bulk-customer/validate`, customers)
 
-//       if (status === BehaviourStatus.Saved || status !== BehaviourStatus.Editing) {
-//         if (data?.data) {
-//           localStorage.setItem('behaviours', JSON.stringify(data?.data?.behaviours))
-//           dispatch({
-//             type: BEHAVIOURS_DATA_GET_SUCCESS,
-//             payload: data?.data?.behaviours,
-//           })
-//         } else {
-//           localStorage.setItem('behaviours', JSON.stringify([]))
-//           dispatch({
-//             type: BEHAVIOURS_DATA_GET_SUCCESS,
-//             payload: [],
-//           })
-//         }
-//       }
-
-//     }
-//   } catch (error) {
-//     dispatch({
-//       type: BEHAVIOURS_DATA_GET_FAIL,
-//       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
-//     })
-//   }
-// }
+    if (data?.status === 'success') {
+      dispatch({
+        type: VALIDATE_BULK_CUSTOMER_SUCCESS,
+        payload: data?.data
+      })
+    }
+  } catch (error) {
+    dispatch({
+      type: VALIDATE_BULK_CUSTOMER_FAILED,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
 
 // export const createFormBehavioursData = (behaviourData: any) => async (dispatch: Dispatch & any) => {
 //   try {

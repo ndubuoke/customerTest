@@ -20,8 +20,6 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
     const { data } = await axios.get(`${SERVER_URL}/customer/published/type/${formType}`, config)
     // const data = null
 
-    // 74448975208 -bvn
-
     dispatch({ type: GET_FORM_SUCCESS, payload: data })
 
     // localStorage.removeItem('form')

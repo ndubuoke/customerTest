@@ -71,7 +71,7 @@ export const BulkTable = ({ uploadedFile, tableTitle, failedValidation, successf
           {/* search and download */}
           <div className={`flex w-fit gap-x-2 justify-between`}>
             <div className={`w-fit border-r-2 pr-1`}>
-              <Search placeholder='Search by Customer Name' onKeyUp={onSearchStringChange} value={searchString} />
+              <Search placeholder='Search by Customer Name' onKeyUp={onSearchStringChange} />
             </div>
             {hasControls ? <div className={`w-[150px]`}>
               <ReactHTMLTableToExcel
