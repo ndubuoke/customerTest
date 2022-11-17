@@ -87,6 +87,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
           <span
             style={{
               visibility: 'hidden',
+              display: customerType === 'sme' ? 'none' : 'flex',
             }}
           >
             Custo{' '}

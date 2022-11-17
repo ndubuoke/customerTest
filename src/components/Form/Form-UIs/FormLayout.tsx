@@ -8,30 +8,32 @@ import FormDropdown from './FormDropdown'
 import FormDate from './FormDate'
 import FormTextArea from './FormTextArea'
 import FormSearchAndSelect from './FormSearchAndSelect'
+import FormPhoneInput from './FormPhoneInput'
+import FormFileUpload from './FormFileUpload'
 
 export const fieldsNames = {
-  DROPDOWN: 'Dropdown',
-  LONGTEXT: 'Long text',
-  SHORTEXT: 'Short text',
+  DROPDOWN: 'Dropdown', //done
+  LONGTEXT: 'Long text', //done
+  SHORTEXT: 'Short text', //done
   ACTIONTOGGLE: 'Action Toggle',
   CHECKBOX: 'Multiple Choice (checkbox)',
   RADIO: 'Single Choice (radio)',
   BUTTON: 'Button',
   FILEUPLOAD: 'File Upload',
-  PASSWORD: 'Password',
-  PHONEINPUT: 'Phone Input',
+  PASSWORD: 'Password', //done
+  PHONEINPUT: 'Phone Input', //done
   HEADING: 'Heading',
-  INFOTEXT: 'Info text',
-  DATE: 'Date',
-  NUMBERCOUNTER: 'Number counter',
-  EMAIL: 'Email',
+  INFOTEXT: 'Info text', //done
+  DATE: 'Date', //done
+  NUMBERCOUNTER: 'Number counter', //done
+  EMAIL: 'Email', //done
   RANGE: 'Range',
-  TIME: 'Time',
+  TIME: 'Time', //done
   URL: 'URL',
-  SEARCHANDSELECT: 'Search and Select',
-  MONTH: 'Month',
-  WEEK: 'Week',
-  DATETIME: 'Date-Time',
+  SEARCHANDSELECT: 'Search and Select', //done
+  MONTH: 'Month', //done
+  WEEK: 'Week', //done
+  DATETIME: 'Date-Time', //done
 }
 
 type Props = {
@@ -100,7 +102,6 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
               field.name === fieldsNames.INFOTEXT ||
               field.name === fieldsNames.NUMBERCOUNTER ||
               field.name === fieldsNames.PASSWORD ||
-              field.name === fieldsNames.PHONEINPUT ||
               field.name === fieldsNames.SHORTEXT ||
               field.name === fieldsNames.URL
             ) {
@@ -127,6 +128,13 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
 
             if (field.name === fieldsNames.SEARCHANDSELECT) {
               return <FormSearchAndSelect item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.PHONEINPUT) {
+              return <FormPhoneInput item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.FILEUPLOAD) {
+              return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
             }
           })}
       </div>
