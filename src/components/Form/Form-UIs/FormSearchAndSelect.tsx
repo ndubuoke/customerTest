@@ -83,6 +83,16 @@ const FormSearchAndSelect = ({ item, collapsed }: Props) => {
         >
           <img src={search} width={15} height={10} />
         </span>
+        <span
+          className='absolute z-50 -right-1   h-full pt-4'
+          style={{
+            top: '-6px',
+            right: '4.7px',
+            pointerEvents: 'none',
+          }}
+        >
+          <img src={caret} width={15} height={10} />
+        </span>
       </div>
     </div>
   )

@@ -50,27 +50,27 @@ const FormDropdown = ({ item, collapsed }: Props) => {
     : getProperty(item.formControlProperties, 'Dropdown Options List', 'defaultState').text
     ? getProperty(item.formControlProperties, 'Dropdown Options List', 'defaultState').text
     : ''
-  const specifyOptionsListValue = getProperty(item.formControlProperties, 'Specify Options List', 'value').list
-    ? getProperty(item.formControlProperties, 'Specify Options List', 'value').list
-    : getProperty(item.formControlProperties, 'Specify Options List', 'defaultState').list
-    ? getProperty(item.formControlProperties, 'Specify Options List', 'defaultState').list
+  const specifyOptionsListValue = getProperty(item.formControlProperties, 'Specify Options List', 'value').text
+    ? getProperty(item.formControlProperties, 'Specify Options List', 'value').text
+    : getProperty(item.formControlProperties, 'Specify Options List', 'defaultState').text
+    ? getProperty(item.formControlProperties, 'Specify Options List', 'defaultState').text
     : ''
-  const importFromFileListValue = getProperty(item.formControlProperties, 'Upload List', 'value').list
-    ? getProperty(item.formControlProperties, 'Upload List', 'value').list
-    : getProperty(item.formControlProperties, 'Upload List', 'defaultState').list
-    ? getProperty(item.formControlProperties, 'Upload List', 'defaultState').list
-    : ''
-
-  const importFromAPIListValue = getProperty(item.formControlProperties, 'Specify API', 'value').list
-    ? getProperty(item.formControlProperties, 'Specify API', 'value').list
-    : getProperty(item.formControlProperties, 'Specify API', 'defaultState').list
-    ? getProperty(item.formControlProperties, 'Specify API', 'defaultState').list
+  const importFromFileListValue = getProperty(item.formControlProperties, 'Upload List', 'value').text
+    ? getProperty(item.formControlProperties, 'Upload List', 'value').text
+    : getProperty(item.formControlProperties, 'Upload List', 'defaultState').text
+    ? getProperty(item.formControlProperties, 'Upload List', 'defaultState').text
     : ''
 
-  const importFromURLListValue = getProperty(item.formControlProperties, 'Specify URL', 'value').list
-    ? getProperty(item.formControlProperties, 'Specify URL', 'value').list
-    : getProperty(item.formControlProperties, 'Specify URL', 'defaultState').list
-    ? getProperty(item.formControlProperties, 'Specify URL', 'defaultState').list
+  const importFromAPIListValue = getProperty(item.formControlProperties, 'Specify API', 'value').text
+    ? getProperty(item.formControlProperties, 'Specify API', 'value').text
+    : getProperty(item.formControlProperties, 'Specify API', 'defaultState').text
+    ? getProperty(item.formControlProperties, 'Specify API', 'defaultState').text
+    : ''
+
+  const importFromURLListValue = getProperty(item.formControlProperties, 'Specify URL', 'value').text
+    ? getProperty(item.formControlProperties, 'Specify URL', 'value').text
+    : getProperty(item.formControlProperties, 'Specify URL', 'defaultState').text
+    ? getProperty(item.formControlProperties, 'Specify URL', 'defaultState').text
     : ''
 
   const optionsField =
@@ -107,8 +107,8 @@ const FormDropdown = ({ item, collapsed }: Props) => {
   }
 
   // useEffect(() => {
-  //   console.log(multipleSelectedDropdownItems)
-  // }, [multipleSelectedDropdownItems.length])
+  //   console.log({ specifyOptionsListValue, optionsField })
+  // }, [optionsField])
 
   return (
     <div
@@ -130,10 +130,18 @@ const FormDropdown = ({ item, collapsed }: Props) => {
           onClick={() => setShowLists((prev) => !prev)}
           title={selectedDropdownItem && selectedDropdownItem}
         >
-          <div className='overflow-hidden'>
-            {selectedDropdownItem && selectedDropdownItem}
-            <span className={`text-text-disabled`}>{!selectedDropdownItem && 'Select'}</span>
-          </div>
+          {enableMultipleSelection.toLowerCase() === 'off' ? (
+            <div className='overflow-hidden'>
+              {selectedDropdownItem && selectedDropdownItem}
+              <span className={`text-text-disabled`}>{!selectedDropdownItem && 'Select'}</span>
+            </div>
+          ) : null}
+
+          {enableMultipleSelection.toLowerCase() === 'on' ? (
+            <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
+              {multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ') || 'Select'}
+            </div>
+          ) : null}
           <span>
             <img src={caret} width={15} height={10} />
           </span>
@@ -146,50 +154,26 @@ const FormDropdown = ({ item, collapsed }: Props) => {
             }}
           >
             {enableMultipleSelection.toLowerCase() === 'off'
-              ? optionsField?.length > 0
-                ? optionsField?.map((selected, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`hover:bg-slate-100 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-white' : ''} `}
-                        onClick={() => handleSelectedDropdownItem(selected)}
-                      >
-                        {selected}
-                      </div>
-                    )
-                  })
-                : sampleList?.map((selected, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`hover:bg-slate-100 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-white' : ''} `}
-                        onClick={() => handleSelectedDropdownItem(selected)}
-                      >
-                        {selected}
-                      </div>
-                    )
-                  })
+              ? optionsField?.length > 0 &&
+                optionsField?.split(',')?.map((selected, index) => {
+                  return (
+                    <div
+                      key={index}
+                      className={`hover:bg-slate-100 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-white' : ''} `}
+                      onClick={() => handleSelectedDropdownItem(selected)}
+                    >
+                      {selected.trim()}
+                    </div>
+                  )
+                })
               : null}
             {enableMultipleSelection.toLowerCase() === 'on'
-              ? optionsField?.length > 0
-                ? optionsField?.map((selected: string, index: number) => {
-                    return (
-                      <MultipleSelectionItem
-                        handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
-                        selected={selected}
-                        key={index}
-                      />
-                    )
-                  })
-                : sampleList?.map((selected: string, index: number) => {
-                    return (
-                      <MultipleSelectionItem
-                        handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
-                        selected={selected}
-                        key={index}
-                      />
-                    )
-                  })
+              ? optionsField?.length > 0 &&
+                optionsField?.split(',')?.map((selected: string, index: number) => {
+                  return (
+                    <MultipleSelectionItem handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem} selected={selected} key={index} />
+                  )
+                })
               : null}
           </div>
         )}
