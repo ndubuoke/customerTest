@@ -36,6 +36,10 @@ const Form = ({ kind, formFields }: Props) => {
                   return <FormLayout isSection={true} item={sects} fields={sects.fields} key={sects.id} />
                 })
               : null}
+
+            {activePageState?.fields?.length > 0 && (
+              <FormLayout isSection={false} item={activePageState} fields={activePageState?.fields} key={activePageState?.id} />
+            )}
           </div>
         </div>
       ) : null}
