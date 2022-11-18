@@ -10,30 +10,36 @@ import FormTextArea from './FormTextArea'
 import FormSearchAndSelect from './FormSearchAndSelect'
 import FormPhoneInput from './FormPhoneInput'
 import FormFileUpload from './FormFileUpload'
+import FormCheckbox from './FormActionToggle'
+import FormActionToggle from './FormActionToggle'
+import FormHeading from './FormHeading'
+import FormButton from './FormButton'
+import FormRadio from './FormRadio'
+import FormRange from './FormRange'
 
 export const fieldsNames = {
-  DROPDOWN: 'Dropdown', //done
-  LONGTEXT: 'Long text', //done
-  SHORTEXT: 'Short text', //done
-  ACTIONTOGGLE: 'Action Toggle',
-  CHECKBOX: 'Multiple Choice (checkbox)',
-  RADIO: 'Single Choice (radio)',
-  BUTTON: 'Button',
-  FILEUPLOAD: 'File Upload',
-  PASSWORD: 'Password', //done
-  PHONEINPUT: 'Phone Input', //done
-  HEADING: 'Heading',
-  INFOTEXT: 'Info text', //done
-  DATE: 'Date', //done
-  NUMBERCOUNTER: 'Number counter', //done
-  EMAIL: 'Email', //done
-  RANGE: 'Range',
-  TIME: 'Time', //done
-  URL: 'URL',
-  SEARCHANDSELECT: 'Search and Select', //done
-  MONTH: 'Month', //done
-  WEEK: 'Week', //done
-  DATETIME: 'Date-Time', //done
+  DROPDOWN: 'Dropdown', //done-
+  LONGTEXT: 'Long text', //done-
+  SHORTEXT: 'Short text', //done-
+  ACTIONTOGGLE: 'Action Toggle', //done-
+  CHECKBOX: 'Multiple Choice (checkbox)', //done-
+  RADIO: 'Single Choice (radio)', // done-
+  BUTTON: 'Button', //done-
+  FILEUPLOAD: 'File Upload', //done-
+  PASSWORD: 'Password', //done-
+  PHONEINPUT: 'Phone Input', //done-
+  HEADING: 'Heading', //done-
+  INFOTEXT: 'Info text', //done -
+  DATE: 'Date', //done-
+  NUMBERCOUNTER: 'Number counter', //done-
+  EMAIL: 'Email', //done-
+  RANGE: 'Range', //done-
+  TIME: 'Time', //done-
+  URL: 'URL', // done-
+  SEARCHANDSELECT: 'Search and Select', //done-
+  MONTH: 'Month', //done----
+  WEEK: 'Week', //done-
+  DATETIME: 'Date-Time', //done-
 }
 
 type Props = {
@@ -103,7 +109,8 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
               field.name === fieldsNames.NUMBERCOUNTER ||
               field.name === fieldsNames.PASSWORD ||
               field.name === fieldsNames.SHORTEXT ||
-              field.name === fieldsNames.URL
+              field.name === fieldsNames.URL ||
+              field.name === fieldsNames.EMAIL
             ) {
               return <FormInput item={field} key={field.id} collapsed={collapsed} />
             }
@@ -135,6 +142,27 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
 
             if (field.name === fieldsNames.FILEUPLOAD) {
               return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.ACTIONTOGGLE) {
+              return <FormActionToggle item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.CHECKBOX) {
+              return <FormCheckbox item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.HEADING) {
+              return <FormHeading item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.BUTTON) {
+              return <FormButton item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.RADIO) {
+              return <FormRadio item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.RANGE) {
+              return <FormRange item={field} key={field.id} collapsed={collapsed} />
             }
           })}
       </div>

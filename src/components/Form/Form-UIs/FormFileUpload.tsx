@@ -29,7 +29,7 @@ const FormFileUpload = ({ item, collapsed }: Props) => {
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
-  const allowableFileTypes = 'pdf' // formGetProperty(item.formControlProperties, 'Allowable File Types', 'png, jpg, pdf')
+  const allowableFileTypes = formGetProperty(item.formControlProperties, 'Allowable File Types', 'png, jpg, pdf')
 
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [fileUploadError, setFileUploadError] = useState(false)
