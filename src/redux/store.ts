@@ -9,6 +9,7 @@ import {
   BulkProcessSummaryTypes,
 } from './reducers/BulkCreation'
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
+import { validateCustomerResponseType, validateCustomerReducer } from './reducers/ValidateCustomer.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -16,6 +17,7 @@ export type ReducersType = {
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
+  validateCustomer: validateCustomerResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -25,6 +27,7 @@ const reducer = combineReducers<ReducersType>({
   bulkProcessSummary: bulkProcessSummaryReducer,
 
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
+  validateCustomer: validateCustomerReducer,
 })
 
 const middleware = [thunk]
