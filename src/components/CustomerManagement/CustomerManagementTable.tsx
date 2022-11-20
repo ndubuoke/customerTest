@@ -770,6 +770,7 @@ const CustomerManagementTable = ({
                                   <div
                                     key={index}
                                     className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                    // here
                                     onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                                   >
                                     <span className='flex w-full  '>

@@ -1,10 +1,17 @@
 import React, { useState, memo } from 'react'
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
-import { UploadFile } from './FileUploader'
+import { UploadFile } from '.'
 import RemoveButton from './RemoveButton'
 
 type Props = {
-  file: UploadFile
+  file: {
+    file: File
+    key?: string
+    verificationData?: {
+      docType: string
+      extractedData: string[]
+    }
+  }
   removeFile: (item: any) => void
 }
 

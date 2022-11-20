@@ -9,7 +9,7 @@ import { API } from 'Utilities/api'
 type Props = {
   setLocalUpload: (file: any) => void
 }
- type UploadFile = {
+type UploadFile = {
   file: File
   key: string
 }
@@ -17,26 +17,26 @@ type Props = {
 const FileUploadComponent = ({ setLocalUpload }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
 
-    const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
-      const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
-        try {
-          const formdata = new FormData()
-          formdata.append('fileName', file)
-          const response = await API.post('/file/upload', formdata)
-          return {
-            file,
-            key: response.data.data.fileKey,
-          }
-        } catch (err) {
-          console.error(err.message, `failed to upload file - ${file.name}`)
-          return null
+  const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
+    const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
+      try {
+        const formdata = new FormData()
+        formdata.append('fileName', file)
+        const response = await API.post('/file/upload', formdata)
+        return {
+          file,
+          key: response.data.data.fileKey,
         }
-      })
-      const awaitUploadedFiles = await Promise.all(uploadedFiles)
-      const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
-      setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
-      setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
-    }, [])
+      } catch (err) {
+        console.error(err.message, `failed to upload file - ${file.name}`)
+        return null
+      }
+    })
+    const awaitUploadedFiles = await Promise.all(uploadedFiles)
+    const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
+    setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
+    setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
+  }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
