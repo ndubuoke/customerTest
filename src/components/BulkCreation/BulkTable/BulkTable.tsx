@@ -26,7 +26,7 @@ export const BulkTable = ({ uploadedFile, tableTitle, failedValidation, successf
   return (
     <>
       {/* {records?.length ? */}
-      <div className={`w-full p-20 font-[Inter]`}>
+      <div className={`w-full ${hasControls ? 'p-20' : 'px-20'} font-[Inter]`}>
         <div className={`w-full flex justify-between items-end h-[150px]`}>
           <div className={`flex flex-col gap-y-8`}>
             <div>{tableTitle}</div>
@@ -85,7 +85,7 @@ export const BulkTable = ({ uploadedFile, tableTitle, failedValidation, successf
             </div> : null}
           </div>
         </div>
-        <div className="shadow overflow-x-auto border-b border-gray-200 mt-10">
+        <div className="shadow overflow-auto border-b border-gray-200 mt-10">
           <table id='table-to-xlsx' className={`min-w-full divide-y divide-x divide-gray-200`}>
             <thead className={`bg-gray-50 h-[60px] w-full`}>
               <tr className={`h-[60px] bg-gray-50`}>
