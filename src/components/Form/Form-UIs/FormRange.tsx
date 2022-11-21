@@ -20,6 +20,9 @@ const FormRange = ({ item, collapsed }: Props) => {
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
+  const maximumNumericInput = formGetProperty(item.formControlProperties, 'Maximum numeric input', '')
+  const minimumNumericInput = formGetProperty(item.formControlProperties, 'Minimum numeric input', '')
+  const stepSize = formGetProperty(item.formControlProperties, 'Step size', '')
 
   const displayType = formGetProperty(item.formControlProperties, 'Type', 'checkbox') as DisplayTypeType
   let _labelPosition = getProperty(item.formControlProperties, 'Swap label position', 'value').text
@@ -45,7 +48,7 @@ const FormRange = ({ item, collapsed }: Props) => {
       title={helpText}
     >
       <div className={` flex    w-full  h-fit gap-2 items-center`}>
-        <input type='range' className={`accent-primay-main w-4 h-4 `} />
+        <input type='range' className={`accent-primay-main  `} min={Number(minimumNumericInput)} max={Number(minimumNumericInput)} step={stepSize} />
         <div className={`relative w-fit ${labelPosition === 'left' ? 'order-2' : 'order-1'}`}>
           {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
           <FieldLabel fieldItem={item} />
