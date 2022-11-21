@@ -1,12 +1,19 @@
 export const formStruture = {
   data: {
     customerData: [
-      // {
-      //     "sectionName": "",
-      //     "data": {
-      //     }
-      // },
+      {
+        sectionName: 'bioData',
+        data: {
+          firstName: '',
+        },
+        sectionId: '',
+        pageId: '',
+      },
     ],
+    formInfomation: {
+      formId: '',
+      formType: '',
+    },
     waiverData: {
       initiator: '',
       initiatorId: '',
@@ -20,7 +27,7 @@ export const formStruture = {
     requestData: {
       initiator: '',
       initiatorId: '',
-      requestType: 'creation',
+      requestType: '', // 'creation' ,
     },
   },
 }
