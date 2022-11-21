@@ -1,6 +1,6 @@
 import { AppAlert } from 'Components/Shareables'
 import Spinner from 'Components/Shareables/Spinner'
-import { FormStrutureType } from 'Components/types/FormStructure.types'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
@@ -20,7 +20,7 @@ type Props = {
 const Form = ({ kind, formFields }: Props) => {
   const dispatch = useDispatch()
 
-  const [fillingFormState, setFillingFormState] = useState<FormStrutureType>(formStruture)
+  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
 
   const [activeFormSections, setActiveFormSections] = useState<any>([])
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
@@ -43,6 +43,18 @@ const Form = ({ kind, formFields }: Props) => {
     }
     // }
   }, [publishedForm])
+
+  useEffect(() => {
+    if (!fillingFormState.data?.formInfomation?.formId) {
+      const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+        ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)) as FormStructureType)
+        : null
+
+      if (fillingFormInStorage) {
+        setFillingFormState(fillingFormInStorage)
+      }
+    }
+  }, [])
 
   useEffect(() => {
     sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
@@ -71,6 +83,7 @@ const Form = ({ kind, formFields }: Props) => {
                       key={sects.id}
                       setFillingFormState={setFillingFormState}
                       publishedFormState={publishedFormState}
+                      fillingFormState={fillingFormState}
                     />
                   )
                 })
@@ -84,6 +97,7 @@ const Form = ({ kind, formFields }: Props) => {
                 key={activePageState?.id}
                 setFillingFormState={setFillingFormState}
                 publishedFormState={publishedFormState}
+                fillingFormState={fillingFormState}
               />
             )}
           </div>

@@ -1,14 +1,14 @@
 export const formStruture = {
   data: {
     customerData: [
-      {
-        sectionName: '',
-        data: {
-          firstName: 'Bonaventure',
-        },
-        sectionId: '',
-        pageId: '',
-      },
+      // {
+      //   sectionName: '',
+      //   data: {
+      //     firstName: 'Bonaventure',
+      //   },
+      //   sectionId: '',
+      //   pageId: '',
+      // },
     ],
     formInfomation: {
       formId: '',

@@ -1,7 +1,8 @@
-import { FormSectionType, FormStrutureType } from 'Components/types/FormStructure.types'
+import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
 import { useSelector } from 'react-redux'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
@@ -15,9 +16,11 @@ type Props = {
   setFillingFormState: any
   publishedFormState: ResponseType
   activePageState?: PageInstance
+
+  fillingFormState: FormStructureType
 }
 
-const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState }: Props) => {
+const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
 
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
@@ -27,6 +30,7 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
+  const theItemFieldNameCamelCase = camelize(fieldLabel)
   // const pageName = theForm?.builtFormMetadata?.pages?.find((x) => formGetProperty(x.pageProperties, "Page name", "Page Name") )
 
   // const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
@@ -38,7 +42,7 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)
 
-    setFillingFormState((prev: FormStrutureType) => {
+    setFillingFormState((prev: FormStructureType) => {
       const copiedPrev = { ...prev }
       const pageId = theItemFromChange?.pageId
 
@@ -48,19 +52,19 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
       }
 
       // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
-      const theItemFieldNameCamelCase = camelize(fieldLabel)
+
       const sectionId = theItemFromChange?.sectionId
       let sectionIndex
 
       if (sectionId) {
-        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x.id === pageId)?.sections?.find((x) => x.id === sectionId)
+        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
         const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
         const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
-        const theSection = copiedPrev?.data?.customerData?.find((x) => x.sectionName === theItemSectionNameCamelCase) as FormSectionType
+        const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
 
         if (theSection) {
-          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x.sectionName === theItemSectionNameCamelCase)
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
           theSection.data[theItemFieldNameCamelCase] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
@@ -81,10 +85,10 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
         const pageNameCamelCase = camelize(pageName)
         const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
 
-        const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x.sectionName === pageNameToBeUsed) as FormSectionType
+        const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
 
         if (theSectionlessPage) {
-          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x.sectionName === pageNameToBeUsed)
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
           theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
@@ -103,6 +107,22 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
       return copiedPrev
     })
   }
+
+  useEffect(() => {
+    const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
+      if (x.sectionId) {
+        return x.sectionId === item.sectionId
+      } else {
+        return x.pageId === item.pageId
+      }
+    })
+
+    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+
+    if (theData) {
+      setText(theData)
+    }
+  }, [])
 
   return (
     <div
@@ -140,6 +160,7 @@ const FormInput = ({ item, collapsed, setFillingFormState, publishedFormState, a
           title={helpText}
           onChange={(e) => handleChange(e, item)}
           maxLength={Number(maximumNumbersOfCharacters)}
+          value={text}
         />
 
         {maximumNumbersOfCharacters ? (
