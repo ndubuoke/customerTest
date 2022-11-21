@@ -1,4 +1,5 @@
 export {
   type setRolesAndPermissionsActionTypes,
-  getRolesAndPermissions
+  getRolesAndPermissions,
+  getUserProfile,
 } from './UserPersmissions'

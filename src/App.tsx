@@ -6,7 +6,7 @@ import Customer360 from 'Screens/Customer360'
 import { useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { RouteSwitches } from './routes/AppRoutes'
-import { getRolesAndPermissions } from 'Redux/actions/UserPersmissions'
+import { getRolesAndPermissions, getUserProfile } from 'Redux/actions/UserPersmissions'
 
 type Props = {}
 
@@ -14,6 +14,7 @@ const App = ({ }: Props) => {
   const dispatch: any = useDispatch()
 
   useEffect(() => {
+    dispatch(getUserProfile())
     dispatch(getRolesAndPermissions())
   }, [])
 
