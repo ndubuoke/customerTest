@@ -1,5 +1,3 @@
-export type UserInputData = {}
-
 export type FormSectionType = {
   sectionName: string
   data: {}
