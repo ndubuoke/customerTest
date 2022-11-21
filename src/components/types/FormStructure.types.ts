@@ -5,9 +5,9 @@ export type FormSectionType = {
   pageId: string | number
 }
 
-export type FormStrutureType = {
+export type FormStructureType = {
   data: {
-    customerData: Array<FormSectionType> | Array<{}>
+    customerData: Array<FormSectionType> | null
     formInfomation: {
       formId: string | number
       formType: string | number

@@ -16,7 +16,7 @@ import FormHeading from './FormHeading'
 import FormButton from './FormButton'
 import FormRadio from './FormRadio'
 import FormRange from './FormRange'
-import { FormStrutureType } from 'Components/types/FormStructure.types'
+import { FormStructureType as FormStructureType } from 'Components/types/FormStructure.types'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 
 export const fieldsNames = {
@@ -49,11 +49,12 @@ type Props = {
   activeSection?: boolean
   item?: FormControlType | FormControlTypeWithSection
   fields?: Array<FormControlType | FormControlTypeWithSection>
-  setFillingFormState: (value: FormStrutureType) => void
+  setFillingFormState: (value: FormStructureType) => void
   publishedFormState: ResponseType
+  fillingFormState: FormStructureType
 }
 
-const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormState, publishedFormState }: Props) => {
+const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormState, publishedFormState, fillingFormState }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -124,6 +125,7 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
                   collapsed={collapsed}
                   setFillingFormState={setFillingFormState}
                   publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
                 />
               )
             }
