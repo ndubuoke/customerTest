@@ -7,9 +7,10 @@ import {
   BulkCustomerValidationProfileTypes,
   bulkProcessSummaryReducer,
   BulkProcessSummaryTypes,
-} from './reducers/BulkCreation'
+} from 'Redux/reducers/BulkCreation'
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
-import { validateCustomerResponseType, validateCustomerReducer } from './reducers/ValidateCustomer.reducer'
+import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
+import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -17,6 +18,8 @@ export type ReducersType = {
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
+  userRolesAndPermissions: UserRolesAndPersmissionsTypes
+  userProfile: UserProfileTypes
   validateCustomer: validateCustomerResponseType
 }
 
@@ -25,8 +28,9 @@ const reducer = combineReducers<ReducersType>({
   allCustomers: getCustomersReducer,
   allRequests: getCustomersRequestReducer,
   bulkProcessSummary: bulkProcessSummaryReducer,
-
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
+  userRolesAndPermissions: userRolesAndPermissionsReducer,
+  userProfile: userProfileReducer,
   validateCustomer: validateCustomerReducer,
 })
 
