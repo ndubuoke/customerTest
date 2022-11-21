@@ -6,30 +6,40 @@ import { FormControlType, FormControlTypeWithSection } from '../Types'
 import FormInput from './FormInput'
 import FormDropdown from './FormDropdown'
 import FormDate from './FormDate'
+import FormTextArea from './FormTextArea'
+import FormSearchAndSelect from './FormSearchAndSelect'
+import FormPhoneInput from './FormPhoneInput'
+import FormFileUpload from './FormFileUpload'
+import FormCheckbox from './FormActionToggle'
+import FormActionToggle from './FormActionToggle'
+import FormHeading from './FormHeading'
+import FormButton from './FormButton'
+import FormRadio from './FormRadio'
+import FormRange from './FormRange'
 
 export const fieldsNames = {
-  DROPDOWN: 'Dropdown',
-  LONGTEXT: 'Long text',
-  SHORTEXT: 'Short text',
-  ACTIONTOGGLE: 'Action Toggle',
-  CHECKBOX: 'Multiple Choice (checkbox)',
-  RADIO: 'Single Choice (radio)',
-  BUTTON: 'Button',
-  FILEUPLOAD: 'File Upload',
-  PASSWORD: 'Password',
-  PHONEINPUT: 'Phone Input',
-  HEADING: 'Heading',
-  INFOTEXT: 'Info text',
-  DATE: 'Date',
-  NUMBERCOUNTER: 'Number counter',
-  EMAIL: 'Email',
-  RANGE: 'Range',
-  TIME: 'Time',
-  URL: 'URL',
-  SEARCHANDSELECT: 'Search and Select',
-  MONTH: 'Month',
-  WEEK: 'Week',
-  DATETIME: 'Date-Time',
+  DROPDOWN: 'Dropdown', //done-
+  LONGTEXT: 'Long text', //done-
+  SHORTEXT: 'Short text', //done-
+  ACTIONTOGGLE: 'Action Toggle', //done-
+  CHECKBOX: 'Multiple Choice (checkbox)', //done-
+  RADIO: 'Single Choice (radio)', // done-
+  BUTTON: 'Button', //done-
+  FILEUPLOAD: 'File Upload', //done-
+  PASSWORD: 'Password', //done-
+  PHONEINPUT: 'Phone Input', //done-
+  HEADING: 'Heading', //done-
+  INFOTEXT: 'Info text', //done -
+  DATE: 'Date', //done-
+  NUMBERCOUNTER: 'Number counter', //done-
+  EMAIL: 'Email', //done-
+  RANGE: 'Range', //done-
+  TIME: 'Time', //done-
+  URL: 'URL', // done-
+  SEARCHANDSELECT: 'Search and Select', //done-
+  MONTH: 'Month', //done----
+  WEEK: 'Week', //done-
+  DATETIME: 'Date-Time', //done-
 }
 
 type Props = {
@@ -96,12 +106,11 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
           fields?.map((field, index) => {
             if (
               field.name === fieldsNames.INFOTEXT ||
-              field.name === fieldsNames.LONGTEXT ||
               field.name === fieldsNames.NUMBERCOUNTER ||
               field.name === fieldsNames.PASSWORD ||
-              field.name === fieldsNames.PHONEINPUT ||
               field.name === fieldsNames.SHORTEXT ||
-              field.name === fieldsNames.URL
+              field.name === fieldsNames.URL ||
+              field.name === fieldsNames.EMAIL
             ) {
               return <FormInput item={field} key={field.id} collapsed={collapsed} />
             }
@@ -118,6 +127,42 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
               field.name === fieldsNames.WEEK
             ) {
               return <FormDate item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.LONGTEXT) {
+              return <FormTextArea item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.SEARCHANDSELECT) {
+              return <FormSearchAndSelect item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.PHONEINPUT) {
+              return <FormPhoneInput item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.FILEUPLOAD) {
+              return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.ACTIONTOGGLE) {
+              return <FormActionToggle item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.CHECKBOX) {
+              return <FormCheckbox item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.HEADING) {
+              return <FormHeading item={field} key={field.id} collapsed={collapsed} />
+            }
+
+            if (field.name === fieldsNames.BUTTON) {
+              return <FormButton item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.RADIO) {
+              return <FormRadio item={field} key={field.id} collapsed={collapsed} />
+            }
+            if (field.name === fieldsNames.RANGE) {
+              return <FormRange item={field} key={field.id} collapsed={collapsed} />
             }
           })}
       </div>

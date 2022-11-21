@@ -12,11 +12,14 @@ import Button from 'Components/Shareables/Button'
 import SkipToForm from 'Components/Shareables/SkipToForm'
 import Form from 'Components/Form'
 import { UploadFile } from 'Components/Shareables'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { validateCustomerAction, validateCustomerResultModalAction } from 'Redux/actions/ValidateCustomer.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 import { API } from 'Utilities/api'
 import ExtractInfoModal from 'Components/Shareables/ExtractInfoModal'
+import { validateCustomerResponseType } from 'Redux/reducers/ValidateCustomer.reducer'
+import { ReducersType } from 'Redux/store'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -35,8 +38,13 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const dispatch = useDispatch()
 
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
+  const {
+    loading,
+    showResultModal,
+    serverResponse: { data },
+  } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
   const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
     identificationType: null,
     identificationNumber: null,
@@ -45,14 +53,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const [localUpload, setLocalUpload] = useState<Array<UploadFile>>([])
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
-  const [matchResponse, setMatchResponse] = useState({ showModal: false, response: { matches: {}, percent: '90.00' } })
-  const [isMatching, setIsMatching] = useState(false)
 
   const handleModalDisplay = (isVisible: boolean) => {
-    setMatchResponse((prev) => ({
-      ...prev,
-      showModal: isVisible,
-    }))
+    dispatch(validateCustomerResultModalAction(isVisible) as any)
   }
 
   const onSetFormMode = useCallback(
@@ -64,27 +67,11 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   )
 
   const handleProceed = async () => {
-    setIsMatching(true)
-    try {
-      const response = await API.post(`/verification/match/${identificationDetails.identificationType}`, {
-        extractedData: localUpload.map((upload) => ({
-          documentType: upload.verificationData.docType,
-          data: upload.verificationData.extractedData,
-        })),
-        identityData: identificationDetails.identityData,
-      })
-      setIsMatching(false)
-      setMatchResponse({
-        showModal: true,
-        response: response.data.data,
-      })
-      console.log('uploads', localUpload)
-      console.log('identificationDetails', identificationDetails)
-      console.log('response', response)
-    } catch (err) {
-      console.error(err)
-      setIsMatching(false)
-    }
+    const extractedData = localUpload.map((upload) => ({
+      documentType: upload.verificationData.docType,
+      data: upload.verificationData.extractedData,
+    }))
+    dispatch(validateCustomerAction(identificationDetails.identificationType, extractedData, identificationDetails.identityData) as any)
   }
 
   useEffect(() => {
@@ -105,8 +92,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
           {!formCreationStarted ? (
             <>
-              {isMatching && <ExtractInfoModal />}
-              {matchResponse.showModal && <MatchModal setShowMatchModal={handleModalDisplay} data={matchResponse.response} />}
+              {loading && <ExtractInfoModal />}
+              {showResultModal && <MatchModal setShowMatchModal={handleModalDisplay} data={data} />}
               <WizardChanger formMode={formMode} creationMode={creationMode} customerType={customerType} />
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />

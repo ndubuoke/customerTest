@@ -30,12 +30,16 @@ const Form = ({ kind, formFields }: Props) => {
       {publishedForm?.serverResponse?.status ? (
         <div>
           <Steps setActivePageState={setActivePageState} />
-          <div className='min-h-[605px]  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
+          <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
             {activePageState?.sections?.length > 0
               ? activePageState?.sections?.map((sects) => {
                   return <FormLayout isSection={true} item={sects} fields={sects.fields} key={sects.id} />
                 })
               : null}
+
+            {activePageState?.fields?.length > 0 && (
+              <FormLayout isSection={false} item={activePageState} fields={activePageState?.fields} key={activePageState?.id} />
+            )}
           </div>
         </div>
       ) : null}

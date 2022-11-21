@@ -23,7 +23,7 @@ const IndividualFile = memo(({ file, removeFile }: Props) => {
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
       <div>
         {file.file.type.startsWith('image') && (
-          <img src={URL.createObjectURL(file.file)} className='object-contain' style={{ width: '194', height: '104px' }} />
+          <img src={URL.createObjectURL(file.file)} className='object-contain' width={194} height={104} style={{ width: '194', height: '104px' }} />
         )}
         {file.file.type.endsWith('pdf') && (
           <Document file={file.file}>
