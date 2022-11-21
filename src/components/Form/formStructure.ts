@@ -2,11 +2,18 @@ export const formStruture = {
   data: {
     customerData: [
       // {
-      //     "sectionName": "",
-      //     "data": {
-      //     }
+      //   sectionName: '',
+      //   data: {
+      //     firstName: 'Bonaventure',
+      //   },
+      //   sectionId: '',
+      //   pageId: '',
       // },
     ],
+    formInfomation: {
+      formId: '',
+      formType: '',
+    },
     waiverData: {
       initiator: '',
       initiatorId: '',
@@ -20,7 +27,7 @@ export const formStruture = {
     requestData: {
       initiator: '',
       initiatorId: '',
-      requestType: 'creation',
+      requestType: '', // 'creation' ,
     },
   },
 }

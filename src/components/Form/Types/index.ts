@@ -123,6 +123,7 @@ export type FormControlTypeWithSection = {
   createdAt?: string
   updatedAt?: string
   __v?: number | string
+  pageId?: string
   sectionId?: number | string
 }
 

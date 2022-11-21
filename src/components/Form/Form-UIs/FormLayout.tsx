@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { dots } from 'Assets/svgs'
 import React from 'react'
 import { getProperty } from 'Utilities/getProperty'
-import { FormControlType, FormControlTypeWithSection } from '../Types'
+import { FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FormInput from './FormInput'
 import FormDropdown from './FormDropdown'
 import FormDate from './FormDate'
@@ -16,6 +16,8 @@ import FormHeading from './FormHeading'
 import FormButton from './FormButton'
 import FormRadio from './FormRadio'
 import FormRange from './FormRange'
+import { FormStructureType as FormStructureType } from 'Components/types/FormStructure.types'
+import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 
 export const fieldsNames = {
   DROPDOWN: 'Dropdown', //done-
@@ -47,9 +49,12 @@ type Props = {
   activeSection?: boolean
   item?: FormControlType | FormControlTypeWithSection
   fields?: Array<FormControlType | FormControlTypeWithSection>
+  setFillingFormState: (value: FormStructureType) => void
+  publishedFormState: ResponseType
+  fillingFormState: FormStructureType
 }
 
-const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
+const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormState, publishedFormState, fillingFormState }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -112,7 +117,17 @@ const FormLayout = ({ isSection, activeSection, item, fields }: Props) => {
               field.name === fieldsNames.URL ||
               field.name === fieldsNames.EMAIL
             ) {
-              return <FormInput item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormInput
+                  activePageState={item}
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.DROPDOWN) {
