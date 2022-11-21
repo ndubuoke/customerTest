@@ -1,15 +1,6 @@
 export const formStruture = {
   data: {
-    customerData: [
-      {
-        sectionName: 'bioData',
-        data: {
-          firstName: '',
-        },
-        sectionId: '',
-        pageId: '',
-      },
-    ],
+    customerData: [],
     formInfomation: {
       formId: '',
       formType: '',
