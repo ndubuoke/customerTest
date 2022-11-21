@@ -45,7 +45,7 @@ const Form = ({ kind, formFields }: Props) => {
   }, [publishedForm])
 
   useEffect(() => {
-    console.log(fillingFormState)
+    sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
   }, [fillingFormState])
 
   return (
