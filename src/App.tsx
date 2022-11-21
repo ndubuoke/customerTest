@@ -1,6 +1,13 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 
-import { MainScreen, FOURZEROFOUR, CustomerCreationScreen, CustomerAccountModificationScreen, BulkCustomerProcessSummary } from './screens'
+import {
+  MainScreen,
+  FOURZEROFOUR,
+  CustomerCreationScreen,
+  CustomerAccountModificationScreen,
+  BulkCustomerProcessSummary,
+  ProcessSummary,
+} from './screens'
 // import { TopNav } from 'Components/MainScreenLayout'
 import Customer360 from 'Screens/Customer360'
 import { AppRoutes } from './routes/AppRoutes'
@@ -14,10 +21,14 @@ const App = (props: Props) => {
       <Routes>
         <Route path={AppRoutes.mainScreen} element={<MainScreen />} />
         <Route path={AppRoutes.individualCustomerCreationScreen} element={<CustomerCreationScreen customerType='individual' />} />
-        <Route path={AppRoutes.bulkCustomerCreationMakerCheckerScreen} element={<BulkCustomerProcessSummary customerType='individual' headerText='Process Summary' />} />
+        <Route
+          path={AppRoutes.bulkCustomerCreationMakerCheckerScreen}
+          element={<BulkCustomerProcessSummary customerType='individual' headerText='Process Summary' />}
+        />
         <Route path={AppRoutes.SMECustomerCreationScreen} element={<CustomerCreationScreen customerType='sme' />} />
         <Route path={AppRoutes.customerAccountModificationScreen} element={<CustomerAccountModificationScreen />} />
         <Route path={AppRoutes.customer360Screen} element={<Customer360 />} />
+        <Route path={AppRoutes.ProcessSummary} element={<ProcessSummary headerText={''} customerType={'individual'} />} />
 
         {/* ----------------------NEVER REMOVE THIS------------------ */}
         <Route path={AppRoutes.FOURZEROFOUR} element={<FOURZEROFOUR />} />
