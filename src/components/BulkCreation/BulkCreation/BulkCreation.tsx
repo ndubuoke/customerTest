@@ -199,6 +199,14 @@ export const BulkCreation = () => {
               </div>
               : null
             }
+            {loading ?
+
+              <div className={`flex gap-x-2 mb-3`}>
+                <img className={`animate-spin`} src={BubbleLoader} alt={``} />
+                <div>Validating Means of Identification</div>
+              </div>
+              : null
+            }
             {bulkCustomersValidatedProfile?.length ?
 
               <div className={`flex gap-x-2 mb-3`}>
@@ -236,7 +244,7 @@ export const BulkCreation = () => {
         />
           : null
         }
-        <div className='flex  justify-center relative  gap-1'>
+        <div className={`flex  justify-center relative  gap-1 ${!bulkCustomersValidatedProfile.length ? "mt-52" : ""}`}>
           <Button
             text='Proceed'
             disabled={!bulkCustomersValidatedProfile.length}

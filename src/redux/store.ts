@@ -1,15 +1,16 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { getFormReducer, getPublishedFormSectionReducer, ResponseType } from './reducers/FormManagement.reducers'
+import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
 import {
   bulkCustomerValidationProfileReducer,
   BulkCustomerValidationProfileTypes,
   bulkProcessSummaryReducer,
   BulkProcessSummaryTypes,
-} from './reducers/BulkCreation'
+} from 'Redux/reducers/BulkCreation'
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
-import { validateCustomerResponseType, validateCustomerReducer } from './reducers/ValidateCustomer.reducer'
+import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
+import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -17,7 +18,8 @@ export type ReducersType = {
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
-  getPublishedFormSection: ResponseType
+  userRolesAndPermissions: UserRolesAndPersmissionsTypes
+  userProfile: UserProfileTypes
   validateCustomer: validateCustomerResponseType
 }
 
@@ -27,7 +29,8 @@ const reducer = combineReducers<ReducersType>({
   allRequests: getCustomersRequestReducer,
   bulkProcessSummary: bulkProcessSummaryReducer,
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
-  getPublishedFormSection: getPublishedFormSectionReducer,
+  userRolesAndPermissions: userRolesAndPermissionsReducer,
+  userProfile: userProfileReducer,
   validateCustomer: validateCustomerReducer,
 })
 
