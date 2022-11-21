@@ -1,5 +1,5 @@
 export enum STORAGE_NAMES {
-  ACTIVE_FORM_SECTION = 'CUSTOMER_MANAGEMENT-activeFormSection',
+  PUBLISHED_FORM_IN_STORAGE = 'CUSTOMER_MANAGEMENT-publishedFormInStorage',
 }
 
 // type StorageType = 'localStorage' | 'sessionStorage'
