@@ -17,8 +17,8 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
       },
     }
 
-     const { data } = await axios.get(`${SERVER_URL}/customer/published/type/${formType}`, config)
-    // const data = null
+    // const { data } = await axios.get(`${SERVER_URL}/customer/published/type/${formType}`, config)
+    const data = null
 
     dispatch({ type: GET_FORM_SUCCESS, payload: data })
 

@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { getProperty } from 'Utilities/getProperty'
 import { FormControlType, FormControlTypeWithSection } from '../Types'
 import FieldLabel from './FieldLabel'
@@ -9,7 +9,7 @@ type Props = {
   collapsed: boolean
 }
 
-const FormDate = ({ item, collapsed }: Props) => {
+const FormTextArea = ({ item, collapsed }: Props) => {
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
     ? getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -32,6 +32,18 @@ const FormDate = ({ item, collapsed }: Props) => {
     ? getProperty(item.formControlProperties, 'Help text', 'defaultState').text
     : fieldLabel
 
+  const maximumNumbersOfCharacters = getProperty(item.formControlProperties, 'Maximum Number of characters', 'value').text
+    ? getProperty(item.formControlProperties, 'Maximum Number of characters', 'value').text
+    : getProperty(item.formControlProperties, 'Maximum Number of characters', 'defaultState').text
+    ? getProperty(item.formControlProperties, 'Maximum Number of characters', 'defaultState').text
+    : '250'
+
+  const [text, setText] = useState<string>('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setText(e.target.value)
+  }
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} `}
@@ -45,29 +57,27 @@ const FormDate = ({ item, collapsed }: Props) => {
         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-      <div>
-        <input
-          className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-text-secondary`}
-          type={
-            item.name === fieldsNames.DATE
-              ? 'date'
-              : item.name === fieldsNames.DATETIME
-              ? 'datetime-local'
-              : item.name === fieldsNames.TIME
-              ? 'time'
-              : item.name === fieldsNames.MONTH
-              ? 'month'
-              : item.name === fieldsNames.WEEK
-              ? 'week'
-              : ''
-          }
+      <div className='relative w-full border border-[#AAAAAA] h-fit pr-1'>
+        <textarea
+          className={`flex w-full  p-1 leading-6 `}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
           title={helpText}
+          onChange={(e) => handleChange(e)}
+          style={{
+            height: '150px',
+          }}
+          maxLength={Number(maximumNumbersOfCharacters)}
         />
+
+        {maximumNumbersOfCharacters ? (
+          <div className='absolute bottom-0 right-0 pr-4 text-sm text-[#9ca3af] z-10 bg-white'>
+            {text.length}/{maximumNumbersOfCharacters}
+          </div>
+        ) : null}
       </div>
     </div>
   )
 }
 
-export default FormDate
+export default FormTextArea

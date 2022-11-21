@@ -4,13 +4,15 @@ import { FormControlType, FormControlTypeWithSection } from '../Types'
 import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
+import PhoneInput from 'react-phone-input-2'
+import 'react-phone-input-2/lib/style.css'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
 }
 
-const FormInput = ({ item, collapsed }: Props) => {
+const FormPhoneInput = ({ item, collapsed }: Props) => {
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
@@ -21,8 +23,8 @@ const FormInput = ({ item, collapsed }: Props) => {
 
   const [text, setText] = useState<string>('')
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setText(e.target.value)
+  const handleChange = (phone: string) => {
+    setText(phone)
   }
 
   return (
@@ -39,28 +41,13 @@ const FormInput = ({ item, collapsed }: Props) => {
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
-        <input
-          className={`flex w-full  py-1 leading-6 `}
-          type={
-            item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
-              ? 'text'
-              : item.name === fieldsNames.PHONEINPUT
-              ? 'tel'
-              : item.name === fieldsNames.PASSWORD
-              ? 'password'
-              : item.name === fieldsNames.URL
-              ? 'url'
-              : item.name === fieldsNames.NUMBERCOUNTER
-              ? 'number'
-              : item.name === fieldsNames.EMAIL
-              ? 'email'
-              : 'text'
-          }
-          required={required.toLowerCase() === 'on'}
-          placeholder={placeholder}
-          title={helpText}
-          onChange={(e) => handleChange(e)}
-          maxLength={Number(maximumNumbersOfCharacters)}
+        <PhoneInput
+          country={'ng'}
+          value={text.length <= Number(maximumNumbersOfCharacters) ? text : text.slice(0, Number(maximumNumbersOfCharacters))}
+          onChange={(phone) => handleChange(phone)}
+          inputStyle={{
+            width: '100%',
+          }}
         />
 
         {maximumNumbersOfCharacters ? (
@@ -73,4 +60,4 @@ const FormInput = ({ item, collapsed }: Props) => {
   )
 }
 
-export default FormInput
+export default FormPhoneInput
