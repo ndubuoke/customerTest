@@ -169,7 +169,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             }
 
             if (field.name === fieldsNames.SEARCHANDSELECT) {
-              return <FormSearchAndSelect item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormSearchAndSelect
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
             if (field.name === fieldsNames.PHONEINPUT) {
               return <FormPhoneInput item={field} key={field.id} collapsed={collapsed} />
