@@ -267,7 +267,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
               )
             }
             if (field.name === fieldsNames.RANGE) {
-              return <FormRange item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormRange
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
           })}
       </div>
