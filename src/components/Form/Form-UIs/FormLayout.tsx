@@ -232,10 +232,10 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
                   item={field}
                   key={field.id}
                   collapsed={collapsed}
-                  // activePageState={item}
-                  // setFillingFormState={setFillingFormState}
-                  // publishedFormState={publishedFormState}
-                  // fillingFormState={fillingFormState}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
                 />
               )
             }
