@@ -165,7 +165,34 @@ const FormFileUpload = ({ item, collapsed, setFillingFormState, publishedFormSta
   const handleRemoveFile = (e: any, index: number) => {
     e.stopPropagation()
     const newFiles = uploadedFiles.filter((item, i) => i !== index)
+    setFillingFormState((prev: FormStructureType) => {
+      const copiedPrev = { ...prev }
+      const pageId = item?.pageId
+      const sectionId = item?.sectionId
+      let sectionIndex
+      if (sectionId) {
+        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+        const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+        const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
+        const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+        console.log('customerData-sectionId', copiedPrev?.data?.customerData)
+        console.log('theSection', theSection)
+        if (theSection) {
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+          delete theSection.data[theItemFieldNameCamelCase]
+          copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+          // theSection.data[theItemFieldNameCamelCase] = {
+          //   file: {
+          //     type: filterSuccessUploadedFiles[0].file.type,
+          //   },
+          //   signedUrl: filterSuccessUploadedFiles[0].signedUrl,
+          // }
+          // copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+        }
+      }
+      return copiedPrev
+    })
     setuploadedFiles((prev) => newFiles)
   }
 
