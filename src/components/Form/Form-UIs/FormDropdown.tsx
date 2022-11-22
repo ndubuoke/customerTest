@@ -1,18 +1,29 @@
 import { caret } from 'Assets/svgs'
-import React, { useEffect, useState } from 'react'
+import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
+import React, { memo, useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
-import { FormControlType, FormControlTypeWithSection } from '../Types'
+import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
+import { formGetProperty } from './formGetProperty'
+import { fieldsNames } from './FormLayout'
 import MultipleSelectionItem from './MultipleSelectionItem'
-
-const sampleList = ['sample 1', 'sample 2', 'sample 3']
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
+  setFillingFormState: any
+  publishedFormState: ResponseType
+  activePageState?: PageInstance
+
+  fillingFormState: FormStructureType
 }
 
-const FormDropdown = ({ item, collapsed }: Props) => {
+const FormDropdown = memo(({ item, collapsed, publishedFormState, activePageState, fillingFormState, setFillingFormState }: Props) => {
+  const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
     ? getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -84,7 +95,9 @@ const FormDropdown = ({ item, collapsed }: Props) => {
       ? importFromURLListValue
       : null
 
-  const [showLists, setShowLists] = useState<Boolean>(false)
+  const theItemFieldNameCamelCase = camelize(fieldLabel)
+
+  const [showLists, setShowLists] = useState<boolean>(false)
   const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
   const [multipleSelectedDropdownItems, setMultipleSelectedDropdownItems] = useState<Array<string>>([])
 
@@ -102,7 +115,7 @@ const FormDropdown = ({ item, collapsed }: Props) => {
         return prev.filter((x) => x !== selectedItem)
       })
     }
-    // console.log(selectedItem)
+    console.log(selectedItem)
     // setSelectedDropdownItem(prev => ([]...prev, }))
   }
 
@@ -136,7 +149,6 @@ const FormDropdown = ({ item, collapsed }: Props) => {
               <span className={`text-text-disabled`}>{!selectedDropdownItem && 'Select'}</span>
             </div>
           ) : null}
-
           {enableMultipleSelection.toLowerCase() === 'on' ? (
             <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
               {multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ') || 'Select'}
@@ -180,6 +192,6 @@ const FormDropdown = ({ item, collapsed }: Props) => {
       </div>
     </div>
   )
-}
+})
 
 export default FormDropdown

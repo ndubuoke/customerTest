@@ -131,7 +131,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             }
 
             if (field.name === fieldsNames.DROPDOWN) {
-              return <FormDropdown item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormDropdown
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (
@@ -244,7 +254,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
               return <FormButton item={field} key={field.id} collapsed={collapsed} />
             }
             if (field.name === fieldsNames.RADIO) {
-              return <FormRadio item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormRadio
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  // activePageState={item}
+                  // setFillingFormState={setFillingFormState}
+                  // publishedFormState={publishedFormState}
+                  // fillingFormState={fillingFormState}
+                />
+              )
             }
             if (field.name === fieldsNames.RANGE) {
               return <FormRange item={field} key={field.id} collapsed={collapsed} />
