@@ -1,6 +1,7 @@
 export enum STORAGE_NAMES {
   PUBLISHED_FORM_IN_STORAGE = 'CUSTOMER_MANAGEMENT-publishedFormInStorage',
   FILLING_FORM_IN_STORAGE = 'CUSTOMER_MANAGEMENT-fillingFormInStorage',
+  BACKUP_FOR_SWITCH_FORM_IN_STORAGE = 'CUSTOMER_MANAGEMENT-backupForSwitchFormInStorage',
 }
 
 // type StorageType = 'localStorage' | 'sessionStorage'

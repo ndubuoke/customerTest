@@ -20,6 +20,7 @@ type Props = {
 const Form = ({ kind, formFields }: Props) => {
   const dispatch = useDispatch()
 
+  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>({})
   const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
 
   const [activeFormSections, setActiveFormSections] = useState<any>([])
@@ -60,6 +61,10 @@ const Form = ({ kind, formFields }: Props) => {
     sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
   }, [fillingFormState])
 
+  useEffect(() => {
+    sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
+  }, [backupForSwitchFormState])
+
   return (
     <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>
       {publishedFormState?.serverError?.status ? <AppAlert alertType='error' message={publishedFormState?.serverError?.error?.message} /> : null}
@@ -84,6 +89,8 @@ const Form = ({ kind, formFields }: Props) => {
                       setFillingFormState={setFillingFormState}
                       publishedFormState={publishedFormState}
                       fillingFormState={fillingFormState}
+                      setBackupForSwitchFormState={setBackupForSwitchFormState}
+                      backupForSwitchFormState={backupForSwitchFormState}
                     />
                   )
                 })
@@ -98,6 +105,8 @@ const Form = ({ kind, formFields }: Props) => {
                 setFillingFormState={setFillingFormState}
                 publishedFormState={publishedFormState}
                 fillingFormState={fillingFormState}
+                setBackupForSwitchFormState={setBackupForSwitchFormState}
+                backupForSwitchFormState={backupForSwitchFormState}
               />
             )}
           </div>
