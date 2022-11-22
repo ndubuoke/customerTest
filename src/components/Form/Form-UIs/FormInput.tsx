@@ -54,6 +54,7 @@ const FormInput = ({
     setText(e.target.value)
 
     setFillingFormState((prev: FormStructureType) => {
+      // console.log('prev', prev)
       const copiedPrev = { ...prev }
       const pageId = theItemFromChange?.pageId
 
