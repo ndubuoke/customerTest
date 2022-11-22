@@ -50,8 +50,6 @@ const FormActionToggle = ({ item, collapsed, publishedFormState, activePageState
       setChecked(false)
     }
 
-    console.log({ sttt: e.target.checked })
-
     setFillingFormState((prev: FormStructureType) => {
       const copiedPrev = { ...prev }
       const pageId = theItemFromChange?.pageId
@@ -117,6 +115,22 @@ const FormActionToggle = ({ item, collapsed, publishedFormState, activePageState
       return copiedPrev
     })
   }
+
+  useEffect(() => {
+    const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
+      if (x.sectionId) {
+        return x.sectionId === item.sectionId
+      } else {
+        return x.pageId === item.pageId
+      }
+    })
+
+    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+
+    if (theData) {
+      setChecked(theData)
+    }
+  }, [])
 
   return (
     <div

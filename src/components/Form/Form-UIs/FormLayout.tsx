@@ -141,7 +141,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
               field.name === fieldsNames.TIME ||
               field.name === fieldsNames.WEEK
             ) {
-              return <FormDate item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormDate
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.LONGTEXT) {
