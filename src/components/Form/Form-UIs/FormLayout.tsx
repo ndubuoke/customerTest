@@ -220,7 +220,17 @@ const FormLayout = ({
             }
 
             if (field.name === fieldsNames.FILEUPLOAD) {
-              return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormFileUpload
+                  activePageState={item}
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
             if (field.name === fieldsNames.ACTIONTOGGLE) {
               return (
