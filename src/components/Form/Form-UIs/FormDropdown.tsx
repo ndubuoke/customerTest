@@ -324,7 +324,11 @@ const FormDropdown = memo(({ item, collapsed, publishedFormState, activePageStat
                     <div
                       key={index}
                       className={`hover:bg-slate-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-slate-200' : ''} `}
-                      onClick={() => handleSelectedDropdownItem(selected, item)}
+                      onClick={() => {
+                        handleSelectedDropdownItem(selected, item)
+
+                        setShowLists((prev) => !prev)
+                      }}
                     >
                       {selected.trim()}
                     </div>
