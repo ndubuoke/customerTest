@@ -1,3 +1,12 @@
+import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL } from '../constants/CustomerManagement.constants';
+import {
+  DELETE_REQUEST_REQUEST,
+  DELETE_REQUEST_SUCCESS,
+  DELETE_REQUEST_FAIL,
+  GET_CUSTOMERS_BY_DATE_REQUEST,
+  GET_CUSTOMERS_BY_DATE_SUCCESS,
+  GET_CUSTOMERS_BY_DATE_FAIL,
+} from '../constants/CustomerManagement.constants'
 
 import {
   GET_CUSTOMERS_REQUEST,
@@ -34,7 +43,7 @@ export const initialStateRequest = {
 
 export const getCustomersReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
-    case GET_CUSTOMERS_REQUEST :
+    case GET_CUSTOMERS_REQUEST:
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_CUSTOMERS_SUCCESS:
@@ -48,36 +57,66 @@ export const getCustomersReducer = (state: customersManagementResponseType = ini
   }
 }
 
-export const sortCustomersAlphabetically = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any })=>{
-   switch (action.type) {
-     case SORT_CUSTOMERS_ALPHABETICALLY_REQUEST:
-       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+export const getCustomersRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_REQUESTS_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
-     case SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS:
-       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    case GET_REQUESTS_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
-     case SORT_CUSTOMERS_ALPHABETICALLY_FAIL:
-       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+    case GET_REQUESTS_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
-     default:
-       return state
-   }
+    default:
+      return state
+  }
 }
 
+export const deleteRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case DELETE_REQUEST_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
+    case DELETE_REQUEST_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
- export const getCustomersRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+    case DELETE_REQUEST_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const activateCustomerReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
     switch (action.type) {
-      case GET_REQUESTS_REQUEST:
+      case ACTIVATE_CUSTOMER_REQUEST:
         return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
-      case GET_REQUESTS_SUCCESS:
+      case ACTIVATE_CUSTOMER_SUCCESS:
         return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
-      case GET_REQUESTS_FAIL:
+      case ACTIVATE_CUSTOMER_FAIL:
         return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
       default:
         return state
     }
- }
+}
+
+export const getCustomersByDateReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CUSTOMERS_BY_DATE_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CUSTOMERS_BY_DATE_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_CUSTOMERS_BY_DATE_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}

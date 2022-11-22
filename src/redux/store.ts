@@ -2,20 +2,29 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
+import { getCustomersByDateReducer, activateCustomerReducer } from './reducers/CustomerManagement.reducer'
 import {
   bulkCustomerValidationProfileReducer,
   BulkCustomerValidationProfileTypes,
   bulkProcessSummaryReducer,
   BulkProcessSummaryTypes,
 } from './reducers/BulkCreation'
-import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
+import {
+  getCustomersReducer,
+  customersManagementResponseType,
+  getCustomersRequestReducer,
+  deleteRequestReducer,
+} from './reducers/CustomerManagement.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
   bulkProcessSummary: BulkProcessSummaryTypes
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
+  deleteRequest: customersManagementResponseType
+  activateCustomer: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
+  allCustomersByDate: customersManagementResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -23,6 +32,9 @@ const reducer = combineReducers<ReducersType>({
   allCustomers: getCustomersReducer,
   allRequests: getCustomersRequestReducer,
   bulkProcessSummary: bulkProcessSummaryReducer,
+  deleteRequest: deleteRequestReducer,
+  allCustomersByDate: getCustomersByDateReducer,
+  activateCustomer: activateCustomerReducer,
 
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
 })

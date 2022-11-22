@@ -12,6 +12,7 @@ import { getCustomersAction, getCustomersRequestsAction } from '../redux/actions
 import { ReducersType } from '../redux/store'
 import { customersManagementResponseType } from '../redux/reducers/CustomerManagement.reducer'
 import { AppRoutes } from 'Routes/AppRoutes'
+import SystemAlert from 'Components/CustomerManagement/SystemAlert'
 
 type Props = {}
 
@@ -29,8 +30,10 @@ const Main = (props: Props) => {
   const initialRef: any = null
   const statusListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
+  const requestFunctionListRef = useRef(initialRef)
   const filterStateOptionsRef = useRef(initialRef)
   const filterTypeOptionsRef = useRef(initialRef)
+  const filterDateRef = useRef(initialRef)
   const filterInitiatorOptionsRef = useRef(initialRef)
   const filterRequestStatusOptionsRef = useRef(initialRef)
   const AllCustomers = useSelector<ReducersType>((state: ReducersType) => state?.allCustomers) as customersManagementResponseType
@@ -43,6 +46,7 @@ const Main = (props: Props) => {
   const [requestStatus, setRequestStatus] = useState<requestStatusType>('All')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
+  const [showRequestFunctionOptions, setShowRequestFunctionOptions] = useState(false)
   const [ShowFilterStateOptions, setShowFilterStateOptions] = useState(false)
   const [showFilterRequestStatusOptions, setShowFilterRequestStatusOptions] = useState(false)
   const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
@@ -50,6 +54,8 @@ const Main = (props: Props) => {
   const [selectedStatus, setSelectedStatus] = useState('Initiated by me')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
+  const [showSystemAlert, setShowSystemAlert] = useState(false)
+  const [showCalender,setShowCalender]= useState(false)
 
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
@@ -65,7 +71,7 @@ const Main = (props: Props) => {
     setSelectedStatus(list)
     setShowStatusLists(false)
   }
-  const highLevelButtonHandler = (customerType:customerType) => {
+  const highLevelButtonHandler = (customerType: customerType) => {
     setCustomerStatus('All')
     setRequestStatus('All')
     if (customerType === 'Individual') {
@@ -81,6 +87,10 @@ const Main = (props: Props) => {
     setNextLevelButtonId(id)
     if (id === 1) {
       setCustomerManagementTableType('All Customers')
+      dispatch(getCustomersRequestsAction(customerType) as any)
+      setTimeout(() => {
+        setShowSystemAlert(true)
+      }, 3000)
     }
     if (id === 2) {
       setCustomerManagementTableType('Requests')
@@ -100,6 +110,9 @@ const Main = (props: Props) => {
       if (showCustomerFunctionOptions && customerFunctionListRef.current && !customerFunctionListRef.current.contains(e.target)) {
         setShowCustomerFunctionOptions(false)
       }
+      if (showRequestFunctionOptions && requestFunctionListRef.current && !requestFunctionListRef.current.contains(e.target)) {
+        setShowRequestFunctionOptions(false)
+      }
       if (ShowFilterStateOptions && filterStateOptionsRef.current && !filterStateOptionsRef.current.contains(e.target)) {
         setShowFilterStateOptions(false)
       }
@@ -112,6 +125,9 @@ const Main = (props: Props) => {
       if (showFilterRequestStatusOptions && filterRequestStatusOptionsRef.current && !filterRequestStatusOptionsRef.current.contains(e.target)) {
         setShowFilterRequestStatusOptions(false)
       }
+       if (showCalender && filterDateRef.current && !filterDateRef.current.contains(e.target)) {
+         setShowCalender(false)
+       }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -127,6 +143,8 @@ const Main = (props: Props) => {
     ShowFilterTypeOptions,
     ShowFilterInitiatorOptions,
     showFilterRequestStatusOptions,
+    showRequestFunctionOptions,
+    showCalender
   ])
 
   const refreshTableHandler = () => {
@@ -145,7 +163,6 @@ const Main = (props: Props) => {
   }
 
   const customerStatusHandler = (status: customerStatus) => {
-  
     if (status === 'All') {
       setCustomerStatus(status)
       dispatch(getCustomersAction(customerType) as any)
@@ -160,48 +177,65 @@ const Main = (props: Props) => {
     }
   }
 
-  const requestStatusHandler = (status: requestStatusType) => {
+  const requestStatusHandler = (status: requestStatusType, requestType) => {
     if (status === 'All') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType) as any)
+      return dispatch(getCustomersRequestsAction(customerType,'', requestType) as any)
     }
     if (status === 'Approved') {
       setRequestStatus(status)
 
-      return dispatch(getCustomersRequestsAction(customerType, 'Approved') as any)
+      return dispatch(getCustomersRequestsAction(customerType, 'Approved',requestType) as any)
     }
     if (status === 'Draft') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType, 'Draft') as any)
+      return dispatch(getCustomersRequestsAction(customerType, 'Draft',requestType) as any)
     }
     if (status === 'In Issue') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType, 'In Issue') as any)
+      return dispatch(getCustomersRequestsAction(customerType, 'In Issue',requestType) as any)
     }
 
     if (status === 'In-Review') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType, 'In-Review') as any)
+      return dispatch(getCustomersRequestsAction(customerType, 'In-Review',requestType) as any)
     }
     if (status === 'Interim Approval') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType, 'Interim Approval') as any)
+      return dispatch(getCustomersRequestsAction(customerType, 'Interim Approval',requestType) as any)
     }
   }
 
   useEffect(() => {
     if (customermanagementTableType === 'All Customers') {
-      dispatch(getCustomersAction(customerType) as any)
+      if (customerType === 'Individual') {
+        dispatch(getCustomersAction(customerType) as any)
+        // dispatch(getCustomersRequestsAction(customerType) as any)
+        // setTimeout(() => {
+        //   setShowSystemAlert(true)
+        // }, 3000)
+      }
+      if (customerType === 'SME') {
+        dispatch(getCustomersAction(customerType) as any)
+      }
     }
     if (customermanagementTableType === 'Requests') {
       dispatch(getCustomersRequestsAction(customerType) as any)
     }
   }, [customerType, customermanagementTableType])
-      // console.log(AllCustomers)
+  // console.log(AllCustomers)
   //  console.log(allRequests)
+
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
+      {/* {showSystemAlert && (
+        <SystemAlert
+          setShowSystemAlert={setShowSystemAlert}
+          message={`${allRequests?.serverResponse?.data?.InIssue} customers accounts in issue!
+Kindly review and update.`}
+        />
+      )} */}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
@@ -237,15 +271,17 @@ const Main = (props: Props) => {
         <div className=' flex justify-between px-6 mt-10'>
           <div>
             <button
-              className={` ${customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
-                } `}
+              className={` ${
+                customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+              } `}
               onClick={highLevelButtonHandler.bind(null, 'Individual')}
             >
               Individual Customers
             </button>
             <button
-              className={` ${customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
-                } ml-4`}
+              className={` ${
+                customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+              } ml-4`}
               onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
               SMEs
@@ -280,16 +316,18 @@ const Main = (props: Props) => {
               <div className=' bg-white flex h-[130px] '>
                 <div className='flex flex-col  border w-[18%]'>
                   <button
-                    className={`${nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
-                      } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
+                    className={`${
+                      nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
+                    } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
                     onClick={nextLevelButtonHandler.bind(null, 1)}
                   >
                     {nextLevelButtonId === 1 && <img className='  absolute left-1' src={redCaret} />}
                     <span className=' '>All Customers</span>
                   </button>
                   <button
-                    className={`${nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
-                      } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
+                    className={`${
+                      nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
+                    } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
                     onClick={nextLevelButtonHandler.bind(null, 2)}
                   >
                     {nextLevelButtonId === 2 && <img className=' absolute left-1' src={redCaret} />}
@@ -334,8 +372,9 @@ const Main = (props: Props) => {
                         <div className=' flex gap-2 '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             <span className='text-[14px] font-bold'>All</span>
                             <h3 className='font-bold text-[24px]'>
@@ -345,8 +384,9 @@ const Main = (props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={customerStatusHandler.bind(null, 'Active')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${
+                              customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Active</span>
@@ -356,8 +396,9 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={customerStatusHandler.bind(null, 'Inactive')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             <span className='text-[14px] text-[#AAAAAA]'>inActive</span>
                             <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.inactive}</h3>
@@ -368,8 +409,9 @@ const Main = (props: Props) => {
                         <div className=' flex gap-2 '>
                           <div
                             onClick={requestStatusHandler.bind(null, 'All')}
-                            className={` py-1 px-4 cursor-pointer hover:border rounded-md hover:border-[#EFEFEF] ${requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={` py-1 px-4 cursor-pointer hover:border rounded-md hover:border-[#EFEFEF] ${
+                              requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             <span className='text-[14px] font-bold'>All</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.total}</h3>
@@ -377,8 +419,9 @@ const Main = (props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={requestStatusHandler.bind(null, 'Approved')}
-                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             {' '}
                             <span className='text-[14px] text-[#2FB755]'>Approved</span>
@@ -388,8 +431,9 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'In-Review')}
-                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
-                              }`}
+                            className={` py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                              requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
+                            }`}
                           >
                             <span className='text-[14px] text-[#3FA2F7]'>in-Review</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InReview}</h3>
@@ -398,8 +442,9 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'Interim Approval')}
-                            className={` ${requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
-                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${
+                              requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#D4A62F]'>interim Approval</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InterimApproval}</h3>
@@ -408,8 +453,9 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'In Issue')}
-                            className={` ${requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
-                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${
+                              requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#CF2A2A]'>in-issue</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
@@ -418,8 +464,9 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={requestStatusHandler.bind(null, 'Draft')}
-                            className={` ${requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
-                              } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
+                            className={` ${
+                              requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
+                            } py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] `}
                           >
                             <span className='text-[14px] text-[#AAAAAA]'>Draft</span>
                             <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.Draft}</h3>
@@ -472,6 +519,9 @@ const Main = (props: Props) => {
                   customerFunctionListRef={customerFunctionListRef}
                   showCustomerFunctionOptions={showCustomerFunctionOptions}
                   setShowCustomerFunctionOptions={setShowCustomerFunctionOptions}
+                  requestFunctionListRef={requestFunctionListRef}
+                  showRequestFunctionOptions={showRequestFunctionOptions}
+                  setShowRequestFunctionOptions={setShowRequestFunctionOptions}
                   tableType={customermanagementTableType}
                   filterStateOptionsRef={filterStateOptionsRef}
                   setShowFilterStateOptions={setShowFilterStateOptions}
@@ -491,6 +541,11 @@ const Main = (props: Props) => {
                   customerStatusHandler={customerStatusHandler}
                   requestStatusHandler={requestStatusHandler}
                   requestStatus={requestStatus}
+                  setShowSystemAlert={setShowSystemAlert}
+                  refreshTableHandler={refreshTableHandler}
+                  showCalender={showCalender}
+                  setShowCalender={setShowCalender}
+                  filterDateRef={filterDateRef}
                 />
               </div>
             </div>

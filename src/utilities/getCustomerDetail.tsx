@@ -37,7 +37,7 @@ const getCustomerDetail = (customer, field) => {
   }
   if (field === 'customerId') {
     return customer.customer_profiles.map((profile) => {
-      return profile.customerId.slice(0, 10)
+      return profile.customerId
     })
   }
    if (field === 'bvn') {
