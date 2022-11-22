@@ -52,9 +52,21 @@ type Props = {
   setFillingFormState: (value: FormStructureType) => void
   publishedFormState: ResponseType
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: {}
 }
 
-const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormState, publishedFormState, fillingFormState }: Props) => {
+const FormLayout = ({
+  isSection,
+  activeSection,
+  item,
+  fields,
+  setFillingFormState,
+  publishedFormState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -126,6 +138,8 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
                   setFillingFormState={setFillingFormState}
                   publishedFormState={publishedFormState}
                   fillingFormState={fillingFormState}
+                  setBackupForSwitchFormState={setBackupForSwitchFormState}
+                  backupForSwitchFormState={backupForSwitchFormState}
                 />
               )
             }
