@@ -155,7 +155,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             }
 
             if (field.name === fieldsNames.LONGTEXT) {
-              return <FormTextArea item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormTextArea
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.SEARCHANDSELECT) {
