@@ -146,8 +146,6 @@ const FormInput = ({
         return copiedPrev
       })
     }
-    // const exist = backupForSwitchFormState[theItemFieldNameCamelCase]
-    // console.log({ exist })
   }, [text])
 
   return (
