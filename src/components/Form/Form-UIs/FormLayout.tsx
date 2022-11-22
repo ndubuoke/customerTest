@@ -182,7 +182,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
               )
             }
             if (field.name === fieldsNames.PHONEINPUT) {
-              return <FormPhoneInput item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormPhoneInput
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.FILEUPLOAD) {
@@ -217,7 +227,17 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             }
 
             if (field.name === fieldsNames.HEADING) {
-              return <FormHeading item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormHeading
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  // activePageState={item}
+                  // setFillingFormState={setFillingFormState}
+                  // publishedFormState={publishedFormState}
+                  // fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.BUTTON) {
