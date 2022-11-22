@@ -1,20 +1,29 @@
 import { caret, search } from 'Assets/svgs'
-import React, { useEffect, useState, useCallback, useMemo } from 'react'
+import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
+import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
-import { FormControlType, FormControlTypeWithSection } from '../Types'
+import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
-import MultipleSelectionItem from './MultipleSelectionItem'
-import DataListInput from 'react-datalist-input'
 import { formGetProperty } from './formGetProperty'
-
-const sampleList = ['sample 1', 'sample 2', 'sample 3']
+import { fieldsNames } from './FormLayout'
+import DataListInput from 'react-datalist-input'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
+  setFillingFormState: any
+  publishedFormState: ResponseType
+  activePageState?: PageInstance
+
+  fillingFormState: FormStructureType
 }
 
-const FormSearchAndSelect = ({ item, collapsed }: Props) => {
+const FormSearchAndSelect = memo(({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
+  const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
@@ -40,19 +49,106 @@ const FormSearchAndSelect = ({ item, collapsed }: Props) => {
       ? importFromURLListValue
       : null
 
+  const theItemFieldNameCamelCase = camelize(fieldLabel)
+
   const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
+
+  //   console.log(optionsField.split(",").map(function (value) {
+  //     return value.trim();
+  //  }))
 
   const items = useMemo(
     () =>
-      sampleList.map((oneItem) => ({
-        label: oneItem,
-        key: oneItem,
+      optionsField?.split(',')?.map((oneItem) => ({
+        label: oneItem?.trim(),
+        key: oneItem?.trim(),
       })),
-    [sampleList]
+    [optionsField]
   )
 
-  const onSelect = useCallback((theSelectedItem) => {
+  const onSelect = useCallback((theSelectedItem, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setSelectedDropdownItem(theSelectedItem.label)
+
+    setFillingFormState((prev: FormStructureType) => {
+      const copiedPrev = { ...prev }
+      const pageId = theItemFromChange?.pageId
+
+      if (!copiedPrev?.data?.formInfomation?.formId) {
+        copiedPrev.data.formInfomation.formId = theForm?._id
+        copiedPrev.data.formInfomation.formType = theForm?.formType
+      }
+
+      // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+      const sectionId = theItemFromChange?.sectionId
+      let sectionIndex
+
+      if (sectionId) {
+        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+        const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+        const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+        const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+        if (theSection) {
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+          theSection.data[theItemFieldNameCamelCase] = theSelectedItem?.label
+          copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+        } else {
+          copiedPrev.data.customerData.push({
+            sectionName: theItemSectionNameCamelCase,
+            data: {
+              [theItemFieldNameCamelCase]: theSelectedItem?.label,
+            },
+            pageId,
+            sectionId,
+          })
+        }
+      }
+
+      if (!sectionId) {
+        const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+        const pageNameCamelCase = camelize(pageName)
+        const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+        const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+        if (theSectionlessPage) {
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+          theSectionlessPage.data[theItemFieldNameCamelCase] = theSelectedItem?.label
+          copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+        } else {
+          copiedPrev.data.customerData.push({
+            sectionName: pageNameToBeUsed,
+            data: {
+              [theItemFieldNameCamelCase]: theSelectedItem?.label,
+            },
+            pageId,
+            sectionId: null,
+          })
+        }
+      }
+
+      return copiedPrev
+    })
+  }, [])
+
+  useEffect(() => {
+    const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
+      if (x.sectionId) {
+        return x?.sectionId === item?.sectionId
+      } else {
+        return x?.pageId === item?.pageId
+      }
+    })
+
+    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+
+    if (theData) {
+      setSelectedDropdownItem(theData)
+    }
   }, [])
 
   return (
@@ -71,7 +167,12 @@ const FormSearchAndSelect = ({ item, collapsed }: Props) => {
 
       <div className='w-full border-b border-b-[#AAAAAA] relative mt-2 pl-2'>
         <div className=' w-full   py-1 pl-2 ml-1`'>
-          <DataListInput placeholder={placeholder} items={items} onSelect={onSelect} />
+          <DataListInput
+            placeholder={selectedDropdownItem || placeholder}
+            items={items}
+            onSelect={(theSelectedItem) => onSelect(theSelectedItem, item)}
+            value={selectedDropdownItem ? selectedDropdownItem : ''}
+          />
         </div>
         <span
           className='absolute z-50 -left-1   h-full pt-4'
@@ -96,6 +197,6 @@ const FormSearchAndSelect = ({ item, collapsed }: Props) => {
       </div>
     </div>
   )
-}
+})
 
 export default FormSearchAndSelect
