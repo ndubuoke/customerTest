@@ -119,10 +119,10 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             ) {
               return (
                 <FormInput
-                  activePageState={item}
                   item={field}
                   key={field.id}
                   collapsed={collapsed}
+                  activePageState={item}
                   setFillingFormState={setFillingFormState}
                   publishedFormState={publishedFormState}
                   fillingFormState={fillingFormState}
@@ -159,11 +159,31 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
               return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
             }
             if (field.name === fieldsNames.ACTIONTOGGLE) {
-              return <FormActionToggle item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormActionToggle
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.CHECKBOX) {
-              return <FormCheckbox item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormCheckbox
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.HEADING) {
