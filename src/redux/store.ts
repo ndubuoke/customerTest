@@ -2,14 +2,22 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
+
 import {
   bulkCustomerValidationProfileReducer,
   BulkCustomerValidationProfileTypes,
   bulkProcessSummaryReducer,
   BulkProcessSummaryTypes,
 } from 'Redux/reducers/BulkCreation'
+
+import {
+  userProfileReducer,
+  UserProfileTypes,
+  userRolesAndPermissionsReducer,
+  UserRolesAndPersmissionsTypes
+} from 'Redux/reducers/UserPersmissions'
+
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
-import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
 
 export type ReducersType = {
