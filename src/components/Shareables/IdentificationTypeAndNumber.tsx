@@ -3,6 +3,7 @@ import { ExclaimateIcon, GreenCheck, info } from 'Assets/svgs'
 import { CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
 import DropDown from './DropDown'
 import { API } from '../../utilities/api'
+import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
 
 type Props = {
   customerType: CustomerType
@@ -25,7 +26,8 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const [identificationNumber, setIdentificationNumber] = useState<IdentificationNumberType>('')
   const [isVerified, setIsVerified] = useState<boolean | null>(null)
   const [status, setStatus] = useState<FieldStatus>('default')
-  const [isAlreadyACustomer, setIsAlreadyACustomer] = useState(false)
+  const [customer, setCustomer] = useState(null)
+  const [showCustomerModal, setShowCustomerModal] = useState(false)
 
   const MAX_FIELD_LENGTH = 12
 
@@ -39,20 +41,48 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         if (response.data && response.status == 200) {
           setIsVerified(true)
           setStatus('success')
-          setIdentificationDetails({
-            identificationType: selectedIdentificationType,
-            identificationNumber: value.trim(),
-          })
+          if (selectedIdentificationType === 'bvn') {
+            setIdentificationDetails({
+              identificationType: selectedIdentificationType,
+              identificationNumber: value.trim(),
+              identityData: response.data.data.response,
+            })
+          } else if (selectedIdentificationType === 'nin') {
+            setIdentificationDetails({
+              identificationType: selectedIdentificationType,
+              identificationNumber: value.trim(),
+              identityData: response.data.data.response[0],
+            })
+          } else if (selectedIdentificationType === 'cac') {
+            setIdentificationDetails({
+              identificationType: selectedIdentificationType,
+              identificationNumber: value.trim(),
+              identityData: response.data.data,
+            })
+          } else if (selectedIdentificationType === 'tin') {
+            setIdentificationDetails({
+              identificationType: selectedIdentificationType,
+              identificationNumber: value.trim(),
+              identityData: response.data.data.response,
+            })
+          }
+
           try {
             const existingCustomer = await API.get(`/customer/id?field=${selectedIdentificationType}&id=${value.trim()}`)
             // console.log('existingCustomer', existingCustomer)
             if (existingCustomer.data && existingCustomer.status == 200) {
-              setIsAlreadyACustomer(true)
+              console.log('existingCustomer', existingCustomer.data)
+              setCustomer(existingCustomer.data.data)
+              setIdentificationDetails({
+                identificationType: null,
+                identificationNumber: null,
+                identityData: null,
+              })
             }
           } catch (err) {
             // console.log(err.response)
             if (err.response && err.response.status === 404) {
-              setIsAlreadyACustomer(false)
+              setCustomer(null)
             }
           }
         }
@@ -67,6 +97,10 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
 
   return (
     <div className='flex flex-col w-full gap-8 px-8 whitespace-nowrap xl:ml-5'>
+      <div className='flex justify-end text-sm gap-3'>
+        <img src={info} />
+        Provide some customer’s basic information and upload relevant <br /> documents to help you fast-track the customer creation process.
+      </div>
       <div className='flex gap-10 '>
         <div className='flex justify-end gap-3 min-w-[200px] items-center '>
           {customerType === 'sme' ? <span>Identification Type</span> : null}
@@ -115,15 +149,19 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
           {status === 'success' ? <GreenCheck /> : null}
         </div>
       </div>
-      {isAlreadyACustomer && (
+      {customer && (
         <div className='flex ml-auto'>
+          {showCustomerModal && <ViewCustomerModal customer={customer} setShowCustomerModal={setShowCustomerModal} />}
           <div className='self-center mr-3'>
             {' '}
             <ExclaimateIcon />
           </div>
           <div className='text-sm'>
             Customer profile already exists, <br />
-            <span className='underline cursor-pointer text-primay-main'>click here</span> to view
+            <span className='underline cursor-pointer text-primay-main' onClick={() => setShowCustomerModal(true)}>
+              click here
+            </span>{' '}
+            to view
           </div>
         </div>
       )}
