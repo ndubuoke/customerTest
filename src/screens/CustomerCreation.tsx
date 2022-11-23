@@ -44,7 +44,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     serverResponse: { data },
   } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
   const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
     identificationType: null,
     identificationNumber: null,

@@ -1,0 +1,1 @@
+export { BulkIndividualModifyRecordModal } from './BulkIndividualModifyRecordModal'

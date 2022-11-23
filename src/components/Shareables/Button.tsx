@@ -19,4 +19,7 @@ const Button = ({ text = 'Proceed', disabled = true, onClick }: Props) => {
   )
 }
 
+Button.defaultProps = {
+  text: "Proceed"
+}
 export default Button
