@@ -1,10 +1,17 @@
 import React, { useState, memo } from 'react'
 import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
-import { UploadFile } from './FileUploader'
+import { UploadFile } from '.'
 import RemoveButton from './RemoveButton'
 
 type Props = {
-  file: UploadFile
+  file: {
+    file: File
+    key?: string
+    verificationData?: {
+      docType: string
+      extractedData: string[]
+    }
+  }
   removeFile: (item: any) => void
 }
 
@@ -16,7 +23,7 @@ const IndividualFile = memo(({ file, removeFile }: Props) => {
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
       <div>
         {file.file.type.startsWith('image') && (
-          <img src={URL.createObjectURL(file.file)} className='object-contain' style={{ width: '194', height: '104px' }} />
+          <img src={URL.createObjectURL(file.file)} className='object-contain' width={194} height={104} style={{ width: '194', height: '104px' }} />
         )}
         {file.file.type.endsWith('pdf') && (
           <Document file={file.file}>

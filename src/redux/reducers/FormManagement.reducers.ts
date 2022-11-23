@@ -1,5 +1,12 @@
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
-import { GET_FORM_FAIL, GET_FORM_REQUEST, GET_FORM_SUCCESS } from 'Redux/constants/FormManagement.constants'
+import {
+  GET_FORM_FAIL,
+  GET_FORM_REQUEST,
+  GET_FORM_SUCCESS,
+  GET_PUBLISHED_FORM_SECTION_FAIL,
+  GET_PUBLISHED_FORM_SECTION_REQUEST,
+  GET_PUBLISHED_FORM_SECTION_SUCCESS,
+} from 'Redux/constants/FormManagement.constants'
 
 export type ResponseType = {
   loading: boolean
@@ -29,10 +36,28 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
-      // return { ...state, ...publishedForm }
+      // return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+      return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const getPublishedFormSectionReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_PUBLISHED_FORM_SECTION_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_PUBLISHED_FORM_SECTION_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_PUBLISHED_FORM_SECTION_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     //   case RESET_STATe:

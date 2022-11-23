@@ -8,13 +8,10 @@ import {
   BulkCustomerValidationProfileTypes,
   bulkProcessSummaryReducer,
   BulkProcessSummaryTypes,
-} from './reducers/BulkCreation'
-import {
-  getCustomersReducer,
-  customersManagementResponseType,
-  getCustomersRequestReducer,
-  deleteRequestReducer,
-} from './reducers/CustomerManagement.reducer'
+} from 'Redux/reducers/BulkCreation'
+import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer ,deleteRequestReducer} from './reducers/CustomerManagement.reducer'
+import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
+import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -25,6 +22,9 @@ export type ReducersType = {
   activateCustomer: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
   allCustomersByDate: customersManagementResponseType
+  userRolesAndPermissions: UserRolesAndPersmissionsTypes
+  userProfile: UserProfileTypes
+  validateCustomer: validateCustomerResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -37,6 +37,9 @@ const reducer = combineReducers<ReducersType>({
   activateCustomer: activateCustomerReducer,
 
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
+  userRolesAndPermissions: userRolesAndPermissionsReducer,
+  userProfile: userProfileReducer,
+  validateCustomer: validateCustomerReducer,
 })
 
 const middleware = [thunk]

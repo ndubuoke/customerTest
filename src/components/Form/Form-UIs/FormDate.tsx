@@ -41,7 +41,10 @@ const FormDate = ({ item, collapsed }: Props) => {
       }}
       title={helpText}
     >
-      <FieldLabel fieldItem={item} />
+      <div className='relative w-fit'>
+        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        <FieldLabel fieldItem={item} />
+      </div>
       <div>
         <input
           className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-text-secondary`}

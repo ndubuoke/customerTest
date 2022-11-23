@@ -3,6 +3,7 @@ import GoBack from 'Components/MainScreenLayout/GoBack'
 import { individualCustomerCreationData, smeCustomerCreationData } from '../data/customerCreationBreadcrumbs'
 import SwitchToFormType from 'Components/Shareables/SwitchToFormType'
 import WizardChanger from 'Components/Shareables/WizardChanger'
+import MatchModal from 'Components/Shareables/MatchModal'
 import CreationMode from 'Components/Shareables/CreationMode'
 import CustomerCreationBox from 'Components/Shareables/CustomerCreation'
 import { CreationModeEnum } from 'Utilities/enums'
@@ -10,9 +11,15 @@ import { IdentificationNumberType, IdentificationTypeType } from 'Components/Sha
 import Button from 'Components/Shareables/Button'
 import SkipToForm from 'Components/Shareables/SkipToForm'
 import Form from 'Components/Form'
-import { useDispatch } from 'react-redux'
+import { UploadFile } from 'Components/Shareables'
+import { useDispatch, useSelector } from 'react-redux'
 import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { validateCustomerAction, validateCustomerResultModalAction } from 'Redux/actions/ValidateCustomer.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
+import { API } from 'Utilities/api'
+import ExtractInfoModal from 'Components/Shareables/ExtractInfoModal'
+import { validateCustomerResponseType } from 'Redux/reducers/ValidateCustomer.reducer'
+import { ReducersType } from 'Redux/store'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -24,21 +31,32 @@ export type CreationModeType = 'single' | 'bulk'
 export type IdentificationDetailsType = {
   identificationType: IdentificationTypeType
   identificationNumber: IdentificationNumberType
+  identityData: any
 }
 
 const CustomerCreation = memo(({ customerType }: Props) => {
   const dispatch = useDispatch()
 
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
+  const {
+    loading,
+    showResultModal,
+    serverResponse: { data },
+  } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
   const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
     identificationType: null,
     identificationNumber: null,
+    identityData: null,
   })
-  const [localUpload, setLocalUpload] = useState<Array<File>>([])
+  const [localUpload, setLocalUpload] = useState<Array<UploadFile>>([])
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
+
+  const handleModalDisplay = (isVisible: boolean) => {
+    dispatch(validateCustomerResultModalAction(isVisible) as any)
+  }
 
   const onSetFormMode = useCallback(
     (value) => {
@@ -48,7 +66,13 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     [formMode, creationMode]
   )
 
-  const handleProceed = () => { }
+  const handleProceed = async () => {
+    const extractedData = localUpload.map((upload) => ({
+      documentType: upload.verificationData.docType,
+      data: upload.verificationData.extractedData,
+    }))
+    dispatch(validateCustomerAction(identificationDetails.identificationType, extractedData, identificationDetails.identityData) as any)
+  }
 
   useEffect(() => {
     if (formCreationStarted) {
@@ -68,6 +92,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
           {!formCreationStarted ? (
             <>
+              {loading && <ExtractInfoModal />}
+              {showResultModal && <MatchModal setShowMatchModal={handleModalDisplay} data={data} />}
               <WizardChanger formMode={formMode} creationMode={creationMode} customerType={customerType} />
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
@@ -81,16 +107,18 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                   setLocalUpload={setLocalUpload}
                 />
 
-                {creationMode === CreationModeEnum.Single ? <div className='flex  justify-center relative  gap-1'>
-                  <div className=' absolute right-3 -top-16'>
-                    <SkipToForm onClick={() => setFormCreationStarted(true)} />
+                {creationMode === CreationModeEnum.Single ? (
+                  <div className='flex  justify-center relative  gap-1'>
+                    <div className=' absolute right-3 -top-16'>
+                      <SkipToForm onClick={() => setFormCreationStarted(true)} />
+                    </div>
+                    <Button
+                      text='Proceed'
+                      disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
+                      onClick={() => handleProceed()}
+                    />
                   </div>
-                  <Button
-                    text='Proceed'
-                    disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
-                    onClick={() => handleProceed()}
-                  />
-                </div> : null}
+                ) : null}
               </section>
             </>
           ) : (

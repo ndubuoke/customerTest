@@ -5,11 +5,8 @@ import { add, upload, deleteBtn } from 'Assets/svgs'
 import { IdentificationDetailsType } from 'Screens/CustomerCreation'
 import IndividualFile from './IndividualFile'
 import { API } from '../../utilities/api'
-
-export type UploadFile = {
-  file: File
-  key: string
-}
+import Spinner from './Spinner'
+import { UploadFile } from 'Components/Shareables'
 
 type Props = {
   identificationDetails?: IdentificationDetailsType
@@ -36,8 +33,20 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
             console.log('ocrVerificationResponse', ocrVerificationResponse.data)
             return {
               file,
-              key: response.data.data.fileKey,
+              verificationData: {
+                docType: ocrVerificationResponse.data.data.docType || '',
+                extractedData: ocrVerificationResponse.data.data.extractedData || [],
+              },
             }
+            // if (ocrVerificationResponse.data.data.docType && ocrVerificationResponse.data.data.extractedData.length) {
+            //   return {
+            //     file,
+            //     verificationData: ocrVerificationResponse.data.data,
+            //   }
+            // } else {
+            //   console.error(`docType missing or no extracted data- ${file.name}`)
+            //   return null
+            // }
           } catch (err) {
             console.error(err.message, `failed to verify with ocr - ${file.name}`)
             return null
@@ -89,14 +98,15 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
             <div className='flex items-center'>
               <span className='text-3xl mr-4'>Loading</span>
               {/* loading icon */}
-              <svg className='animate-spin h-5 w-5 text-gray-600' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
+              <Spinner size={'medium'} />
+              {/* <svg className='animate-spin h-5 w-5 text-gray-600' xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24'>
                 <circle className='opacity-25' cx='12' cy='12' r='10' stroke='currentColor' stroke-width='4'></circle>
                 <path
                   className='opacity-75'
                   fill='currentColor'
                   d='M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z'
                 ></path>
-              </svg>
+              </svg> */}
               {/* end loading icon */}
             </div>
           </div>
