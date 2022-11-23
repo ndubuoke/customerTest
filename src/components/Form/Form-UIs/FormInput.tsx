@@ -124,6 +124,17 @@ const FormInput = ({
   }
 
   useEffect(() => {
+    // console.log({ runni: fillingFormState?.data?.customerData })
+    if (fillingFormState?.data?.customerData?.length === 0) {
+      const exists = fillingFormState[theItemFieldNameCamelCase]
+
+      // console.log('here')
+
+      if (exists) {
+        setText(exists)
+      }
+      return
+    }
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
       if (x.sectionId) {
         return x.sectionId === item.sectionId

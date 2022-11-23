@@ -15,16 +15,18 @@ import { PageInstance } from './Types'
 type Props = {
   kind: 'new' | 'modification'
   formFields: any
+  fillingFormState: FormStructureType
+  setFillingFormState: any
+  publishedFormState: any // ResponseType;
+  setPublishedFormState: any
 }
 
-const Form = ({ kind, formFields }: Props) => {
+const Form = ({ kind, formFields, fillingFormState, publishedFormState, setFillingFormState, setPublishedFormState }: Props) => {
   const dispatch = useDispatch()
 
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>({})
-  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
 
   const [activeFormSections, setActiveFormSections] = useState<any>([])
-  const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
