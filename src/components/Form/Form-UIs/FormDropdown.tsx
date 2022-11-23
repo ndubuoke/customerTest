@@ -105,71 +105,6 @@ const FormDropdown = memo(({ item, collapsed, publishedFormState, activePageStat
 
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
     setSelectedDropdownItem(selectedItem.trim())
-
-    setFillingFormState((prev: FormStructureType) => {
-      const copiedPrev = { ...prev }
-      const pageId = theItemFromChange?.pageId
-
-      if (!copiedPrev?.data?.formInfomation?.formId) {
-        copiedPrev.data.formInfomation.formId = theForm?._id
-        copiedPrev.data.formInfomation.formType = theForm?.formType
-      }
-
-      // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
-
-      const sectionId = theItemFromChange?.sectionId
-      let sectionIndex
-
-      if (sectionId) {
-        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
-        const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
-        const theItemSectionNameCamelCase = camelize(theItemSectionName)
-
-        const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-
-        if (theSection) {
-          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-
-          theSection.data[theItemFieldNameCamelCase] = selectedDropdownItem
-          copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-        } else {
-          copiedPrev.data.customerData.push({
-            sectionName: theItemSectionNameCamelCase,
-            data: {
-              [theItemFieldNameCamelCase]: selectedDropdownItem,
-            },
-            pageId,
-            sectionId,
-          })
-        }
-      }
-
-      if (!sectionId) {
-        const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
-        const pageNameCamelCase = camelize(pageName)
-        const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
-
-        const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
-
-        if (theSectionlessPage) {
-          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
-
-          theSectionlessPage.data[theItemFieldNameCamelCase] = selectedDropdownItem
-          copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
-        } else {
-          copiedPrev.data.customerData.push({
-            sectionName: pageNameToBeUsed,
-            data: {
-              [theItemFieldNameCamelCase]: selectedDropdownItem,
-            },
-            pageId,
-            sectionId: null,
-          })
-        }
-      }
-
-      return copiedPrev
-    })
   }
 
   const handleMultipleSelectedDropdownItem = (selectedItem, action: 'remove' | 'add') => {
@@ -255,6 +190,75 @@ const FormDropdown = memo(({ item, collapsed, publishedFormState, activePageStat
       })
     }
   }, [multipleSelectedDropdownItems])
+
+  useEffect(() => {
+    if (enableMultipleSelection.toLowerCase() === 'off') {
+      setFillingFormState((prev: FormStructureType) => {
+        const copiedPrev = { ...prev }
+        const pageId = item?.pageId
+
+        if (!copiedPrev?.data?.formInfomation?.formId) {
+          copiedPrev.data.formInfomation.formId = theForm?._id
+          copiedPrev.data.formInfomation.formType = theForm?.formType
+        }
+
+        // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+        const sectionId = item?.sectionId
+        let sectionIndex
+
+        if (sectionId) {
+          const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+          const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+          const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+          const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+          if (theSection) {
+            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+            theSection.data[theItemFieldNameCamelCase] = selectedDropdownItem
+            copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+          } else {
+            copiedPrev.data.customerData.push({
+              sectionName: theItemSectionNameCamelCase,
+              data: {
+                [theItemFieldNameCamelCase]: selectedDropdownItem,
+              },
+              pageId,
+              sectionId,
+            })
+          }
+        }
+
+        if (!sectionId) {
+          const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+          const pageNameCamelCase = camelize(pageName)
+          const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+          const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+          if (theSectionlessPage) {
+            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+            theSectionlessPage.data[theItemFieldNameCamelCase] = selectedDropdownItem
+            copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+          } else {
+            copiedPrev.data.customerData.push({
+              sectionName: pageNameToBeUsed,
+              data: {
+                [theItemFieldNameCamelCase]: selectedDropdownItem,
+              },
+              pageId,
+              sectionId: null,
+            })
+          }
+        }
+
+        return copiedPrev
+      })
+    }
+  }, [selectedDropdownItem])
 
   useEffect(() => {
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
