@@ -1,9 +1,11 @@
 import { AppAlert } from 'Components/Shareables'
 import Spinner from 'Components/Shareables/Spinner'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { getProperty } from 'Utilities/getProperty'
 import { FormLayout, Steps } from './Form-UIs'
 import { PageInstance } from './Types'
@@ -14,9 +16,23 @@ type Props = {
 }
 
 const Form = ({ kind, formFields }: Props) => {
+  const dispatch = useDispatch()
+  const [activeFormSections, setActiveFormSections] = useState<any>([])
+
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const [activePageState, setActivePageState] = useState<PageInstance>(null)
+
+  useEffect(() => {
+    const activeFormSectionInStorage = sessionStorage.getItem(STORAGE_NAMES.ACTIVE_FORM_SECTION)
+    if (activeFormSectionInStorage) {
+      setActiveFormSections(activeFormSectionInStorage)
+    } else {
+      if (publishedForm?.success) {
+        dispatch(getPublishedFormSectionAction(publishedForm?.serverResponse?.data?._id) as any)
+      }
+    }
+  }, [publishedForm])
 
   return (
     <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>
