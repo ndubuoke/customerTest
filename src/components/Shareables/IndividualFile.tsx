@@ -1,5 +1,5 @@
 import React, { useState, memo } from 'react'
-import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
+// import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
 import { UploadFile } from '.'
 import RemoveButton from './RemoveButton'
 
@@ -32,11 +32,11 @@ const IndividualFile = memo(({ file, removeFile }: Props) => {
             style={{ width: '194', height: '104px' }}
           />
         )}
-        {file.file.type.endsWith('pdf') && (
+        {/* {file.file.type.endsWith('pdf') && (
           <Document file={file.signedUrl || file.file}>
             <Page pageNumber={1} width={94} height={104} renderTextLayer={false} renderAnnotationLayer={false} />
           </Document>
-        )}
+        )} */}
       </div>
       {/* <p>Upload Key: {file.key}</p> */}
     </div>

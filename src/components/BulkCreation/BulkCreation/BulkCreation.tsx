@@ -10,15 +10,15 @@ import { BulkTable } from '../BulkTable'
 import { AppRoutes } from 'Routes/AppRoutes'
 import { bulkCreationColumns } from 'Utilities/columns'
 import { setBulkCreationSummary } from 'Redux/actions/BulkCreation'
-import { updateValidatedCustomers, validateCustomers } from 'Redux/actions/BulkCreation/BulkCreation'
+import { setFileUploaded, updateValidatedCustomers, validateCustomers } from 'Redux/actions/BulkCreation/BulkCreation'
 import { ReducersType } from 'Redux/store'
 import { BulkCustomerValidationProfileTypes } from 'Redux/reducers/BulkCreation'
+import { BulkIndividualModifyRecordModal } from 'Components/BulkIndividualModifyRecordModal'
 
 export const BulkCreation = () => {
   const dispatch = useDispatch() as any
 
-  const [uploadedFile, setUploadedFile] = useState([])
-  const [fileUploaded, setFileUploaded] = useState(false)
+  // const [fileUploaded, setFileUploaded] = useState(false)
   const [fileUploadError, setFileUploadError] = useState(false)
   const [failedValidation, setFailedValidation] = useState(0)
   const [successfulValidation, setSuccessfulValidation] = useState(0)
@@ -27,7 +27,7 @@ export const BulkCreation = () => {
   const [records, setRecords] = useState([])
 
   const bulkUploadTemplateRef = useRef(null)
-  const { bulkCustomersValidatedProfile, error, message, success, loading } = useSelector<ReducersType>(state => state.bulkCustomerValidationProfile) as BulkCustomerValidationProfileTypes
+  const { bulkCustomersValidatedProfile, fileUploaded, error, message, success, loading } = useSelector<ReducersType>(state => state.bulkCustomerValidationProfile) as BulkCustomerValidationProfileTypes
 
   const navigate = useNavigate()
 
@@ -42,14 +42,14 @@ export const BulkCreation = () => {
 
       setUploadedFileName(rejectedFile?.file['name'])
       setFileUploadError(true)
-      setFileUploaded(true)
+      dispatch(setFileUploaded(true))
       return
     }
 
     const acceptedFile = acceptedFiles[0]
     setUploadedFileName(acceptedFile['name'])
     setFileUploadError(false)
-    setFileUploaded(true)
+    dispatch(setFileUploaded(true))
 
     const file = acceptedFiles[0];
     const formData = new FormData()
@@ -65,16 +65,16 @@ export const BulkCreation = () => {
 
     dispatch(validateCustomers(formData))
 
-  }, [fileUploaded, fileUploadError, uploadedFileName, uploadedFile, successfulValidation, failedValidation])
+  }, [fileUploaded, fileUploadError, uploadedFileName, successfulValidation, failedValidation])
 
   const onDeleteUploadedFile = useCallback(() => {
 
     setFileUploadError(false)
-    setFileUploaded(false)
+    dispatch(setFileUploaded(false))
     setUploadedFileName('')
     // setUploadedFile(() => [])
     dispatch(updateValidatedCustomers([]))
-  }, [fileUploaded, fileUploadError, uploadedFileName, uploadedFile, bulkCustomersValidatedProfile])
+  }, [fileUploaded, fileUploadError, uploadedFileName, bulkCustomersValidatedProfile])
 
   const onDeleteCustomer = useCallback((index) => {
     const temp = bulkCustomersValidatedProfile
@@ -87,7 +87,7 @@ export const BulkCreation = () => {
     if (searchString) {
       setSearchString(null)
     }
-  }, [uploadedFile, successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
+  }, [successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
 
   const onCheckout = useCallback(() => {
     const validatedProfilesOnly = bulkCustomersValidatedProfile.map((profile) => {
@@ -97,7 +97,7 @@ export const BulkCreation = () => {
     }).filter(Boolean)
     dispatch(setBulkCreationSummary(validatedProfilesOnly))
     navigate(AppRoutes.bulkCustomerCreationMakerCheckerScreen)
-  }, [uploadedFile, successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
+  }, [successfulValidation, failedValidation, searchString, bulkCustomersValidatedProfile])
 
   const onDownloadTemplate = useCallback(() => {
     const ext = "xlsx";
@@ -252,6 +252,11 @@ export const BulkCreation = () => {
           />
         </div>
       </div>
+      <BulkIndividualModifyRecordModal
+        isOpen={false}
+        modalCloseClick={undefined}
+        loading={false}
+      />
 
     </>
 
