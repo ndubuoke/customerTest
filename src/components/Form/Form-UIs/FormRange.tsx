@@ -18,11 +18,22 @@ type Props = {
   activePageState?: PageInstance
 
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: any
 }
 
 // type DisplayTypeType = 'checkbox' | 'toggle switch'
 
-const FormRange = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
+const FormRange = ({
+  item,
+  collapsed,
+  setFillingFormState,
+  publishedFormState,
+  activePageState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
@@ -130,6 +141,17 @@ const FormRange = ({ item, collapsed, setFillingFormState, publishedFormState, a
       setText(theData)
     }
   }, [])
+
+  useEffect(() => {
+    if (text) {
+      setBackupForSwitchFormState((prev) => {
+        const copiedPrev = { ...prev }
+        copiedPrev[theItemFieldNameCamelCase] = text
+
+        return copiedPrev
+      })
+    }
+  }, [text])
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} flex items-center`}

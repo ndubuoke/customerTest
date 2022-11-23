@@ -23,6 +23,8 @@ type Props = {
   activePageState?: PageInstance
 
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: any
 }
 
 export type UploadFile = {
@@ -30,7 +32,15 @@ export type UploadFile = {
   signedUrl: string
 }
 
-const FormFileUpload = ({ item, collapsed, setFillingFormState, publishedFormState, fillingFormState }: Props) => {
+const FormFileUpload = ({
+  item,
+  collapsed,
+  setFillingFormState,
+  publishedFormState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
@@ -202,6 +212,17 @@ const FormFileUpload = ({ item, collapsed, setFillingFormState, publishedFormSta
     }
   }, [])
 
+  useEffect(() => {
+    if (uploadedFiles) {
+      setBackupForSwitchFormState((prev) => {
+        const copiedPrev = { ...prev }
+        copiedPrev[theItemFieldNameCamelCase] = uploadedFiles
+
+        return copiedPrev
+      })
+    }
+  }, [uploadedFiles])
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} `}
@@ -220,9 +241,9 @@ const FormFileUpload = ({ item, collapsed, setFillingFormState, publishedFormSta
           <div {...getRootProps()} className='cursor-pointer relative  h-[150px]'>
             <input type={`file`} hidden {...getInputProps()} multiple={false} />
 
-            <button className='absolute bottom-0 right-0' style={{ marginTop: 'auto' }}>
+            <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
               <img src={add} className='inline mr-1' />
-            </button>
+            </div>
           </div>
         )}
 

@@ -20,6 +20,8 @@ import { API } from 'Utilities/api'
 import ExtractInfoModal from 'Components/Shareables/ExtractInfoModal'
 import { validateCustomerResponseType } from 'Redux/reducers/ValidateCustomer.reducer'
 import { ReducersType } from 'Redux/store'
+import { formStruture } from 'Components/Form/formStructure'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -53,6 +55,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const [localUpload, setLocalUpload] = useState<Array<UploadFile>>([])
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
+
+  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
+  const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
 
   const handleModalDisplay = (isVisible: boolean) => {
     dispatch(validateCustomerResultModalAction(isVisible) as any)
@@ -88,7 +93,15 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
       <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
         <div className={`${formCreationStarted ? '' : 'h-[845px]'} min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
-          <SwitchToFormType customerType={customerType} formCreationStarted={formCreationStarted} mode={formMode} onSetFormMode={onSetFormMode} />
+          <SwitchToFormType
+            customerType={customerType}
+            formCreationStarted={formCreationStarted}
+            mode={formMode}
+            onSetFormMode={onSetFormMode}
+            fillingFormState={fillingFormState}
+            setFillingFormState={setFillingFormState}
+            setPublishedFormState={setPublishedFormState}
+          />
 
           {!formCreationStarted ? (
             <>
@@ -122,7 +135,14 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               </section>
             </>
           ) : (
-            <Form kind='new' formFields={''} />
+            <Form
+              kind='new'
+              formFields={''}
+              setFillingFormState={setFillingFormState}
+              setPublishedFormState={setPublishedFormState}
+              fillingFormState={fillingFormState}
+              publishedFormState={publishedFormState}
+            />
           )}
         </div>
       </main>
