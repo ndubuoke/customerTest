@@ -176,19 +176,10 @@ const FormFileUpload = ({ item, collapsed, setFillingFormState, publishedFormSta
         const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
         const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-        console.log('customerData-sectionId', copiedPrev?.data?.customerData)
-        console.log('theSection', theSection)
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
           delete theSection.data[theItemFieldNameCamelCase]
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-          // theSection.data[theItemFieldNameCamelCase] = {
-          //   file: {
-          //     type: filterSuccessUploadedFiles[0].file.type,
-          //   },
-          //   signedUrl: filterSuccessUploadedFiles[0].signedUrl,
-          // }
-          // copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         }
       }
       return copiedPrev
