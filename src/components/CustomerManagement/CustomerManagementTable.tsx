@@ -301,7 +301,7 @@ const CustomerManagementTable = ({
     <>
       {showCustomerModal && <ViewCustomerModal customer={customer} setShowCustomerModal={setShowCustomerModal} />}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[300px] overflow-auto '>
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[300px]'>
         <table className='w-full text-sm text-left table-auto '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>

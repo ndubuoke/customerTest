@@ -1,6 +1,13 @@
 import { BrowserRouter, Route, Routes, Navigate } from 'react-router-dom'
 
-import { MainScreen, FOURZEROFOUR, CustomerCreationScreen, CustomerAccountModificationScreen, BulkCustomerProcessSummary } from './screens'
+import {
+  MainScreen,
+  FOURZEROFOUR,
+  CustomerCreationScreen,
+  CustomerAccountModificationScreen,
+  BulkCustomerProcessSummary,
+  ProcessSummary,
+} from './screens'
 // import { TopNav } from 'Components/MainScreenLayout'
 import Customer360 from 'Screens/Customer360'
 import { useEffect } from 'react'
@@ -10,7 +17,7 @@ import { getRolesAndPermissions, getUserProfile } from 'Redux/actions/UserPersmi
 
 type Props = {}
 
-const App = ({ }: Props) => {
+const App = ({}: Props) => {
   const dispatch: any = useDispatch()
 
   useEffect(() => {
@@ -18,9 +25,7 @@ const App = ({ }: Props) => {
     dispatch(getRolesAndPermissions())
   }, [])
 
-  return (
-    <RouteSwitches />
-  )
+  return <RouteSwitches />
 }
 
 export default App
