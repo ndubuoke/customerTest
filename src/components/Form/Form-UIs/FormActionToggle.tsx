@@ -18,11 +18,22 @@ type Props = {
   activePageState?: PageInstance
 
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: any
 }
 
 type DisplayTypeType = 'checkbox' | 'toggle switch'
 
-const FormActionToggle = ({ item, collapsed, publishedFormState, activePageState, fillingFormState, setFillingFormState }: Props) => {
+const FormActionToggle = ({
+  item,
+  collapsed,
+  publishedFormState,
+  activePageState,
+  fillingFormState,
+  setFillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
@@ -131,6 +142,17 @@ const FormActionToggle = ({ item, collapsed, publishedFormState, activePageState
       setChecked(theData)
     }
   }, [])
+
+  useEffect(() => {
+    if (checked) {
+      setBackupForSwitchFormState((prev) => {
+        const copiedPrev = { ...prev }
+        copiedPrev[theItemFieldNameCamelCase] = checked
+
+        return copiedPrev
+      })
+    }
+  }, [checked])
 
   return (
     <div
