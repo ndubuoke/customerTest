@@ -1,25 +1,21 @@
 import { useState, useCallback, useEffect, memo } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import { individualCustomerCreationData, smeCustomerCreationData } from '../data/customerCreationBreadcrumbs'
-import SwitchToFormType from 'Components/Shareables/SwitchToFormType'
-import WizardChanger from 'Components/Shareables/WizardChanger'
-import CreationMode from 'Components/Shareables/CreationMode'
-import CustomerCreationBox from 'Components/Shareables/CustomerCreation'
-import { CreationModeEnum } from 'Utilities/enums'
-import { IdentificationNumberType, IdentificationTypeType } from 'Components/Shareables/IdentificationTypeAndNumber'
-import Button from 'Components/Shareables/Button'
-import SkipToForm from 'Components/Shareables/SkipToForm'
-import Form from 'Components/Form'
 import { bulkProcessSummaryColumns } from 'Utilities/columns'
-import { BulkTable } from 'Components/BulkCreation/BulkTable'
-import { BulkProcessSummaryTypes } from 'Redux/reducers/BulkCreation'
+import { BulkProcessSummaryTypes, SaveBulkCreationTypes } from 'Redux/reducers/BulkCreation'
 import { ReducersType } from 'Redux/store'
 import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
 import { CancelIcon, ModifyIcon, SubmitIcon } from 'Assets/svgs'
 import { BulkProcessSummaryTable } from 'Components/BulkCreation/BulkProcessSummaryTable'
 import ActivityLog from 'Components/Shareables/ActivityLog'
+import { AppRoutes } from 'Routes/AppRoutes'
+import { saveCustomers, setFileUploaded, updateValidatedCustomers } from 'Redux/actions/BulkCreation'
+import AlertModal from 'Components/Shareables/AlertModal'
+import { UserProfileTypes } from 'Redux/reducers/UserPersmissions'
+import { BulkCreationDataInitialData } from 'Utilities/interfaces'
+import { getUserProfile } from 'Redux/actions/UserPersmissions'
 
 type Props = {
   headerText: string
@@ -27,12 +23,62 @@ type Props = {
 }
 
 export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Props) => {
-  const naviate = useNavigate()
+  const navigate = useNavigate()
+  const dispatch: any = useDispatch()
+
+  const [beforeSave, setBeforeSave] = useState(false)
+  const [onSaving, setOnSaving] = useState(false)
+  const [dataToSave, setDataToSave] = useState(BulkCreationDataInitialData)
+
   const { bulkSummary } = useSelector<ReducersType>((state) => state.bulkProcessSummary) as BulkProcessSummaryTypes
+  const { user } = useSelector<ReducersType>((state) => state.userProfile) as UserProfileTypes
+  const { loading: saveLoading, message: saveMessage, error: saveError, success: saveSuccess } = useSelector<ReducersType>((state) => state.saveBulkCustomerCreation) as SaveBulkCreationTypes
 
   const onCancelCreation = useCallback(() => {
-    naviate('/')
+    dispatch(setFileUploaded(false))
+    dispatch(updateValidatedCustomers([]))
+    navigate('/')
   }, [])
+
+  const onSubmitCreation = useCallback(() => {
+    setBeforeSave(false)
+    setOnSaving(true)
+    const tempData = dataToSave
+    bulkSummary.forEach((summary) => {
+      tempData?.data?.customerData.push(summary)
+    })
+    tempData.data.requestData.initiator = `${user?.firstname} ${user?.lastname}`
+    tempData.data.requestData.initiatorId = user?.id
+    tempData.data.requestData.requestType = "Creation"
+    setDataToSave(tempData)
+
+    dispatch(saveCustomers(tempData))
+    // console.log(tempData)
+
+    // console.log(user)
+  }, [onSaving, beforeSave, dataToSave, bulkSummary])
+
+  const openBeforeSave = useCallback(() => {
+    setBeforeSave(true)
+  }, [beforeSave])
+
+  const closeBeforeSave = useCallback(() => {
+    setBeforeSave(false)
+  }, [beforeSave])
+
+  const closeSavingModal = useCallback(() => {
+    setOnSaving(false)
+    setDataToSave(BulkCreationDataInitialData)
+  }, [dataToSave, onSaving])
+
+  useEffect(() => {
+    if (!user.email) {
+      dispatch(getUserProfile())
+    }
+    if (!bulkSummary?.length) {
+      navigate(AppRoutes.individualCustomerCreationScreen)
+    }
+  }, [user, bulkSummary])
 
   return (
     <>
@@ -65,7 +111,9 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
             </div>
 
             <div className={`bg-white absolute m-auto bottom-2 right-2 w-[254px] h-[64px] flex justify-evenly items-center rounded-lg shadow-md`}>
-              <button className={`flex flex-col justify-center items-center`}>
+              <button className={`flex flex-col justify-center items-center`}
+                onClick={() => navigate(AppRoutes.individualCustomerCreationScreen)}
+              >
                 <ModifyIcon />
                 <div>Modify</div>
               </button>
@@ -73,7 +121,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
                 <CancelIcon />
                 <div>Cancel</div>
               </button>
-              <button className={`flex flex-col justify-center items-center`}>
+              <button className={`flex flex-col justify-center items-center`} onClick={openBeforeSave}>
                 <SubmitIcon />
                 <div>Submit Form</div>
               </button>
@@ -92,6 +140,33 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
           </div>
         </section>
       </main>
+      <AlertModal
+        leftClick={onCancelCreation}
+        leftClickText={"Cancel"}
+        rightClick={onSubmitCreation}
+        rightClickText={'Yes'}
+        message={`Default Savings Product will be Assigned to Customers `}
+        closeModal={closeBeforeSave}
+        loading={false}
+        status={'warning'}
+        isOpen={beforeSave}
+      />
+      <AlertModal
+        leftClick={() => navigate(AppRoutes.mainScreen)}
+        leftClickText={"Return to dashboard"}
+        rightClick={() => navigate(AppRoutes.individualCustomerCreationScreen)}
+        rightClickText={'Create another customer'}
+        message={saveMessage}
+        closeModal={closeSavingModal}
+        loading={saveLoading}
+        status={saveSuccess ? "success" : saveError ? "error" : "warning"}
+        isOpen={onSaving}
+      />
     </>
   )
 })
+
+// Bulk Customer profiles created successfully
+//
+// 20 of 20 new customer profiles submitted
+// for authorization 
