@@ -53,7 +53,7 @@ type Props = {
   publishedFormState: ResponseType
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
-  backupForSwitchFormState: {}
+  backupForSwitchFormState: any
 }
 
 const FormLayout = ({
@@ -154,6 +154,8 @@ const FormLayout = ({
                   setFillingFormState={setFillingFormState}
                   publishedFormState={publishedFormState}
                   fillingFormState={fillingFormState}
+                  setBackupForSwitchFormState={setBackupForSwitchFormState}
+                  backupForSwitchFormState={backupForSwitchFormState}
                 />
               )
             }

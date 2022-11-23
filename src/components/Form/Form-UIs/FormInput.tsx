@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
+import { generateID } from 'Utilities/generateId'
 import { getProperty } from 'Utilities/getProperty'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
@@ -19,7 +20,7 @@ type Props = {
 
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
-  backupForSwitchFormState
+  backupForSwitchFormState: any
 }
 
 const FormInput = ({
