@@ -208,6 +208,8 @@ const FormLayout = ({
                   setFillingFormState={setFillingFormState}
                   publishedFormState={publishedFormState}
                   fillingFormState={fillingFormState}
+                  setBackupForSwitchFormState={setBackupForSwitchFormState}
+                  backupForSwitchFormState={backupForSwitchFormState}
                 />
               )
             }
