@@ -52,9 +52,21 @@ type Props = {
   setFillingFormState: (value: FormStructureType) => void
   publishedFormState: ResponseType
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: {}
 }
 
-const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormState, publishedFormState, fillingFormState }: Props) => {
+const FormLayout = ({
+  isSection,
+  activeSection,
+  item,
+  fields,
+  setFillingFormState,
+  publishedFormState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -119,6 +131,97 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
             ) {
               return (
                 <FormInput
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                  setBackupForSwitchFormState={setBackupForSwitchFormState}
+                  backupForSwitchFormState={backupForSwitchFormState}
+                />
+              )
+            }
+
+            if (field.name === fieldsNames.DROPDOWN) {
+              return (
+                <FormDropdown
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
+            }
+
+            if (
+              field.name === fieldsNames.DATE ||
+              field.name === fieldsNames.DATETIME ||
+              field.name === fieldsNames.MONTH ||
+              field.name === fieldsNames.TIME ||
+              field.name === fieldsNames.WEEK
+            ) {
+              return (
+                <FormDate
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
+            }
+
+            if (field.name === fieldsNames.LONGTEXT) {
+              return (
+                <FormTextArea
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
+            }
+
+            if (field.name === fieldsNames.SEARCHANDSELECT) {
+              return (
+                <FormSearchAndSelect
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
+            }
+            if (field.name === fieldsNames.PHONEINPUT) {
+              return (
+                <FormPhoneInput
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
+            }
+
+            if (field.name === fieldsNames.FILEUPLOAD) {
+              return (
+                <FormFileUpload
                   activePageState={item}
                   item={field}
                   key={field.id}
@@ -129,55 +232,76 @@ const FormLayout = ({ isSection, activeSection, item, fields, setFillingFormStat
                 />
               )
             }
-
-            if (field.name === fieldsNames.DROPDOWN) {
-              return <FormDropdown item={field} key={field.id} collapsed={collapsed} />
-            }
-
-            if (
-              field.name === fieldsNames.DATE ||
-              field.name === fieldsNames.DATETIME ||
-              field.name === fieldsNames.MONTH ||
-              field.name === fieldsNames.TIME ||
-              field.name === fieldsNames.WEEK
-            ) {
-              return <FormDate item={field} key={field.id} collapsed={collapsed} />
-            }
-
-            if (field.name === fieldsNames.LONGTEXT) {
-              return <FormTextArea item={field} key={field.id} collapsed={collapsed} />
-            }
-
-            if (field.name === fieldsNames.SEARCHANDSELECT) {
-              return <FormSearchAndSelect item={field} key={field.id} collapsed={collapsed} />
-            }
-            if (field.name === fieldsNames.PHONEINPUT) {
-              return <FormPhoneInput item={field} key={field.id} collapsed={collapsed} />
-            }
-
-            if (field.name === fieldsNames.FILEUPLOAD) {
-              return <FormFileUpload item={field} key={field.id} collapsed={collapsed} />
-            }
             if (field.name === fieldsNames.ACTIONTOGGLE) {
-              return <FormActionToggle item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormActionToggle
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.CHECKBOX) {
-              return <FormCheckbox item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormCheckbox
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.HEADING) {
-              return <FormHeading item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormHeading
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
 
             if (field.name === fieldsNames.BUTTON) {
               return <FormButton item={field} key={field.id} collapsed={collapsed} />
             }
             if (field.name === fieldsNames.RADIO) {
-              return <FormRadio item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormRadio
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  // activePageState={item}
+                  // setFillingFormState={setFillingFormState}
+                  // publishedFormState={publishedFormState}
+                  // fillingFormState={fillingFormState}
+                />
+              )
             }
             if (field.name === fieldsNames.RANGE) {
-              return <FormRange item={field} key={field.id} collapsed={collapsed} />
+              return (
+                <FormRange
+                  item={field}
+                  key={field.id}
+                  collapsed={collapsed}
+                  activePageState={item}
+                  setFillingFormState={setFillingFormState}
+                  publishedFormState={publishedFormState}
+                  fillingFormState={fillingFormState}
+                />
+              )
             }
           })}
       </div>

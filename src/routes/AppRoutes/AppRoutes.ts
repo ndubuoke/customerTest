@@ -10,7 +10,8 @@ export const AppRoutes = {
   SMECustomerCreationScreen: CMR + '/sme-customer-creation',
   customerAccountModificationScreen: CMR + '/:customerId',
   customer360Screen: CMR + '/customer-360/:customerId',
-
+  // process summary
+  ProcessSummary: CMR + '/Process-summary/',
   // 404
   FOURZEROFOUR: CMR + '*',
 }

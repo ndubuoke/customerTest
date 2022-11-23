@@ -1,15 +1,26 @@
-import React, { useEffect } from 'react'
+import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
+import React, { useEffect, useState } from 'react'
+import { useSelector } from 'react-redux'
+import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
-import { FormControlType, FormControlTypeWithSection } from '../Types'
+import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
+import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
+  setFillingFormState: any
+  publishedFormState: ResponseType
+  activePageState?: PageInstance
+  fillingFormState: FormStructureType
 }
 
-const FormDate = ({ item, collapsed }: Props) => {
+const FormDate = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
+  const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
     ? getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -31,6 +42,94 @@ const FormDate = ({ item, collapsed }: Props) => {
     : getProperty(item.formControlProperties, 'Help text', 'defaultState').text
     ? getProperty(item.formControlProperties, 'Help text', 'defaultState').text
     : fieldLabel
+  const theItemFieldNameCamelCase = camelize(fieldLabel)
+
+  const [text, setText] = useState<string>('')
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
+    setText(e.target.value)
+
+    setFillingFormState((prev: FormStructureType) => {
+      const copiedPrev = { ...prev }
+      const pageId = theItemFromChange?.pageId
+
+      if (!copiedPrev?.data?.formInfomation?.formId) {
+        copiedPrev.data.formInfomation.formId = theForm?._id
+        copiedPrev.data.formInfomation.formType = theForm?.formType
+      }
+
+      // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+      const sectionId = theItemFromChange?.sectionId
+      let sectionIndex
+
+      if (sectionId) {
+        const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+        const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+        const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+        const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+        if (theSection) {
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+          theSection.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+        } else {
+          copiedPrev.data.customerData.push({
+            sectionName: theItemSectionNameCamelCase,
+            data: {
+              [theItemFieldNameCamelCase]: e.target.value.trim(),
+            },
+            pageId,
+            sectionId,
+          })
+        }
+      }
+
+      if (!sectionId) {
+        const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+        const pageNameCamelCase = camelize(pageName)
+        const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+        const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+        if (theSectionlessPage) {
+          sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+          theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+        } else {
+          copiedPrev.data.customerData.push({
+            sectionName: pageNameToBeUsed,
+            data: {
+              [theItemFieldNameCamelCase]: e.target.value.trim(),
+            },
+            pageId,
+            sectionId: null,
+          })
+        }
+      }
+
+      return copiedPrev
+    })
+  }
+
+  useEffect(() => {
+    const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
+      if (x.sectionId) {
+        return x.sectionId === item.sectionId
+      } else {
+        return x.pageId === item.pageId
+      }
+    })
+
+    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+
+    if (theData) {
+      setText(theData)
+    }
+  }, [])
 
   return (
     <div
@@ -64,6 +163,8 @@ const FormDate = ({ item, collapsed }: Props) => {
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
           title={helpText}
+          onChange={(e) => handleChange(e, item)}
+          value={text}
         />
       </div>
     </div>
