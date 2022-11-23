@@ -10,6 +10,7 @@ import {
 } from './reducers/BulkCreation'
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from './reducers/ValidateCustomer.reducer'
+import { userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from './reducers/UserPersmissions'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -19,6 +20,7 @@ export type ReducersType = {
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
   getPublishedFormSection: ResponseType
   validateCustomer: validateCustomerResponseType
+  userRolesAndPermissions: UserRolesAndPersmissionsTypes
 }
 
 const reducer = combineReducers<ReducersType>({

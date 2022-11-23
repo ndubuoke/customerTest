@@ -29,25 +29,10 @@ type Props = {
 export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Props) => {
   const naviate = useNavigate()
   const { bulkSummary } = useSelector<ReducersType>((state) => state.bulkProcessSummary) as BulkProcessSummaryTypes
-  // const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
-  // const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  // const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
-  // const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
-  //   identificationType: null,
-  //   identificationNumber: null,
-  // })
-  // const [localUpload, setLocalUpload] = useState<Array<File>>([])
-  // const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
   const onCancelCreation = useCallback(() => {
     naviate("/")
   }, [])
-
-  // const handleProceed = () => { }
-
-  // useEffect(() => {
-  //   // console.log(identificationDetails)
-  // }, [identificationDetails])
 
   return (
     <>
