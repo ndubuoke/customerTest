@@ -327,9 +327,13 @@ const FormDropdown = memo(
 
       if (backup) {
         if (enableMultipleSelection.toLowerCase() === 'off') {
-          setSelectedDropdownItem(backup)
+          if (!selectedDropdownItem) {
+            setSelectedDropdownItem(backup)
+          }
         } else {
-          setMultipleSelectedDropdownItems(backup)
+          if (multipleSelectedDropdownItems.length === 0) {
+            setMultipleSelectedDropdownItems(backup)
+          }
         }
       }
     }, [fillingFormState, publishedFormState])
