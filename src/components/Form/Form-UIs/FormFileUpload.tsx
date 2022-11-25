@@ -213,7 +213,7 @@ const FormFileUpload = ({
   }, [])
 
   useEffect(() => {
-    if (uploadedFiles) {
+    if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
         copiedPrev[theItemFieldNameCamelCase] = uploadedFiles
