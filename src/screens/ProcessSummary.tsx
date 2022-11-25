@@ -93,7 +93,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               </div>
             </div>
 
-            <div className={`bg-white absolute m-auto bottom-2 right-2 w-[300px] h-[64px] flex justify-evenly items-center rounded-lg shadow-md`}>
+            <div
+              className={`bg-white absolute m-auto bottom-2 right-2 min-w-[300px] min-h-[64px] flex justify-evenly items-center rounded-lg shadow-md`}
+            >
               <button className={`flex flex-col justify-center items-center`}>
                 <ModifyIcon />
                 <p className='text-sm'>Modify</p>
@@ -104,7 +106,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               </button>
               <button className={`flex flex-col justify-center items-center`}>
                 <SubmitIcon />
-                <p className='text-sm'>Submit Form</p>
+                <p className='text-sm'>
+                  Request for waiver <br /> & submit form
+                </p>
               </button>
             </div>
           </div>
