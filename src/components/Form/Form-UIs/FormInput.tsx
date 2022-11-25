@@ -166,7 +166,7 @@ const FormInput = ({
   }, [text])
 
   useEffect(() => {
-    const backup = backupForSwitchFormState[theItemFieldNameCamelCase]
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
 
     if (backup) {
       setText(backup)

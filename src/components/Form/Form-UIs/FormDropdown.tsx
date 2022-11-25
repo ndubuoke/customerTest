@@ -322,6 +322,18 @@ const FormDropdown = memo(
       }
     }, [multipleSelectedDropdownItems])
 
+    useEffect(() => {
+      const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+      if (backup) {
+        if (enableMultipleSelection.toLowerCase() === 'off') {
+          setSelectedDropdownItem(backup)
+        } else {
+          setMultipleSelectedDropdownItems(backup)
+        }
+      }
+    }, [fillingFormState, publishedFormState])
+
     return (
       <div
         className={`${collapsed ? 'hidden' : ''} `}
