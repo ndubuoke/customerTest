@@ -24,7 +24,7 @@ type Props = {
 const Form = ({ kind, formFields, fillingFormState, publishedFormState, setFillingFormState, setPublishedFormState }: Props) => {
   const dispatch = useDispatch()
 
-  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>({})
+  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
 
   const [activeFormSections, setActiveFormSections] = useState<any>([])
 
@@ -33,14 +33,7 @@ const Form = ({ kind, formFields, fillingFormState, publishedFormState, setFilli
   const [activePageState, setActivePageState] = useState<PageInstance>(null)
 
   useEffect(() => {
-    // const publishedFormInStorage = sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
-    //   ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)) as ResponseType)
-    //   : null
-    // if (publishedFormInStorage) {
-    //   setPublishedFormState(publishedFormInStorage)
-    // } else {
     if (publishedForm?.success) {
-      dispatch(getPublishedFormSectionAction(publishedForm?.serverResponse?.data?._id) as any)
       setPublishedFormState(publishedForm)
       sessionStorage.setItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE, JSON.stringify(publishedForm))
     }
@@ -48,24 +41,47 @@ const Form = ({ kind, formFields, fillingFormState, publishedFormState, setFilli
   }, [publishedForm])
 
   useEffect(() => {
+    // console.log({ fillingFormState })
     if (!fillingFormState.data?.formInfomation?.formId) {
       const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
         ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)) as FormStructureType)
         : null
 
       if (fillingFormInStorage) {
+        // console.log({ fillingFormInStorage })
         setFillingFormState(fillingFormInStorage)
       }
     }
   }, [])
 
   useEffect(() => {
-    sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
+    // console.log({ fillingFormState })
+
+    if (fillingFormState?.data?.customerData?.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
+    }
   }, [fillingFormState])
 
   useEffect(() => {
-    sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
+    // const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+    //   ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
+    //   : null
+    if (backupForSwitchFormState) {
+      sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
+    }
   }, [backupForSwitchFormState])
+
+  useEffect(() => {
+    if (fillingFormState?.data?.customerData?.length === 0) {
+      const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
+        : null
+
+      if (backupInStorage) {
+        setBackupForSwitchFormState(backupInStorage)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>

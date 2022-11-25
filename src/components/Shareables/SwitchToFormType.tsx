@@ -36,7 +36,6 @@ const SwitchToFormType = ({
     }
 
     setFillingFormState(formStruture)
-
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
     setPublishedFormState(null)
