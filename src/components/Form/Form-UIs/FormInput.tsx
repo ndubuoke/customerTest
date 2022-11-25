@@ -124,11 +124,12 @@ const FormInput = ({
   }
 
   useEffect(() => {
+    // console.log({ fillingFormState, backupForSwitchFormState })
     // console.log({ runni: fillingFormState?.data?.customerData })
     if (fillingFormState?.data?.customerData?.length === 0) {
       const exists = fillingFormState[theItemFieldNameCamelCase]
 
-      // console.log('here')
+      // console.log({ exists })
 
       if (exists) {
         setText(exists)
@@ -147,11 +148,13 @@ const FormInput = ({
     // console.log
 
     if (theData) {
+      // console.log({ theData })
       setText(theData)
     }
   }, [])
 
   useEffect(() => {
+    // console.log({ text })
     if (text) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
@@ -161,6 +164,16 @@ const FormInput = ({
       })
     }
   }, [text])
+
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (!text) {
+      if (backup) {
+        setText(backup)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div
@@ -176,32 +189,45 @@ const FormInput = ({
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
-        <input
-          className={`flex w-full  py-1 leading-6 `}
-          type={
-            item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
-              ? 'text'
-              : item.name === fieldsNames.PHONEINPUT
-              ? 'tel'
-              : item.name === fieldsNames.PASSWORD
-              ? 'password'
-              : item.name === fieldsNames.URL
-              ? 'url'
-              : item.name === fieldsNames.NUMBERCOUNTER
-              ? 'number'
-              : item.name === fieldsNames.EMAIL
-              ? 'email'
-              : 'text'
-          }
-          required={required.toLowerCase() === 'on'}
-          placeholder={placeholder}
-          title={helpText}
-          onChange={(e) => handleChange(e, item)}
-          maxLength={Number(maximumNumbersOfCharacters)}
-          value={text}
-        />
+        {item.name === fieldsNames.NUMBERCOUNTER ? (
+          <input
+            className={`flex w-full  py-1 leading-6 `}
+            type='number'
+            required={required.toLowerCase() === 'on'}
+            placeholder={placeholder}
+            title={helpText}
+            onChange={(e) => handleChange(e, item)}
+            maxLength={Number(maximumNumbersOfCharacters)}
+            value={text}
+            min='0'
+          />
+        ) : null}
+        {item.name !== fieldsNames.NUMBERCOUNTER ? (
+          <input
+            className={`flex w-full  py-1 leading-6 `}
+            type={
+              item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
+                ? 'text'
+                : item.name === fieldsNames.PHONEINPUT
+                ? 'tel'
+                : item.name === fieldsNames.PASSWORD
+                ? 'password'
+                : item.name === fieldsNames.URL
+                ? 'url'
+                : item.name === fieldsNames.EMAIL
+                ? 'email'
+                : 'text'
+            }
+            required={required.toLowerCase() === 'on'}
+            placeholder={placeholder}
+            title={helpText}
+            onChange={(e) => handleChange(e, item)}
+            maxLength={Number(maximumNumbersOfCharacters)}
+            value={text}
+          />
+        ) : null}
 
-        {maximumNumbersOfCharacters ? (
+        {item.name !== fieldsNames.NUMBERCOUNTER && maximumNumbersOfCharacters ? (
           <div className='absolute bottom-0 right-0 text-sm text-[#9ca3af] z-10 bg-white'>
             {text.length}/{maximumNumbersOfCharacters}
           </div>

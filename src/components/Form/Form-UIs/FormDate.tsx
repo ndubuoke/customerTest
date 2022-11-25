@@ -153,6 +153,14 @@ const FormDate = ({
     }
   }, [text])
 
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (backup) {
+      setText(backup)
+    }
+  }, [fillingFormState, publishedFormState])
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} `}

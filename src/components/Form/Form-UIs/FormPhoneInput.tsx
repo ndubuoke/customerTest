@@ -141,6 +141,16 @@ const FormPhoneInput = ({
     }
   }, [text])
 
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (!text) {
+      if (backup) {
+        setText(backup)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} `}

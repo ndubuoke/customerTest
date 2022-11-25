@@ -174,6 +174,16 @@ const FormSearchAndSelect = memo(
       }
     }, [selectedDropdownItem])
 
+    useEffect(() => {
+      const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+      if (!selectedDropdownItem) {
+        if (backup) {
+          setSelectedDropdownItem(backup)
+        }
+      }
+    }, [fillingFormState, publishedFormState])
+
     return (
       <div
         className={`${collapsed ? 'hidden' : ''} `}
