@@ -2,7 +2,7 @@ import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
 import { CancelIcon, ModifyIcon, ProcessStep, sterlingLogoProcess, SterlingStepperImg, SubmitIcon } from 'Assets/svgs'
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import ActivityLog from 'Components/Shareables/ActivityLog'
-import { individualCustomerCreationData, smeCustomerCreationData } from 'src/data/customerCreationBreadcrumbs'
+import { individualCustomerCreationData, smeCustomerCreationData } from '../data/process-summary'
 
 type Props = {
   headerText: string
@@ -14,7 +14,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     <>
       <h2>PROCESS SUMMARY</h2>
       <nav>
-        <GoBack headerText={headerText} breadCrumbsList={[]} />
+        <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
       </nav>
 
       <main className={`bg-background-dash relative flex mx-auto py-[20px] font-roboto px-[30px] gap-x-[20px] h-screen`}>
