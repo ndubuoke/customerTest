@@ -18,7 +18,7 @@ type Props = {
 
 const IndividualFile = memo(({ file, removeFile }: Props) => {
   const [showRemove, setShowRemove] = useState<boolean>(true)
-  console.log('file', file)
+  console.log('file', file.file)
   return (
     <div className='relative' onClick={(e) => e.stopPropagation()}>
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />

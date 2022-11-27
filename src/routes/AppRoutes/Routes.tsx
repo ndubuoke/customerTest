@@ -23,7 +23,8 @@ export const RouteSwitches = () => (
       <Route path={AppRoutes.SMECustomerCreationScreen} element={<CustomerCreationScreen customerType='sme' />} />
       <Route path={AppRoutes.customerAccountModificationScreen} element={<CustomerAccountModificationScreen />} />
       <Route path={AppRoutes.customer360Screen} element={<Customer360 />} />
-      <Route path={AppRoutes.ProcessSummary} element={<ProcessSummary headerText={''} customerType={'individual'} />} />
+      <Route path={AppRoutes.individualProcessSummary} element={<ProcessSummary headerText={''} customerType={'individual'} />} />
+      <Route path={AppRoutes.SMEProcessSummary} element={<ProcessSummary headerText={''} customerType={'sme'} />} />
 
       {/* ----------------------NEVER REMOVE THIS------------------ */}
       <Route path={AppRoutes.FOURZEROFOUR} element={<FOURZEROFOUR />} />

@@ -227,6 +227,7 @@ const FormFileUpload = ({
     })
 
     const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+    console.log('theData', theData)
     if (theData) {
       setuploadedFiles([theData])
     }
@@ -236,12 +237,29 @@ const FormFileUpload = ({
     if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
-        copiedPrev[theItemFieldNameCamelCase] = uploadedFiles
+        copiedPrev[theItemFieldNameCamelCase] = [
+          {
+            file: {
+              type: uploadedFiles[0].file.type,
+            },
+            signedUrl: uploadedFiles[0].signedUrl,
+          },
+        ]
 
         return copiedPrev
       })
     }
   }, [uploadedFiles])
+
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+    console.log('backup', backup)
+    if (!uploadedFiles?.length) {
+      if (backup) {
+        setuploadedFiles(backup)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div
