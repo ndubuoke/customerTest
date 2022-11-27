@@ -1,4 +1,4 @@
-import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL } from '../constants/CustomerManagement.constants';
+import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL, GET_REQUESTS_BY_DATE_REQUEST, GET_REQUESTS_BY_DATE_SUCCESS, GET_REQEUSTS_BY_DATE_FAIL, GET_TOTAL_REQUEST_STATUS_REQUEST, GET_TOTAL_REQUEST_STATUS_SUCCESS, GET_TOTAL_REQUEST_STATUS_FAIL, GET_REQUESTS_FOR_CHECKER_REQUEST, GET_REQUESTS_FOR_CHECKER_SUCCESS, GET_REQUESTS_FOR_CHECKER_FAIL } from '../constants/CustomerManagement.constants';
 import {
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
@@ -15,9 +15,7 @@ import {
   GET_REQUESTS_FAIL,
   GET_REQUESTS_REQUEST,
   GET_REQUESTS_SUCCESS,
-  SORT_CUSTOMERS_ALPHABETICALLY_REQUEST,
-  SORT_CUSTOMERS_ALPHABETICALLY_SUCCESS,
-  SORT_CUSTOMERS_ALPHABETICALLY_FAIL,
+
 } from 'Redux/constants/CustomerManagement.constants'
 export type customersManagementResponseType = {
   loading: boolean
@@ -73,6 +71,22 @@ export const getCustomersRequestReducer = (state: customersManagementResponseTyp
   }
 }
 
+export const getRequestsForCheckerReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_REQUESTS_FOR_CHECKER_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_REQUESTS_FOR_CHECKER_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_REQUESTS_FOR_CHECKER_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
 export const deleteRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
     case DELETE_REQUEST_REQUEST:
@@ -114,6 +128,40 @@ export const getCustomersByDateReducer = (state: customersManagementResponseType
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case GET_CUSTOMERS_BY_DATE_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const getRequestsByDateReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_REQUESTS_BY_DATE_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_REQUESTS_BY_DATE_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_REQEUSTS_BY_DATE_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+
+
+export const getTotalRequestStatusReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_TOTAL_REQUEST_STATUS_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_TOTAL_REQUEST_STATUS_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_TOTAL_REQUEST_STATUS_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:

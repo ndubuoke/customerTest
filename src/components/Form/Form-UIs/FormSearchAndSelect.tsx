@@ -172,6 +172,7 @@ const FormSearchAndSelect = memo(({ item, collapsed, setFillingFormState, publis
             items={items}
             onSelect={(theSelectedItem) => onSelect(theSelectedItem, item)}
             value={selectedDropdownItem ? selectedDropdownItem : ''}
+            label={selectedDropdownItem || placeholder}
           />
         </div>
         <span

@@ -9,7 +9,20 @@ import {
   GET_REQUESTS_SUCCESS,
 } from '../constants/CustomerManagement.constants'
 import store, { ReducersType } from 'Redux/store'
-import { ACTIVATE_CUSTOMER_FAIL, ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS } from '../constants/CustomerManagement.constants'
+import {
+  ACTIVATE_CUSTOMER_FAIL,
+  ACTIVATE_CUSTOMER_REQUEST,
+  ACTIVATE_CUSTOMER_SUCCESS,
+  GET_REQUESTS_BY_DATE_REQUEST,
+  GET_REQUESTS_BY_DATE_SUCCESS,
+  GET_REQEUSTS_BY_DATE_FAIL,
+  GET_TOTAL_REQUEST_STATUS_REQUEST,
+  GET_TOTAL_REQUEST_STATUS_SUCCESS,
+  GET_TOTAL_REQUEST_STATUS_FAIL,
+  GET_REQUESTS_FOR_CHECKER_REQUEST,
+  GET_REQUESTS_FOR_CHECKER_SUCCESS,
+  GET_REQUESTS_FOR_CHECKER_FAIL,
+} from '../constants/CustomerManagement.constants'
 import {
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
@@ -130,6 +143,73 @@ export const getCustomersByDateAction =
     } catch (error) {
       dispatch({
         type: GET_CUSTOMERS_BY_DATE_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }
+
+export const getRequestsByDateAction =
+  (filter: dateFilterType, number: number = 0) =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: GET_REQUESTS_BY_DATE_REQUEST })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/request/by/date?filterBy=${filter}&number=${number}`, config)
+
+      dispatch({ type: GET_REQUESTS_BY_DATE_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_REQEUSTS_BY_DATE_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }
+
+export const getTotalRequestStatusCustomersAction =
+  (status: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: GET_TOTAL_REQUEST_STATUS_REQUEST })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/request?status=${status}`, config)
+
+      dispatch({ type: GET_TOTAL_REQUEST_STATUS_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_TOTAL_REQUEST_STATUS_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }
+
+export const getRequestsForCheckerAction =
+  (requestStatus: string, customerType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: GET_REQUESTS_FOR_CHECKER_REQUEST })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/request/data/checker?status=${requestStatus}&customerType=${customerType}`, config)
+
+      dispatch({ type: GET_REQUESTS_FOR_CHECKER_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_REQUESTS_FOR_CHECKER_FAIL,
         payload: error?.response && error?.response?.data?.message,
       })
     }

@@ -11,10 +11,11 @@ type CalenderProps = {
   value?: Date
   onChange?: (value: Date) => void
   calenderRef: any
-  dispatchDateFilterHandler: (startDate, endDate) => void
+  dispatchDateFilterHandler: (e, v, y) => void
+  tableType:string
 }
 
-const Calender: React.FC<CalenderProps> = ({ value = new Date(), onChange, calenderRef, dispatchDateFilterHandler }) => {
+const Calender: React.FC<CalenderProps> = ({tableType, value = new Date(), onChange, calenderRef, dispatchDateFilterHandler }) => {
   const startDate = startOfMonth(value)
   const endDate = endOfMonth(value)
 
@@ -33,20 +34,20 @@ const Calender: React.FC<CalenderProps> = ({ value = new Date(), onChange, calen
 
   const dateFunctionHandler = (func: dateActionsType) => {
     if (func === 'Last 7 days') {
-      dispatchDateFilterHandler('day', 7)
+      dispatchDateFilterHandler('day', 7, tableType)
     }
     if (func === 'Last 14 days') {
-        dispatchDateFilterHandler('day', 14)
+        dispatchDateFilterHandler('day', 14, tableType)
     }
     if (func === 'Last 30 days') {
-        dispatchDateFilterHandler('day', 30)
+        dispatchDateFilterHandler('day', 30, tableType)
     }
     if (func === 'Last 3 months') {
-        dispatchDateFilterHandler('month', 3)
+        dispatchDateFilterHandler('month', 3, tableType)
     }
 
     if (func === 'Last 12 months') {
-       dispatchDateFilterHandler('month', 12)
+       dispatchDateFilterHandler('month', 12, tableType)
     }
   }
 

@@ -21,7 +21,8 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
 import Calender from './Calender/Calender'
 import CustomerDetailsRow from './CustomerDetailsRow'
-import { activateCustomerAction } from '../../redux/actions/CustomerManagement.actions'
+import { activateCustomerAction, getRequestsByDateAction } from '../../redux/actions/CustomerManagement.actions'
+import RequestDetailsRow from './RequestDetailsRow'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -78,6 +79,8 @@ type CustomerManagementTable = {
   setShowRequestFunctionOptions: (e) => void
   setShowSystemAlert: (e) => void
   refreshTableHandler: () => void
+  userRole: string
+  searchTerm:string
 }
 
 const CustomerManagementTable = ({
@@ -114,6 +117,8 @@ const CustomerManagementTable = ({
   showCalender,
   filterDateRef,
   setShowCalender,
+  userRole,
+  searchTerm,
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
   const [requestId, setRequestId] = useState(0)
@@ -142,10 +147,14 @@ const CustomerManagementTable = ({
   const [RequestModalMessage, setRequestModalMessage] = useState('')
   const [currentDate, setCurrentDate] = useState(new Date())
   const [isAsc, setIsAsc] = useState(false)
-
   const deleteRequest = useSelector<ReducersType>((state: ReducersType) => state?.deleteRequest) as customersManagementResponseType
   const activateCustomer = useSelector<ReducersType>((state: ReducersType) => state?.activateCustomer) as customersManagementResponseType
   const allCustomersByDate = useSelector<ReducersType>((state: ReducersType) => state?.allCustomersByDate) as customersManagementResponseType
+  const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
+  const customers = AllCustomers?.serverResponse?.data?.customer
+  const customersByDate = allCustomersByDate?.serverResponse?.data
+  const requests = allRequests?.serverResponse?.data?.res
+  const requestsForChecker = allRequestsForChecker?.serverResponse?.data?.requests
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -400,17 +409,18 @@ const CustomerManagementTable = ({
 
       customerId: getCustomerDetail(customer, 'customerId')[0],
     }
-      dispatch(activateCustomerAction(body) as any)
+    dispatch(activateCustomerAction(body) as any)
   }
   type dateFilterType = 'day' | 'month'
 
-  const dispatchDateFilterHandler = (filterBy: dateFilterType, number) => {
-    dispatch(getCustomersByDateAction(filterBy, number) as any)
+  const dispatchDateFilterHandler = (filterBy: dateFilterType, number: number, tableType) => {
+    if (tableType === 'All Customers') {
+      dispatch(getCustomersByDateAction(filterBy, number) as any)
+    }
+    if (tableType === 'Requests') {
+      dispatch(getRequestsByDateAction(filterBy, number) as any)
+    }
   }
-
-  const customers = AllCustomers?.serverResponse?.data?.customer
-  const customersByDate = allCustomersByDate?.serverResponse?.data
-  const requests = allRequests?.serverResponse?.data?.res
 
   useEffect(() => {
     if (tableType === 'All Customers') {
@@ -486,6 +496,8 @@ const CustomerManagementTable = ({
 
   // console.log(allCustomersByDate)
   // console.log(AllCustomers)
+  const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
+  // console.log(allRequestsForChecker)
 
   return (
     <>
@@ -625,12 +637,13 @@ const CustomerManagementTable = ({
                       {tableHead === 'updated on' ? (
                         <img src={Filter} onClick={ShowCalenderHandler} alt='' className='absolute cursor-pointer right-14 top-[35%] mr-2' />
                       ) : null}
-                      {showCalender && tableHead === 'updated on' && (
+                      {showCalender && tableType === 'All Customers' && tableHead === 'updated on' && (
                         <Calender
                           dispatchDateFilterHandler={dispatchDateFilterHandler}
                           calenderRef={filterDateRef}
                           value={currentDate}
                           onChange={setDate}
+                          tableType={tableType}
                         />
                       )}
                     </th>
@@ -967,7 +980,18 @@ const CustomerManagementTable = ({
                           })}
                         </div>
                       )}
-                      {tableHead === 'updated on' ? <img src={Filter} alt='' className='absolute right-14 top-[35%] mr-2' /> : null}
+                      {tableHead === 'updated on' ? (
+                        <img src={Filter} onClick={ShowCalenderHandler} alt='' className='absolute right-14 top-[35%] cursor-pointer mr-2' />
+                      ) : null}
+                      {showCalender && tableType === 'Requests' && tableHead === 'updated on' && (
+                        <Calender
+                          dispatchDateFilterHandler={dispatchDateFilterHandler}
+                          calenderRef={filterDateRef}
+                          value={currentDate}
+                          onChange={setDate}
+                          tableType={tableType}
+                        />
+                      )}
                     </th>
                   ))
                 : null}
@@ -990,18 +1014,27 @@ const CustomerManagementTable = ({
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
-                    customers.map((customer) => (
-                      <CustomerDetailsRow
-                        key={customer?.id}
-                        customerId={customerId}
-                        showCustomersFunctionHandler={showCustomersFunctionHandler}
-                        customer={customer}
-                        customerFunctionOptions={customerFunctionOptions}
-                        showCustomerFunctionOptions={showCustomerFunctionOptions}
-                        customerFunctionListRef={customerFunctionListRef}
-                        customerFunctionHandler={customerFunctionHandler}
-                      />
-                    ))}
+                    customers
+                      .filter((customer) => {
+                        if (searchTerm === '') {
+                          return customer
+                        }else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return customer
+                        }
+                      })
+                      .map((customer) => (
+                        <CustomerDetailsRow
+                          userRole={userRole}
+                          key={customer?.id}
+                          customerId={customerId}
+                          showCustomersFunctionHandler={showCustomersFunctionHandler}
+                          customer={customer}
+                          customerFunctionOptions={customerFunctionOptions}
+                          showCustomerFunctionOptions={showCustomerFunctionOptions}
+                          customerFunctionListRef={customerFunctionListRef}
+                          customerFunctionHandler={customerFunctionHandler}
+                        />
+                      ))}
                 </tbody>
               )}
               {allCustomersByDate?.success && !AllCustomers?.success && (
@@ -1011,6 +1044,7 @@ const CustomerManagementTable = ({
                     customersByDate.map((customer) => (
                       <CustomerDetailsRow
                         key={customer?.id}
+                        userRole={userRole}
                         customerId={customerId}
                         showCustomersFunctionHandler={showCustomersFunctionHandler}
                         customer={customer}
@@ -1025,8 +1059,9 @@ const CustomerManagementTable = ({
             </>
           )}
 
-          {/* Requests */}
-          {allRequests?.loading ? (
+          {/* Requests for maker */}
+
+          {allRequests?.loading || allRequestsByDate?.loading ? (
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
@@ -1038,211 +1073,116 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              <tbody>
-                {tableType === 'Requests' &&
-                  requests &&
-                  requests.map((request) => {
-                    if (request.customerType === customerType) {
-                      return (
-                        <tr key={request.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
-                          <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
-                            {request.requestTitle}
-                          </td>
-                          <td className='py-2 px-2'>{request.requestType}</td>
-                          <td className='py-2 px-2'>{request.initiator}</td>
-                          <td className='py-2 px-2 text-[#1E0A3C] '>
-                            <span
-                              className={` ${request.status === 'Approved' ? 'bg-[#D4F7DC] text-[#15692A]' : null} ${
-                                request.status === 'In-Review' ? 'bg-[#F0F5FF] text-[#0050C8]' : null
-                              }
-                            ${request.status === 'In Issue' ? 'bg-[#FFD4D2] text-[#9F1F17]' : null}
-                            ${request.status === 'Interim Approval' ? 'bg-[#FFF8CC] text-[#806B00]' : null}
-                            ${request.status === 'Draft' ? 'bg-[#E5E5EA] text-[#1E0A3C]' : null}
-                            p-1 rounded font-medium flex w-fit  gap-2`}
-                            >
-                              {request.status} <img src={Eye} alt='' />
-                            </span>
-                          </td>
-                          <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-                            {request.updatedAt}
-                            <img src={Menu} alt='' className='cursor-pointer' onClick={showRequestFunctionHandler.bind(null, request.id)} />
-                            {showRequestFunctionOptions && request.id === requestId && (
-                              <div
-                                ref={requestFunctionListRef}
-                                className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
-                              >
-                                {requestFunctionOptions?.map((option, index) => {
-                                  if (request.status === 'Approved') {
-                                    if (option === 'View') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Eye} />
-                                            View
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                  }
-                                  if (request.status === 'In-Review') {
-                                    if (option === 'View') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Eye} />
-                                            View
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                    if (option === 'Withdraw & Delete Request') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={redDelete} />
-                                            Withdraw & Delete Request
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                  }
+              {allRequests?.success && !allRequestsByDate?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
 
-                                  if (request.status === 'In Issue') {
-                                    if (option === 'View') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Eye} />
-                                            View
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                    if (option === 'Modify') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, { option, request })}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Edit} />
-                                            Modify
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                    if (option === 'Delete Request') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={redDelete} />
-                                            Delete Request
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                  }
+              {allRequestsByDate?.success && !allRequests?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
+            </>
+          )}
 
-                                  if (request.status === 'Interim Approval') {
-                                    if (option === 'View') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Eye} />
-                                            View
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                    if (option === 'Regularize Documents') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Edit} />
-                                            Regularize Documents
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                  }
-                                  if (request.status === 'Draft') {
-                                    if (option === 'Continue Request') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, option)}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={Edit} />
-                                            Continue Request
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                    if (option === 'Delete Request') {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                          onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
-                                        >
-                                          <span className='flex w-full  '>
-                                            {' '}
-                                            <img className='mr-2' src={redDelete} />
-                                            Delete Request
-                                          </span>
-                                        </div>
-                                      )
-                                    }
-                                  }
-                                })}
-                              </div>
-                            )}
-                          </td>
-                        </tr>
-                      )
-                    }
-                  })}
-              </tbody>
+          {/* Requests for checker */}
+          {allRequestsForChecker?.loading ? (
+            <tbody className=' '>
+              <tr className=' '>
+                <td className='  relative' colSpan={5}>
+                  <div className='min-h-[300px]      flex items-center justify-center'>
+                    <Spinner size='large' />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          ) : (
+            <>
+              {allRequestsForChecker?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requestsForChecker &&
+                    requestsForChecker.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
+
+              {/* {allRequestsByDate?.success && !allRequests?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )} */}
             </>
           )}
         </table>

@@ -2,7 +2,12 @@ import { legacy_createStore as createStore, combineReducers, applyMiddleware } f
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
 import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
-import { getCustomersByDateReducer, activateCustomerReducer } from './reducers/CustomerManagement.reducer'
+import {
+  getCustomersByDateReducer,
+  activateCustomerReducer,
+  getTotalRequestStatusReducer,
+  getRequestsByDateReducer,
+} from './reducers/CustomerManagement.reducer'
 import {
   bulkCustomerValidationProfileReducer,
   BulkCustomerValidationProfileTypes,
@@ -12,15 +17,17 @@ import {
   SaveBulkCreationTypes,
 } from 'Redux/reducers/BulkCreation'
 
-import {
-  userProfileReducer,
-  UserProfileTypes,
-  userRolesAndPermissionsReducer,
-  UserRolesAndPersmissionsTypes
-} from 'Redux/reducers/UserPersmissions'
+import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
 
-import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer,deleteRequestReducer } from './reducers/CustomerManagement.reducer'
+import {
+  getCustomersReducer,
+  customersManagementResponseType,
+  getCustomersRequestReducer,
+  deleteRequestReducer,
+} from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
+import { getTotalRequestStatusCustomersAction } from './actions/CustomerManagement.actions'
+import { getRequestsForCheckerReducer } from './reducers/CustomerManagement.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -31,10 +38,13 @@ export type ReducersType = {
   activateCustomer: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
   allCustomersByDate: customersManagementResponseType
+  allRequestsByDate: customersManagementResponseType
   userRolesAndPermissions: UserRolesAndPersmissionsTypes
   userProfile: UserProfileTypes
   validateCustomer: validateCustomerResponseType
   saveBulkCustomerCreation: SaveBulkCreationTypes
+  totalStatusCustomers: customersManagementResponseType
+  allRequestsForChecker: customersManagementResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -45,7 +55,9 @@ const reducer = combineReducers<ReducersType>({
   deleteRequest: deleteRequestReducer,
   allCustomersByDate: getCustomersByDateReducer,
   activateCustomer: activateCustomerReducer,
-
+  totalStatusCustomers: getTotalRequestStatusReducer,
+  allRequestsByDate: getRequestsByDateReducer,
+  allRequestsForChecker: getRequestsForCheckerReducer,
   bulkCustomerValidationProfile: bulkCustomerValidationProfileReducer,
   userRolesAndPermissions: userRolesAndPermissionsReducer,
   userProfile: userProfileReducer,
