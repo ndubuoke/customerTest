@@ -250,6 +250,7 @@ const Main = (props: Props) => {
   // console.log(AllCustomers)
   //  console.log(allRequests)
   // console.log(allRequestsForChecker)
+   console.log(user)
 
   return (
     <>
