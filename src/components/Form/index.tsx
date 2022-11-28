@@ -19,12 +19,21 @@ type Props = {
   setFillingFormState: any
   publishedFormState: any // ResponseType;
   setPublishedFormState: any
+  backupForSwitchFormState: {}
+  setBackupForSwitchFormState: (value: any) => any
 }
 
-const Form = ({ kind, formFields, fillingFormState, publishedFormState, setFillingFormState, setPublishedFormState }: Props) => {
+const Form = ({
+  kind,
+  formFields,
+  fillingFormState,
+  publishedFormState,
+  setFillingFormState,
+  setPublishedFormState,
+  backupForSwitchFormState,
+  setBackupForSwitchFormState,
+}: Props) => {
   const dispatch = useDispatch()
-
-  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
 
   const [activeFormSections, setActiveFormSections] = useState<any>([])
 

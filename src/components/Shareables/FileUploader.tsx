@@ -89,6 +89,10 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
     setLocalUpload((prev) => newFiles)
   }
 
+  useEffect(() => {
+    console.log({ uploadedFiles })
+  }, [uploadedFiles])
+
   return (
     <div className={`border rounded-md max-w-[599px] h-full `}>
       <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative min-h-[312px]'>
