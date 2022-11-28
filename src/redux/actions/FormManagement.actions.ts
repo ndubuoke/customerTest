@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
 import { Dispatch } from 'redux'
+import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
@@ -66,3 +67,12 @@ export const getPublishedFormSectionAction = (formId: string) => async (dispatch
     })
   }
 }
+
+// SET_REQUIRED_FORM_FIELDS
+export const setRequiredFormFieldsAction =
+  (requiredFields: Array<any>) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    dispatch({
+      type: SET_REQUIRED_FORM_FIELDS,
+      payload: requiredFields,
+    })
+  }

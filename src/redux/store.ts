@@ -1,7 +1,7 @@
 import { legacy_createStore as createStore, combineReducers, applyMiddleware } from 'redux'
 import thunk from 'redux-thunk'
 import { composeWithDevTools } from 'redux-devtools-extension'
-import { getFormReducer, ResponseType } from './reducers/FormManagement.reducers'
+import { getFormReducer, ResponseType, setRequiredFormFieldsReducer } from './reducers/FormManagement.reducers'
 
 import {
   bulkCustomerValidationProfileReducer,
@@ -12,12 +12,7 @@ import {
   SaveBulkCreationTypes,
 } from 'Redux/reducers/BulkCreation'
 
-import {
-  userProfileReducer,
-  UserProfileTypes,
-  userRolesAndPermissionsReducer,
-  UserRolesAndPersmissionsTypes
-} from 'Redux/reducers/UserPersmissions'
+import { userProfileReducer, UserProfileTypes, userRolesAndPermissionsReducer, UserRolesAndPersmissionsTypes } from 'Redux/reducers/UserPersmissions'
 
 import { getCustomersReducer, customersManagementResponseType, getCustomersRequestReducer } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
@@ -32,6 +27,7 @@ export type ReducersType = {
   userProfile: UserProfileTypes
   validateCustomer: validateCustomerResponseType
   saveBulkCustomerCreation: SaveBulkCreationTypes
+  setRequiredFormFields: any
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -44,6 +40,7 @@ const reducer = combineReducers<ReducersType>({
   userProfile: userProfileReducer,
   validateCustomer: validateCustomerReducer,
   saveBulkCustomerCreation: saveBulkCreationReducer,
+  setRequiredFormFields: setRequiredFormFieldsReducer,
 })
 
 const middleware = [thunk]

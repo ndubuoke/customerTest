@@ -7,16 +7,19 @@ import StepNumbers from './StepNumbers'
 
 type Props = {
   setActivePageState: (val: PageInstance) => void
+  activePageState: PageInstance
+  canSubmit: boolean
+  setCanSubmit: (prev: boolean) => void
+  canNext: boolean
+  setCanNext: (prev: boolean) => void
 }
 
-const Steps = ({ setActivePageState }: Props) => {
+const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit }: Props) => {
   const [form, setForm] = useState<Form>(null)
-  const [activePage, setActivePage] = useState<PageInstance>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const handleActivePage = (index: number) => {
-    setActivePage(form?.builtFormMetadata?.pages[index])
     setActivePageState(form?.builtFormMetadata?.pages[index])
   }
 
@@ -28,7 +31,6 @@ const Steps = ({ setActivePageState }: Props) => {
 
   useEffect(() => {
     if (publishedForm) {
-      setActivePage(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0])
       setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0])
     }
   }, [publishedForm])
@@ -45,7 +47,7 @@ const Steps = ({ setActivePageState }: Props) => {
                 index={index}
                 last={form?.builtFormMetadata?.pages.length === index + 1}
                 onClick={(index) => handleActivePage(index)}
-                isActive={page?.id === activePage?.id}
+                isActive={page?.id === activePageState?.id}
               />
             )
           })}
