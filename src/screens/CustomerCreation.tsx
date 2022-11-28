@@ -58,6 +58,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
+  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
 
   const handleModalDisplay = (isVisible: boolean) => {
     dispatch(validateCustomerResultModalAction(isVisible) as any)
@@ -142,6 +143,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               setPublishedFormState={setPublishedFormState}
               fillingFormState={fillingFormState}
               publishedFormState={publishedFormState}
+              setBackupForSwitchFormState={setBackupForSwitchFormState}
+              backupForSwitchFormState={backupForSwitchFormState}
             />
           )}
         </div>

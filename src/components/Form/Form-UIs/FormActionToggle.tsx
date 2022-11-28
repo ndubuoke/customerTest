@@ -154,6 +154,14 @@ const FormActionToggle = ({
     }
   }, [checked])
 
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (backup) {
+      setChecked(backup)
+    }
+  }, [fillingFormState, publishedFormState])
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} flex items-center`}
