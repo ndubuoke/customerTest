@@ -9,6 +9,7 @@ import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { getProperty } from 'Utilities/getProperty'
 import { FormLayout, Steps } from './Form-UIs'
+import ActionButtonsForForm from './Form-UIs/ActionButtonsForForm'
 import { formStruture } from './formStructure'
 import { PageInstance } from './Types'
 
@@ -40,6 +41,9 @@ const Form = ({
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const [activePageState, setActivePageState] = useState<PageInstance>(null)
+  const [canSubmit, setCanSubmit] = useState<boolean>(false)
+  const [canNext, setCanNext] = useState<boolean>(false)
+  const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
 
   useEffect(() => {
     if (publishedForm?.success) {
@@ -103,7 +107,14 @@ const Form = ({
 
       {publishedFormState?.serverResponse?.status ? (
         <form>
-          <Steps setActivePageState={setActivePageState} />
+          <Steps
+            setActivePageState={setActivePageState}
+            activePageState={activePageState}
+            canSubmit={canSubmit}
+            setCanSubmit={setCanSubmit}
+            canNext={canNext}
+            setCanNext={setCanNext}
+          />
           <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
             {activePageState?.sections?.length > 0
               ? activePageState?.sections?.map((sects) => {
@@ -138,6 +149,10 @@ const Form = ({
             )}
           </div>
         </form>
+      ) : null}
+
+      {publishedFormState?.serverResponse?.status ? (
+        <ActionButtonsForForm setActivePageState={setActivePageState} activePageState={activePageState} fillingFormState={fillingFormState} />
       ) : null}
     </div>
   )

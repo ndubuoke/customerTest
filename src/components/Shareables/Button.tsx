@@ -9,8 +9,9 @@ type Props = {
 const Button = ({ text = 'Proceed', disabled = true, onClick }: Props) => {
   return (
     <button
-      className={`font-bold leading-5 text-white bg-button-background  cursor-pointer h-full w-fit px-10 py-1   rounded-lg ${disabled ? 'cursor-not-allowed' : 'bg-button-hover-background'
-        }`}
+      className={`font-bold leading-5 text-white bg-button-background  cursor-pointer h-full w-fit px-10 py-1   rounded-lg ${
+        disabled ? 'cursor-not-allowed' : 'bg-button-hover-background'
+      }`}
       disabled={disabled}
       onClick={onClick}
     >
@@ -19,7 +20,7 @@ const Button = ({ text = 'Proceed', disabled = true, onClick }: Props) => {
   )
 }
 
-Button.defaultProps = {
-  text: "Proceed"
-}
+// Button.defaultProps = {
+//   text: "Proceed"
+// }
 export default Button
