@@ -18,9 +18,20 @@ type Props = {
   activePageState?: PageInstance
 
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: any
 }
 
-const FormHeading = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
+const FormHeading = ({
+  item,
+  collapsed,
+  setFillingFormState,
+  publishedFormState,
+  activePageState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 

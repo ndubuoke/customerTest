@@ -11,7 +11,8 @@ export const AppRoutes = {
   customerAccountModificationScreen: CMR + '/:customerId',
   customer360Screen: CMR + '/customer-360/:customerId',
   // process summary
-  ProcessSummary: CMR + '/Process-summary/',
+  individualProcessSummary: CMR + '/individual-customer-creation/process-summary/',
+  SMEProcessSummary: CMR + '/sme-customer-creation/process-summary/',
   // 404
   FOURZEROFOUR: CMR + '*',
 }

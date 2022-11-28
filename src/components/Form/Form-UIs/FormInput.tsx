@@ -1,9 +1,12 @@
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
+import { generateID } from 'Utilities/generateId'
 import { getProperty } from 'Utilities/getProperty'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
@@ -19,7 +22,7 @@ type Props = {
 
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
-  backupForSwitchFormState
+  backupForSwitchFormState: any
 }
 
 const FormInput = ({
@@ -32,6 +35,7 @@ const FormInput = ({
   setBackupForSwitchFormState,
   backupForSwitchFormState,
 }: Props) => {
+  const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
 
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
@@ -44,7 +48,7 @@ const FormInput = ({
   const theItemFieldNameCamelCase = camelize(fieldLabel)
   // const pageName = theForm?.builtFormMetadata?.pages?.find((x) => formGetProperty(x.pageProperties, "Page name", "Page Name") )
 
-  // const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
+  const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
   // console.log(item)
 
@@ -123,6 +127,18 @@ const FormInput = ({
   }
 
   useEffect(() => {
+    // console.log({ fillingFormState, backupForSwitchFormState })
+    // console.log({ runni: fillingFormState?.data?.customerData })
+    if (fillingFormState?.data?.customerData?.length === 0) {
+      const exists = fillingFormState[theItemFieldNameCamelCase]
+
+      // console.log({ exists })
+
+      if (exists) {
+        setText(exists)
+      }
+      return
+    }
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
       if (x.sectionId) {
         return x.sectionId === item.sectionId
@@ -135,12 +151,21 @@ const FormInput = ({
     // console.log
 
     if (theData) {
+      // console.log({ theData })
       setText(theData)
     }
   }, [])
 
   useEffect(() => {
+    // console.log({ text })
     if (text) {
+      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+      if (requiredFieldsFromRedux) {
+        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+      }
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
         copiedPrev[theItemFieldNameCamelCase] = text
@@ -149,6 +174,16 @@ const FormInput = ({
       })
     }
   }, [text])
+
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (!text) {
+      if (backup) {
+        setText(backup)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div
@@ -164,37 +199,55 @@ const FormInput = ({
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
-        <input
-          className={`flex w-full  py-1 leading-6 `}
-          type={
-            item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
-              ? 'text'
-              : item.name === fieldsNames.PHONEINPUT
-              ? 'tel'
-              : item.name === fieldsNames.PASSWORD
-              ? 'password'
-              : item.name === fieldsNames.URL
-              ? 'url'
-              : item.name === fieldsNames.NUMBERCOUNTER
-              ? 'number'
-              : item.name === fieldsNames.EMAIL
-              ? 'email'
-              : 'text'
-          }
-          required={required.toLowerCase() === 'on'}
-          placeholder={placeholder}
-          title={helpText}
-          onChange={(e) => handleChange(e, item)}
-          maxLength={Number(maximumNumbersOfCharacters)}
-          value={text}
-        />
+        {item.name === fieldsNames.NUMBERCOUNTER ? (
+          <input
+            className={`flex w-full  py-1 leading-6 `}
+            type='number'
+            required={required.toLowerCase() === 'on'}
+            placeholder={placeholder}
+            title={helpText}
+            onChange={(e) => handleChange(e, item)}
+            maxLength={Number(maximumNumbersOfCharacters)}
+            value={text}
+            min='0'
+          />
+        ) : null}
+        {item.name !== fieldsNames.NUMBERCOUNTER ? (
+          <input
+            className={`flex w-full  py-1 leading-6 `}
+            type={
+              item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
+                ? 'text'
+                : item.name === fieldsNames.PHONEINPUT
+                ? 'tel'
+                : item.name === fieldsNames.PASSWORD
+                ? 'password'
+                : item.name === fieldsNames.URL
+                ? 'url'
+                : item.name === fieldsNames.EMAIL
+                ? 'email'
+                : 'text'
+            }
+            required={required.toLowerCase() === 'on'}
+            placeholder={placeholder}
+            title={helpText}
+            onChange={(e) => handleChange(e, item)}
+            maxLength={Number(maximumNumbersOfCharacters)}
+            value={text}
+          />
+        ) : null}
 
-        {maximumNumbersOfCharacters ? (
+        {item.name !== fieldsNames.NUMBERCOUNTER && maximumNumbersOfCharacters ? (
           <div className='absolute bottom-0 right-0 text-sm text-[#9ca3af] z-10 bg-white'>
             {text.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}
       </div>
+      {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>
+          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+        </p>
+      ) : null}
     </div>
   )
 }

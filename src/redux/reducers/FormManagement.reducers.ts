@@ -1,4 +1,5 @@
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
+import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
@@ -62,6 +63,16 @@ export const getPublishedFormSectionReducer = (state: ResponseType = initialStat
 
     //   case RESET_STATe:
     //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const setRequiredFormFieldsReducer = (state = { list: [] }, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case SET_REQUIRED_FORM_FIELDS:
+      return { ...state, list: action.payload }
+
     default:
       return state
   }

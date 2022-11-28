@@ -4,15 +4,29 @@ import { formTypeSwitch as formTypeSwitchImage } from 'Assets/svgs'
 import { getFormAction } from 'Redux/actions/FormManagement.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 import { useDispatch } from 'react-redux'
+import { formStruture } from 'Components/Form/formStructure'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 
 type Props = {
   mode: FormModeType
   onSetFormMode: (mode: FormModeType) => void
   customerType: CustomerType
   formCreationStarted: boolean
+  fillingFormState: FormStructureType
+  setFillingFormState: any
+  setPublishedFormState: any
 }
 
-const SwitchToFormType = ({ mode, onSetFormMode, customerType, formCreationStarted }: Props) => {
+const SwitchToFormType = ({
+  mode,
+  onSetFormMode,
+  customerType,
+  formCreationStarted,
+  fillingFormState,
+  setFillingFormState,
+  setPublishedFormState,
+}: Props) => {
   const dispatch = useDispatch()
 
   const handleSetFormType = (formMode: FormModeType) => {
@@ -20,6 +34,12 @@ const SwitchToFormType = ({ mode, onSetFormMode, customerType, formCreationStart
     if (!window.confirm(`Switch to ${formMode} form? The information captured so far will be transferred to the ${formMode} form`)) {
       return
     }
+
+    setFillingFormState(formStruture)
+    sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
+    setPublishedFormState(null)
+
     if (formMode === 'legacy') {
       onSetFormMode(formMode)
 

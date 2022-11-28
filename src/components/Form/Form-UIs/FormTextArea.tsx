@@ -17,9 +17,20 @@ type Props = {
   publishedFormState: ResponseType
   activePageState?: PageInstance
   fillingFormState: FormStructureType
+  setBackupForSwitchFormState: (value: any) => void
+  backupForSwitchFormState: any
 }
 
-const FormTextArea = ({ item, collapsed, setFillingFormState, publishedFormState, activePageState, fillingFormState }: Props) => {
+const FormTextArea = ({
+  item,
+  collapsed,
+  setFillingFormState,
+  publishedFormState,
+  activePageState,
+  fillingFormState,
+  setBackupForSwitchFormState,
+  backupForSwitchFormState,
+}: Props) => {
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -136,6 +147,27 @@ const FormTextArea = ({ item, collapsed, setFillingFormState, publishedFormState
       setText(theData)
     }
   }, [])
+
+  useEffect(() => {
+    if (text) {
+      setBackupForSwitchFormState((prev) => {
+        const copiedPrev = { ...prev }
+        copiedPrev[theItemFieldNameCamelCase] = text
+
+        return copiedPrev
+      })
+    }
+  }, [text])
+
+  useEffect(() => {
+    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+
+    if (!text) {
+      if (backup) {
+        setText(backup)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div

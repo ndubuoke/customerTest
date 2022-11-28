@@ -9,36 +9,44 @@ import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { getProperty } from 'Utilities/getProperty'
 import { FormLayout, Steps } from './Form-UIs'
+import ActionButtonsForForm from './Form-UIs/ActionButtonsForForm'
 import { formStruture } from './formStructure'
 import { PageInstance } from './Types'
 
 type Props = {
   kind: 'new' | 'modification'
   formFields: any
+  fillingFormState: FormStructureType
+  setFillingFormState: any
+  publishedFormState: any // ResponseType;
+  setPublishedFormState: any
+  backupForSwitchFormState: {}
+  setBackupForSwitchFormState: (value: any) => any
 }
 
-const Form = ({ kind, formFields }: Props) => {
+const Form = ({
+  kind,
+  formFields,
+  fillingFormState,
+  publishedFormState,
+  setFillingFormState,
+  setPublishedFormState,
+  backupForSwitchFormState,
+  setBackupForSwitchFormState,
+}: Props) => {
   const dispatch = useDispatch()
 
-  const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>({})
-  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
-
   const [activeFormSections, setActiveFormSections] = useState<any>([])
-  const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const [activePageState, setActivePageState] = useState<PageInstance>(null)
+  const [canSubmit, setCanSubmit] = useState<boolean>(false)
+  const [canNext, setCanNext] = useState<boolean>(false)
+  const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
 
   useEffect(() => {
-    // const publishedFormInStorage = sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
-    //   ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)) as ResponseType)
-    //   : null
-    // if (publishedFormInStorage) {
-    //   setPublishedFormState(publishedFormInStorage)
-    // } else {
     if (publishedForm?.success) {
-      dispatch(getPublishedFormSectionAction(publishedForm?.serverResponse?.data?._id) as any)
       setPublishedFormState(publishedForm)
       sessionStorage.setItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE, JSON.stringify(publishedForm))
     }
@@ -46,24 +54,47 @@ const Form = ({ kind, formFields }: Props) => {
   }, [publishedForm])
 
   useEffect(() => {
+    // console.log({ fillingFormState })
     if (!fillingFormState.data?.formInfomation?.formId) {
       const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
         ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)) as FormStructureType)
         : null
 
       if (fillingFormInStorage) {
+        // console.log({ fillingFormInStorage })
         setFillingFormState(fillingFormInStorage)
       }
     }
   }, [])
 
   useEffect(() => {
-    sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
+    // console.log({ fillingFormState })
+
+    if (fillingFormState?.data?.customerData?.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
+    }
   }, [fillingFormState])
 
   useEffect(() => {
-    sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
+    // const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+    //   ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
+    //   : null
+    if (backupForSwitchFormState) {
+      sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
+    }
   }, [backupForSwitchFormState])
+
+  useEffect(() => {
+    if (fillingFormState?.data?.customerData?.length === 0) {
+      const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
+        : null
+
+      if (backupInStorage) {
+        setBackupForSwitchFormState(backupInStorage)
+      }
+    }
+  }, [fillingFormState, publishedFormState])
 
   return (
     <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>
@@ -76,7 +107,14 @@ const Form = ({ kind, formFields }: Props) => {
 
       {publishedFormState?.serverResponse?.status ? (
         <form>
-          <Steps setActivePageState={setActivePageState} />
+          <Steps
+            setActivePageState={setActivePageState}
+            activePageState={activePageState}
+            canSubmit={canSubmit}
+            setCanSubmit={setCanSubmit}
+            canNext={canNext}
+            setCanNext={setCanNext}
+          />
           <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
             {activePageState?.sections?.length > 0
               ? activePageState?.sections?.map((sects) => {
@@ -111,6 +149,10 @@ const Form = ({ kind, formFields }: Props) => {
             )}
           </div>
         </form>
+      ) : null}
+
+      {publishedFormState?.serverResponse?.status ? (
+        <ActionButtonsForForm setActivePageState={setActivePageState} activePageState={activePageState} fillingFormState={fillingFormState} />
       ) : null}
     </div>
   )

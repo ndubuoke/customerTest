@@ -1,6 +1,6 @@
 export type FormSectionType = {
   sectionName: string
-  data: {}
+  data: {} // firstName: "Bonaventure"
   sectionId: string | number
   pageId: string | number
 }
