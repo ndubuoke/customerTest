@@ -195,6 +195,7 @@ const FormFileUpload = ({
   const handleRemoveFile = (e: any, index: number) => {
     e.stopPropagation()
     const newFiles = uploadedFiles.filter((item, i) => i !== index)
+    setuploadedFiles((prev) => newFiles)
     setFillingFormState((prev: FormStructureType) => {
       const copiedPrev = { ...prev }
       const pageId = item?.pageId
@@ -208,13 +209,19 @@ const FormFileUpload = ({
         const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+          console.log('theSect', theSection)
           delete theSection.data[theItemFieldNameCamelCase]
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         }
       }
       return copiedPrev
     })
-    setuploadedFiles((prev) => newFiles)
+    setBackupForSwitchFormState((prev) => {
+      const copiedPrev = { ...prev }
+      delete copiedPrev[theItemFieldNameCamelCase]
+
+      return copiedPrev
+    })
   }
 
   useEffect(() => {
@@ -234,6 +241,7 @@ const FormFileUpload = ({
   }, [])
 
   useEffect(() => {
+    console.log('uploadedFiles', uploadedFiles)
     if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
@@ -245,6 +253,13 @@ const FormFileUpload = ({
             signedUrl: uploadedFiles[0].signedUrl,
           },
         ]
+
+        return copiedPrev
+      })
+    } else {
+      setBackupForSwitchFormState((prev) => {
+        const copiedPrev = { ...prev }
+        delete copiedPrev[theItemFieldNameCamelCase]
 
         return copiedPrev
       })

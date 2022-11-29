@@ -22,6 +22,7 @@ import { validateCustomerResponseType } from 'Redux/reducers/ValidateCustomer.re
 import { ReducersType } from 'Redux/store'
 import { formStruture } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -59,6 +60,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
+  const { serverResponse } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
 
   const handleModalDisplay = (isVisible: boolean) => {
     dispatch(validateCustomerResultModalAction(isVisible) as any)
@@ -82,6 +84,11 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   useEffect(() => {
     if (formCreationStarted) {
+      if (serverResponse.data) {
+        const matches = serverResponse.data.matches
+        sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+        setBackupForSwitchFormState({ ...matches })
+      }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
   }, [formCreationStarted])
@@ -107,7 +114,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
           {!formCreationStarted ? (
             <>
               {loading && <ExtractInfoModal />}
-              {showResultModal && <MatchModal setShowMatchModal={handleModalDisplay} data={data} />}
+              {showResultModal && <MatchModal setShowMatchModal={handleModalDisplay} setFormCreationStarted={setFormCreationStarted} data={data} />}
               <WizardChanger formMode={formMode} creationMode={creationMode} customerType={customerType} />
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
