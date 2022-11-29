@@ -7,7 +7,7 @@ export type FormSectionType = {
 
 export type FormStructureType = {
   data: {
-    customerData: Array<FormSectionType> | null
+    customerData: Array<FormSectionType>
     formInfomation: {
       formId: string | number
       formType: string | number
