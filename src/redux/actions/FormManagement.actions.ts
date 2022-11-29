@@ -73,6 +73,7 @@ export const setRequiredFormFieldsAction =
   (requiredFields: Array<any>) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     dispatch({
       type: SET_REQUIRED_FORM_FIELDS,
+      // payload: requiredFields, //old
       payload: requiredFields,
     })
   }

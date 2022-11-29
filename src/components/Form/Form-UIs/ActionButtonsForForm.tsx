@@ -20,6 +20,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const dispatch = useDispatch()
   const [form, setForm] = useState<Form>(null)
   const [index, setIndex] = useState<number>(0)
+  const [submit, setSubmit] = useState<number>(1)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -42,23 +43,24 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   }
 
   const handleSubmit = () => {
-    let _requiredFields = []
+    setSubmit((prev) => prev + 1)
+    let _allFields = []
     form?.builtFormMetadata?.pages?.forEach((x) => {
       if (x?.sections?.length > 0) {
         x?.sections?.forEach((section) => {
-          _requiredFields.push(section?.fields)
+          _allFields.push(section?.fields)
         })
 
         if (x?.fields?.length > 0) {
-          _requiredFields.push(x?.fields)
+          _allFields.push(x?.fields)
         }
       }
     })
 
-    const requiredFields = _requiredFields.flat(Infinity)
+    const allFields = _allFields.flat(Infinity)
 
-    if (requiredFields?.length > 0) {
-      const _fieldLabelsOfRequiredFields = requiredFields
+    if (allFields?.length > 0) {
+      const _fieldLabelsOfRequiredFields = allFields
         ?.map((x) => {
           return getProperty(x?.formControlProperties, 'Set as Required', 'value').text.toLowerCase() === 'on'
             ? { fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text), sectionId: x?.sectionId, pageId: x?.pageId }
@@ -66,26 +68,31 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         })
         .filter(Boolean)
 
-      // const _fillingFormState
+      const _fillingFormState = fillingFormState as FormStructureType
 
-      const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields?.filter((x) => {
-        const _fillingFormState = fillingFormState as FormStructureType
+      const fieldLabelsOfNotFilledRequiredFields = []
 
-        // console.log(_fillingFormState?.data?.customerData?.find((customer) => customer?.sectionId === x?.sectionId))
+      const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields.forEach((x) => {
+        if (x.sectionId) {
+          const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.sectionId === x.sectionId)
 
-        //  _fillingFormState?.data?.customerData?.find((customer) => {
-        //       if (x?.sectionId === customer?.sectionId && !customer?.data.hasOwnProperty(x.fieldLabel)) {
-        //         return x
-        //       }
-        //     })
+          if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
+            fieldLabelsOfNotFilledRequiredFields.push(x)
+          }
+        } else {
+          const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.pageId === x.pageId)
+
+          if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
+            fieldLabelsOfNotFilledRequiredFields.push(x)
+          }
+        }
       })
 
-      //   console.log(first)
-
-      //   dispatch(setRequiredFormFieldsAction(fieldLabelsOfRequiredFields) as any)
+      dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
     }
   }
 
+  // const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields.filter(x => !_fillingFormState.data.customerData.some(y => y.data. === x.));
   useEffect(() => {
     if (publishedForm?.success) {
       setForm(publishedForm?.serverResponse?.data)
@@ -97,6 +104,8 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[index])
     }
   }, [publishedForm, index])
+
+  // Handle RequiredFields
 
   return (
     <div className='flex justify-center gap-6 py-4'>
