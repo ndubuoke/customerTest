@@ -57,6 +57,14 @@ const FormInput = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)
 
+    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+    if (requiredFieldsFromRedux) {
+      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+      dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+    }
+
     setFillingFormState((prev: FormStructureType) => {
       // console.log('prev', prev)
       const copiedPrev = { ...prev }
@@ -159,13 +167,6 @@ const FormInput = ({
   useEffect(() => {
     // console.log({ text })
     if (text) {
-      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
-
-      if (requiredFieldsFromRedux) {
-        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
-
-        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
-      }
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
         copiedPrev[theItemFieldNameCamelCase] = text
@@ -179,7 +180,7 @@ const FormInput = ({
     const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
 
     if (!text) {
-      if (backup) {
+      if (backup && backup?.length > 1) {
         setText(backup)
       }
     }
