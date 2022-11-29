@@ -1,4 +1,4 @@
-import { Disable, Edit, Eye, Filter, Menu } from 'Assets/svgs'
+import { DeleteIcon, Disable, Edit, Eye, Filter, Menu, redDelete } from 'Assets/svgs'
 import { Checkbox } from 'Components/Shareables'
 import Spinner from 'Components/Shareables/Spinner'
 import React from 'react'
@@ -7,18 +7,41 @@ import { useDispatch, useSelector } from 'react-redux'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import { ReducersType } from '../../redux/store'
 import { useEffect } from 'react'
-import { sortCustomersAlphabetically } from '../../redux/actions/CustomerManagement.actions'
+import {
+  getCustomersRequestsAction,
+  deleteRequestAction,
+  getCustomersByDateAction,
+  getCustomersAction,
+} from '../../redux/actions/CustomerManagement.actions'
 import ViewCustomerModal from './ViewCustomerModal'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
+import RequestModal from './RequestModal'
+import CustomerAlertModal from './customerAlertModal'
+import { useNavigate } from 'react-router-dom'
+import { AppRoutes } from 'Routes/AppRoutes'
+import Calender from './Calender/Calender'
+import CustomerDetailsRow from './CustomerDetailsRow'
+import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
+import RequestDetailsRow from './RequestDetailsRow'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
+type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
 const customerTableHeads: customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 const requestTableHeads = ['Request', 'TYPE', 'INITIATOR', 'Status', 'updated on']
-const customerFunctionOptions = ['View', 'Modify', 'Deactivate']
+const customerFunctionOptions = ['View', 'Modify', 'Deactivate', 'Activate']
+const requestFunctionOptions: requestFunctionOptionsType = [
+  'View',
+  'Withdraw & Delete Request',
+  'Delete Request',
+  'Modify',
+  'Regularize Documents',
+  'Continue Request',
+]
 const filterStateOptions = ['Select all', 'Active', 'Inactive']
-const requestType = ['Select all', 'Creation', 'Modification', 'Deactivation', 'Reactivation']
-const filterRequestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In Issue', 'Draft']
-type requestStatusType = 'All' | 'Select all' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft'
+const filterRequestTypeList = ['Select all', 'Creation', 'Modification', 'Deactivation', 'Reactivation']
+type filterRequestType = 'All' | 'Select all' | 'Creation' | 'Modification' | 'Deactivation' | 'Reactivation'
+const filterRequestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In Issue', 'Draft', 'Pending', 'Rejected']
+type requestStatusType = 'All' | 'Select all' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft' | 'Pending' | 'Rejected'
 const user = 'John Smith '
 type customerStatusType = 'All' | 'Active' | 'Inactive'
 
@@ -28,13 +51,16 @@ type CustomerManagementTable = {
   AllCustomers: any
   allRequests: any
   showCustomerFunctionOptions: boolean
+  showCalender: boolean
   selectedStatus: string
   setShowCustomerFunctionOptions: (e) => void
   customerFunctionListRef: any
   filterStateOptionsRef: any
   filterTypeOptionsRef: any
+  filterDateRef: any
   filterRequestStatusOptionsRef: any
   filterInitiatorOptionsRef: any
+  requestFunctionListRef: any
   setShowFilterStateOptions: (e) => void
   ShowFilterStateOptions: boolean
   ShowFilterTypeOptions: boolean
@@ -42,17 +68,25 @@ type CustomerManagementTable = {
   showFilterRequestStatusOptions: boolean
   setShowDeactivationModal: (e) => void
   setShowFilterTypeOptions: (e) => void
+  setShowCalender: (e) => void
   setShowFilterInitiatorOptions: (e) => void
   setShowFilterRequestStatusOptions: (e) => void
   customerStatusHandler: (e) => void
   customerStatus: string
-  requestStatusHandler: (e) => void
+  requestStatusHandler: (e, v?) => void
   requestStatus: requestStatusType
+  showRequestFunctionOptions: boolean
+  setShowRequestFunctionOptions: (e) => void
+  setShowSystemAlert: (e) => void
+  refreshTableHandler: () => void
+  userRole: string
+  searchTerm: string
 }
 
 const CustomerManagementTable = ({
   tableType,
   customerFunctionListRef,
+  requestFunctionListRef,
   showCustomerFunctionOptions,
   setShowCustomerFunctionOptions,
   ShowFilterStateOptions,
@@ -76,9 +110,20 @@ const CustomerManagementTable = ({
   customerStatus,
   requestStatusHandler,
   requestStatus,
+  showRequestFunctionOptions,
+  setShowRequestFunctionOptions,
+  setShowSystemAlert,
+  refreshTableHandler,
+  showCalender,
+  filterDateRef,
+  setShowCalender,
+  userRole,
+  searchTerm,
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
-  const [customer, setCustomer] = useState({})
+  const [requestId, setRequestId] = useState(0)
+  const [requestIdToBeDeleted, setRequestIdToBeDeleted] = useState('')
+  const [customer, setCustomer] = useState() as any
   const [allChecked, setallChecked] = useState(false)
   const [activeChecked, setActiveChecked] = useState(false)
   const [inactiveChecked, setInactiveChecked] = useState(false)
@@ -89,11 +134,44 @@ const CustomerManagementTable = ({
   const [draftRequestStatusOptionChecked, setDraftRequestStatusOptionChecked] = useState(false)
   const [allRequestStatusOptionChecked, setAllRequestStatusOptionChecked] = useState(false)
   const [showCustomerModal, setShowCustomerModal] = useState(false)
+  const [showRequestModal, setShowRequestModal] = useState(false)
+  const [allRequestTypeOptionChecked, setAllRequestTypeOptionChecked] = useState(false)
+  const [creationRequestTypeOptionChecked, setCreationRequestTypeOptionChecked] = useState(false)
+  const [deactivationRequestTypeOptionChecked, setDeactivationRequestTypeOptionChecked] = useState(false)
+  const [modificationRequestTypeOptionChecked, setModificationRequestTypeOptionChecked] = useState(false)
+  const [reactivationRequestTypeOptionChecked, setReactivationRequestTypeOptionChecked] = useState(false)
+  const [showCustomerAlertModal, setShowCustomerAlertModal] = useState(false)
+  const [showActivateCustomerAlertModal, setShowActivateCustomerAlertModal] = useState(false)
+  const [showActivateCustomerRequestModal, setShowActivateCustomerRequestModal] = useState(false)
+  const [customerAlertModalMessage, setCustomerAlertModalMessage] = useState('')
+  const [RequestModalMessage, setRequestModalMessage] = useState('')
+  const [currentDate, setCurrentDate] = useState(new Date())
+  const [isAsc, setIsAsc] = useState(false)
+  const deleteRequest = useSelector<ReducersType>((state: ReducersType) => state?.deleteRequest) as customersManagementResponseType
+  const activateCustomer = useSelector<ReducersType>((state: ReducersType) => state?.activateCustomer) as customersManagementResponseType
+  const allCustomersByDate = useSelector<ReducersType>((state: ReducersType) => state?.allCustomersByDate) as customersManagementResponseType
+  const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
+  const customers = AllCustomers?.serverResponse?.data?.customer
+  const customersByDate = allCustomersByDate?.serverResponse?.data
+  const requests = allRequests?.serverResponse?.data?.res
+  const requestsForChecker = allRequestsForChecker?.serverResponse?.data?.requests
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
+  const setDate = (value) => {
+    setCurrentDate(value)
+  }
 
   const showCustomersFunctionHandler = (id) => {
     setCustomerId(id)
     setShowCustomerFunctionOptions(!showCustomerFunctionOptions)
   }
+
+  const showRequestFunctionHandler = (id) => {
+    setRequestId(id)
+    setShowRequestFunctionOptions(!showRequestFunctionOptions)
+  }
+
   const filterStateHandler = () => {
     setShowFilterStateOptions(true)
   }
@@ -107,6 +185,10 @@ const CustomerManagementTable = ({
   }
   const filterRequestStatusHandler = () => {
     setShowFilterRequestStatusOptions(true)
+  }
+
+  const ShowCalenderHandler = () => {
+    setShowCalender(true)
   }
 
   const checkIfCustomerStatusOptionChecked = (option: customerStatusType) => {
@@ -211,6 +293,68 @@ const CustomerManagementTable = ({
     }
   }
 
+  const checkIfRequestTypeOptionChecked = (option: filterRequestType) => {
+    if (option === 'Select all') {
+      if (allRequestTypeOptionChecked) {
+        return
+      }
+      setCreationRequestTypeOptionChecked(false)
+      setDeactivationRequestTypeOptionChecked(false)
+      setModificationRequestTypeOptionChecked(false)
+      setReactivationRequestTypeOptionChecked(false)
+      requestStatusHandler(requestStatus)
+    }
+    if (option === 'Creation') {
+      if (creationRequestTypeOptionChecked) {
+        return
+      }
+      setAllRequestTypeOptionChecked(false)
+      setDeactivationRequestTypeOptionChecked(false)
+      setModificationRequestTypeOptionChecked(false)
+      setReactivationRequestTypeOptionChecked(false)
+      requestStatusHandler(requestStatus, 'Creation')
+    }
+    if (option === 'Deactivation') {
+      if (deactivationRequestTypeOptionChecked) {
+        return
+      }
+      setAllRequestTypeOptionChecked(false)
+      setCreationRequestTypeOptionChecked(false)
+      setModificationRequestTypeOptionChecked(false)
+      setReactivationRequestTypeOptionChecked(false)
+      requestStatusHandler(requestStatus, 'Deactivation')
+    }
+    if (option === 'Modification') {
+      if (modificationRequestTypeOptionChecked) {
+        return
+      }
+      setAllRequestTypeOptionChecked(false)
+      setCreationRequestTypeOptionChecked(false)
+      setDeactivationRequestTypeOptionChecked(false)
+      setReactivationRequestTypeOptionChecked(false)
+      requestStatusHandler(requestStatus, 'Modification')
+    }
+    if (option === 'Reactivation') {
+      if (reactivationRequestTypeOptionChecked) {
+        return
+      }
+      setAllRequestTypeOptionChecked(false)
+      setCreationRequestTypeOptionChecked(false)
+      setDeactivationRequestTypeOptionChecked(false)
+      setModificationRequestTypeOptionChecked(false)
+      requestStatusHandler(requestStatus, 'Reactivation')
+    }
+  }
+  const sortCustomersAlphabetically = () => {
+    if (isAsc) {
+      dispatch(getCustomersAction(customerType, customerStatus === 'All' ? '' : customerStatus, 'desc') as any)
+      setIsAsc(false)
+    } else {
+      dispatch(getCustomersAction(customerType, customerStatus === 'All' ? '' : customerStatus, 'asc') as any)
+      setIsAsc(true)
+    }
+  }
+
   const customerFunctionHandler = ({ option, customer }) => {
     if (option === 'View') {
       setShowCustomerModal(true)
@@ -218,11 +362,69 @@ const CustomerManagementTable = ({
     } else if (option === 'Modify') {
       //  navigate(AppRoutes.SMECustomerCreationScreen)
     } else if (option === 'Deactivate') {
-      setShowDeactivationModal(customerId)
+      setShowDeactivationModal(customer)
+    } else if (option === 'Activate') {
+      setCustomer(customer)
+      setShowActivateCustomerRequestModal(true)
     }
   }
-  const customers = AllCustomers?.serverResponse?.data?.customer
-  const requests = allRequests?.serverResponse?.data?.res
+
+  const requestFunctionHandler = ({ option, requestId }) => {
+    if (option === 'Delete Request') {
+      setRequestIdToBeDeleted(requestId)
+      setShowRequestModal(true)
+      setCustomerAlertModalMessage('Request Deleted')
+      setRequestModalMessage('Do you want to delete request?')
+    }
+    if (option === 'Withdraw & Delete Request') {
+      setRequestIdToBeDeleted(requestId)
+      setShowRequestModal(true)
+      setCustomerAlertModalMessage('Request Withdrawn and Deleted')
+      setRequestModalMessage('Do you want to withdraw and delete request?')
+    }
+    if (option === 'View') {
+      // dispatch(getSingleRequestAction(requestId) as any)
+      navigate(`/customer-management/process-summary/${requestId}`)
+    }
+  }
+
+  const deleteRequestHandler = () => {
+    setShowCustomerAlertModal(true)
+    setShowRequestModal(false)
+    dispatch(deleteRequestAction(requestIdToBeDeleted) as any)
+  }
+
+  const activateCustomerHandler = () => {
+    setShowActivateCustomerAlertModal(true)
+    setShowActivateCustomerRequestModal(false)
+
+    const body = {
+      requestType: 'reactivation',
+
+      firstName: getCustomerDetail(customer, 'firstName')[0],
+
+      surname: getCustomerDetail(customer, 'surname')[0],
+
+      customerType: customer?.customerType,
+
+      initiator: 'testing Initiator',
+
+      initiatorId: '8d8711ca-362f-4541-b977-7faeebde91de',
+
+      customerId: getCustomerDetail(customer, 'customerId')[0],
+    }
+    dispatch(activateCustomerAction(body) as any)
+  }
+  type dateFilterType = 'day' | 'month'
+
+  const dispatchDateFilterHandler = (filterBy: dateFilterType, number: number, tableType) => {
+    if (tableType === 'All Customers') {
+      dispatch(getCustomersByDateAction(filterBy, number) as any)
+    }
+    if (tableType === 'Requests') {
+      dispatch(getRequestsByDateAction(filterBy, number) as any)
+    }
+  }
 
   useEffect(() => {
     if (tableType === 'All Customers') {
@@ -295,26 +497,67 @@ const CustomerManagementTable = ({
       }
     }
   }, [customerStatus, tableType, requestStatus])
-  // console.log(customers)
+
+  // console.log(allCustomersByDate)
+  // console.log(AllCustomers)
+  const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
+  // console.log(allRequestsForChecker)
 
   return (
     <>
       {showCustomerModal && <ViewCustomerModal customer={customer} setShowCustomerModal={setShowCustomerModal} />}
+      {showRequestModal && (
+        <RequestModal externalFunctionToDoSomething={deleteRequestHandler} message={RequestModalMessage} setShowRequestModal={setShowRequestModal} />
+      )}
+      {showCustomerAlertModal && (
+        <CustomerAlertModal
+          leftClick={() => {
+            setShowCustomerAlertModal(false)
+            refreshTableHandler()
+          }}
+          closeModal={() => {
+            setShowCustomerAlertModal(false)
+          }}
+          message={customerAlertModalMessage}
+          isOpen={showCustomerAlertModal}
+          loading={deleteRequest.loading}
+          status={deleteRequest.serverResponse.status === 'success' ? 'success' : 'error'}
+        />
+      )}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[300px]'>
-        <table className='w-full text-sm text-left table-auto '>
+      {showActivateCustomerRequestModal && (
+        <RequestModal
+          externalFunctionToDoSomething={activateCustomerHandler}
+          message={'Do you want to activate this customer?'}
+          setShowRequestModal={setShowActivateCustomerRequestModal}
+        />
+      )}
+      {showActivateCustomerAlertModal && (
+        <CustomerAlertModal
+          leftClick={() => {
+            setShowActivateCustomerAlertModal(false)
+            refreshTableHandler()
+          }}
+          closeModal={() => {
+            setShowActivateCustomerAlertModal(false)
+          }}
+          loadingMessage={'Submitting'}
+          message={'Customer Submitted for Activation'}
+          isOpen={showActivateCustomerAlertModal}
+          loading={activateCustomer.loading}
+          status={activateCustomer.serverResponse.status === 'success' ? 'success' : 'error'}
+        />
+      )}
+
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-screen overflow-auto '>
+        <table className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
                 ? customerTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
                       {tableHead === 'NAME/ID' ? (
-                        <span
-                          onClick={() => {
-                            // dispatch(sortCustomersAlphabetically() as any)
-                          }}
-                          className='border-l border-common-title px-2 cursor-pointer'
-                        >
+                        <span onClick={sortCustomersAlphabetically} className='border-l border-common-title px-2 cursor-pointer'>
                           {tableHead}
                         </span>
                       ) : (
@@ -395,7 +638,18 @@ const CustomerManagementTable = ({
                           })}
                         </div>
                       )}
-                      {tableHead === 'updated on' ? <img src={Filter} alt='' className='absolute right-14 top-[35%] mr-2' /> : null}
+                      {tableHead === 'updated on' ? (
+                        <img src={Filter} onClick={ShowCalenderHandler} alt='' className='absolute cursor-pointer right-14 top-[35%] mr-2' />
+                      ) : null}
+                      {showCalender && tableType === 'All Customers' && tableHead === 'updated on' && (
+                        <Calender
+                          dispatchDateFilterHandler={dispatchDateFilterHandler}
+                          calenderRef={filterDateRef}
+                          value={currentDate}
+                          onChange={setDate}
+                          tableType={tableType}
+                        />
+                      )}
                     </th>
                   ))
                 : null}
@@ -411,14 +665,18 @@ const CustomerManagementTable = ({
                           ref={filterTypeOptionsRef}
                           className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
                         >
-                          {requestType?.map((option, index) => {
+                          {filterRequestTypeList?.map((option: filterRequestType, index) => {
                             if (option === 'Select all') {
                               return (
                                 <div key={index} className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
-                                      <Checkbox />
+                                      <Checkbox
+                                        checked={allRequestTypeOptionChecked}
+                                        setChecked={setAllRequestTypeOptionChecked}
+                                        externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
+                                      />
                                     </span>
                                     [ Select all]
                                   </span>
@@ -431,7 +689,11 @@ const CustomerManagementTable = ({
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
-                                      <Checkbox />
+                                      <Checkbox
+                                        checked={creationRequestTypeOptionChecked}
+                                        setChecked={setCreationRequestTypeOptionChecked}
+                                        externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
+                                      />
                                     </span>
                                     Creation
                                   </span>
@@ -444,7 +706,11 @@ const CustomerManagementTable = ({
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
-                                      <Checkbox />
+                                      <Checkbox
+                                        checked={modificationRequestTypeOptionChecked}
+                                        setChecked={setModificationRequestTypeOptionChecked}
+                                        externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
+                                      />
                                     </span>
                                     Modification
                                   </span>
@@ -457,7 +723,11 @@ const CustomerManagementTable = ({
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
-                                      <Checkbox />
+                                      <Checkbox
+                                        checked={deactivationRequestTypeOptionChecked}
+                                        setChecked={setDeactivationRequestTypeOptionChecked}
+                                        externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
+                                      />
                                     </span>
                                     Deactivation
                                   </span>
@@ -470,7 +740,11 @@ const CustomerManagementTable = ({
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
-                                      <Checkbox />
+                                      <Checkbox
+                                        checked={reactivationRequestTypeOptionChecked}
+                                        setChecked={setReactivationRequestTypeOptionChecked}
+                                        externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
+                                      />
                                     </span>
                                     Reactivation
                                   </span>
@@ -492,9 +766,7 @@ const CustomerManagementTable = ({
                             <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
                               <span className='flex w-full  '>
                                 {' '}
-                                <span className='mr-2'>
-                                  <Checkbox disabled={true} />
-                                </span>
+                                <span className='mr-2'>{/* <Checkbox disabled={true} /> */}</span>
                                 {user}[ME]
                               </span>
                             </div>
@@ -504,9 +776,7 @@ const CustomerManagementTable = ({
                             <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
                               <span className='flex w-full  '>
                                 {' '}
-                                <span className='mr-2'>
-                                  <Checkbox disabled={true} />
-                                </span>
+                                <span className='mr-2'>{/* <Checkbox disabled={true} /> */}</span>
                                 Teams
                               </span>
                             </div>
@@ -714,17 +984,29 @@ const CustomerManagementTable = ({
                           })}
                         </div>
                       )}
-                      {tableHead === 'updated on' ? <img src={Filter} alt='' className='absolute right-14 top-[35%] mr-2' /> : null}
+                      {tableHead === 'updated on' ? (
+                        <img src={Filter} onClick={ShowCalenderHandler} alt='' className='absolute right-14 top-[35%] cursor-pointer mr-2' />
+                      ) : null}
+                      {showCalender && tableType === 'Requests' && tableHead === 'updated on' && (
+                        <Calender
+                          dispatchDateFilterHandler={dispatchDateFilterHandler}
+                          calenderRef={filterDateRef}
+                          value={currentDate}
+                          onChange={setDate}
+                          tableType={tableType}
+                        />
+                      )}
                     </th>
                   ))
                 : null}
             </tr>
           </thead>
-          {AllCustomers?.loading ? (
+
+          {AllCustomers?.loading || allCustomersByDate?.loading ? (
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
-                  <div className='min-h-[300px]      flex items-center justify-center'>
+                  <div className='min-h-[300px]   flex items-center justify-center'>
                     <Spinner size='large' />
                   </div>
                 </td>
@@ -732,97 +1014,58 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              <tbody className=' '>
-                {tableType === 'All Customers' &&
-                  customers &&
-                  customers.map((customer) => (
-                    <tr key={customer.id} className='bg-background-lightRed border-b text-text-secondary   '>
-                      <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
-                        {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
-                        {/* {customer.customer_profiles.firstName} {customer.customer_profiles.surname} */}
-                        <span className='text-common-title'>{getCustomerDetail(customer, 'customerEntityId')}</span>
-                        {/* <span className='text-common-title'>{customer.customer_profiles.customerEntityId}</span> */}
-                      </td>
-                      <td className='py-2 px-2'>{getCustomerDetail(customer, 'mobileNumber')}</td>
-                      {/* <td className='py-2 px-2'>{customer.customer_profiles.mobileNumber}</td> */}
-                      <td className='py-2 px-2'>{getCustomerDetail(customer, 'emailAddress')}</td>
-                      {/* <td className='py-2 px-2'>{customer.customer_profiles.emailAddress}</td> */}
-                      <td className='py-2 px-2 text-[#1E0A3C]'>
-                        <span
-                          className={` ${
-                            customer.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
-                          } p-1 rounded font-medium`}
-                        >
-                          {customer.status}
-                        </span>
-                      </td>
-                      <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-                        {customer.updatedAt}
-                        <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} />
-                        {showCustomerFunctionOptions && customer.id === customerId && (
-                          <div
-                            ref={customerFunctionListRef}
-                            className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
-                          >
-                            {customerFunctionOptions?.map((option, index) => {
-                              if (option === 'View') {
-                                return (
-                                  <div
-                                    key={index}
-                                    className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                    // here
-                                    onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
-                                  >
-                                    <span className='flex w-full  '>
-                                      {' '}
-                                      <img className='mr-2' src={Eye} />
-                                      View
-                                    </span>
-                                  </div>
-                                )
-                              }
-                              if (option == 'Modify') {
-                                return (
-                                  <div
-                                    key={index}
-                                    className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                    onClick={customerFunctionHandler.bind(null, option)}
-                                  >
-                                    <span className='flex w-full  '>
-                                      {' '}
-                                      <img className='mr-2' src={Edit} />
-                                      Modify
-                                    </span>
-                                  </div>
-                                )
-                              }
-                              if (option == 'Deactivate') {
-                                return (
-                                  <div
-                                    key={index}
-                                    className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                    onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
-                                  >
-                                    <span className='flex w-full  '>
-                                      {' '}
-                                      <img className='mr-2' src={Disable} />
-                                      Deactivate
-                                    </span>
-                                  </div>
-                                )
-                              }
-                            })}
-                          </div>
-                        )}
-                      </td>
-                    </tr>
-                  ))}
-              </tbody>
+              {AllCustomers?.success && !allCustomersByDate?.success && (
+                <tbody className=' '>
+                  {tableType === 'All Customers' &&
+                    customers &&
+                    customers
+                      .filter((customer) => {
+                        if (searchTerm === '') {
+                          return customer
+                        } else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return customer
+                        }
+                      })
+                      .map((customer) => (
+                        <CustomerDetailsRow
+                          userRole={userRole}
+                          key={customer?.id}
+                          customerId={customerId}
+                          showCustomersFunctionHandler={showCustomersFunctionHandler}
+                          customer={customer}
+                          customerFunctionOptions={customerFunctionOptions}
+                          showCustomerFunctionOptions={showCustomerFunctionOptions}
+                          customerFunctionListRef={customerFunctionListRef}
+                          customerFunctionHandler={customerFunctionHandler}
+                        />
+                      ))}
+                </tbody>
+              )}
+              {allCustomersByDate?.success && !AllCustomers?.success && (
+                <tbody className=' '>
+                  {tableType === 'All Customers' &&
+                    customersByDate &&
+                    customersByDate.map((customer) => (
+                      <CustomerDetailsRow
+                        key={customer?.id}
+                        userRole={userRole}
+                        customerId={customerId}
+                        showCustomersFunctionHandler={showCustomersFunctionHandler}
+                        customer={customer}
+                        customerFunctionOptions={customerFunctionOptions}
+                        showCustomerFunctionOptions={showCustomerFunctionOptions}
+                        customerFunctionListRef={customerFunctionListRef}
+                        customerFunctionHandler={customerFunctionHandler}
+                      />
+                    ))}
+                </tbody>
+              )}
             </>
           )}
 
-          {/* Requests */}
-          {allRequests?.loading ? (
+          {/* Requests for maker */}
+
+          {allRequests?.loading || allRequestsByDate?.loading ? (
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
@@ -834,94 +1077,116 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              <tbody>
-                {tableType === 'Requests' &&
-                  requests &&
-                  requests.map((request) => {
-                    if (request.customerType === customerType) {
-                      return (
-                        <tr key={request.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
-                          <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
-                            {request.requestTitle}
-                          </td>
-                          <td className='py-2 px-2'>{request.requestType}</td>
-                          <td className='py-2 px-2'>{request.initiator}</td>
-                          <td className='py-2 px-2 text-[#1E0A3C] '>
-                            <span
-                              className={` ${request.status === 'Approved' ? 'bg-[#D4F7DC] text-[#15692A]' : null} ${
-                                request.status === 'In-Review' ? 'bg-[#F0F5FF] text-[#0050C8]' : null
-                              }
-                            ${request.status === 'In Issue' ? 'bg-[#FFD4D2] text-[#9F1F17]' : null}
-                            ${request.status === 'Interim Approval' ? 'bg-[#FFF8CC] text-[#806B00]' : null}
-                            ${request.status === 'Draft' ? 'bg-[#E5E5EA] text-[#1E0A3C]' : null}
-                            p-1 rounded font-medium flex w-fit  gap-2`}
-                            >
-                              {request.status} <img src={Eye} alt='' />
-                            </span>
-                          </td>
-                          <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-                            {request.updatedAt}
-                            {/* <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} /> */}
-                            {/* {showCustomerFunctionOptions && customer.id === customerId && (
-                        <div
-                          ref={customerFunctionListRef}
-                          className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
-                        >
-                          {customerFunctionOptions?.map((option, index) => {
-                            if (option === 'View') {
-                              return (
-                                <div
-                                  key={index}
-                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                  onClick={customerFunctionHandler.bind(null, option)}
-                                >
-                                  <span className='flex w-full  '>
-                                    {' '}
-                                    <img className='mr-2' src={Eye} />
-                                    View
-                                  </span>
-                                </div>
-                              )
-                            }
-                            if (option == 'Modify') {
-                              return (
-                                <div
-                                  key={index}
-                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                  onClick={customerFunctionHandler.bind(null, option)}
-                                >
-                                  <span className='flex w-full  '>
-                                    {' '}
-                                    <img className='mr-2' src={Edit} />
-                                    Modify
-                                  </span>
-                                </div>
-                              )
-                            }
-                            if (option == 'Deactivate') {
-                              return (
-                                <div
-                                  key={index}
-                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                                  onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
-                                >
-                                  <span className='flex w-full  '>
-                                    {' '}
-                                    <img className='mr-2' src={Disable} />
-                                    Deactivate
-                                  </span>
-                                </div>
-                              )
-                            }
-                          })}
-                        </div>
-                      )} */}
-                          </td>
-                        </tr>
-                      )
-                    }
-                  })}
-              </tbody>
+              {allRequests?.success && !allRequestsByDate?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
+
+              {allRequestsByDate?.success && !allRequests?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
+            </>
+          )}
+
+          {/* Requests for checker */}
+          {allRequestsForChecker?.loading ? (
+            <tbody className=' '>
+              <tr className=' '>
+                <td className='  relative' colSpan={5}>
+                  <div className='min-h-[300px]      flex items-center justify-center'>
+                    <Spinner size='large' />
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          ) : (
+            <>
+              {allRequestsForChecker?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requestsForChecker &&
+                    requestsForChecker.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )}
+
+              {/* {allRequestsByDate?.success && !allRequests?.success && (
+                <tbody className=' '>
+                  {tableType === 'Requests' &&
+                    requests &&
+                    requests.map((request) => {
+                      if (request.customerType === customerType) {
+                        return (
+                          <RequestDetailsRow
+                            key={request?.id}
+                            requestFunctionListRef={requestFunctionListRef}
+                            showRequestFunctionOptions={showRequestFunctionOptions}
+                            request={request}
+                            requestId={requestId}
+                            requestFunctionHandler={requestFunctionHandler}
+                            requestFunctionOptions={requestFunctionOptions}
+                            showRequestFunctionHandler={showRequestFunctionHandler}
+                            userRole={userRole}
+                          />
+                        )
+                      }
+                    })}
+                </tbody>
+              )} */}
             </>
           )}
         </table>

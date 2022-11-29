@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 
 type CheckboxType = {
   disabled?: boolean
-  externalFunctionToDoSomething?: () => void
-  checked?: boolean
-  setChecked?: (e) => void
+  externalFunctionToDoSomething: () => void
+  checked: boolean
+  setChecked: (e) => void
 }
 
 const Checkbox = ({ disabled, externalFunctionToDoSomething, checked, setChecked }: CheckboxType) => {
-  // const [checked, setChecked] = useState(false)
+
   const checkTheBox = () => {
     setChecked(!checked)
     externalFunctionToDoSomething()
