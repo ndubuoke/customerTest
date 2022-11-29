@@ -9,6 +9,7 @@ import {
   GET_REQUESTS_SUCCESS,
 } from '../constants/CustomerManagement.constants'
 import store, { ReducersType } from 'Redux/store'
+import { GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL } from '../constants/CustomerManagement.constants';
 import {
   ACTIVATE_CUSTOMER_FAIL,
   ACTIVATE_CUSTOMER_REQUEST,
@@ -214,3 +215,28 @@ export const getRequestsForCheckerAction =
       })
     }
   }
+
+
+
+
+  export const getSingleRequestAction =
+    (requestId:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+      try {
+        dispatch({ type: GET_SINGLE_REQUEST_REQUEST })
+
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        }
+
+        const { data } = await axios.get(`${SERVER_URL}/request/${requestId}`, config)
+
+        dispatch({ type: GET_SINGLE_REQUEST_SUCESS, payload: data })
+      } catch (error) {
+        dispatch({
+          type: GET_SINGLE_REQUEST_FAIL ,
+          payload: error?.response && error?.response?.data?.message,
+        })
+      }
+    }

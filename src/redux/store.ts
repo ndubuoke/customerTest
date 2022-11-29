@@ -28,8 +28,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
-import { getTotalRequestStatusCustomersAction } from './actions/CustomerManagement.actions'
-import { getRequestsForCheckerReducer } from './reducers/CustomerManagement.reducer'
+import { getRequestsForCheckerReducer, getSingleRequestReducer } from './reducers/CustomerManagement.reducer';
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -48,6 +47,7 @@ export type ReducersType = {
   totalStatusCustomers: customersManagementResponseType
   allRequestsForChecker: customersManagementResponseType
   setRequiredFormFields: any
+  singleRequest:customersManagementResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -67,6 +67,7 @@ const reducer = combineReducers<ReducersType>({
   validateCustomer: validateCustomerReducer,
   saveBulkCustomerCreation: saveBulkCreationReducer,
   setRequiredFormFields: setRequiredFormFieldsReducer,
+  singleRequest:getSingleRequestReducer
 })
 
 const middleware = [thunk]

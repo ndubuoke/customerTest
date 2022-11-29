@@ -21,7 +21,7 @@ import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
 import Calender from './Calender/Calender'
 import CustomerDetailsRow from './CustomerDetailsRow'
-import { activateCustomerAction, getRequestsByDateAction } from '../../redux/actions/CustomerManagement.actions'
+import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
@@ -80,7 +80,7 @@ type CustomerManagementTable = {
   setShowSystemAlert: (e) => void
   refreshTableHandler: () => void
   userRole: string
-  searchTerm:string
+  searchTerm: string
 }
 
 const CustomerManagementTable = ({
@@ -381,6 +381,10 @@ const CustomerManagementTable = ({
       setShowRequestModal(true)
       setCustomerAlertModalMessage('Request Withdrawn and Deleted')
       setRequestModalMessage('Do you want to withdraw and delete request?')
+    }
+    if (option === 'View') {
+      // dispatch(getSingleRequestAction(requestId) as any)
+      navigate(`/customer-management/process-summary/${requestId}`)
     }
   }
 
@@ -1018,7 +1022,7 @@ const CustomerManagementTable = ({
                       .filter((customer) => {
                         if (searchTerm === '') {
                           return customer
-                        }else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                        } else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
                           return customer
                         }
                       })

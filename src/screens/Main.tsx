@@ -24,7 +24,8 @@ import SearchBar from 'Components/CustomerManagement/SearchBar'
 type Props = {}
 
 const customerTypeoptions = ['Individual', 'SME']
-const statusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide', 'Sent to me', 'Sent to my team']
+const customersDropdownStatusOptions = ['Created by me', 'Created by my team', 'Created system-wide']
+const requestsDropdownStatusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide']
 type customerStatus = 'All' | 'Active' | 'Inactive'
 type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft' | 'Pending' | 'Rejected'
 type customerType = 'Individual' | 'SME'
@@ -61,7 +62,8 @@ const Main = (props: Props) => {
   const [showFilterRequestStatusOptions, setShowFilterRequestStatusOptions] = useState(false)
   const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
   const [ShowFilterInitiatorOptions, setShowFilterInitiatorOptions] = useState(false)
-  const [selectedStatus, setSelectedStatus] = useState('Initiated by me')
+  const [customersSelectedStatus, setCustomersSelectedStatus] = useState('')
+  const [requestsSelectedStatus, setRequestsSelectedStatus] = useState('')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [showSystemAlert, setShowSystemAlert] = useState(false)
@@ -80,7 +82,12 @@ const Main = (props: Props) => {
   }
 
   const statusSelectForm = (list) => {
-    setSelectedStatus(list)
+    if (customermanagementTableType === 'All Customers') {
+      setCustomersSelectedStatus(list)
+    }
+    if (customermanagementTableType === 'Requests') {
+      setRequestsSelectedStatus(list)
+    }
     setShowStatusLists(false)
   }
   const highLevelButtonHandler = (customerType: customerType) => {
@@ -248,15 +255,15 @@ const Main = (props: Props) => {
     }
   }, [customerType, customermanagementTableType])
   // console.log(AllCustomers)
-  //  console.log(allRequests)
+  // console.log(allRequests)
   // console.log(allRequestsForChecker)
-   console.log(user)
+  //  console.log(user)
 
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
 
-      {showSystemAlert && (
+      {/* {showSystemAlert && (
         <>
           {userRole === 'maker' && (
             <SystemAlert
@@ -272,7 +279,7 @@ const Main = (props: Props) => {
             />
           )}
         </>
-      )}
+      )} */}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
@@ -385,7 +392,16 @@ const Main = (props: Props) => {
                           onClick={() => setShowStatusLists(!showStatusLists)}
                         >
                           <div>
-                            <span className={`text-[#252C32]`}>{selectedStatus ? selectedStatus : 'Initiated by me'}</span>
+                            {customermanagementTableType === 'All Customers' && (
+                              <span className={`text-[#252C32]`}>
+                                {customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptions[0]}
+                              </span>
+                            )}
+                            {customermanagementTableType === 'Requests' && (
+                              <span className={`text-[#252C32]`}>
+                                {requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptions[0]}
+                              </span>
+                            )}
                           </div>
                           <span>
                             <img src={chevron} className='' />
@@ -393,17 +409,36 @@ const Main = (props: Props) => {
                         </button>
                         {showStatusLists && (
                           <div ref={statusListRef} className=' w-full  absolute z-20  bg-background-paper  flex flex-col  border rounded-md'>
-                            {statusOptions?.map((status, index) => {
-                              return (
-                                <div
-                                  key={index}
-                                  className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                  onClick={statusSelectForm.bind(null, status)}
-                                >
-                                  {status}
-                                </div>
-                              )
-                            })}
+                            {customermanagementTableType === 'All Customers' && (
+                              <>
+                                {customersDropdownStatusOptions?.map((status, index) => {
+                                  return (
+                                    <div
+                                      key={index}
+                                      className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                      onClick={statusSelectForm.bind(null, status)}
+                                    >
+                                      {status}
+                                    </div>
+                                  )
+                                })}
+                              </>
+                            )}
+                            {customermanagementTableType === 'Requests' && (
+                              <>
+                                {requestsDropdownStatusOptions?.map((status, index) => {
+                                  return (
+                                    <div
+                                      key={index}
+                                      className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                      onClick={statusSelectForm.bind(null, status)}
+                                    >
+                                      {status}
+                                    </div>
+                                  )
+                                })}
+                              </>
+                            )}
                           </div>
                         )}
                       </div>
@@ -571,7 +606,7 @@ const Main = (props: Props) => {
                 {/* Customer Managament Table */}
 
                 <CustomerManagementTable
-                searchTerm={searchTerm}
+                  searchTerm={searchTerm}
                   filterRequestStatusOptionsRef={filterRequestStatusOptionsRef}
                   showFilterRequestStatusOptions={showFilterRequestStatusOptions}
                   setShowFilterRequestStatusOptions={setShowFilterRequestStatusOptions}
@@ -592,7 +627,7 @@ const Main = (props: Props) => {
                   filterInitiatorOptionsRef={filterInitiatorOptionsRef}
                   setShowFilterInitiatorOptions={setShowFilterInitiatorOptions}
                   ShowFilterInitiatorOptions={ShowFilterInitiatorOptions}
-                  selectedStatus={selectedStatus}
+                  selectedStatus={''}
                   AllCustomers={AllCustomers}
                   allRequests={allRequests}
                   customerType={customerType}
