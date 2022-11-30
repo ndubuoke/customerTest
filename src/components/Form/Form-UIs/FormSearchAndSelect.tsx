@@ -1,7 +1,7 @@
 import { caret, search } from 'Assets/svgs'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useCallback, useEffect, useMemo, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
@@ -11,6 +11,8 @@ import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
 import DataListInput from 'react-datalist-input'
+import { ReducersType } from 'Redux/store'
+import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -35,6 +37,7 @@ const FormSearchAndSelect = memo(
     setBackupForSwitchFormState,
     backupForSwitchFormState,
   }: Props) => {
+    const dispatch = useDispatch()
     const theForm = publishedFormState?.serverResponse?.data as Form
     const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
@@ -65,9 +68,23 @@ const FormSearchAndSelect = memo(
 
     const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
 
+    const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+
     //   console.log(optionsField.split(",").map(function (value) {
     //     return value.trim();
     //  }))
+
+    const handleRemoveFromRequired = () => {
+      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+      if (requiredFieldsFromRedux) {
+        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+        // console.log({ filterOutCosFillingStarted })
+
+        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+      }
+    }
 
     const items = useMemo(
       () =>
@@ -197,13 +214,15 @@ const FormSearchAndSelect = memo(
           {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
           <FieldLabel fieldItem={item} />
         </div>
-
         <div className='w-full border-b border-b-[#AAAAAA] relative mt-2 pl-2'>
           <div className=' w-full   py-1 pl-2 ml-1`'>
             <DataListInput
               placeholder={selectedDropdownItem || placeholder}
               items={items}
-              onSelect={(theSelectedItem) => onSelect(theSelectedItem, item)}
+              onSelect={(theSelectedItem) => {
+                onSelect(theSelectedItem, item)
+                handleRemoveFromRequired()
+              }}
               value={selectedDropdownItem ? selectedDropdownItem : ''}
             />
           </div>
@@ -228,6 +247,12 @@ const FormSearchAndSelect = memo(
             <img src={caret} width={15} height={10} />
           </span>
         </div>
+
+        {required.toLowerCase() === 'on' ? (
+          <p className='text-red-500'>
+            {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+          </p>
+        ) : null}
       </div>
     )
   }

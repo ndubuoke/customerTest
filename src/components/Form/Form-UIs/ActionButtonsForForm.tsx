@@ -50,10 +50,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         x?.sections?.forEach((section) => {
           _allFields.push(section?.fields)
         })
-
-        if (x?.fields?.length > 0) {
-          _allFields.push(x?.fields)
-        }
+      }
+      if (x?.fields?.length > 0) {
+        _allFields.push(x?.fields)
       }
     })
 
@@ -68,6 +67,8 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         })
         .filter(Boolean)
 
+      // console.log(_fieldLabelsOfRequiredFields)
+
       const _fillingFormState = fillingFormState as FormStructureType
 
       const fieldLabelsOfNotFilledRequiredFields = []
@@ -79,7 +80,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
           }
-        } else {
+        }
+
+        if (!x.sectionId && x.pageId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.pageId === x.pageId)
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {

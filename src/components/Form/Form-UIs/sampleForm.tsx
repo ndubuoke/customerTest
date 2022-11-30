@@ -20823,7 +20823,7 @@ export const publishedForm: ResponseType = {
                     __v: 0,
                     createdAt: '2022-10-02T17:05:03.539Z',
                     updatedAt: '2022-10-12T12:00:22.799Z',
-                    value: '',
+                    value: 'on',
                   },
                   {
                     _id: '6339c4bf94b2d9efa54318c6',
