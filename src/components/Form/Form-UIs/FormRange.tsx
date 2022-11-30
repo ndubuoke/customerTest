@@ -40,7 +40,7 @@ const FormRange = ({
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
-  const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
+  const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Range')
   const required = formGetProperty(item.formControlProperties, 'Set as Required', 'off')
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
@@ -58,7 +58,7 @@ const FormRange = ({
 
   const theItemFieldNameCamelCase = camelize(fieldLabel)
 
-  const [text, setText] = useState<string>('')
+  const [text, setText] = useState<string>('0')
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
@@ -200,11 +200,12 @@ const FormRange = ({
           <FieldLabel fieldItem={item} />
         </div>
       </div>
-      {required.toLowerCase() === 'on' ? (
+      <br />
+      {/* {required.toLowerCase() === 'on' ? (
         <p className='text-red-500'>
           {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
         </p>
-      ) : null}
+      ) : null} */}
     </div>
   )
 }

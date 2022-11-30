@@ -16,8 +16,8 @@ import { FormStructureType, FormSectionType } from 'Components/types/FormStructu
 import { API } from 'Utilities/api'
 import Spinner from 'Components/Shareables/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
-import { ReducersType } from 'Redux/store'
 import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { ReducersType } from 'Redux/store'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -69,9 +69,6 @@ const FormFileUpload = ({
 
   const onDrop = useCallback(
     async (acceptedFiles: Array<File>, fileRejections) => {
-      // console.log({ file: acceptedFiles[0], key: Date.now() })
-      setIsUploading(true)
-
       const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
 
       if (requiredFieldsFromRedux) {
@@ -79,6 +76,7 @@ const FormFileUpload = ({
 
         dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
       }
+      setIsUploading(true)
       const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
         try {
           const formdata = new FormData()
@@ -136,7 +134,7 @@ const FormFileUpload = ({
             const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
             const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-            console.log('customerData-sectionId', copiedPrev?.data?.customerData)
+            // console.log('customerData-sectionId', copiedPrev?.data?.customerData)
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
@@ -248,7 +246,7 @@ const FormFileUpload = ({
     })
 
     const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
-    console.log('theData', theData)
+    // console.log('theData', theData)
     if (theData) {
       setuploadedFiles([theData])
     }
@@ -304,24 +302,22 @@ const FormFileUpload = ({
         <FieldLabel fieldItem={item} />
       </div>
       {/* loading overlay  */}
-
+      {isUploading && (
+        // <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
+        <div className='flex items-center'>
+          <span className='text-3xl mr-4'>Loading</span>
+          {/* loading icon */}
+          <Spinner size={'small'} />
+        </div>
+        // </div>
+      )}
       {fileUploadError.isError && <p>{fileUploadError.message}</p>}
       <div
-        className='relative w-full border  rounded-[12px] pl-2'
-        style={{
-          border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? '1px solid red' : '1px solid #AAAAAA',
-        }}
+        className={`relative w-full border  rounded-[12px] pl-2 ${
+          setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? 'border-red-500' : 'border-[#AAAAAA]'
+        }`}
       >
-        {isUploading && (
-          // <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
-          <div className='flex items-center  h-[150px]'>
-            <span className='text-3xl mr-4'>Loading</span>
-            {/* loading icon */}
-            <Spinner size={'small'} />
-          </div>
-          // </div>
-        )}
-        {!isUploading && uploadedFiles?.length === 0 && (
+        {uploadedFiles?.length === 0 && (
           <div {...getRootProps()} className='cursor-pointer relative  h-[150px]'>
             <input type={`file`} hidden {...getInputProps()} multiple={false} />
 
@@ -334,7 +330,7 @@ const FormFileUpload = ({
         {uploadedFiles?.length > 0 && (
           <div className='cursor-pointer relative flex items-center h-[150px] '>
             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
-              {uploadedFiles.map((file: UploadFile, index) => {
+              {uploadedFiles?.map((file: UploadFile, index) => {
                 return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
               })}
             </div>
