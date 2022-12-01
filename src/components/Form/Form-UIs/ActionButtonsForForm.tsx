@@ -50,10 +50,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         x?.sections?.forEach((section) => {
           _allFields.push(section?.fields)
         })
-
-        if (x?.fields?.length > 0) {
-          _allFields.push(x?.fields)
-        }
+      }
+      if (x?.fields?.length > 0) {
+        _allFields.push(x?.fields)
       }
     })
 
@@ -63,10 +62,17 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       const _fieldLabelsOfRequiredFields = allFields
         ?.map((x) => {
           return getProperty(x?.formControlProperties, 'Set as Required', 'value').text.toLowerCase() === 'on'
-            ? { fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text), sectionId: x?.sectionId, pageId: x?.pageId }
+            ? {
+                fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text),
+                sectionId: x?.sectionId,
+                pageId: x?.pageId,
+                formType: x?.name,
+              }
             : null
         })
         .filter(Boolean)
+
+      // console.log(_fieldLabelsOfRequiredFields)
 
       const _fillingFormState = fillingFormState as FormStructureType
 
@@ -79,7 +85,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
           }
-        } else {
+        }
+
+        if (!x.sectionId && x.pageId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.pageId === x.pageId)
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {

@@ -1,7 +1,9 @@
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
@@ -31,6 +33,7 @@ const FormDate = ({
   setBackupForSwitchFormState,
   backupForSwitchFormState,
 }: Props) => {
+  const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -57,8 +60,18 @@ const FormDate = ({
 
   const [text, setText] = useState<string>('')
 
+  const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)
+
+    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+    if (requiredFieldsFromRedux) {
+      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+      dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+    }
 
     setFillingFormState((prev: FormStructureType) => {
       const copiedPrev = { ...prev }
@@ -197,6 +210,11 @@ const FormDate = ({
           value={text}
         />
       </div>
+      {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>
+          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+        </p>
+      ) : null}
     </div>
   )
 }
