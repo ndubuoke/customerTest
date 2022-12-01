@@ -2,7 +2,6 @@ import React, { useCallback, useState, useEffect, memo } from 'react'
 import { useDropzone } from 'react-dropzone'
 
 import { add, upload, deleteBtn } from 'Assets/svgs'
-import { IdentificationDetailsType } from 'Screens/CustomerCreation'
 import IndividualFile from 'Components/Shareables/IndividualFile'
 import { API } from 'Utilities/api'
 

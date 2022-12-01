@@ -47,7 +47,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     serverResponse: { data },
   } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const [formMode, setFormMode] = useState<FormModeType>('accelerated')
-  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Bulk)
+  const [creationMode, setCreationMode] = useState<CreationModeType>(CreationModeEnum.Single)
   const [identificationDetails, setIdentificationDetails] = useState<IdentificationDetailsType>({
     identificationType: null,
     identificationNumber: null,
@@ -75,19 +75,25 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   )
 
   const handleProceed = async () => {
-    const extractedData = localUpload.map((upload) => ({
-      documentType: upload.verificationData.docType,
-      data: upload.verificationData.extractedData,
-    }))
-    dispatch(validateCustomerAction(identificationDetails.identificationType, extractedData, identificationDetails.identityData) as any)
+    sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+    sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
+    sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    if (localUpload.length) {
+      const extractedData = localUpload.map((upload) => ({
+        documentType: upload.verificationData.docType,
+        data: upload.verificationData.extractedData,
+      }))
+      dispatch(validateCustomerAction(identificationDetails.identificationType, extractedData, identificationDetails.identityData) as any)
+    } else {
+      setFormCreationStarted(true)
+    }
   }
 
   useEffect(() => {
     if (formCreationStarted) {
-      if (serverResponse.data) {
-        const matches = serverResponse.data.matches
-        sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
-        setBackupForSwitchFormState({ ...matches })
+      console.log('identificationDetails', identificationDetails)
+      if (identificationDetails.identityData) {
+        setBackupForSwitchFormState({ ...identificationDetails.identityData })
       }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
@@ -135,7 +141,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                     </div>
                     <Button
                       text='Proceed'
-                      disabled={localUpload.length < 1 || !identificationDetails.identificationNumber || !identificationDetails.identificationType}
+                      disabled={!identificationDetails.identificationNumber || !identificationDetails.identificationType}
                       onClick={() => handleProceed()}
                     />
                   </div>

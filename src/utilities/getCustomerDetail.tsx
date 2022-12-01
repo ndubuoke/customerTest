@@ -1,4 +1,4 @@
-const getCustomerDetail = (customer, field) => {
+const getCustomerDetail = (customer, field:string): string | string[] | '' => {
   if (field === 'surname') {
     return customer.customer_profiles.map((profile) => {
       return profile.surname
@@ -37,24 +37,24 @@ const getCustomerDetail = (customer, field) => {
   }
   if (field === 'customerId') {
     return customer.customer_profiles.map((profile) => {
-      return profile.customerId.slice(0, 10)
+      return profile.customerId
     })
   }
-   if (field === 'bvn') {
-     return customer.customer_profiles.map((profile) => {
-       return profile.bvn
-     })
-   }
-   if (field === 'riskStatus') {
-     return customer.customer_profiles.map((profile) => {
-       return profile.riskStatus
-     })
-   }
-   if (field === 'customerGroups') {
-     return customer.customer_profiles.map((profile) => {
-       return profile.customerGroups
-     })
-   }
+  if (field === 'bvn') {
+    return customer.customer_profiles.map((profile) => {
+      return profile.bvn
+    })
+  }
+  if (field === 'riskStatus') {
+    return customer.customer_profiles.map((profile) => {
+      return profile.riskStatus
+    })
+  }
+  if (field === 'customerGroups') {
+    return customer.customer_profiles.map((profile) => {
+      return profile.customerGroups
+    })
+  }
 }
 
 export default getCustomerDetail

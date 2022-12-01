@@ -9,6 +9,7 @@ import {
   ProcessSummary,
 } from 'Screens/index'
 import { AppRoutes } from './AppRoutes'
+import CustomerManagementProcessSummary from '../../screens/CustomerManagementProcessSummary';
 
 export const RouteSwitches = () => (
   <BrowserRouter>
@@ -19,6 +20,10 @@ export const RouteSwitches = () => (
       <Route
         path={AppRoutes.bulkCustomerCreationMakerCheckerScreen}
         element={<BulkCustomerProcessSummary customerType='individual' headerText='Process Summary' />}
+      />
+      <Route
+        path={AppRoutes.customerManagementProcessSummary}
+        element={<CustomerManagementProcessSummary  />}
       />
       <Route path={AppRoutes.SMECustomerCreationScreen} element={<CustomerCreationScreen customerType='sme' />} />
       <Route path={AppRoutes.customerAccountModificationScreen} element={<CustomerAccountModificationScreen />} />

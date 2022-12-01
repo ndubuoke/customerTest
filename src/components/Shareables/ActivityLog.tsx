@@ -4,8 +4,8 @@ type Props = {}
 
 const ActivityLog = (props: Props) => {
   return (
-    <div className=''>
-      <p className='ml-4'>Activity Log</p>
+    <div className='mt-2'>
+      <p className='ml-4 text-[#636363] text-[24px]'>Activity Log</p>
       <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
       <ol className='relative border-l border-gray-200 dark:border-gray-700 mt-8 ml-6'>
         <li className='mb-10 ml-6'>
