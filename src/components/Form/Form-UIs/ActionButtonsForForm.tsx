@@ -62,7 +62,12 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       const _fieldLabelsOfRequiredFields = allFields
         ?.map((x) => {
           return getProperty(x?.formControlProperties, 'Set as Required', 'value').text.toLowerCase() === 'on'
-            ? { fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text), sectionId: x?.sectionId, pageId: x?.pageId }
+            ? {
+                fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text),
+                sectionId: x?.sectionId,
+                pageId: x?.pageId,
+                formType: x?.name,
+              }
             : null
         })
         .filter(Boolean)
