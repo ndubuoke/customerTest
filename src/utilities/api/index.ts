@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const API = axios.create({
-  baseURL: 'https://retailcore-customerservice.herokuapp.com/v1',
+  baseURL: 'https://customer-management-api-dev.reventtechnologies.com/v1',
   headers: {
     userid: '',
     apiKey: '',
