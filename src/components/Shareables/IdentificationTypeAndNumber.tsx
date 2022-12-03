@@ -154,7 +154,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             readOnly={!selectedIdentificationType}
             value={identificationNumber}
           />
-          {status === 'loading' ? <Spinner size='small' /> : status === 'success' ? <GreenCheck /> : null}
+          {status === 'loading' ? <Spinner size='medium' /> : status === 'success' ? <GreenCheck /> : null}
         </div>
       </div>
       {customer && (
