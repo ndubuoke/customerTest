@@ -46,8 +46,17 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
           <img src={arrow} title='Go back' />
         </Link>
         {breadCrumbsList?.map((item: BreadCrumbsListItemType, index: number) => {
+          const addQuery =
+            location.pathname === '/customer-management/individual-customer-creation/process-summary/' ||
+            location.pathname === '/customer-management/sme-customer-creation/process-summary/'
+
           return (
-            <BreadCrumb link={item.link} text={item.text} isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false} key={item.link} />
+            <BreadCrumb
+              link={addQuery ? `${item.link}/?isForm=true` : item.link}
+              text={item.text}
+              isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false}
+              key={item.link}
+            />
           )
         })}
       </div>
