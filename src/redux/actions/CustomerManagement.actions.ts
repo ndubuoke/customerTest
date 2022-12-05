@@ -36,7 +36,7 @@ import {
 type order = '' | 'asc' | 'desc'
 
 type dateFilterType = 'day' | 'month'
-const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/v1'
+const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
 
 export const getCustomersAction =
   (customerType: string, customerStatus: string = '', order: order = '') =>
