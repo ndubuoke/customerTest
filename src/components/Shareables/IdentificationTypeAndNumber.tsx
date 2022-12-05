@@ -4,6 +4,7 @@ import { CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreatio
 import DropDown from './DropDown'
 import { API } from '../../utilities/api'
 import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
+import Spinner from './Spinner'
 
 type Props = {
   customerType: CustomerType
@@ -19,13 +20,13 @@ enum VerificationModeEnum {
 
 export type IdentificationTypeType = 'bvn' | 'nin' | 'cac' | 'tin' | null
 export type IdentificationNumberType = string | null
-type FieldStatus = 'default' | 'success' | 'error'
+type FieldStatus = 'loading' | 'success' | 'error'
 
 const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }: Props) => {
   const [selectedIdentificationType, setSelectedIdentificationType] = useState<IdentificationTypeType>(null)
   const [identificationNumber, setIdentificationNumber] = useState<IdentificationNumberType>('')
   const [isVerified, setIsVerified] = useState<boolean | null>(null)
-  const [status, setStatus] = useState<FieldStatus>('default')
+  const [status, setStatus] = useState<FieldStatus>(null)
   const [customer, setCustomer] = useState(null)
   const [showCustomerModal, setShowCustomerModal] = useState(false)
 
@@ -34,9 +35,10 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target
     setIdentificationNumber(value)
-    setStatus('default')
+    setStatus(null)
     if (value.length === MAX_FIELD_LENGTH) {
       try {
+        setStatus('loading')
         const response = await API.get(`/verification/${selectedIdentificationType}/${value.trim()}`)
         if (response.data && response.status == 200) {
           setIsVerified(true)
@@ -92,6 +94,12 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         setStatus('error')
       }
       console.log('completed - verify')
+    } else {
+      setIdentificationDetails({
+        identificationType: null,
+        identificationNumber: null,
+        identityData: null,
+      })
     }
   }
 
@@ -146,7 +154,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             readOnly={!selectedIdentificationType}
             value={identificationNumber}
           />
-          {status === 'success' ? <GreenCheck /> : null}
+          {status === 'loading' ? <Spinner size='small' /> : status === 'success' ? <GreenCheck /> : null}
         </div>
       </div>
       {customer && (

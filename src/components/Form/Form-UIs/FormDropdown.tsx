@@ -1,8 +1,10 @@
 import { caret } from 'Assets/svgs'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { generateID } from 'Utilities/generateId'
@@ -36,6 +38,7 @@ const FormDropdown = memo(
     setBackupForSwitchFormState,
     backupForSwitchFormState,
   }: Props) => {
+    const dispatch = useDispatch()
     const theForm = publishedFormState?.serverResponse?.data as Form
     const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
     const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -116,8 +119,18 @@ const FormDropdown = memo(
     const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
     const [multipleSelectedDropdownItems, setMultipleSelectedDropdownItems] = useState<Array<string>>([])
 
+    const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+
     const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
       setSelectedDropdownItem(selectedItem.trim())
+
+      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+      if (requiredFieldsFromRedux) {
+        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+      }
     }
 
     const handleMultipleSelectedDropdownItem = (selectedItem, action: 'remove' | 'add') => {
@@ -139,6 +152,13 @@ const FormDropdown = memo(
         if (multipleSelectedDropdownItems.length === 0) {
           return
         } else {
+          const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+
+          if (requiredFieldsFromRedux) {
+            const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+
+            dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+          }
           setFillingFormState((prev: FormStructureType) => {
             const copiedPrev = { ...prev }
             const pageId = item?.pageId
@@ -292,7 +312,7 @@ const FormDropdown = memo(
       const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
 
       if (enableMultipleSelection.toLowerCase() === 'on') {
-        if (theData) {
+        if (theData?.length > 0) {
           setMultipleSelectedDropdownItems(theData?.split(','))
         }
       } else {
@@ -360,19 +380,31 @@ const FormDropdown = memo(
           >
             {enableMultipleSelection.toLowerCase() === 'off' ? (
               <div className='overflow-hidden'>
-                {selectedDropdownItem && selectedDropdownItem}
-                <span className={`text-text-disabled`}>{!selectedDropdownItem && 'Select'}</span>
+                {selectedDropdownItem ? (
+                  typeof selectedDropdownItem !== 'string' ? (
+                    [].concat(selectedDropdownItem).toString()
+                  ) : (
+                    selectedDropdownItem
+                  )
+                ) : (
+                  <span className={`text-text-disabled`}>Select</span>
+                )}
               </div>
             ) : null}
             {enableMultipleSelection.toLowerCase() === 'on' ? (
               <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
-                {multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ') || 'Select'}
+                {multipleSelectedDropdownItems.length === 0 ? 'Select' : multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ')}
               </div>
             ) : null}
             <span>
               <img src={caret} width={15} height={10} />
             </span>
           </div>
+          {!showLists && required.toLowerCase() === 'on' ? (
+            <p className='text-red-500'>
+              {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+            </p>
+          ) : null}
           {showLists && (
             <div
               className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg'
