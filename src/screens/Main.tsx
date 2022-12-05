@@ -73,6 +73,7 @@ const Main = (props: Props) => {
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
+
   const handleSelectForm = (list) => {
     if (list === 'Individual') {
       navigate(AppRoutes.individualCustomerCreationScreen)
@@ -174,10 +175,18 @@ const Main = (props: Props) => {
       dispatch(getCustomersAction(customerType, customerStatus) as any)
     }
     if (customermanagementTableType === 'Requests') {
-      if (requestStatus === 'All') {
-        return dispatch(getCustomersRequestsAction(customerType) as any)
+      if (userRole === 'maker') {
+        if (requestStatus === 'All') {
+          return dispatch(getCustomersRequestsAction(customerType) as any)
+        }
+        dispatch(getCustomersRequestsAction(customerType, requestStatus) as any)
       }
-      dispatch(getCustomersRequestsAction(customerType, requestStatus) as any)
+      if (userRole === 'checker') {
+        if (requestStatus === 'All') {
+          return dispatch(getRequestsForCheckerAction('', customerType) as any)
+        }
+        dispatch(getRequestsForCheckerAction(customerType, requestStatus) as any)
+      }
     }
   }
 
@@ -199,13 +208,14 @@ const Main = (props: Props) => {
   const requestStatusHandler = (status: requestStatusType, requestType) => {
     if (status === 'All') {
       setRequestStatus(status)
-      return dispatch(getCustomersRequestsAction(customerType, '', requestType) as any)
+      if (userRole === 'maker') {
+        return dispatch(getCustomersRequestsAction(customerType, '', requestType) as any)
+      }
+      if (userRole === 'checker') {
+        return dispatch(getRequestsForCheckerAction('', customerType) as any)
+      }
     }
-    if (status === 'Approved') {
-      setRequestStatus(status)
 
-      return dispatch(getCustomersRequestsAction(customerType, 'Approved', requestType) as any)
-    }
     if (status === 'Draft') {
       setRequestStatus(status)
       return dispatch(getCustomersRequestsAction(customerType, 'Draft', requestType) as any)
@@ -222,6 +232,24 @@ const Main = (props: Props) => {
     if (status === 'Interim Approval') {
       setRequestStatus(status)
       return dispatch(getCustomersRequestsAction(customerType, 'Interim Approval', requestType) as any)
+    }
+    if (status === 'Pending') {
+      setRequestStatus(status)
+      return dispatch(getRequestsForCheckerAction('Pending', customerType) as any)
+    }
+
+    if (status === 'Approved') {
+      setRequestStatus(status)
+      if (userRole === 'maker') {
+        return dispatch(getCustomersRequestsAction(customerType, 'Approved', requestType) as any)
+      }
+      if (userRole === 'checker') {
+        return dispatch(getRequestsForCheckerAction('Approved', customerType) as any)
+      }
+    }
+    if (status === 'Rejected') {
+      setRequestStatus(status)
+      return dispatch(getRequestsForCheckerAction('Rejected', customerType) as any)
     }
   }
 
@@ -245,6 +273,7 @@ const Main = (props: Props) => {
         dispatch(getCustomersAction(customerType) as any)
       }
     }
+
     if (customermanagementTableType === 'Requests') {
       if (userRole === 'maker') {
         dispatch(getCustomersRequestsAction(customerType) as any)
@@ -256,7 +285,7 @@ const Main = (props: Props) => {
   }, [customerType, customermanagementTableType])
   // console.log(AllCustomers)
   // console.log(allRequests)
-  // console.log(allRequestsForChecker)
+  console.log(allRequestsForChecker)
   //  console.log(user)
 
   return (
@@ -524,7 +553,7 @@ const Main = (props: Props) => {
                                 <h3 className='font-bold text-[24px]'>{allRequestsForChecker?.serverResponse?.data?.pending}</h3>
                               </div>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Pending')}
+                                onClick={requestStatusHandler.bind(null, 'Rejected')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'Rejected' ? 'bg-[#EFEFEF]' : ''
                                 }`}
