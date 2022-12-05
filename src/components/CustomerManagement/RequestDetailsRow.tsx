@@ -55,9 +55,21 @@ const RequestDetailsRow = ({
         </td>
         <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
           {request?.updatedAt}
-          {userRole === 'checker' && request?.status === 'Pending' && <button className='border p-2 shadow-md'>Review</button>}
-          {userRole === 'checker' && request?.status === 'Approved' && <button className='border p-2 shadow-md'>View</button>}
-          {userRole === 'checker' && request?.status === 'Rejected' && <button className='border p-2 shadow-md'>View</button>}
+          {userRole === 'checker' && request?.status === 'Pending' && (
+            <button onClick={requestFunctionHandler.bind(null, { option: 'View', requestId: request.requestId })} className='border p-2 shadow-md'>
+              Review
+            </button>
+          )}
+          {userRole === 'checker' && request?.status === 'Approved' && (
+            <button onClick={requestFunctionHandler.bind(null, { option: 'View', requestId: request.requestId })} className='border p-2 shadow-md'>
+              View
+            </button>
+          )}
+          {userRole === 'checker' && request?.status === 'Rejected' && (
+            <button onClick={requestFunctionHandler.bind(null, { option: 'View', requestId: request.requestId })} className='border p-2 shadow-md'>
+              View
+            </button>
+          )}
           {userRole === 'maker' && (
             <>
               <img src={Menu} alt='' className='cursor-pointer' onClick={showRequestFunctionHandler.bind(null, request?.id)} />
