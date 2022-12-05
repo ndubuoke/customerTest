@@ -169,10 +169,14 @@ const FormRange = ({
   useEffect(() => {
     const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
 
-    if (!text && backup) {
-      setText(backup)
+    if (!text) {
+      if (backup) {
+        setText(backup)
+      } else {
+        setText('0')
+      }
     }
-  }, [fillingFormState, publishedFormState])
+  }, [publishedFormState])
 
   return (
     <div

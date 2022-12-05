@@ -1,5 +1,5 @@
 import Button from 'Components/Shareables/Button'
-import React, { useEffect, useState } from 'react'
+import React, { Dispatch, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
@@ -7,8 +7,18 @@ import { Form, PageInstance } from '../Types'
 import { findIndexOfObject } from 'Utilities/findIndexOfObject'
 import { getProperty } from 'Utilities/getProperty'
 import { camelize } from 'Utilities/convertStringToCamelCase'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, statusForCanProceedAction } from 'Redux/actions/FormManagement.actions'
 import { FormStructureType } from 'Components/types/FormStructure.types'
+import { AnyAction } from 'redux'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { AppRoutes } from 'Routes/AppRoutes'
+
+export type RequiredFieldsType = {
+  fieldLabel: string
+  sectionId: string
+  pageId: string
+  formType: string
+}
 
 type Props = {
   setActivePageState: (val: PageInstance) => void
@@ -18,6 +28,8 @@ type Props = {
 
 const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState }: Props) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const location = useLocation()
   const [form, setForm] = useState<Form>(null)
   const [index, setIndex] = useState<number>(0)
   const [submit, setSubmit] = useState<number>(1)
@@ -76,7 +88,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
       const _fillingFormState = fillingFormState as FormStructureType
 
-      const fieldLabelsOfNotFilledRequiredFields = []
+      const fieldLabelsOfNotFilledRequiredFields = [] as Array<RequiredFieldsType>
 
       const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields.forEach((x) => {
         if (x.sectionId) {
@@ -97,6 +109,29 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       })
 
       dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
+
+      const checkIfUnfilledRequiredFieldsAreDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
+        (x) => camelize(x.formType) !== camelize('File Upload')
+      )
+
+      console.log({ checkIfUnfilledRequiredFieldsAreDocsOnly })
+
+      // exists
+      if (checkIfUnfilledRequiredFieldsAreDocsOnly) {
+        // dispatch to prevent proceeding
+        dispatch(statusForCanProceedAction(false) as any)
+      } else {
+        dispatch(statusForCanProceedAction(true) as any)
+        // Proceed to process summary
+        if (location.pathname === AppRoutes.individualCustomerCreationScreen) {
+          navigate(AppRoutes.individualProcessSummary)
+          return
+        }
+        if (location.pathname === AppRoutes.SMECustomerCreationScreen) {
+          navigate(AppRoutes.SMEProcessSummary)
+          return
+        }
+      }
     }
   }
 
