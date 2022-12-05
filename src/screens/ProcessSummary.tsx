@@ -1,7 +1,12 @@
 import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
-import { CancelIcon, ModifyIcon, ProcessStep, sterlingLogoProcess, SterlingStepperImg, SubmitIcon } from 'Assets/svgs'
+
 import GoBack from 'Components/MainScreenLayout/GoBack'
+import ProcessActions from 'Components/ProcessSummary/ProcessActions'
+import ProgressBar from 'Components/ProcessSummary/ProgressBar'
+import SingleSection from 'Components/ProcessSummary/SingleSection'
 import ActivityLog from 'Components/Shareables/ActivityLog'
+import { FormStructureType } from 'Components/types/FormStructure.types'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { individualCustomerCreationData, smeCustomerCreationData } from '../data/process-summary'
 
 type Props = {
@@ -10,107 +15,44 @@ type Props = {
 }
 
 const ProcessSummary = ({ headerText, customerType }: Props) => {
+  const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
+    : null
   return (
     <>
-      <h2>PROCESS SUMMARY</h2>
       <nav>
-        <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
+        <GoBack
+          headerText='PROCESS SUMMARY'
+          breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData}
+        />
       </nav>
 
-      <main className={`bg-background-dash relative flex mx-auto py-[20px] font-roboto px-[30px] gap-x-[20px] h-screen`}>
-        <section className={`w-[75%]`}>
-          <div className={`relative rounded-lg text-[#636363] font-[Inter] w-full h-full  min:h-full max:h-full overflow-auto bg-white pt-20`}>
-            <div className={`relative ml-20 mb-5 h-[108px] w-[60%] rounded-[20px] border border-[#d2d2d2] flex justify-center items-center`}>
-              <div className={`w-[80%] flex justify-center items-center`}>
-                <div className={`absolute bg-white border-none -top-3 left-7`}>Processing Status:</div>
-                <div className={`w-[90%] relative h-[50px]`}>
-                  <div className={`w-full m-auto absolute inset-0 bg-[#d9d9d9] h-[10px]`}></div>
-                  <img className={`absolute m-auto inset-y-0 left-0 w-[36px] rounded-full`} src={sterlingLogoProcess} alt='' />
-                  <div className={`absolute m-auto -bottom-[30px] -left-[50px] h-[30px] `}>Pending Submission</div>
-                  <img className={`absolute m-auto inset-y-0 right-0 w-[36px] rounded-full`} src={ProcessPendingStateIcon} alt='' />
-                  <div className={`absolute m-auto -bottom-[30px] text-center -right-[60px] w-[150px] h-[30px]`}>Approval</div>
-                </div>
+      <main className={`bg-background-dash relative flex mx-auto py-12 font-roboto px-[30px] gap-x-[20px] min-h-50  `}>
+        <section className={`w-[75%] relative `}>
+          <div className={`relative rounded-lg text-[#636363] font-[Inter] w-full h-full  min:h-full max:h-full  bg-white py-6`}>
+            <div className='p-4'>
+              <ProgressBar mode='creation' waiverRequest={false} waiverStatus='not approved' />
+            </div>
+            <div className='px-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12'>
+              <h2
+                className='capitalize font-medium text-[24px] leading-[28px] text-[#636363] px-4 py-4'
+                style={{
+                  letterSpacing: '0.025em',
+                }}
+              >
+                {customerType.split('--')[0].trim()} Customer Creation
+              </h2>
+              <div className='px-4 flex flex-col gap-8 '>
+                {!fillingFormInStorage
+                  ? null
+                  : fillingFormInStorage?.data?.customerData?.map((x, i) => {
+                      return <SingleSection section={x} key={i} />
+                    })}
               </div>
             </div>
-            <div className={`px-20 mt-5 max-h-[400px] overflow-auto`}>
-              <div>
-                <h3 className='text-[24px]'>Individual Customer Details</h3>
-                <div>
-                  <h5 className='ml-5 text-md'>Section-[Number]/page</h5>
-                  <div className='flex'>
-                    <div className='ml-20 text-right'>
-                      <p className='text-sm mb-3'>title</p>
-                      <p className='text-sm mb-3'>first name</p>
-                      <p className='text-sm mb-3'>Mothers Maiden Name</p>
-                      <p className='text-sm mb-3'>Other Names</p>
-                    </div>
-                    <div className='ml-[70px] '>
-                      <p className='text-sm mb-3'>Mr</p>
-                      <p className='text-sm mb-3'>Adeshina</p>
-                      <p className='text-sm mb-3'>Oluwaseun</p>
-                      <p className='text-sm mb-3'>Oluwakemi</p>
-                    </div>
-                  </div>
-                </div>
-                {/* each section or page and we will map through */}
-                <div>
-                  <h5 className='ml-5 text-md'>Account Information</h5>
-                  <div className='flex'>
-                    <div className='ml-20 text-right'>
-                      <p className='text-sm mb-3'>title</p>
-                      <p className='text-sm mb-3'>first name</p>
-                      <p className='text-sm mb-3'>Mothers Maiden Name</p>
-                      <p className='text-sm mb-3'>Other Names</p>
-                    </div>
-                    <div className='ml-[70px] '>
-                      <p className='text-sm mb-3'>Mr</p>
-                      <p className='text-sm mb-3'>Adeshina</p>
-                      <p className='text-sm mb-3'>Oluwaseun</p>
-                      <p className='text-sm mb-3'>Oluwakemi</p>
-                    </div>
-                  </div>
-                </div>
-                {/*end of each section */}
-                {/* each section or page and we will map through */}
-                <div>
-                  <h5 className='ml-5 text-md'>Documentation</h5>
-                  <div className='flex'>
-                    <div className='ml-20 text-right'>
-                      <p className='text-sm mb-3'>title</p>
-                      <p className='text-sm mb-3'>first name</p>
-                      <p className='text-sm mb-3'>Mothers Maiden Name</p>
-                      <p className='text-sm mb-3'>Other Names</p>
-                    </div>
-                    <div className='ml-[70px] '>
-                      <p className='text-sm mb-3'>Mr</p>
-                      <p className='text-sm mb-3'>Adeshina</p>
-                      <p className='text-sm mb-3'>Oluwaseun</p>
-                      <p className='text-sm mb-3'>Oluwakemi</p>
-                    </div>
-                  </div>
-                </div>
-                {/*end of each section */}
-              </div>
-            </div>
-
-            <div
-              className={`bg-white absolute m-auto bottom-2 right-2 min-w-[300px] min-h-[64px] flex justify-evenly items-center rounded-lg shadow-md`}
-            >
-              <button className={`flex flex-col justify-center items-center`}>
-                <ModifyIcon />
-                <p className='text-sm'>Modify</p>
-              </button>
-              <button className={`flex flex-col justify-center items-center`}>
-                <CancelIcon />
-                <p className='text-sm'>Cancel</p>
-              </button>
-              <button className={`flex flex-col justify-center items-center`}>
-                <SubmitIcon />
-                <p className='text-sm'>
-                  Request for waiver <br /> & submit form
-                </p>
-              </button>
-            </div>
+          </div>
+          <div className='absolute bg-white  m-auto bottom-2 right-2 '>
+            <ProcessActions waiver={true} mode='creation' customerType={customerType} />
           </div>
         </section>
         <section className={`w-[25%]`}>

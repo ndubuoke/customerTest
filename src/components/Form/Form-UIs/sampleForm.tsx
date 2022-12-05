@@ -710,7 +710,7 @@ export const publishedForm: ResponseType = {
                         __v: 0,
                         createdAt: '2022-10-02T17:05:03.539Z',
                         updatedAt: '2022-10-12T12:00:22.798Z',
-                        value: '0',
+                        value: '100',
                       },
                       {
                         _id: '6339c4bf94b2d9efa54318b9',
@@ -19103,7 +19103,7 @@ export const publishedForm: ResponseType = {
                     __v: 0,
                     createdAt: '2022-10-02T17:05:03.538Z',
                     updatedAt: '2022-10-12T12:00:22.799Z',
-                    value: '',
+                    value: 'The Age',
                   },
                   {
                     _id: '6339c4bf94b2d9efa54318c0',

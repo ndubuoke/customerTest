@@ -4,7 +4,7 @@ export const formStruture = {
       // {
       //   sectionName: '',
       //   data: {
-      //     firstName: 'Bonaventure',
+      //     firstName: ['Bonaventure'],
       //   },
       //   sectionId: '',
       //   pageId: '',

@@ -7,6 +7,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  STATUS_FOR_CAN_PROCEED,
 } from 'Redux/constants/FormManagement.constants'
 
 export type ResponseType = {
@@ -72,6 +73,16 @@ export const setRequiredFormFieldsReducer = (state = { list: [] }, action: { typ
   switch (action.type) {
     case SET_REQUIRED_FORM_FIELDS:
       return { ...state, list: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const statusForCanProceedReducer = (state = { status: false }, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case STATUS_FOR_CAN_PROCEED:
+      return { ...state, status: action.payload }
 
     default:
       return state
