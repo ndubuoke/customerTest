@@ -38,7 +38,7 @@ export type IdentificationDetailsType = {
   identityData: any
 }
 
-export const isForm = '?isForm=true'
+export const isForm = '/?isForm=true'
 
 const CustomerCreation = memo(({ customerType }: Props) => {
   const dispatch = useDispatch()
@@ -107,7 +107,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   // Handle automatic redirect when trying to view the form from process summary
   useEffect(() => {
     const search = location.search
-    if (search === isForm) {
+    if (search === isForm.replace('/', '')) {
       setFormCreationStarted(true)
     }
   }, [location])

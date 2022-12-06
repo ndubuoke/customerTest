@@ -4,12 +4,12 @@ import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
 
 type Props = {
   mode: 'creation' | 'modification'
-  waiverRequest?: boolean
+  waiverRequest?: 'show' | 'hide'
   submitted?: boolean
   waiverStatus: 'approved' | 'not approved'
 }
 
-const ProgressBar = ({ mode = 'creation', waiverRequest = false, submitted = false, waiverStatus = 'not approved' }: Props) => {
+const ProgressBar = ({ mode = 'creation', waiverRequest = 'hide', submitted = false, waiverStatus = 'not approved' }: Props) => {
   if (mode === 'creation') {
     return (
       <section
@@ -27,7 +27,7 @@ const ProgressBar = ({ mode = 'creation', waiverRequest = false, submitted = fal
           ></div>
 
           <ImageText text='Pending Submission' />
-          {waiverRequest ? (
+          {waiverRequest === 'show' ? (
             <div className={`z-10 ${waiverStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
               <ImageText text='Waiver Approval' />
             </div>
