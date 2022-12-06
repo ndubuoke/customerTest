@@ -8,7 +8,7 @@ import CancelFormModal from './CancelFormModal'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type Props = {
-  waiver: boolean
+  waiver: 'show' | 'hide'
   mode: 'creation' | 'modification'
   customerType: 'individual' | 'sme'
 }
@@ -60,7 +60,7 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
         <div className='w-[35px] h-[35px] mb-2 '>
           <img src={submitForm} alt='go back' width={30} height={24} />
         </div>
-        <div className='text-[12px] '>{waiver ? 'Request for waiver \n & submit form' : 'Submit form'}</div>
+        <div className='text-[12px] '>{waiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}</div>
       </div>
       {openCancelFormModal ? <CancelFormModal closeModalFunction={handleOpenCancelFormModal} cancelFormCreation={handleCancelFormCreation} /> : null}
     </div>

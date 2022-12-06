@@ -86,7 +86,7 @@ export const statusForCanProceedAction = (canProceed: boolean) => async (dispatc
     payload: canProceed,
   })
 }
-export const showWaiverModalInFormAction = (status: 'show') => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const showWaiverModalInFormAction = (status: 'show' | "hide") => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   dispatch({
     type: SHOW_WAIVER_MODAL_IN_FORM,
     payload: status,

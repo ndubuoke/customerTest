@@ -90,9 +90,9 @@ export const statusForCanProceedReducer = (state = { status: false }, action: { 
   }
 }
 
-export type ShowModalInFormType = { status: string }
+export type ShowModalInFormType = { status: 'show' | 'hide' }
 
-export const showWaiverModalInFormReducer = (state: ShowModalInFormType = { status: '' }, action: { type: string; payload: any }) => {
+export const showWaiverModalInFormReducer = (state: ShowModalInFormType = { status: 'hide' }, action: { type: string; payload: any }) => {
   switch (action.type) {
     case SHOW_WAIVER_MODAL_IN_FORM:
       return { ...state, status: action.payload }

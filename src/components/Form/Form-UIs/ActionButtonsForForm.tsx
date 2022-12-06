@@ -13,6 +13,8 @@ import { AnyAction } from 'redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
 import WaiverAlert from 'Components/ProcessSummary/WaiverAlert'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { isForm } from 'Screens/CustomerCreation'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -96,7 +98,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         if (x.sectionId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.sectionId === x.sectionId)
 
-          console.log({ sectionThatMatched })
+          // console.log({ sectionThatMatched })
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
@@ -114,8 +116,6 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
       dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
 
-      console.log({ fieldLabelsOfNotFilledRequiredFields })
-
       const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
         (x) => camelize(x.formType) !== camelize('File Upload')
       )
@@ -128,6 +128,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       } else {
         // console.log({ fieldLabelsOfNotFilledRequiredFields })
         if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
+          dispatch(showWaiverModalInFormAction('hide') as any)
           handleProceedToProcessSummary()
         } else {
           handleShowModal()
@@ -139,25 +140,28 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   // Handle show modal function
   const handleShowModal = () => {
     // dispatch show waiver
-    dispatch(showWaiverModalInFormAction('show') as any)
-
+    sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('show'))
+    // dispatch(showWaiverModalInFormAction('show') as any)
     setShowWaiverAlert((prev) => !prev)
   }
 
   const handleProceedToProcessSummary = () => {
     // Proceed to process summary
     dispatch(statusForCanProceedAction(true) as any)
-    if (location.pathname === AppRoutes.individualCustomerCreationScreen) {
+
+    // console.log({ pathnmae: location.pathname, individi: AppRoutes.individualCustomerCreationScreen + '/' })
+
+    // console.log({ pathName: location.pathname.replace(/[^a-zA-Z0-9 ]/g, '') })
+    if (location.pathname.replace(/[^a-zA-Z0-9 ]/g, '') === AppRoutes.individualCustomerCreationScreen.replace(/[^a-zA-Z0-9 ]/g, '')) {
       navigate(AppRoutes.individualProcessSummary)
       return
     }
-    if (location.pathname === AppRoutes.SMECustomerCreationScreen) {
+    if (location.pathname.replace(/[^a-zA-Z0-9 ]/g, '') === AppRoutes.SMECustomerCreationScreen.replace(/[^a-zA-Z0-9 ]/g, '')) {
       navigate(AppRoutes.SMEProcessSummary)
       return
     }
   }
 
-  // const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields.filter(x => !_fillingFormState.data.customerData.some(y => y.data. === x.));
   useEffect(() => {
     if (publishedForm?.success) {
       setForm(publishedForm?.serverResponse?.data)
