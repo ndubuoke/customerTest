@@ -83,9 +83,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               </div>
             </div>
           </div>
-          <div className='absolute bg-white  m-auto bottom-2 right-2 '>
-            <ProcessActions waiver={showWaiverTimeline} mode='creation' customerType={customerType} />
-          </div>
+          <ProcessActions waiver={showWaiverTimeline} mode='creation' customerType={customerType} />
         </section>
         <section className={`w-[25%]`}>
           <div

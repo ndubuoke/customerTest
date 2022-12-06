@@ -30,7 +30,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
             const ocrVerificationResponse = await API.post('/verification/ocr/extraction', {
               imageUrl: signedUrlResponse.data.data,
             })
-            console.log('ocrVerificationResponse', ocrVerificationResponse.data)
+            // console.log('ocrVerificationResponse', ocrVerificationResponse.data)
             return {
               file,
               verificationData: {
@@ -89,9 +89,9 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
     setLocalUpload((prev) => newFiles)
   }
 
-  useEffect(() => {
-    console.log({ uploadedFiles })
-  }, [uploadedFiles])
+  // useEffect(() => {
+  //   console.log({ uploadedFiles })
+  // }, [uploadedFiles])
 
   return (
     <div className={`border rounded-md max-w-[599px] h-full `}>
