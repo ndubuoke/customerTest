@@ -7,6 +7,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
 } from 'Redux/constants/FormManagement.constants'
 
@@ -82,6 +83,18 @@ export const setRequiredFormFieldsReducer = (state = { list: [] }, action: { typ
 export const statusForCanProceedReducer = (state = { status: false }, action: { type: string; payload: any }) => {
   switch (action.type) {
     case STATUS_FOR_CAN_PROCEED:
+      return { ...state, status: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export type ShowModalInFormType = { status: 'show' | 'hide' }
+
+export const showWaiverModalInFormReducer = (state: ShowModalInFormType = { status: 'hide' }, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case SHOW_WAIVER_MODAL_IN_FORM:
       return { ...state, status: action.payload }
 
     default:
