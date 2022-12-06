@@ -7,11 +7,12 @@ import { Form, PageInstance } from '../Types'
 import { findIndexOfObject } from 'Utilities/findIndexOfObject'
 import { getProperty } from 'Utilities/getProperty'
 import { camelize } from 'Utilities/convertStringToCamelCase'
-import { setRequiredFormFieldsAction, statusForCanProceedAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, showWaiverModalInFormAction, statusForCanProceedAction } from 'Redux/actions/FormManagement.actions'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { AnyAction } from 'redux'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
+import WaiverAlert from 'Components/ProcessSummary/WaiverAlert'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -33,6 +34,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [form, setForm] = useState<Form>(null)
   const [index, setIndex] = useState<number>(0)
   const [submit, setSubmit] = useState<number>(1)
+  const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -84,15 +86,17 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         })
         .filter(Boolean)
 
-      // console.log(_fieldLabelsOfRequiredFields)
+      // console.log({ _fieldLabelsOfRequiredFields })
 
       const _fillingFormState = fillingFormState as FormStructureType
 
       const fieldLabelsOfNotFilledRequiredFields = [] as Array<RequiredFieldsType>
 
-      const fieldLabelsOfRequiredFields = _fieldLabelsOfRequiredFields.forEach((x) => {
+      _fieldLabelsOfRequiredFields.forEach((x) => {
         if (x.sectionId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.sectionId === x.sectionId)
+
+          console.log({ sectionThatMatched })
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
@@ -110,28 +114,46 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
       dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
 
-      const checkIfUnfilledRequiredFieldsAreDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
+      console.log({ fieldLabelsOfNotFilledRequiredFields })
+
+      const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
         (x) => camelize(x.formType) !== camelize('File Upload')
       )
 
-      console.log({ checkIfUnfilledRequiredFieldsAreDocsOnly })
+      // console.log({ checkIfUnfilledRequiredFieldsAreNotDocsOnly })
 
-      // exists
-      if (checkIfUnfilledRequiredFieldsAreDocsOnly) {
+      if (checkIfUnfilledRequiredFieldsAreNotDocsOnly) {
         // dispatch to prevent proceeding
         dispatch(statusForCanProceedAction(false) as any)
       } else {
-        dispatch(statusForCanProceedAction(true) as any)
-        // Proceed to process summary
-        if (location.pathname === AppRoutes.individualCustomerCreationScreen) {
-          navigate(AppRoutes.individualProcessSummary)
-          return
-        }
-        if (location.pathname === AppRoutes.SMECustomerCreationScreen) {
-          navigate(AppRoutes.SMEProcessSummary)
-          return
+        // console.log({ fieldLabelsOfNotFilledRequiredFields })
+        if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
+          handleProceedToProcessSummary()
+        } else {
+          handleShowModal()
         }
       }
+    }
+  }
+
+  // Handle show modal function
+  const handleShowModal = () => {
+    // dispatch show waiver
+    dispatch(showWaiverModalInFormAction('show') as any)
+
+    setShowWaiverAlert((prev) => !prev)
+  }
+
+  const handleProceedToProcessSummary = () => {
+    // Proceed to process summary
+    dispatch(statusForCanProceedAction(true) as any)
+    if (location.pathname === AppRoutes.individualCustomerCreationScreen) {
+      navigate(AppRoutes.individualProcessSummary)
+      return
+    }
+    if (location.pathname === AppRoutes.SMECustomerCreationScreen) {
+      navigate(AppRoutes.SMEProcessSummary)
+      return
     }
   }
 
@@ -161,6 +183,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         }
         text={findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? 'Proceed' : 'Next'}
       />
+      {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
     </div>
   )
 }

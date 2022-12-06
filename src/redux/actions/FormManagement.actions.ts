@@ -9,6 +9,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
 } from 'Redux/constants/FormManagement.constants'
 import { ReducersType } from 'Redux/store'
@@ -83,5 +84,11 @@ export const statusForCanProceedAction = (canProceed: boolean) => async (dispatc
   dispatch({
     type: STATUS_FOR_CAN_PROCEED,
     payload: canProceed,
+  })
+}
+export const showWaiverModalInFormAction = (status: 'show') => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  dispatch({
+    type: SHOW_WAIVER_MODAL_IN_FORM,
+    payload: status,
   })
 }
