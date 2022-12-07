@@ -9,7 +9,7 @@ import {
   GET_REQUESTS_SUCCESS,
 } from '../constants/CustomerManagement.constants'
 import store, { ReducersType } from 'Redux/store'
-import { GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL } from '../constants/CustomerManagement.constants';
+import { GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL, GET_CUSTOMERS_ACTIVITY_LOG_REQUEST, GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, GET_CUSTOMERS_ACTIVITY_LOG_FAIL } from '../constants/CustomerManagement.constants';
 import {
   ACTIVATE_CUSTOMER_FAIL,
   ACTIVATE_CUSTOMER_REQUEST,
@@ -240,3 +240,28 @@ export const getRequestsForCheckerAction =
         })
       }
     }
+
+
+
+
+    
+  export const getActivityLogAction = (customerId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_REQUEST })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/activity-log/customer/${customerId}`, config)
+
+      dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_CUSTOMERS_ACTIVITY_LOG_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }

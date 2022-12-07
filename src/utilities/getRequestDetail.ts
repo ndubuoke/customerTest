@@ -1,4 +1,4 @@
-const getRequestDetail = (request, field: string): string | string[] | '' => {
+const getRequestDetail = (request, field: string): string | string[]  => {
   if (field === 'surname') {
     return request?.data?.customerData.map((detail) => {
       return detail?.data?.surname

@@ -1,4 +1,4 @@
-import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL, GET_REQUESTS_BY_DATE_REQUEST, GET_REQUESTS_BY_DATE_SUCCESS, GET_REQEUSTS_BY_DATE_FAIL, GET_TOTAL_REQUEST_STATUS_REQUEST, GET_TOTAL_REQUEST_STATUS_SUCCESS, GET_TOTAL_REQUEST_STATUS_FAIL, GET_REQUESTS_FOR_CHECKER_REQUEST, GET_REQUESTS_FOR_CHECKER_SUCCESS, GET_REQUESTS_FOR_CHECKER_FAIL, GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL } from '../constants/CustomerManagement.constants';
+import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL, GET_REQUESTS_BY_DATE_REQUEST, GET_REQUESTS_BY_DATE_SUCCESS, GET_REQEUSTS_BY_DATE_FAIL, GET_TOTAL_REQUEST_STATUS_REQUEST, GET_TOTAL_REQUEST_STATUS_SUCCESS, GET_TOTAL_REQUEST_STATUS_FAIL, GET_REQUESTS_FOR_CHECKER_REQUEST, GET_REQUESTS_FOR_CHECKER_SUCCESS, GET_REQUESTS_FOR_CHECKER_FAIL, GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL, GET_CUSTOMERS_ACTIVITY_LOG_REQUEST, GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, GET_CUSTOMERS_ACTIVITY_LOG_FAIL } from '../constants/CustomerManagement.constants';
 import {
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
@@ -180,6 +180,23 @@ export const getSingleRequestReducer = (state: customersManagementResponseType =
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case GET_SINGLE_REQUEST_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+
+export const getActivityLogReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CUSTOMERS_ACTIVITY_LOG_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_CUSTOMERS_ACTIVITY_LOG_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:
