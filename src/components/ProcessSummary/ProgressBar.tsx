@@ -8,7 +8,7 @@ type Props = {
   submitted?: boolean
   waiverStatus: 'approved' | 'not approved'
 }
-
+// mode
 const ProgressBar = ({ mode = 'creation', waiverRequest = 'hide', submitted = false, waiverStatus = 'not approved' }: Props) => {
   if (mode === 'creation') {
     return (

@@ -303,7 +303,7 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
             </div>
 
             <div className='w-[25%] bg-white h-full rounded-md'>
-              <ActivityLog customerId={request?.customerId} />
+              <ActivityLog customerId={request?.customerId} mode={'modification'} />
             </div>
           </div>
         </div>

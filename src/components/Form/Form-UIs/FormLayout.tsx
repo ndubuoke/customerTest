@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { dots } from 'Assets/svgs'
+import { dots, ExclaimateIcon } from 'Assets/svgs'
 import React from 'react'
 import { getProperty } from 'Utilities/getProperty'
 import { FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
@@ -92,6 +92,7 @@ const FormLayout = ({
                 ? getProperty(item?.formControlProperties, 'Section name', 'defaultState').text
                 : 'Section label'}
             </h6>
+            <ExclaimateIcon /> some info missing
           </div>
           <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
             <svg
