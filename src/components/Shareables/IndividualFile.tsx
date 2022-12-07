@@ -14,22 +14,41 @@ type Props = {
     }
   }
   removeFile: (item: any) => void
+  height?: number
+  waiverRequest?: boolean
 }
 
-const IndividualFile = memo(({ file, removeFile }: Props) => {
+const IndividualFile = memo(({ file, removeFile, height = 110, waiverRequest = false }: Props) => {
   const [showRemove, setShowRemove] = useState<boolean>(true)
+
   // console.log('file', file.file)
-  return (
-    <div className='relative' onClick={(e) => e.stopPropagation()}>
-      <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
-      <div>
+  if (waiverRequest) {
+    return (
+      <div className={`relative border rounded-sm`}>
+        <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
         {file.file.type.startsWith('image') && (
           <img
             src={file.signedUrl || URL.createObjectURL(file.file)}
             className='object-contain'
             width={194}
-            height={104}
-            style={{ width: '194', height: '104px' }}
+            height={height}
+            style={{ width: '194', height }}
+          />
+        )}
+      </div>
+    )
+  }
+  return (
+    <div className={`relative h-[${height}px] w-[194px]`} onClick={(e) => e.stopPropagation()}>
+      <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
+      <div className={`h-[${height}px] w-[194px]`}>
+        {file.file.type.startsWith('image') && (
+          <img
+            src={file.signedUrl || URL.createObjectURL(file.file)}
+            className='object-contain'
+            width={194}
+            height={height}
+            style={{ width: '194', height }}
           />
         )}
         {/* {file.file.type.endsWith('pdf') && (
