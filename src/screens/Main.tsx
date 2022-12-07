@@ -69,7 +69,7 @@ const Main = (props: Props) => {
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
-  const [userRole, setUserRole] = useState<userType>('maker')
+  const [userRole, setUserRole] = useState<userType>('checker')
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
