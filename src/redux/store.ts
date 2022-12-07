@@ -35,7 +35,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
-import { getRequestsForCheckerReducer, getSingleRequestReducer } from './reducers/CustomerManagement.reducer'
+import { getRequestsForCheckerReducer, getSingleRequestReducer, getActivityLogReducer } from './reducers/CustomerManagement.reducer';
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -53,6 +53,7 @@ export type ReducersType = {
   saveBulkCustomerCreation: SaveBulkCreationTypes
   totalStatusCustomers: customersManagementResponseType
   allRequestsForChecker: customersManagementResponseType
+  customerActivityLog: customersManagementResponseType
   setRequiredFormFields: any
   singleRequest: customersManagementResponseType
   statusForCanProceed: any
@@ -62,6 +63,7 @@ export type ReducersType = {
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
   allCustomers: getCustomersReducer,
+  customerActivityLog:getActivityLogReducer,
   allRequests: getCustomersRequestReducer,
   bulkProcessSummary: bulkProcessSummaryReducer,
   deleteRequest: deleteRequestReducer,

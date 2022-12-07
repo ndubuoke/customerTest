@@ -1,9 +1,11 @@
 import React from 'react'
 import useCharacterCount from '../../hooks/use-character-count'
 
-type TextareaType = {}
+type TextareaType = {
+  rows?:number
+}
 
-const Textarea = ({}: TextareaType) => {
+const Textarea = ({rows}: TextareaType) => {
   const { characterCount, characterLengthChangeHandler } = useCharacterCount()
   return (
     <div className='  w-full relative '>
@@ -11,7 +13,7 @@ const Textarea = ({}: TextareaType) => {
         <label className='capitalize text-[#333333] text-sm'>Provide justification for deactivation</label>
       </div>
       <textarea
-        rows={4}
+        rows={rows? rows : 4}
         maxLength={150}
         onChange={characterLengthChangeHandler}
         className=' bg-transparent   text-text-secondary p-2 rounded  resize-none text-sm   w-full  border-common-title border outline-none '
