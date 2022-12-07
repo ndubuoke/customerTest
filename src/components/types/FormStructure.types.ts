@@ -16,7 +16,7 @@ export type FormStructureType = {
       initiator: string
       initiatorId: string
       justification: string
-      type: string
+      type: string | 'documentation' | 'edd'
       documents: Array<string>
     }
     requestData: {

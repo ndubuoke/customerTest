@@ -9,18 +9,19 @@ import Spinner from 'Components/Shareables/Spinner'
 type Props = {
   setLocalUpload: (file: any) => void
   hideAddMoreFiles?: boolean
+  setUploadKey?: any
 }
 type UploadFile = {
   file: File
-  key: string
+  signedUrl: string
 }
 
-const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
+const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [errorUploading, setErrorUploading] = useState<string>('')
 
-  const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
+  const onDrop = useCallback(async (acceptedFiles: Array<File>, fileRejections) => {
     setLoading(true)
     const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
       try {
@@ -28,9 +29,20 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
         formdata.append('fileName', file)
         const response = await API.post('/file/upload', formdata)
         setLoading(false)
-        return {
-          file,
-          key: response.data.data.fileKey,
+
+        console.log(response?.data?.data)
+        setUploadKey((prev) => [...prev, response?.data?.data?.fileKey])
+        try {
+          const signedUrlResponse = await API.get('/file/signedurl/' + response?.data?.data?.fileKey)
+          return {
+            file,
+            signedUrl: signedUrlResponse?.data?.data,
+          }
+        } catch (err) {
+          console.error(err.message, `failed to get signed url - ${file.name}`)
+          setErrorUploading(`failed to upload file - ${file.name}`)
+
+          return null
         }
       } catch (err) {
         setLoading(false)
@@ -40,11 +52,17 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
         return null
       }
     })
+    if (fileRejections.length) {
+      setErrorUploading(`File not accepted`)
+      return
+    }
+
+    // response?.data?.data?.fileKey
     const awaitUploadedFiles = await Promise.all(uploadedFiles)
     const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
     setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
     setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
-    console.log({ filterSuccessUploadedFiles })
+    // console.log(filterSuccessUploadedFiles)
   }, [])
 
   const { getRootProps, getInputProps } = useDropzone({
@@ -64,20 +82,22 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
     setLocalUpload((prev) => newFiles)
   }
   return (
-    <>
-      <div>
-        <label className='capitalize text-[#333333] text-[16px] leading-[19px] mb-3'>Upload Supporting Documents</label>
+    <div>
+      <div className='mb-3'>
+        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>Upload Supporting Documents</label>
       </div>
-      <div className={`flex gap-12 w-full max-w-[392px] min-h-[86px] max-h-[120px] border border-[#c4c4c4] rounded-[10px] items-center px-3`}>
+      <div
+        className={`flex gap-12 w-full max-w-[392px] min-h-[110px] max-h-[120px] border border-[#c4c4c4] rounded-[10px] items-center px-3  relative `}
+      >
         {loading ? (
           <div className='flex items-center  h-[150px]'>
-            <span className='text-3xl mr-4'>Loading</span>
+            <span>Loading</span>
             <Spinner size={'small'} />
           </div>
         ) : (
           <>
             {' '}
-            {uploadedFiles.length === 0 ? (
+            {uploadedFiles && uploadedFiles?.length === 0 ? (
               <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
                 <input type={`file`} hidden {...getInputProps()} />
                 <div>
@@ -90,22 +110,51 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
                 </p>
               </div>
             ) : (
-              <div className='flex flex-col justify-between  p-2 border h-full overflow-y-auto'>
-                <>
-                  <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
-                    {uploadedFiles.map((file: UploadFile, index) => {
-                      return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
-                    })}
-                    {hideAddMoreFiles ? null : (
-                      <div className='flex items-end mt-auto' {...getRootProps()}>
-                        <input type={`file`} hidden {...getInputProps()} />
-                        <button className='flex items-end ' style={{ marginTop: 'auto' }}>
-                          <img src={add} className='mr-1 inline' /> Add more files
-                        </button>
-                      </div>
-                    )}
-                  </div>
-                  <div className='flex justify-between '>
+              <div
+                className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2'
+                style={{
+                  border: hideAddMoreFiles ? '' : '1px solid #cccccc',
+                }}
+              >
+                <div className=' h-full'>
+                  {uploadedFiles.map((file: UploadFile, index) => {
+                    return (
+                      <IndividualFile
+                        file={file}
+                        key={index}
+                        removeFile={(e) => handleRemoveFile(e, index)}
+                        height={hideAddMoreFiles ? 100 : 110}
+                        waiverRequest
+                      />
+                    )
+                  })}
+                  {hideAddMoreFiles ? null : (
+                    <div className='flex items-end mt-auto' {...getRootProps()}>
+                      <input type={`file`} hidden {...getInputProps()} />
+                      <button className='flex items-end ' style={{ marginTop: 'auto' }}>
+                        <img src={add} className='mr-1 inline' /> Add more files
+                      </button>
+                    </div>
+                  )}
+                </div>
+                {hideAddMoreFiles ? (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      setLocalUpload([])
+                      setuploadedFiles([])
+                    }}
+                    className='absolute right-1 bottom-1'
+                  >
+                    <img src={deleteBtn} />
+                  </button>
+                ) : (
+                  <div
+                    className='flex  gap-2 '
+                    style={{
+                      justifyContent: 'space-between',
+                    }}
+                  >
                     <p onClick={(e) => e.stopPropagation()}>{uploadedFiles.length} files uploaded</p>
 
                     <button
@@ -117,17 +166,17 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles }: Props) => {
                       className='flex gap-3'
                     >
                       <img src={deleteBtn} />
-                      {hideAddMoreFiles ? null : 'Delete all'}
+                      Delete all
                     </button>
                   </div>
-                </>
+                )}
               </div>
             )}
           </>
         )}
       </div>
       {errorUploading ? <p className='text-red-400'>{errorUploading}</p> : null}
-    </>
+    </div>
   )
 }
 
