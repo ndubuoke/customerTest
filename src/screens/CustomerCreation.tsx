@@ -23,6 +23,7 @@ import { ReducersType } from 'Redux/store'
 import { formStruture } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -37,8 +38,12 @@ export type IdentificationDetailsType = {
   identityData: any
 }
 
+export const isForm = '/?isForm=true'
+
 const CustomerCreation = memo(({ customerType }: Props) => {
   const dispatch = useDispatch()
+  const location = useLocation()
+  const navigate = useNavigate()
 
   const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
   const {
@@ -91,13 +96,36 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   useEffect(() => {
     if (formCreationStarted) {
-      console.log('identificationDetails', identificationDetails)
+      // console.log('identificationDetails', identificationDetails)
       if (identificationDetails.identityData) {
         setBackupForSwitchFormState({ ...identificationDetails.identityData })
       }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
   }, [formCreationStarted])
+
+  // Handle automatic redirect when trying to view the form from process summary
+  useEffect(() => {
+    const search = location.search
+    if (search === isForm.replace('/', '')) {
+      setFormCreationStarted(true)
+    }
+  }, [location])
+
+  // Cancel form creation because user requested for it
+
+  useEffect(() => {
+    const clearFormStatus = sessionStorage.getItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS)
+      ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS))
+      : null
+
+    if (clearFormStatus) {
+      setBackupForSwitchFormState(null)
+      setFillingFormState(formStruture)
+      setPublishedFormState(null)
+      sessionStorage.removeItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS)
+    }
+  }, [])
 
   return (
     <>
@@ -137,7 +165,13 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                 {creationMode === CreationModeEnum.Single ? (
                   <div className='flex  justify-center relative  gap-1'>
                     <div className=' absolute right-3 -top-16'>
-                      <SkipToForm onClick={() => setFormCreationStarted(true)} />
+                      <SkipToForm
+                        onClick={() => {
+                          setFormCreationStarted(true)
+                          // navigate(location.pathname + isForm)
+                          sessionStorage.setItem(STORAGE_NAMES.FORM_MODE_STATUS, 'creation')
+                        }}
+                      />
                     </div>
                     <Button
                       text='Proceed'

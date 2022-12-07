@@ -9,11 +9,13 @@ import {
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  SHOW_WAIVER_MODAL_IN_FORM,
+  STATUS_FOR_CAN_PROCEED,
 } from 'Redux/constants/FormManagement.constants'
 import { ReducersType } from 'Redux/store'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
-const SERVER_URL = 'https://retailcore-formconfigapi.herokuapp.com'
+const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
 
 export const getFormAction = (formType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
@@ -77,3 +79,16 @@ export const setRequiredFormFieldsAction =
       payload: requiredFields,
     })
   }
+
+export const statusForCanProceedAction = (canProceed: boolean) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  dispatch({
+    type: STATUS_FOR_CAN_PROCEED,
+    payload: canProceed,
+  })
+}
+export const showWaiverModalInFormAction = (status: 'show' | "hide") => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  dispatch({
+    type: SHOW_WAIVER_MODAL_IN_FORM,
+    payload: status,
+  })
+}

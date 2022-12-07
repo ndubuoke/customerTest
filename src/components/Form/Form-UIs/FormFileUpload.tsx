@@ -44,6 +44,7 @@ const FormFileUpload = ({
   fillingFormState,
   setBackupForSwitchFormState,
   backupForSwitchFormState,
+  activePageState,
 }: Props) => {
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
@@ -56,7 +57,7 @@ const FormFileUpload = ({
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
   const allowableFileTypes = formGetProperty(item.formControlProperties, 'Allowable File Types', 'png, jpg, pdf')
 
-  const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
+  const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>(null)
   const [isUploading, setIsUploading] = useState(false)
   const [fileUploadError, setFileUploadError] = useState({
     isError: false,
@@ -255,7 +256,7 @@ const FormFileUpload = ({
   }, [])
 
   useEffect(() => {
-    console.log('uploadedFiles', uploadedFiles)
+    // console.log('uploadedFiles', uploadedFiles)
     if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
@@ -282,17 +283,84 @@ const FormFileUpload = ({
 
   useEffect(() => {
     const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
-    console.log('backup', backup)
+    // console.log('backup', backup)
     if (!uploadedFiles?.length) {
       if (backup) {
         setuploadedFiles(backup)
+      } else {
+        setuploadedFiles(null)
+        setFillingFormState((prev: FormStructureType) => {
+          // console.log('prev', prev)
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
+
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
+          }
+
+          // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+          const sectionId = item?.sectionId
+          let sectionIndex
+
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+              theSection.data[theItemFieldNameCamelCase] = null
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: null,
+                },
+                pageId,
+                sectionId,
+              })
+            }
+          }
+
+          if (!sectionId) {
+            const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+            const pageNameCamelCase = camelize(pageName)
+            const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+            const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+            if (theSectionlessPage) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+              theSectionlessPage.data[theItemFieldNameCamelCase] = null
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: pageNameToBeUsed,
+                data: {
+                  [theItemFieldNameCamelCase]: null,
+                },
+                pageId,
+                sectionId: null,
+              })
+            }
+          }
+
+          return copiedPrev
+        })
       }
     }
-  }, [fillingFormState, publishedFormState])
+  }, [publishedFormState])
 
   return (
     <div
-      className={`${collapsed ? 'hidden' : ''} relative`}
+      className={`${collapsed ? 'hidden' : ''}`}
       style={{
         gridColumn: ` span ${span}`,
         // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
@@ -303,44 +371,38 @@ const FormFileUpload = ({
         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-      {/* loading overlay  */}
-
-      {fileUploadError.isError && <p>{fileUploadError.message}</p>}
       <div
-        className='relative w-full border  rounded-[12px] pl-2'
+        className=' w-full border  rounded-[12px]  h-[150px] p-2'
         style={{
           border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? '1px solid red' : '1px solid #AAAAAA',
         }}
       >
-        {isUploading && (
-          // <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
-          <div className='flex items-center  h-[150px]'>
-            <span className='text-3xl mr-4'>Loading</span>
-            {/* loading icon */}
-            <Spinner size={'small'} />
-          </div>
-          // </div>
-        )}
-        {!isUploading && uploadedFiles?.length === 0 && (
-          <div {...getRootProps()} className='cursor-pointer relative  h-[150px]'>
-            <input type={`file`} hidden {...getInputProps()} multiple={false} />
+        {fileUploadError.isError && <p>{fileUploadError.message}</p>}
 
-            <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
-              <img src={add} className='inline mr-1' />
-            </div>
-          </div>
-        )}
-
-        {uploadedFiles?.length > 0 && (
-          <div className='cursor-pointer relative flex items-center h-[150px] '>
+        {uploadedFiles?.length > 0 ? (
+          <div className='cursor-pointer relative flex items-center '>
             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
               {uploadedFiles.map((file: UploadFile, index) => {
                 return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
               })}
             </div>
           </div>
+        ) : isUploading ? (
+          <div className='flex items-center  h-[150px]'>
+            <span className='text-3xl mr-4'>Loading</span>
+            <Spinner size={'small'} />
+          </div>
+        ) : (
+          <div {...getRootProps()} className='cursor-pointer relative h-full '>
+            <input type={`file`} hidden {...getInputProps()} multiple={false} className='' />
+
+            <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
+              <img src={add} className='inline mr-1' />
+            </div>
+          </div>
         )}
       </div>
+
       {required.toLowerCase() === 'on' ? (
         <p className='text-red-500'>
           {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
@@ -351,3 +413,71 @@ const FormFileUpload = ({
 }
 
 export default FormFileUpload
+// const MMM = () => {
+//   return (
+//     <div
+//       className={`${collapsed ? 'hidden' : ''} relative`}
+//       style={{
+//         gridColumn: ` span ${span}`,
+//         // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+//       }}
+//       title={helpText}
+//     >
+//       <div className='relative w-fit'>
+//         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+//         <FieldLabel fieldItem={item} />
+//       </div>
+//       {/* loading overlay  */}
+
+//       <div
+//         className='relative w-full border  rounded-[12px] pl-2  h-[150px]'
+//         style={{
+//           border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? '1px solid red' : '1px solid #AAAAAA',
+//         }}
+//       >
+//         {fileUploadError.isError && <p>{fileUploadError.message}</p>}
+//         {isUploading && (
+//           // <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
+//           <div className='flex items-center  h-[150px]'>
+//             <span className='text-3xl mr-4'>Loading</span>
+//             {/* loading icon */}
+//             <Spinner size={'small'} />
+//           </div>
+//           // </div>
+//         )}
+//         {/* {!isUploading && uploadedFiles?.length === 0 && (
+//       <div {...getRootProps()} className='cursor-pointer relative  h-[150px]'>
+//         <input type={`file`} hidden {...getInputProps()} multiple={false} />
+
+//         <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
+//           <img src={add} className='inline mr-1' />
+//         </div>
+//       </div>
+//     )} */}
+
+//         {uploadedFiles?.length > 0 ? (
+//           <div className='cursor-pointer relative flex items-center '>
+//             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
+//               {uploadedFiles.map((file: UploadFile, index) => {
+//                 return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
+//               })}
+//             </div>
+//           </div>
+//         ) : (
+//           <div {...getRootProps()} className='cursor-pointer relative '>
+//             <input type={`file`} hidden {...getInputProps()} multiple={false} />
+
+//             <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
+//               <img src={add} className='inline mr-1' />
+//             </div>
+//           </div>
+//         )}
+//       </div>
+//       {required.toLowerCase() === 'on' ? (
+//         <p className='text-red-500'>
+//           {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+//         </p>
+//       ) : null}
+//     </div>
+//   )
+// }

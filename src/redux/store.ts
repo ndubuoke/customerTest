@@ -8,7 +8,14 @@ import {
   getTotalRequestStatusReducer,
   getRequestsByDateReducer,
 } from './reducers/CustomerManagement.reducer'
-import { getFormReducer, ResponseType, setRequiredFormFieldsReducer } from './reducers/FormManagement.reducers'
+import {
+  getFormReducer,
+  ResponseType,
+  setRequiredFormFieldsReducer,
+  statusForCanProceedReducer,
+  showWaiverModalInFormReducer,
+  ShowModalInFormType,
+} from './reducers/FormManagement.reducers'
 
 import {
   bulkCustomerValidationProfileReducer,
@@ -49,6 +56,8 @@ export type ReducersType = {
   customerActivityLog: customersManagementResponseType
   setRequiredFormFields: any
   singleRequest: customersManagementResponseType
+  statusForCanProceed: any
+  showWaiverModalInForm: ShowModalInFormType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -69,7 +78,9 @@ const reducer = combineReducers<ReducersType>({
   validateCustomer: validateCustomerReducer,
   saveBulkCustomerCreation: saveBulkCreationReducer,
   setRequiredFormFields: setRequiredFormFieldsReducer,
-  singleRequest:getSingleRequestReducer
+  singleRequest: getSingleRequestReducer,
+  statusForCanProceed: statusForCanProceedReducer,
+  showWaiverModalInForm: showWaiverModalInFormReducer,
 })
 
 const middleware = [thunk]

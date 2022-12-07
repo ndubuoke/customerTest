@@ -355,8 +355,16 @@ const FormDropdown = memo(
             setMultipleSelectedDropdownItems(backup)
           }
         }
+      } else {
+        if (enableMultipleSelection.toLowerCase() === 'off') {
+          setSelectedDropdownItem('')
+        }
+
+        if (enableMultipleSelection.toLowerCase() === 'on') {
+          setMultipleSelectedDropdownItems([])
+        }
       }
-    }, [fillingFormState, publishedFormState])
+    }, [publishedFormState])
 
     return (
       <div
