@@ -2,13 +2,13 @@ import { Close, Substract2 } from 'Assets/svgs'
 import Button from 'Components/Shareables/Button'
 import React from 'react'
 
-type deleteRequestType = {
+type requestModalType = {
   setShowRequestModal: (e) => void
   message: string
   externalFunctionToDoSomething:()=> void
 }
 
-const RequestModal = ({ setShowRequestModal, message, externalFunctionToDoSomething }: deleteRequestType) => {
+const RequestModal = ({ setShowRequestModal, message, externalFunctionToDoSomething }: requestModalType) => {
   const closeModal = () => {
     setShowRequestModal(false)
   }
@@ -22,7 +22,7 @@ const RequestModal = ({ setShowRequestModal, message, externalFunctionToDoSometh
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` h-[200px] w-[400px] bg-white py-6 px-8 rounded-2xl `}>
+      <div className={` h-[200px] w-[400px] bg-white py-6 px-6 rounded-2xl `}>
         <div className=' w-full  flex flex-col  justify-between'>
           <div className='flex justify-between  pb-4'>
             <img className=' h-fit' src={Substract2} />
