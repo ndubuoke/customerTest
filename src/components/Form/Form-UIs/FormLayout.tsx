@@ -1,6 +1,8 @@
 import { useState } from 'react'
-import { dots } from 'Assets/svgs'
+import { dots, ExclaimateIcon } from 'Assets/svgs'
 import React from 'react'
+import { useSelector } from 'react-redux'
+import { ReducersType } from 'Redux/store'
 import { getProperty } from 'Utilities/getProperty'
 import { FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FormInput from './FormInput'
@@ -75,6 +77,9 @@ const FormLayout = ({
 
   // console.log({ fields })
 
+  const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+  console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
+
   return (
     <section className='max-w-[1060px] mx-4'>
       {isSection && (
@@ -92,6 +97,12 @@ const FormLayout = ({
                 ? getProperty(item?.formControlProperties, 'Section name', 'defaultState').text
                 : 'Section label'}
             </h6>
+            {setRequiredFormFieldsRedux.list.some((requiredField) => requiredField.sectionId === item.id) && (
+              <span className='ml-6 flex items-center gap-2'>
+                {' '}
+                <ExclaimateIcon /> Some Information missing
+              </span>
+            )}
           </div>
           <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
             <svg

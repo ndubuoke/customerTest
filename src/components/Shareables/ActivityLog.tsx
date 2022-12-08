@@ -8,9 +8,10 @@ import Spinner from 'Components/Shareables/Spinner'
 
 type Props = {
   customerId?: string
+  mode: 'creation' | 'modification'
 }
 
-const ActivityLog = ({ customerId }: Props) => {
+const ActivityLog = ({ customerId, mode }: Props) => {
   const activityLog = useSelector<ReducersType>((state: ReducersType) => state?.customerActivityLog) as customersManagementResponseType
   const logs = activityLog.serverResponse.data
   const dispatch = useDispatch()
