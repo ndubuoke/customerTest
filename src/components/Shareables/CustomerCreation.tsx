@@ -4,6 +4,7 @@ import { CreationModeType, CustomerType, IdentificationDetailsType } from 'Scree
 import { CreationModeEnum } from 'Utilities/enums'
 import IdentificationTypeAndNumber from './IdentificationTypeAndNumber'
 import FileUploader from './FileUploader'
+import AddExecutiveModal from 'Components/IndependentForms/SME/AddExecutiveModal'
 
 type Props = {
   creationMode: CreationModeType
@@ -26,6 +27,11 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
             <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
             <div className='flex-1'>
               <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
+              <AddExecutiveModal
+                setShowCustomerModal={() => {
+                  console.log('clicked')
+                }}
+              />
             </div>
           </div>
         </div>

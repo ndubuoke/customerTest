@@ -383,7 +383,6 @@ const CustomerManagementTable = ({
       setRequestModalMessage('Do you want to withdraw and delete request?')
     }
     if (option === 'View') {
-    
       navigate(`/customer-management/process-summary/${requestId}`)
     }
   }
