@@ -37,6 +37,7 @@ const Main = (props: Props) => {
   const dispatch = useDispatch()
   const initialRef: any = null
   const statusListRef = useRef(initialRef)
+  const createCustomerListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
   const requestFunctionListRef = useRef(initialRef)
   const filterStateOptionsRef = useRef(initialRef)
@@ -149,6 +150,9 @@ const Main = (props: Props) => {
       if (showCalender && filterDateRef.current && !filterDateRef.current.contains(e.target)) {
         setShowCalender(false)
       }
+       if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
+         setShowLists(false)
+       }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -166,6 +170,7 @@ const Main = (props: Props) => {
     showFilterRequestStatusOptions,
     showRequestFunctionOptions,
     showCalender,
+    showLists
   ])
 
   const refreshTableHandler = () => {
@@ -323,7 +328,7 @@ const Main = (props: Props) => {
           <h1 className='text-[#636363] text-[38px]'>Customer Management</h1>
 
           {userRole === 'maker' && (
-            <div className='ml-6 relative '>
+            <div className='ml-6 relative ' ref={createCustomerListRef}>
               <button
                 className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main 
           py-1'
@@ -341,7 +346,7 @@ const Main = (props: Props) => {
                 <div className='absolute w-full top-0   bg-background-paper  flex flex-col z-20 border rounded-md'>
                   {customerTypeoptions?.map((list, index) => {
                     return (
-                      <div key={index} className='hover:bg-lists-background cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
+                      <div key={index} className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
                         {list}
                       </div>
                     )
