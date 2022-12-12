@@ -1,6 +1,7 @@
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
+  ACTIVE_PAGE,
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
@@ -96,6 +97,16 @@ export const showWaiverModalInFormReducer = (state: ShowModalInFormType = { stat
   switch (action.type) {
     case SHOW_WAIVER_MODAL_IN_FORM:
       return { ...state, status: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const activePageReducer = (state: { page: any; theIndex: number } = { page: {}, theIndex: null }, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case ACTIVE_PAGE:
+      return { ...state, page: action.payload.page, theIndex: action.payload.theIndex }
 
     default:
       return state

@@ -15,6 +15,7 @@ import {
   statusForCanProceedReducer,
   showWaiverModalInFormReducer,
   ShowModalInFormType,
+  activePageReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -35,7 +36,12 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
-import { getRequestsForCheckerReducer, getSingleRequestReducer, getActivityLogReducer, updateRequestReducer } from './reducers/CustomerManagement.reducer';
+import {
+  getRequestsForCheckerReducer,
+  getSingleRequestReducer,
+  getActivityLogReducer,
+  updateRequestReducer,
+} from './reducers/CustomerManagement.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -59,18 +65,19 @@ export type ReducersType = {
   singleRequest: customersManagementResponseType
   statusForCanProceed: any
   showWaiverModalInForm: ShowModalInFormType
+  activePage: any
 }
 
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
   allCustomers: getCustomersReducer,
-  customerActivityLog:getActivityLogReducer,
+  customerActivityLog: getActivityLogReducer,
   allRequests: getCustomersRequestReducer,
   bulkProcessSummary: bulkProcessSummaryReducer,
   deleteRequest: deleteRequestReducer,
   allCustomersByDate: getCustomersByDateReducer,
   activateCustomer: activateCustomerReducer,
-  updatedRequest:updateRequestReducer,
+  updatedRequest: updateRequestReducer,
   totalStatusCustomers: getTotalRequestStatusReducer,
   allRequestsByDate: getRequestsByDateReducer,
   allRequestsForChecker: getRequestsForCheckerReducer,
@@ -83,6 +90,7 @@ const reducer = combineReducers<ReducersType>({
   singleRequest: getSingleRequestReducer,
   statusForCanProceed: statusForCanProceedReducer,
   showWaiverModalInForm: showWaiverModalInFormReducer,
+  activePage: activePageReducer,
 })
 
 const middleware = [thunk]

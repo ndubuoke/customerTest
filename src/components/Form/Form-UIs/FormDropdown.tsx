@@ -430,7 +430,8 @@ const FormDropdown = memo(
                         className={`hover:bg-slate-200 cursor-pointer px-3 py-2 capitalize ${
                           selected === selectedDropdownItem ? 'bg-slate-200' : ''
                         } `}
-                        onClick={() => {
+                        onClick={(e) => {
+                          e.stopPropagation()
                           handleSelectedDropdownItem(selected, item)
 
                           setShowLists((prev) => !prev)

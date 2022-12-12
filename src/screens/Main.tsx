@@ -71,7 +71,7 @@ const Main = (props: Props) => {
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   // const [userRole, setUserRole] = useState('checker')
-   const [userRole, setUserRole] = useState<userType>('maker')
+  const [userRole, setUserRole] = useState<userType>('maker')
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
@@ -150,9 +150,9 @@ const Main = (props: Props) => {
       if (showCalender && filterDateRef.current && !filterDateRef.current.contains(e.target)) {
         setShowCalender(false)
       }
-       if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
-         setShowLists(false)
-       }
+      if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
+        setShowLists(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -170,7 +170,7 @@ const Main = (props: Props) => {
     showFilterRequestStatusOptions,
     showRequestFunctionOptions,
     showCalender,
-    showLists
+    showLists,
   ])
 
   const refreshTableHandler = () => {
@@ -330,7 +330,7 @@ const Main = (props: Props) => {
           {userRole === 'maker' && (
             <div className='ml-6 relative ' ref={createCustomerListRef}>
               <button
-                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main 
+                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main
           py-1'
                 onClick={() => setShowLists(true)}
               >

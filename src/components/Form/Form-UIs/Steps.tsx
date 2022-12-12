@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { activePageAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { Form, PageInstance } from '../Types'
@@ -15,12 +16,16 @@ type Props = {
 }
 
 const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit }: Props) => {
+  const dispatch = useDispatch()
+
   const [form, setForm] = useState<Form>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const handleActivePage = (index: number) => {
-    setActivePageState(form?.builtFormMetadata?.pages[index])
+    const page = form?.builtFormMetadata?.pages[index]
+    dispatch(activePageAction(page, index) as any)
+    setActivePageState(page)
   }
 
   useEffect(() => {
@@ -31,7 +36,9 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit }:
 
   useEffect(() => {
     if (publishedForm) {
-      setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0])
+      const page = publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[0]
+      dispatch(activePageAction(page, 0) as any)
+      setActivePageState(page)
     }
   }, [publishedForm])
 

@@ -3,6 +3,7 @@ import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
 import { Dispatch } from 'redux'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
+  ACTIVE_PAGE,
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
@@ -86,9 +87,17 @@ export const statusForCanProceedAction = (canProceed: boolean) => async (dispatc
     payload: canProceed,
   })
 }
-export const showWaiverModalInFormAction = (status: 'show' | "hide") => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const showWaiverModalInFormAction =
+  (status: 'show' | 'hide') => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    dispatch({
+      type: SHOW_WAIVER_MODAL_IN_FORM,
+      payload: status,
+    })
+  }
+
+export const activePageAction = (page: any, theIndex: number) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   dispatch({
-    type: SHOW_WAIVER_MODAL_IN_FORM,
-    payload: status,
+    type: ACTIVE_PAGE,
+    payload: { page, theIndex },
   })
 }
