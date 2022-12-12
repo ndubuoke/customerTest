@@ -1,4 +1,3 @@
-import { ACTIVATE_CUSTOMER_REQUEST, ACTIVATE_CUSTOMER_SUCCESS, ACTIVATE_CUSTOMER_FAIL, GET_REQUESTS_BY_DATE_REQUEST, GET_REQUESTS_BY_DATE_SUCCESS, GET_REQEUSTS_BY_DATE_FAIL, GET_TOTAL_REQUEST_STATUS_REQUEST, GET_TOTAL_REQUEST_STATUS_SUCCESS, GET_TOTAL_REQUEST_STATUS_FAIL, GET_REQUESTS_FOR_CHECKER_REQUEST, GET_REQUESTS_FOR_CHECKER_SUCCESS, GET_REQUESTS_FOR_CHECKER_FAIL, GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL, GET_CUSTOMERS_ACTIVITY_LOG_REQUEST, GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, GET_CUSTOMERS_ACTIVITY_LOG_FAIL } from '../constants/CustomerManagement.constants';
 import {
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
@@ -6,17 +5,35 @@ import {
   GET_CUSTOMERS_BY_DATE_REQUEST,
   GET_CUSTOMERS_BY_DATE_SUCCESS,
   GET_CUSTOMERS_BY_DATE_FAIL,
-} from '../constants/CustomerManagement.constants'
-
-import {
+  ACTIVATE_CUSTOMER_REQUEST,
+  ACTIVATE_CUSTOMER_SUCCESS,
+  ACTIVATE_CUSTOMER_FAIL,
+  GET_REQUESTS_BY_DATE_REQUEST,
+  GET_REQUESTS_BY_DATE_SUCCESS,
+  GET_REQEUSTS_BY_DATE_FAIL,
+  GET_TOTAL_REQUEST_STATUS_REQUEST,
+  GET_TOTAL_REQUEST_STATUS_SUCCESS,
+  GET_TOTAL_REQUEST_STATUS_FAIL,
+  GET_REQUESTS_FOR_CHECKER_REQUEST,
+  GET_REQUESTS_FOR_CHECKER_SUCCESS,
+  GET_REQUESTS_FOR_CHECKER_FAIL,
+  GET_SINGLE_REQUEST_REQUEST,
+  GET_SINGLE_REQUEST_SUCESS,
+  GET_SINGLE_REQUEST_FAIL,
+  GET_CUSTOMERS_ACTIVITY_LOG_REQUEST,
+  GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS,
+  GET_CUSTOMERS_ACTIVITY_LOG_FAIL,
+  UPDATE_REQUEST_REQUEST,
+  UPDATE_REQUEST_SUCCESS,
+  UPDATE_REQUEST_FAIL,
   GET_CUSTOMERS_REQUEST,
   GET_CUSTOMERS_FAIL,
   GET_CUSTOMERS_SUCCESS,
   GET_REQUESTS_FAIL,
   GET_REQUESTS_REQUEST,
   GET_REQUESTS_SUCCESS,
+} from '../constants/CustomerManagement.constants'
 
-} from 'Redux/constants/CustomerManagement.constants'
 export type customersManagementResponseType = {
   loading: boolean
   success?: boolean
@@ -197,6 +214,23 @@ export const getActivityLogReducer = (state: customersManagementResponseType = i
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case GET_CUSTOMERS_ACTIVITY_LOG_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+
+export const updateRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case UPDATE_REQUEST_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case UPDATE_REQUEST_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case UPDATE_REQUEST_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:

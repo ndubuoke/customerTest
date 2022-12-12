@@ -37,6 +37,7 @@ const Main = (props: Props) => {
   const dispatch = useDispatch()
   const initialRef: any = null
   const statusListRef = useRef(initialRef)
+  const createCustomerListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
   const requestFunctionListRef = useRef(initialRef)
   const filterStateOptionsRef = useRef(initialRef)
@@ -69,6 +70,7 @@ const Main = (props: Props) => {
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
+  // const [userRole, setUserRole] = useState('checker')
   const [userRole, setUserRole] = useState<userType>('maker')
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -148,6 +150,9 @@ const Main = (props: Props) => {
       if (showCalender && filterDateRef.current && !filterDateRef.current.contains(e.target)) {
         setShowCalender(false)
       }
+      if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
+        setShowLists(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -165,6 +170,7 @@ const Main = (props: Props) => {
     showFilterRequestStatusOptions,
     showRequestFunctionOptions,
     showCalender,
+    showLists,
   ])
 
   const refreshTableHandler = () => {
@@ -254,6 +260,13 @@ const Main = (props: Props) => {
   }
 
   useEffect(() => {
+    if (userRole === 'checker') {
+      setNextLevelButtonId(2)
+      setCustomerManagementTableType('Requests')
+    }
+  }, [])
+
+  useEffect(() => {
     if (customermanagementTableType === 'All Customers') {
       if (customerType === 'Individual') {
         dispatch(getCustomersAction(customerType) as any)
@@ -282,10 +295,10 @@ const Main = (props: Props) => {
         dispatch(getRequestsForCheckerAction('', customerType) as any)
       }
     }
-  }, [customerType, customermanagementTableType])
+  }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
   // console.log(allRequests)
-  console.log(allRequestsForChecker)
+  // console.log(allRequestsForChecker)
   //  console.log(user)
 
   return (
@@ -315,7 +328,7 @@ const Main = (props: Props) => {
           <h1 className='text-[#636363] text-[38px]'>Customer Management</h1>
 
           {userRole === 'maker' && (
-            <div className='ml-6 relative '>
+            <div className='ml-6 relative ' ref={createCustomerListRef}>
               <button
                 className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main
           py-1'
@@ -333,7 +346,7 @@ const Main = (props: Props) => {
                 <div className='absolute w-full top-0   bg-background-paper  flex flex-col z-20 border rounded-md'>
                   {customerTypeoptions?.map((list, index) => {
                     return (
-                      <div key={index} className='hover:bg-lists-background cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
+                      <div key={index} className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
                         {list}
                       </div>
                     )
@@ -552,6 +565,7 @@ const Main = (props: Props) => {
                                 <span className='text-[14px] text-[#3FA2F7]'>Pending</span>
                                 <h3 className='font-bold text-[24px]'>{allRequestsForChecker?.serverResponse?.data?.pending}</h3>
                               </div>
+                              <div className='border'></div>
                               <div
                                 onClick={requestStatusHandler.bind(null, 'Rejected')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${

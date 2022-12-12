@@ -1,6 +1,7 @@
 import { Disable, Edit, Enable, Eye, Menu } from 'Assets/svgs'
 import React from 'react'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
+import {format, parseISO} from 'date-fns'
 
 type customerDetailsRowType = {
   customer: {
@@ -45,7 +46,7 @@ const CustomerDetailsRow = ({
         </span>
       </td>
       <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-        {customer?.updatedAt}
+        {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' HH:mm a")}
         {userRole === 'maker' && (
           <>
             <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} />
