@@ -23,6 +23,7 @@ import Calender from './Calender/Calender'
 import CustomerDetailsRow from './CustomerDetailsRow'
 import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
+import getRequestDetail from '../../utilities/getRequestDetail';
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -1044,19 +1045,27 @@ const CustomerManagementTable = ({
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&
-                    customersByDate.map((customer) => (
-                      <CustomerDetailsRow
-                        key={customer?.id}
-                        userRole={userRole}
-                        customerId={customerId}
-                        showCustomersFunctionHandler={showCustomersFunctionHandler}
-                        customer={customer}
-                        customerFunctionOptions={customerFunctionOptions}
-                        showCustomerFunctionOptions={showCustomerFunctionOptions}
-                        customerFunctionListRef={customerFunctionListRef}
-                        customerFunctionHandler={customerFunctionHandler}
-                      />
-                    ))}
+                    customersByDate
+                      .filter((customer) => {
+                        if (searchTerm === '') {
+                          return customer
+                        } else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return customer
+                        }
+                      })
+                      .map((customer) => (
+                        <CustomerDetailsRow
+                          key={customer?.id}
+                          userRole={userRole}
+                          customerId={customerId}
+                          showCustomersFunctionHandler={showCustomersFunctionHandler}
+                          customer={customer}
+                          customerFunctionOptions={customerFunctionOptions}
+                          showCustomerFunctionOptions={showCustomerFunctionOptions}
+                          customerFunctionListRef={customerFunctionListRef}
+                          customerFunctionHandler={customerFunctionHandler}
+                        />
+                      ))}
                 </tbody>
               )}
             </>
@@ -1080,23 +1089,31 @@ const CustomerManagementTable = ({
                 <tbody className=' '>
                   {tableType === 'Requests' &&
                     requests &&
-                    requests.map((request) => {
-                      if (request.customerType === customerType) {
-                        return (
-                          <RequestDetailsRow
-                            key={request?.id}
-                            requestFunctionListRef={requestFunctionListRef}
-                            showRequestFunctionOptions={showRequestFunctionOptions}
-                            request={request}
-                            requestId={requestId}
-                            requestFunctionHandler={requestFunctionHandler}
-                            requestFunctionOptions={requestFunctionOptions}
-                            showRequestFunctionHandler={showRequestFunctionHandler}
-                            userRole={userRole}
-                          />
-                        )
-                      }
-                    })}
+                    requests
+                      .filter((request) => {
+                        if (searchTerm === '') {
+                          return request
+                        } else if (getRequestDetail(request, 'firstName')?.toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return request
+                        }
+                      })
+                      .map((request) => {
+                        if (request.customerType === customerType) {
+                          return (
+                            <RequestDetailsRow
+                              key={request?.id}
+                              requestFunctionListRef={requestFunctionListRef}
+                              showRequestFunctionOptions={showRequestFunctionOptions}
+                              request={request}
+                              requestId={requestId}
+                              requestFunctionHandler={requestFunctionHandler}
+                              requestFunctionOptions={requestFunctionOptions}
+                              showRequestFunctionHandler={showRequestFunctionHandler}
+                              userRole={userRole}
+                            />
+                          )
+                        }
+                      })}
                 </tbody>
               )}
 

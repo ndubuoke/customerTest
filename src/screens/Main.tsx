@@ -305,7 +305,7 @@ const Main = (props: Props) => {
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
 
-      {showSystemAlert && (
+      {/* {showSystemAlert && (
         <>
           {userRole === 'maker' && (
             <SystemAlert
@@ -321,7 +321,7 @@ const Main = (props: Props) => {
             />
           )}
         </>
-      )}
+      )} */}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>

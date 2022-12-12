@@ -1,4 +1,5 @@
 import { Edit, Eye, Menu, redDelete } from 'Assets/svgs'
+import { format, parseISO } from 'date-fns';
 import React from 'react'
 
 type requestDetailsRowType = {
@@ -30,6 +31,7 @@ const RequestDetailsRow = ({
   requestFunctionHandler,
   userRole,
 }: requestDetailsRowType) => {
+  // console.log(request)
   return (
     <>
       <tr key={request?.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
@@ -54,7 +56,7 @@ const RequestDetailsRow = ({
           </span>
         </td>
         <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-          {request?.updatedAt}
+          {format(parseISO(request?.updatedAt), " dd MMM yyyy ',' HH:mm a")}
           {userRole === 'checker' && request?.status === 'Pending' && (
             <button onClick={requestFunctionHandler.bind(null, { option: 'View', requestId: request.requestId })} className='border p-2 shadow-md'>
               Review
