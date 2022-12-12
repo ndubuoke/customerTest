@@ -1,8 +1,8 @@
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSingleRequestAction } from '../redux/actions/CustomerManagement.actions'
+import { getSingleRequestAction, updateRequestAction } from '../redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../redux/store'
 import { customersManagementResponseType } from '../redux/reducers/CustomerManagement.reducer'
 import GoBack from 'Components/MainScreenLayout/GoBack'
@@ -20,17 +20,27 @@ import convertToUppercase from 'Utilities/convertToUppercase'
 import { useState } from 'react'
 import RejectionModal from 'Components/CustomerManagement/RejectionModal'
 import RequestModal from 'Components/CustomerManagement/RequestModal'
+import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmissions'
+import CustomerAlertModal from '../components/CustomerManagement/customerAlertModal'
+import JustificationModal from '../components/CustomerManagement/justificationModal'
 
 type CustomerManagementProcessSummaryType = {}
 
 const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryType) => {
   const singleRequest = useSelector<ReducersType>((state: ReducersType) => state?.singleRequest) as customersManagementResponseType
+  const data = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
+  const updatedRequest = useSelector<ReducersType>((state: ReducersType) => state?.updatedRequest) as customersManagementResponseType
   const [ShowRejectionModal, setShowRejectionModal] = useState(false)
   const [ShowRequestModal, setShowRequestModal] = useState(false)
+  const [ShowJustificationModal, setShowJustificationModal] = useState(false)
   const [requestModalMessage, setRequestModalMessage] = useState('')
+  const [justification, setJustification] = useState('')
+  const [customerAlertModalMessage, setCustomerAlertModalMessage] = useState('')
+  const [showCustomerAlertModal, setShowCustomerAlertModal] = useState(false)
   const [action, setAction] = useState('')
   let { requestId } = useParams()
   const dispatch = useDispatch()
+  const navigate = useNavigate()
   useEffect(() => {
     dispatch(getSingleRequestAction(requestId) as any)
   }, [requestId])
@@ -55,10 +65,58 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
       setRequestModalMessage(`Do you want to cancel review?`)
       setShowRequestModal(!ShowRequestModal)
     }
+    if (action === 'Interim Approval') {
+      setAction('Interim Approval')
+      if (request?.creationMode === 'Legacy') {
+        setShowJustificationModal(true)
+      }
+      if (request?.creationMode === 'Accelerated') {
+        setRequestModalMessage(`Do you want to grant interim approval to customer?`)
+        setShowRequestModal(!ShowRequestModal)
+      }
+    }
   }
 
   const doSomething = (action) => {
     if (action === 'Cancel') {
+      navigate('/customer-management')
+    }
+    if (action === 'Approve') {
+      setShowCustomerAlertModal(true)
+      setCustomerAlertModalMessage(`Customer ${convertToUppercase(request?.requestType)} Approved`)
+      const body = {
+        approver: `${data?.user?.firstname} ${data?.user?.lastname}`,
+        approverId: data?.user?.id,
+        justification: '',
+        status: 'Approved',
+      }
+      dispatch(updateRequestAction(body, request?.requestId) as any)
+      setShowRequestModal(false)
+    }
+    if (action === 'Reject') {
+      setShowRejectionModal(false)
+      setShowCustomerAlertModal(true)
+      setCustomerAlertModalMessage(`Customer ${convertToUppercase(request?.requestType)} Request Rejected`)
+      const body = {
+        approver: `${data?.user?.firstname} ${data?.user?.lastname}`,
+        approverId: data?.user?.id,
+        justification: justification,
+        status: 'Rejected',
+      }
+      dispatch(updateRequestAction(body, request?.requestId) as any)
+    }
+    if (action === 'Interim Approval') {
+      setShowJustificationModal(false)
+      setShowCustomerAlertModal(true)
+      setCustomerAlertModalMessage(`Interim Approval Granted`)
+      const body = {
+        approver: `${data?.user?.firstname} ${data?.user?.lastname}`,
+        approverId: data?.user?.id,
+        justification: justification,
+        status: 'Interim Approval',
+      }
+      dispatch(updateRequestAction(body, request?.requestId) as any)
+      setShowRequestModal(false)
     }
   }
 
@@ -66,6 +124,13 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
 
   return (
     <>
+      {ShowJustificationModal && (
+        <JustificationModal
+          interimApprovalModalSubmitHandler={doSomething.bind(null, 'Interim Approval')}
+          setShowJustificationModal={setShowJustificationModal}
+          setJustification={setJustification}
+        />
+      )}
       {ShowRequestModal && (
         <RequestModal
           externalFunctionToDoSomething={() => {
@@ -75,7 +140,31 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
           setShowRequestModal={setShowRequestModal}
         />
       )}
-      {ShowRejectionModal && <RejectionModal setShowRejectionModal={setShowRejectionModal} />}
+      {showCustomerAlertModal && (
+        <CustomerAlertModal
+          leftClick={() => {
+            setShowCustomerAlertModal(false)
+            navigate('/customer-management')
+          }}
+          closeModal={() => {
+            setShowCustomerAlertModal(false)
+            navigate('/customer-management')
+          }}
+          loadingMessage={'Processing....'}
+          message={customerAlertModalMessage}
+          isOpen={showCustomerAlertModal}
+          loading={updatedRequest.loading}
+          status={updatedRequest.serverResponse.status === 'success' ? 'success' : 'error'}
+        />
+      )}
+      {ShowRejectionModal && (
+        <RejectionModal
+          setJustification={setJustification}
+          justification={request?.justification}
+          rejectionModalSubmitHandler={doSomething.bind(null, 'Reject')}
+          setShowRejectionModal={setShowRejectionModal}
+        />
+      )}
       {singleRequest.loading && (
         <div className='min-h-[300px] w-screen h-screen   flex items-center justify-center'>
           <Spinner size='large' />
@@ -225,7 +314,8 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
 
                     <p className='text-sm'>Reject</p>
                   </button>
-                  <button className={`flex flex-col justify-center items-center`}>
+
+                  <button onClick={actionButtonsHandler.bind(null, 'Interim Approval')} className={`flex flex-col justify-center items-center`}>
                     <img src={InterimApprovalButton} className='w-7 h-7' alt='' />
 
                     <p className='text-sm'>
@@ -233,10 +323,12 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
                     </p>
                   </button>
 
-                  <button onClick={actionButtonsHandler.bind(null, 'Approve')} className={`flex flex-col justify-center items-center`}>
-                    <SubmitIcon />
-                    <p className='text-sm'>Approve</p>
-                  </button>
+                  {request?.creationMode !== 'Accelerated' && (
+                    <button onClick={actionButtonsHandler.bind(null, 'Approve')} className={`flex flex-col justify-center items-center`}>
+                      <SubmitIcon />
+                      <p className='text-sm'>Approve</p>
+                    </button>
+                  )}
                 </>
               )}
 

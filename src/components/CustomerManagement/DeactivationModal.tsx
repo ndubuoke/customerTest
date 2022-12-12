@@ -2,14 +2,16 @@ import { Close } from 'Assets/svgs'
 
 import Button from 'Components/Shareables/Button'
 import React from 'react'
+import { useCharacterCount } from '../../hooks/use-character-count'
 import FileUploadComponent from './FileUploadComponent'
 import Textarea from './Textarea'
 
 type props = {
-  setShowDeactivationModal:(e)=> void
+  setShowDeactivationModal: (e) => void
 }
 
 const DeactivationModal = ({ setShowDeactivationModal }: props) => {
+  const { characterCount, characterLengthChangeHandler, character } = useCharacterCount()
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
@@ -19,7 +21,6 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
       style={{
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
-      
     >
       <div className={` min-h-[300px] min-w-[500px] bg-white py-6 px-8 rounded-2xl `}>
         <div className=' w-full  min-h-[300px] flex flex-col  justify-between'>
@@ -30,7 +31,12 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
             </button>
           </div>
           <div className='mt-12'>
-            <Textarea />
+            <Textarea
+              character={character}
+              characterCount={characterCount}
+              characterLengthChangeHandler={characterLengthChangeHandler}
+              label={'Provide justification for deactivation'}
+            />
           </div>
 
           <div className='mt-6'>

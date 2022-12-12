@@ -15,6 +15,9 @@ const ActivityLog = ({ customerId }: Props) => {
   const logs = activityLog.serverResponse.data
   const dispatch = useDispatch()
   useEffect(() => {
+    if (customerId === undefined) {
+      return
+    }
     dispatch(getActivityLogAction(customerId) as any)
   }, [customerId])
   // console.log(activityLog)

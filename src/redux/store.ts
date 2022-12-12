@@ -35,7 +35,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
-import { getRequestsForCheckerReducer, getSingleRequestReducer, getActivityLogReducer } from './reducers/CustomerManagement.reducer';
+import { getRequestsForCheckerReducer, getSingleRequestReducer, getActivityLogReducer, updateRequestReducer } from './reducers/CustomerManagement.reducer';
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -44,6 +44,7 @@ export type ReducersType = {
   allRequests: customersManagementResponseType
   deleteRequest: customersManagementResponseType
   activateCustomer: customersManagementResponseType
+  updatedRequest: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
   allCustomersByDate: customersManagementResponseType
   allRequestsByDate: customersManagementResponseType
@@ -69,6 +70,7 @@ const reducer = combineReducers<ReducersType>({
   deleteRequest: deleteRequestReducer,
   allCustomersByDate: getCustomersByDateReducer,
   activateCustomer: activateCustomerReducer,
+  updatedRequest:updateRequestReducer,
   totalStatusCustomers: getTotalRequestStatusReducer,
   allRequestsByDate: getRequestsByDateReducer,
   allRequestsForChecker: getRequestsForCheckerReducer,

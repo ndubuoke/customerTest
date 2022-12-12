@@ -1,5 +1,8 @@
 import axios from 'axios'
 import { Dispatch } from 'redux'
+
+import store, { ReducersType } from 'Redux/store'
+
 import {
   GET_CUSTOMERS_FAIL,
   GET_CUSTOMERS_REQUEST,
@@ -7,10 +10,15 @@ import {
   GET_REQUESTS_REQUEST,
   GET_REQUESTS_FAIL,
   GET_REQUESTS_SUCCESS,
-} from '../constants/CustomerManagement.constants'
-import store, { ReducersType } from 'Redux/store'
-import { GET_SINGLE_REQUEST_REQUEST, GET_SINGLE_REQUEST_SUCESS, GET_SINGLE_REQUEST_FAIL, GET_CUSTOMERS_ACTIVITY_LOG_REQUEST, GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, GET_CUSTOMERS_ACTIVITY_LOG_FAIL } from '../constants/CustomerManagement.constants';
-import {
+  UPDATE_REQUEST_REQUEST,
+  UPDATE_REQUEST_SUCCESS,
+  UPDATE_REQUEST_FAIL,
+  GET_SINGLE_REQUEST_REQUEST,
+  GET_SINGLE_REQUEST_SUCESS,
+  GET_SINGLE_REQUEST_FAIL,
+  GET_CUSTOMERS_ACTIVITY_LOG_REQUEST,
+  GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS,
+  GET_CUSTOMERS_ACTIVITY_LOG_FAIL,
   ACTIVATE_CUSTOMER_FAIL,
   ACTIVATE_CUSTOMER_REQUEST,
   ACTIVATE_CUSTOMER_SUCCESS,
@@ -23,8 +31,6 @@ import {
   GET_REQUESTS_FOR_CHECKER_REQUEST,
   GET_REQUESTS_FOR_CHECKER_SUCCESS,
   GET_REQUESTS_FOR_CHECKER_FAIL,
-} from '../constants/CustomerManagement.constants'
-import {
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
   DELETE_REQUEST_FAIL,
@@ -216,38 +222,53 @@ export const getRequestsForCheckerAction =
     }
   }
 
+export const getSingleRequestAction = (requestId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_SINGLE_REQUEST_REQUEST })
 
-
-
-  export const getSingleRequestAction =
-    (requestId:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
-      try {
-        dispatch({ type: GET_SINGLE_REQUEST_REQUEST })
-
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        }
-
-        const { data } = await axios.get(`${SERVER_URL}/request/${requestId}`, config)
-
-        dispatch({ type: GET_SINGLE_REQUEST_SUCESS, payload: data })
-      } catch (error) {
-        dispatch({
-          type: GET_SINGLE_REQUEST_FAIL ,
-          payload: error?.response && error?.response?.data?.message,
-        })
-      }
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
     }
 
+    const { data } = await axios.get(`${SERVER_URL}/request/${requestId}`, config)
 
+    dispatch({ type: GET_SINGLE_REQUEST_SUCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_SINGLE_REQUEST_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
 
+export const getActivityLogAction = (customerId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_REQUEST })
 
-    
-  export const getActivityLogAction = (customerId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL}/activity-log/customer/${customerId}`, config)
+
+    dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_CUSTOMERS_ACTIVITY_LOG_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
+
+export const updateRequestAction =
+  (body = {}, requestId: string) =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
-      dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_REQUEST })
+      dispatch({ type: UPDATE_REQUEST_REQUEST })
 
       const config = {
         headers: {
@@ -255,12 +276,12 @@ export const getRequestsForCheckerAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/activity-log/customer/${customerId}`, config)
+      const { data } = await axios.patch(`${SERVER_URL}/request/${requestId}`, body)
 
-      dispatch({ type: GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS, payload: data })
+      dispatch({ type: UPDATE_REQUEST_SUCCESS, payload: data })
     } catch (error) {
       dispatch({
-        type: GET_CUSTOMERS_ACTIVITY_LOG_FAIL,
+        type: UPDATE_REQUEST_FAIL,
         payload: error?.response && error?.response?.data?.message,
       })
     }
