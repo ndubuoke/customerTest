@@ -72,7 +72,7 @@ export const getUserProfile = () => async (dispatch: Dispatch) => {
       }
     }
     const { data } = await axios.get(`${SERVER_URL}/v1/users/profile`, config)
-    console.log(data)
+    //  console.log(data)
     if (data?.success) {
       dispatch({
         type: GET_USER_PROFILE_SUCCESS,

@@ -3,14 +3,28 @@ import { Close, Substract2 } from 'Assets/svgs'
 import SearchAndSelect from './SearchAndSelect'
 import Textarea from './Textarea'
 import Button from 'Components/Shareables/Button'
+import { useSelector } from 'react-redux'
+import { ReducersType } from '../../redux/store'
+import { UserProfileTypes } from 'Redux/reducers/UserPersmissions'
+import { useCharacterCount } from '../../hooks/use-character-count'
+import {useEffect} from 'react';
 type props = {
   setShowRejectionModal: (e) => void
+  rejectionModalSubmitHandler: (e) => void
+  justification: string
+  setJustification: (e) => void
 }
 
-const RejectionModal = ({ setShowRejectionModal }: props) => {
+const RejectionModal = ({ setShowRejectionModal, rejectionModalSubmitHandler, justification, setJustification }: props) => {
+  const data = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
+  const { characterCount, characterLengthChangeHandler, character } = useCharacterCount()
   const closeModal = () => {
     setShowRejectionModal(false)
   }
+  useEffect(() => {
+    setJustification(character)
+  }, [character])
+
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -32,16 +46,25 @@ const RejectionModal = ({ setShowRejectionModal }: props) => {
             <div className='w-[50%]'>
               <SearchAndSelect fieldlabel='Route Request To' />
             </div>
-            <div className='flex w-[50%] ml-4 items-center '>
-              <img className=' w-6 h-6 mr-2' src={Substract2} />
-              <p className='text-[#636363]'>User is currently unavailable, please re-route</p>
-            </div>
+            {/* {data && !data.user.is_active && (
+              <div className='flex w-[50%] ml-4 items-center '>
+                <img className=' w-6 h-6 mr-2' src={Substract2} />
+                <p className='text-[#636363]'>User is currently unavailable, please re-route</p>
+              </div>
+            )} */}
           </div>
           <div className='mt-6'>
-            <Textarea rows={10} />
+            <Textarea
+              character={character}
+              characterCount={characterCount}
+              characterLengthChangeHandler={characterLengthChangeHandler}
+              label={'Provide reason for rejection'}
+              value={justification === null ? '' : justification}
+              rows={10}
+            />
           </div>
           <div className='w-full text-center mt-8'>
-            <Button disabled={false} text={'Submit'} onClick={() => {}} />
+            <Button disabled={false} text={'Submit'} onClick={rejectionModalSubmitHandler.bind(null, 'Reject')} />
           </div>
         </div>
       </div>

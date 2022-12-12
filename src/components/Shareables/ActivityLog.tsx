@@ -8,7 +8,7 @@ import Spinner from 'Components/Shareables/Spinner'
 
 type Props = {
   customerId?: string
-  mode: 'creation' | 'modification'
+  mode?: 'creation' | 'modification'
 }
 
 const ActivityLog = ({ customerId, mode }: Props) => {
@@ -16,6 +16,9 @@ const ActivityLog = ({ customerId, mode }: Props) => {
   const logs = activityLog.serverResponse.data
   const dispatch = useDispatch()
   useEffect(() => {
+    if (customerId === undefined) {
+      return
+    }
     dispatch(getActivityLogAction(customerId) as any)
   }, [customerId])
   // console.log(activityLog)

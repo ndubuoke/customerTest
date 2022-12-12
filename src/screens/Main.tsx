@@ -69,7 +69,8 @@ const Main = (props: Props) => {
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
-  const [userRole, setUserRole] = useState<userType>('checker')
+  // const [userRole, setUserRole] = useState('checker')
+   const [userRole, setUserRole] = useState<userType>('maker')
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
@@ -254,6 +255,13 @@ const Main = (props: Props) => {
   }
 
   useEffect(() => {
+    if (userRole === 'checker') {
+      setNextLevelButtonId(2)
+      setCustomerManagementTableType('Requests')
+    }
+  }, [])
+
+  useEffect(() => {
     if (customermanagementTableType === 'All Customers') {
       if (customerType === 'Individual') {
         dispatch(getCustomersAction(customerType) as any)
@@ -282,17 +290,17 @@ const Main = (props: Props) => {
         dispatch(getRequestsForCheckerAction('', customerType) as any)
       }
     }
-  }, [customerType, customermanagementTableType])
+  }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
   // console.log(allRequests)
-  console.log(allRequestsForChecker)
+  // console.log(allRequestsForChecker)
   //  console.log(user)
 
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
 
-      {/* {showSystemAlert && (
+      {showSystemAlert && (
         <>
           {userRole === 'maker' && (
             <SystemAlert
@@ -308,7 +316,7 @@ const Main = (props: Props) => {
             />
           )}
         </>
-      )} */}
+      )}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
@@ -552,6 +560,7 @@ const Main = (props: Props) => {
                                 <span className='text-[14px] text-[#3FA2F7]'>Pending</span>
                                 <h3 className='font-bold text-[24px]'>{allRequestsForChecker?.serverResponse?.data?.pending}</h3>
                               </div>
+                              <div className='border'></div>
                               <div
                                 onClick={requestStatusHandler.bind(null, 'Rejected')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${

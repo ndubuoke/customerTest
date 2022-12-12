@@ -1,4 +1,4 @@
-const getCustomerDetail = (customer, field:string): string | string[] | '' => {
+const getCustomerDetail = (customer, field:string): string | string[] | ''  => {
   if (field === 'surname') {
     return customer.customer_profiles.map((profile) => {
       return profile.surname
