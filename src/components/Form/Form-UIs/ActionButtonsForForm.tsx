@@ -7,7 +7,12 @@ import { Form, PageInstance } from '../Types'
 import { findIndexOfObject } from 'Utilities/findIndexOfObject'
 import { getProperty } from 'Utilities/getProperty'
 import { camelize } from 'Utilities/convertStringToCamelCase'
-import { setRequiredFormFieldsAction, showWaiverModalInFormAction, statusForCanProceedAction } from 'Redux/actions/FormManagement.actions'
+import {
+  activePageAction,
+  setRequiredFormFieldsAction,
+  showWaiverModalInFormAction,
+  statusForCanProceedAction,
+} from 'Redux/actions/FormManagement.actions'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { AnyAction } from 'redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -170,7 +175,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
   useEffect(() => {
     if (publishedForm) {
-      setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[index])
+      const page = publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[index]
+      dispatch(activePageAction(page, index) as any)
+      setActivePageState(page)
     }
   }, [publishedForm, index])
 

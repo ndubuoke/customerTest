@@ -27,11 +27,11 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
             <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
             <div className='flex-1'>
               <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
-              <AddExecutiveModal
+              {/* <AddExecutiveModal
                 setShowCustomerModal={() => {
                   console.log('clicked')
                 }}
-              />
+              /> */}
             </div>
           </div>
         </div>

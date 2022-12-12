@@ -69,7 +69,7 @@ const Main = (props: Props) => {
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
-  const [userRole, setUserRole] = useState<userType>('checker')
+  const [userRole, setUserRole] = useState<userType>('maker')
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
@@ -317,7 +317,7 @@ const Main = (props: Props) => {
           {userRole === 'maker' && (
             <div className='ml-6 relative '>
               <button
-                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main 
+                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main
           py-1'
                 onClick={() => setShowLists(true)}
               >
