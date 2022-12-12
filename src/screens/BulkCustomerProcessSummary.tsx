@@ -32,7 +32,12 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
 
   const { bulkSummary } = useSelector<ReducersType>((state) => state.bulkProcessSummary) as BulkProcessSummaryTypes
   const { user } = useSelector<ReducersType>((state) => state.userProfile) as UserProfileTypes
-  const { loading: saveLoading, message: saveMessage, error: saveError, success: saveSuccess } = useSelector<ReducersType>((state) => state.saveBulkCustomerCreation) as SaveBulkCreationTypes
+  const {
+    loading: saveLoading,
+    message: saveMessage,
+    error: saveError,
+    success: saveSuccess,
+  } = useSelector<ReducersType>((state) => state.saveBulkCustomerCreation) as SaveBulkCreationTypes
 
   const onCancelCreation = useCallback(() => {
     dispatch(setFileUploaded(false))
@@ -49,7 +54,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
     })
     tempData.data.requestData.initiator = `${user?.firstname} ${user?.lastname}`
     tempData.data.requestData.initiatorId = user?.id
-    tempData.data.requestData.requestType = "Creation"
+    tempData.data.requestData.requestType = 'Creation'
     setDataToSave(tempData)
 
     dispatch(saveCustomers(tempData))
@@ -111,9 +116,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
             </div>
 
             <div className={`bg-white absolute m-auto bottom-2 right-2 w-[254px] h-[64px] flex justify-evenly items-center rounded-lg shadow-md`}>
-              <button className={`flex flex-col justify-center items-center`}
-                onClick={() => navigate(AppRoutes.individualCustomerCreationScreen)}
-              >
+              <button className={`flex flex-col justify-center items-center`} onClick={() => navigate(AppRoutes.individualCustomerCreationScreen)}>
                 <ModifyIcon />
                 <div>Modify</div>
               </button>
@@ -134,7 +137,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
             className={`rounded-lg text-[#636363] text-[24px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px]`}
           >
             <div>
-              <ActivityLog />
+              <ActivityLog mode={'modification'} />
             </div>
             <div className={`mt-5 min-h-[70%] w-full max-h-[70%] overflow-auto`}></div>
           </div>
@@ -142,7 +145,7 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
       </main>
       <AlertModal
         leftClick={onCancelCreation}
-        leftClickText={"Cancel"}
+        leftClickText={'Cancel'}
         rightClick={onSubmitCreation}
         rightClickText={'Yes'}
         message={`Default Savings Product will be Assigned to Customers `}
@@ -153,13 +156,13 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
       />
       <AlertModal
         leftClick={() => navigate(AppRoutes.mainScreen)}
-        leftClickText={"Return to dashboard"}
+        leftClickText={'Return to dashboard'}
         rightClick={() => navigate(AppRoutes.individualCustomerCreationScreen)}
         rightClickText={'Create another customer'}
         message={saveMessage}
         closeModal={closeSavingModal}
         loading={saveLoading}
-        status={saveSuccess ? "success" : saveError ? "error" : "warning"}
+        status={saveSuccess ? 'success' : saveError ? 'error' : 'warning'}
         isOpen={onSaving}
       />
     </>
@@ -169,4 +172,4 @@ export const BulkCustomerProcessSummary = memo(({ headerText, customerType }: Pr
 // Bulk Customer profiles created successfully
 //
 // 20 of 20 new customer profiles submitted
-// for authorization 
+// for authorization

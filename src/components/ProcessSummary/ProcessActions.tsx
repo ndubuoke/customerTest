@@ -7,6 +7,7 @@ import { Modal } from 'Components/Modal'
 import CancelFormModal from './CancelFormModal'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import WaiverRequestForm from './WaiverRequestForm'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 
 type Props = {
   waiver: 'show' | 'hide'
@@ -15,6 +16,10 @@ type Props = {
 }
 
 const ProcessActions = ({ waiver, mode, customerType }: Props) => {
+  const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
+    : null
+
   const navigate = useNavigate()
 
   const [openCancelFormModal, setOpenCancelFormModal] = useState<boolean>(false)
@@ -49,7 +54,6 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
     navigate(AppRoutes.mainScreen)
   }
 
-  const handleSunmitWaiver = () => {}
   return (
     <div
       className={`absolute   m-auto bottom-2 right-2  grid grid-cols-3 gap-0 rounded-lg  max-w-[500px] px-4 py-2 bg-white`}
@@ -78,7 +82,7 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
       </div>
       {openCancelFormModal ? <CancelFormModal closeModalFunction={handleOpenCancelFormModal} cancelFormCreation={handleCancelFormCreation} /> : null}
 
-      {openWaiverRequestForm ? <WaiverRequestForm closeModalFunction={handleOpenWaiverRequestForm} handleSubmitWaiver={handleSunmitWaiver} /> : null}
+      {openWaiverRequestForm ? <WaiverRequestForm closeModalFunction={handleOpenWaiverRequestForm} /> : null}
     </div>
   )
 }

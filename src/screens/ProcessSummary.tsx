@@ -89,7 +89,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           <div
             className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px overflow-y-auto`}
           >
-            <ActivityLog />
+            <ActivityLog mode={'creation'} />
           </div>
         </section>
       </main>

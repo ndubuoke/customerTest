@@ -1,63 +1,48 @@
 import { Close, upload } from 'Assets/svgs'
 import Button from 'Components/Shareables/Button'
-import React, { useState, useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { UploadFile } from 'Components/Shareables'
 import { API } from 'Utilities/api'
 import { FileRejection, useDropzone } from 'react-dropzone'
+import FileUpload from 'Components/Form/Form-UIs/FileUpload'
+import FileUploadComponent from 'Components/CustomerManagement/FileUploadComponent'
+import { FormStructureType } from 'Components/types/FormStructure.types'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type Props = {
   closeModalFunction: () => void
-  handleSubmitWaiver: () => void
 }
 
-const WaiverRequestForm = ({ closeModalFunction, handleSubmitWaiver }: Props) => {
-  const [text, setText] = useState<string>('')
+const WaiverRequestForm = ({ closeModalFunction }: Props) => {
+  const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
+    : null
+  const [localUpload, setLocalUpload] = useState<Array<any>>([])
+  const [justification, setJustification] = useState<string>('')
+  const [uploadKey, setUploadKey] = useState<Array<string>>([])
+  const [initiator, setInitiator] = useState('Bona name')
+  const [initiatorId, setInitiatorId] = useState('rhyme id')
 
-  // const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
-  // const [isProcessing, setIsProcessing] = useState(false)
+  const handleSubmitWaiver = () => {
+    if (localUpload && localUpload.length > 0) {
+      if (fillingFormInStorage.data.customerData.length > 0) {
+        const updatedData = fillingFormInStorage.data.waiverData
+        fillingFormInStorage.data.waiverData = {
+          ...updatedData,
+          documents: [...updatedData.documents, ...uploadKey],
+          initiator,
+          initiatorId,
+          type: 'documentation',
+          justification,
+        }
 
-  // const onDrop = useCallback(async (acceptedFiles: Array<File>) => {
-  //   setIsProcessing(true)
-  //   const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
-  //     try {
-  //       const formdata = new FormData()
-  //       formdata.append('fileName', file)
-  //       const response = await API.post('/file/upload', formdata)
+        sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormInStorage))
 
-  //       return response
-  //     } catch (err) {
-  //       console.error(err.message, `failed to upload file - ${file.name}`)
-  //       return null
-  //     }
-  //   })
-  //   const awaitUploadedFiles = await Promise.all(uploadedFiles)
-  //   const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
-  //   setuploadedFiles((prev) => [...prev, ...filterSuccessUploadedFiles])
-  //   // setLocalUpload((prev) => [...prev, ...filterSuccessUploadedFiles])
-  //   setIsProcessing(false)
-  // }, [])
+        closeModalFunction()
+      }
+    }
+  }
 
-  // const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
-  //   console.log('fileRejections', fileRejections)
-  // }, [])
-
-  // const { getRootProps, getInputProps } = useDropzone({
-  //   onDrop,
-  //   onDropRejected,
-  //   accept: {
-  //     'image/jpeg': [],
-  //     'image/png': [],
-  //     'application/pdf': ['.pdf'],
-  //   },
-  // })
-
-  // const handleRemoveFile = (e: any, index: number) => {
-  //   e.stopPropagation()
-  //   const newFiles = uploadedFiles.filter((item, i) => i !== index)
-
-  //   setuploadedFiles((prev) => newFiles)
-  //   // setLocalUpload((prev) => newFiles)
-  // }
   return (
     <aside
       className='fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center '
@@ -83,26 +68,14 @@ const WaiverRequestForm = ({ closeModalFunction, handleSubmitWaiver }: Props) =>
                 border: '1px solid #aaaaaa',
                 borderRadius: '4px',
               }}
-              value={text}
-              onChange={(e) => setText(e.target.value)}
+              value={justification}
+              onChange={(e) => setJustification(e.target.value)}
             ></textarea>
           </div>
         </div>
-        <div>
-          <div className='text-[#333333] text-[16px] font-normal leading-[19px] mb-3'>Upload Supporting Documents</div>
-          <div className='flex gap-12 w-full max-w-[392px] h-[86px] border border-[#c4c4c4] rounded-[10px] items-center px-3'>
-            <div>
-              <img src={upload} className='w-12' />
-            </div>
-            <p className='mb-2 text-sm text-gray-500 dark:text-gray-400 '>
-              <span className='font-semibold text-primay-main'>Click to upload</span>
-              <span> or drag and drop</span>
-              <span className='block text-center'>.pdf .jpeg .png</span>
-            </p>
-          </div>
-        </div>
+        <FileUploadComponent setLocalUpload={setLocalUpload} hideAddMoreFiles={true} setUploadKey={setUploadKey} />
         <div className='mx-auto w-fit'>
-          <Button disabled={false} onClick={handleSubmitWaiver} text='Submit' />
+          <Button disabled={uploadKey.length === 0 || !justification} onClick={handleSubmitWaiver} text='Submit' />
         </div>
       </section>
     </aside>
