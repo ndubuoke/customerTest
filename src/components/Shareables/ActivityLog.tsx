@@ -8,7 +8,7 @@ import Spinner from 'Components/Shareables/Spinner'
 
 type Props = {
   customerId?: string
-  mode: 'creation' | 'modification'
+  mode?: 'creation' | 'modification'
 }
 
 const ActivityLog = ({ customerId, mode }: Props) => {
