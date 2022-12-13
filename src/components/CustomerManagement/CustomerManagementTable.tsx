@@ -1121,23 +1121,31 @@ const CustomerManagementTable = ({
                 <tbody className=' '>
                   {tableType === 'Requests' &&
                     requests &&
-                    requests.map((request) => {
-                      if (request.customerType === customerType) {
-                        return (
-                          <RequestDetailsRow
-                            key={request?.id}
-                            requestFunctionListRef={requestFunctionListRef}
-                            showRequestFunctionOptions={showRequestFunctionOptions}
-                            request={request}
-                            requestId={requestId}
-                            requestFunctionHandler={requestFunctionHandler}
-                            requestFunctionOptions={requestFunctionOptions}
-                            showRequestFunctionHandler={showRequestFunctionHandler}
-                            userRole={userRole}
-                          />
-                        )
-                      }
-                    })}
+                    requests
+                      .filter((request) => {
+                        if (searchTerm === '') {
+                          return request
+                        } else if (getRequestDetail(request, 'firstName')?.toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return request
+                        }
+                      })
+                      .map((request) => {
+                        if (request.customerType === customerType) {
+                          return (
+                            <RequestDetailsRow
+                              key={request?.id}
+                              requestFunctionListRef={requestFunctionListRef}
+                              showRequestFunctionOptions={showRequestFunctionOptions}
+                              request={request}
+                              requestId={requestId}
+                              requestFunctionHandler={requestFunctionHandler}
+                              requestFunctionOptions={requestFunctionOptions}
+                              showRequestFunctionHandler={showRequestFunctionHandler}
+                              userRole={userRole}
+                            />
+                          )
+                        }
+                      })}
                 </tbody>
               )}
             </>
@@ -1160,23 +1168,31 @@ const CustomerManagementTable = ({
                 <tbody className=' '>
                   {tableType === 'Requests' &&
                     requestsForChecker &&
-                    requestsForChecker.map((request) => {
-                      if (request.customerType === customerType) {
-                        return (
-                          <RequestDetailsRow
-                            key={request?.id}
-                            requestFunctionListRef={requestFunctionListRef}
-                            showRequestFunctionOptions={showRequestFunctionOptions}
-                            request={request}
-                            requestId={requestId}
-                            requestFunctionHandler={requestFunctionHandler}
-                            requestFunctionOptions={requestFunctionOptions}
-                            showRequestFunctionHandler={showRequestFunctionHandler}
-                            userRole={userRole}
-                          />
-                        )
-                      }
-                    })}
+                    requestsForChecker
+                      .filter((request) => {
+                        if (searchTerm === '') {
+                          return request
+                        } else if (getRequestDetail(request, 'firstName')?.toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                          return request
+                        }
+                      })
+                      .map((request) => {
+                        if (request.customerType === customerType) {
+                          return (
+                            <RequestDetailsRow
+                              key={request?.id}
+                              requestFunctionListRef={requestFunctionListRef}
+                              showRequestFunctionOptions={showRequestFunctionOptions}
+                              request={request}
+                              requestId={requestId}
+                              requestFunctionHandler={requestFunctionHandler}
+                              requestFunctionOptions={requestFunctionOptions}
+                              showRequestFunctionHandler={showRequestFunctionHandler}
+                              userRole={userRole}
+                            />
+                          )
+                        }
+                      })}
                 </tbody>
               )}
 

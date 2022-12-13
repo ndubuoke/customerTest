@@ -201,7 +201,8 @@ export const getTotalRequestStatusCustomersAction =
   }
 
 export const getRequestsForCheckerAction =
-  (requestStatus: string, customerType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  (requestStatus: string, customerType: string, requestType: string = '') =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: GET_REQUESTS_FOR_CHECKER_REQUEST })
 
@@ -211,7 +212,10 @@ export const getRequestsForCheckerAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/request/data/checker?status=${requestStatus}&customerType=${customerType}`, config)
+      const { data } = await axios.get(
+        `${SERVER_URL}/request/data/checker?status=${requestStatus}&customerType=${customerType}&requestType=${requestType}`,
+        config
+      )
 
       dispatch({ type: GET_REQUESTS_FOR_CHECKER_SUCCESS, payload: data })
     } catch (error) {

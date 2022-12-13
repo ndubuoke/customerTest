@@ -28,8 +28,9 @@ const customersDropdownStatusOptions = ['Created by me', 'Created by my team', '
 const requestsDropdownStatusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide']
 type customerStatus = 'All' | 'Active' | 'Inactive'
 type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft' | 'Pending' | 'Rejected'
+type requestType = '' | 'Creation' | 'Modification' | 'Deactivation' | 'Reactivation'
 type customerType = 'Individual' | 'SME'
-type tableType = 'All Customers' | 'Requests'
+type tableType = 'All Customers' | 'Requests' | null
 // const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 
 const Main = (props: Props) => {
@@ -53,9 +54,10 @@ const Main = (props: Props) => {
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
   type userType = 'maker' | 'checker'
   const [showLists, setShowLists] = useState(false)
-  const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>('All Customers')
+  const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>(null)
   const [customerStatus, setCustomerStatus] = useState<customerStatus>('All')
   const [requestStatus, setRequestStatus] = useState<requestStatusType>('All')
+  const [requestTypeName, setRequestTypeName] = useState<requestType>('')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [showRequestFunctionOptions, setShowRequestFunctionOptions] = useState(false)
@@ -71,7 +73,7 @@ const Main = (props: Props) => {
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   // const [userRole, setUserRole] = useState('checker')
-   const [userRole, setUserRole] = useState<userType>('maker')
+  const [userRole, setUserRole] = useState<userType>('maker')
   const [searchTerm, setSearchTerm] = useState('')
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
@@ -150,9 +152,9 @@ const Main = (props: Props) => {
       if (showCalender && filterDateRef.current && !filterDateRef.current.contains(e.target)) {
         setShowCalender(false)
       }
-       if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
-         setShowLists(false)
-       }
+      if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
+        setShowLists(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -170,7 +172,7 @@ const Main = (props: Props) => {
     showFilterRequestStatusOptions,
     showRequestFunctionOptions,
     showCalender,
-    showLists
+    showLists,
   ])
 
   const refreshTableHandler = () => {
@@ -211,14 +213,16 @@ const Main = (props: Props) => {
     }
   }
 
-  const requestStatusHandler = (status: requestStatusType, requestType) => {
+  const requestStatusHandler = (status: requestStatusType, requestType: requestType ) => {
+    
     if (status === 'All') {
       setRequestStatus(status)
+
       if (userRole === 'maker') {
         return dispatch(getCustomersRequestsAction(customerType, '', requestType) as any)
       }
       if (userRole === 'checker') {
-        return dispatch(getRequestsForCheckerAction('', customerType) as any)
+        return dispatch(getRequestsForCheckerAction('', customerType, requestType) as any)
       }
     }
 
@@ -228,6 +232,7 @@ const Main = (props: Props) => {
     }
     if (status === 'In Issue') {
       setRequestStatus(status)
+
       return dispatch(getCustomersRequestsAction(customerType, 'In Issue', requestType) as any)
     }
 
@@ -241,7 +246,7 @@ const Main = (props: Props) => {
     }
     if (status === 'Pending') {
       setRequestStatus(status)
-      return dispatch(getRequestsForCheckerAction('Pending', customerType) as any)
+      return dispatch(getRequestsForCheckerAction('Pending', customerType, requestType) as any)
     }
 
     if (status === 'Approved') {
@@ -250,12 +255,13 @@ const Main = (props: Props) => {
         return dispatch(getCustomersRequestsAction(customerType, 'Approved', requestType) as any)
       }
       if (userRole === 'checker') {
-        return dispatch(getRequestsForCheckerAction('Approved', customerType) as any)
+        return dispatch(getRequestsForCheckerAction('Approved', customerType, requestType) as any)
       }
     }
     if (status === 'Rejected') {
+     
       setRequestStatus(status)
-      return dispatch(getRequestsForCheckerAction('Rejected', customerType) as any)
+      return dispatch(getRequestsForCheckerAction('Rejected', customerType, requestType) as any)
     }
   }
 
@@ -263,6 +269,10 @@ const Main = (props: Props) => {
     if (userRole === 'checker') {
       setNextLevelButtonId(2)
       setCustomerManagementTableType('Requests')
+    }
+    if (userRole === 'maker') {
+      setNextLevelButtonId(1)
+      setCustomerManagementTableType('All Customers')
     }
   }, [])
 
@@ -526,7 +536,7 @@ const Main = (props: Props) => {
                       {nextLevelButtonId === 2 && customermanagementTableType === 'Requests' ? (
                         <div className=' flex gap-2 '>
                           <div
-                            onClick={requestStatusHandler.bind(null, 'All')}
+                            onClick={requestStatusHandler.bind(null, 'All','')}
                             className={` py-1 px-4 cursor-pointer flex flex-col justify-center items-center hover:border rounded-md hover:border-[#EFEFEF] ${
                               requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
                             }`}
@@ -539,7 +549,7 @@ const Main = (props: Props) => {
                           </div>
                           <div className='border'></div>
                           <div
-                            onClick={requestStatusHandler.bind(null, 'Approved')}
+                            onClick={requestStatusHandler.bind(null, 'Approved','')}
                             className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                               requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
                             }`}
@@ -556,7 +566,7 @@ const Main = (props: Props) => {
                           {userRole === 'checker' && (
                             <>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Pending')}
+                                onClick={requestStatusHandler.bind(null, 'Pending','')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'Pending' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -567,7 +577,7 @@ const Main = (props: Props) => {
                               </div>
                               <div className='border'></div>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Rejected')}
+                                onClick={requestStatusHandler.bind(null, 'Rejected','')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'Rejected' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -582,7 +592,7 @@ const Main = (props: Props) => {
                           {userRole === 'maker' && (
                             <>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'In-Review')}
+                                onClick={requestStatusHandler.bind(null, 'In-Review','')}
                                 className={` py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -593,7 +603,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Interim Approval')}
+                                onClick={requestStatusHandler.bind(null, 'Interim Approval','')}
                                 className={` ${
                                   requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
@@ -604,7 +614,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'In Issue')}
+                                onClick={requestStatusHandler.bind(null, 'In Issue','')}
                                 className={` ${
                                   requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
@@ -615,7 +625,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Draft')}
+                                onClick={requestStatusHandler.bind(null, 'Draft','')}
                                 className={` ${
                                   requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
