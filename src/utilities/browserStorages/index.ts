@@ -5,6 +5,7 @@ export enum STORAGE_NAMES {
   FORM_MODE_STATUS = 'CUSTOMER_MANAGEMENT-FORM_MODE_STATUS',
   STOP_FORM_FILLING_STATUS = 'CUSTOMER_MANAGEMENT-stopFormFillingStatus',
   SHOW_WAIVER_MODAL_IN_FORM = 'CUSTOMER_MANAGEMENT-showWaiverModalInForm',
+  SIGNATORY_IN_STORAGE = "CUSTOMER_MANAGEMENT-signatoryInStorage"
 }
 
 // type StorageType = 'localStorage' | 'sessionStorage'
