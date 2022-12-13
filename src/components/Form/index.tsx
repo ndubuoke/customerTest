@@ -8,6 +8,7 @@ import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { getProperty } from 'Utilities/getProperty'
+import Executives from './ExecutiveandDirector'
 import { FormLayout, Steps } from './Form-UIs'
 import ActionButtonsForForm from './Form-UIs/ActionButtonsForForm'
 import { formStruture } from './formStructure'
@@ -140,7 +141,7 @@ const Form = memo(
                     )
                   })
                 : null}
-
+              {activePage && activePage?.theIndex === 3 ? <Executives /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}
