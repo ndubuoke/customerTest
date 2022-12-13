@@ -1,5 +1,8 @@
 import { add, Plus } from 'Assets/svgs'
-import React, { memo, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { SignatoryDetailsType } from '../Types/SignatoryTypes'
+import { SignatoryDetailsInitial } from './InitialData'
 import SignatoriesTable from './SignatoriesTable'
 import SignatoryModal from './SignatoryModal'
 
@@ -8,8 +11,10 @@ type Props = {}
 const Signatories = memo((props: Props) => {
   const [showSignatoryForm, setShowSignatoryForm] = useState<boolean>(false)
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [signatories, setSignatories] = useState<Array<any>>([])
+  const [signatories, setSignatories] = useState<Array<SignatoryDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [modification, setModification] = useState<boolean>(false)
+  const [signatoryDetails, setSignatoryDetails] = useState<SignatoryDetailsType>(SignatoryDetailsInitial)
 
   const handleCollapseSection = () => {
     setCollapsed((prev) => !prev)
@@ -17,7 +22,39 @@ const Signatories = memo((props: Props) => {
 
   const closeModalFunction = () => {
     setOpenModal((prev) => !prev)
+    setModification(false)
+    setSignatoryDetails(SignatoryDetailsInitial)
   }
+
+  const handleRemoveSignatory = (id: string | number) => {
+    const filtered = signatories.find((x) => x?.id !== id)
+    setSignatoryDetails(filtered)
+  }
+
+  const handleModify = (id: string | number) => {
+    const item = signatories.find((x) => x?.id === id)
+    setSignatoryDetails(item)
+    setModification(true)
+    setOpenModal((prev) => !prev)
+  }
+
+  useEffect(() => {
+    if (signatories.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE, JSON.stringify(signatories))
+    }
+  }, [signatories])
+
+  useEffect(() => {
+    if (signatories.length === 0) {
+      const signatoryInStorage = sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE))
+        : null
+
+      if (signatoryInStorage) {
+        setSignatories(signatoryInStorage)
+      }
+    }
+  }, [])
 
   return (
     <section className='max-w-[1060px] mx-4 bg-slate-50'>
@@ -56,9 +93,25 @@ const Signatories = memo((props: Props) => {
             Add Signatory
           </button>
         </div>
-        <SignatoriesTable collapsed={collapsed} setSignatories={setSignatories} signatories={signatories} />
+        <SignatoriesTable
+          collapsed={collapsed}
+          setSignatories={setSignatories}
+          signatories={signatories}
+          handleRemoveSignatory={handleRemoveSignatory}
+          handleModify={handleModify}
+        />
       </div>
-      {openModal ? <SignatoryModal closeModalFunction={closeModalFunction} /> : null}
+      {openModal ? (
+        <SignatoryModal
+          closeModalFunction={closeModalFunction}
+          setSignatories={setSignatories}
+          signatories={signatories}
+          modification={modification}
+          setModification={setModification}
+          signatoryDetails={signatoryDetails}
+          setSignatoryDetails={setSignatoryDetails}
+        />
+      ) : null}
     </section>
   )
 })

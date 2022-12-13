@@ -1,12 +1,16 @@
+import { closeRed, editRed } from 'Assets/svgs'
 import React, { memo } from 'react'
+import { SignatoryDetailsType } from '../Types/SignatoryTypes'
 
 type Props = {
   signatories?: Array<any>
   setSignatories?: (value: any) => void
-  collapsed
+  collapsed: boolean
+  handleRemoveSignatory: (id: number | string) => void
+  handleModify: (id: number | string) => void
 }
 
-const SignatoriesTable = memo(({ setSignatories, signatories = [], collapsed }: Props) => {
+const SignatoriesTable = memo(({ setSignatories, signatories = [], collapsed, handleRemoveSignatory, handleModify }: Props) => {
   return (
     <div className={`py-6 w-[987px] overflow-x-auto ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'px-3'}  `}>
       <table className='w-full  '>
@@ -33,8 +37,28 @@ const SignatoriesTable = memo(({ setSignatories, signatories = [], collapsed }: 
             </tr>
           ) : null}
           {signatories.length > 0
-            ? signatories?.map((x, i) => {
-                return <tr key={i}>There are signatories</tr>
+            ? signatories?.map((x: SignatoryDetailsType, i) => {
+                return (
+                  <tr key={i} className=' align-middle font-bold text-[16px] text-[#636363] border-b h-[60px] '>
+                    <td>{i + 1}</td>
+                    <td className=' align-middle font-bold text-[16px] text-[#636363] '>
+                      {x?.['First Name']} {x?.['Surname']}
+                    </td>
+                    <td className=' align-middle font-bold text-[16px] text-[#636363] '>
+                      <span className='block'>{x?.['Means of Identification']}</span>
+
+                      <span className='block text-[#aaaaaa] '>{x?.['ID Number']}</span>
+                    </td>
+                    <td>
+                      <button type='button' className='p-2 bg-white rounded  shadow mr-2' onClick={() => handleModify(x?.id)}>
+                        <img src={editRed} alt='modify' />
+                      </button>
+                      <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveSignatory(x?.id)}>
+                        <img src={closeRed} alt='remove' />
+                      </button>
+                    </td>
+                  </tr>
+                )
               })
             : null}
         </tbody>

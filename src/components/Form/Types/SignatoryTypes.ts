@@ -1,6 +1,7 @@
 export type SignatoryDetailsType = {
   // 'Identification Method': string
   // 'ID Number': string
+  id?: string | number
   Title: string
   Surname: string
   'First Name': string

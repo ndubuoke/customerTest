@@ -1,3 +1,4 @@
+import { caret } from 'Assets/svgs'
 import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
 import React, { useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
@@ -51,6 +52,10 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
               <span className={`text-text-disabled`}>Select</span>
             )}
           </div>
+
+          <span>
+            <img src={caret} width={15} height={10} />
+          </span>
 
           {showLists && (
             <div
