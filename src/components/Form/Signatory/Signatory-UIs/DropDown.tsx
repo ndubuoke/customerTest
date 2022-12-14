@@ -2,6 +2,8 @@ import { caret } from 'Assets/svgs'
 import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
 import React, { useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
+import { ReducersType } from 'Redux/store'
+import { useSelector } from 'react-redux'
 
 type Props = {
   required: 'on' | 'off'
@@ -14,6 +16,8 @@ type Props = {
 }
 
 const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
+  const unfilledRequiredSignatoryList = useSelector<ReducersType>((state) => state.unfilledRequiredSignatoryList)
+
   const [showLists, setShowLists] = useState<boolean>(false)
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
@@ -84,6 +88,11 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
           )}
         </div>
       </div>
+      {/* {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>
+          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+        </p>
+      ) : null} */}
     </div>
   )
 }

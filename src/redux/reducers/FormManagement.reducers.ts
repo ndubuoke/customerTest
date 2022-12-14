@@ -1,4 +1,5 @@
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
+import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.actions'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   ACTIVE_PAGE,
@@ -10,6 +11,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
+  UNFILLED_REQUIRED_SIGNATORY_LIST,
 } from 'Redux/constants/FormManagement.constants'
 
 export type ResponseType = {
@@ -40,8 +42,8 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      // return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
-      return { ...state, ...publishedForm }
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
@@ -107,6 +109,20 @@ export const activePageReducer = (state: { page: any; theIndex: number } = { pag
   switch (action.type) {
     case ACTIVE_PAGE:
       return { ...state, page: action.payload.page, theIndex: action.payload.theIndex }
+
+    default:
+      return state
+  }
+}
+
+export type UnfilledRequiredSignatoryListReducerType = { list: UnfilledRequiredSignatoryListType }
+export const unfilledRequiredSignatoryListReducer = (
+  state: { list: UnfilledRequiredSignatoryListType } = { list: [] },
+  action: { type: string; payload: any }
+) => {
+  switch (action.type) {
+    case UNFILLED_REQUIRED_SIGNATORY_LIST:
+      return { ...state, list: action.payload?.list }
 
     default:
       return state
