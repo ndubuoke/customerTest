@@ -3,7 +3,9 @@ import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
 import React, { useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
 import { ReducersType } from 'Redux/store'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   required: 'on' | 'off'
@@ -16,7 +18,11 @@ type Props = {
 }
 
 const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
-  const unfilledRequiredSignatoryList = useSelector<ReducersType>((state) => state.unfilledRequiredSignatoryList)
+  const dispatch = useDispatch()
+
+  const unfilledRequiredSignatoryList = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryList
+  ) as UnfilledRequiredSignatoryListReducerType
 
   const [showLists, setShowLists] = useState<boolean>(false)
 
@@ -26,6 +32,17 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
       ...prev,
       [text]: selectedItem.trim(),
     }))
+    handleRedispatchOfRequiredFields()
+  }
+
+  const handleRedispatchOfRequiredFields = () => {
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredList) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
+    }
   }
 
   return (
@@ -88,11 +105,9 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
           )}
         </div>
       </div>
-      {/* {required.toLowerCase() === 'on' ? (
-        <p className='text-red-500'>
-          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
-        </p>
-      ) : null} */}
+      {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>{unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text.trim()) ? `${text} is required!` : null}</p>
+      ) : null}
     </div>
   )
 }

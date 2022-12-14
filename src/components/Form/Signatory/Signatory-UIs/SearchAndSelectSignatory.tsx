@@ -3,6 +3,10 @@ import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
 import { caret, search } from 'Assets/svgs'
 import React, { useCallback, useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
+import { useDispatch, useSelector } from 'react-redux'
+import { ReducersType } from 'Redux/store'
+import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   required: 'on' | 'off'
@@ -25,22 +29,30 @@ const SearchAndSelectSignatory = ({
   setSelectedDropdownItem,
   placeholder,
 }: Props) => {
+  const dispatch = useDispatch()
   const [showLists, setShowLists] = useState<boolean>(false)
 
-  //   const handleSelectedDropdownItem = (selectedItem: string) => {
-  //     setShowLists((prev) => !prev)
-  //     setSelectedDropdownItem((prev: any) => ({
-  //       ...prev,
-  //       [text]: selectedItem.trim(),
-  //     }))
-  //   }
+  const unfilledRequiredSignatoryList = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryList
+  ) as UnfilledRequiredSignatoryListReducerType
 
   const onSelect = useCallback((theSelectedItem: { label: string; key: string }) => {
     setSelectedDropdownItem((prev: any) => ({
       ...prev,
       [text]: theSelectedItem.label.trim(),
     }))
+    handleRedispatchOfRequiredFields()
   }, [])
+
+  const handleRedispatchOfRequiredFields = () => {
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredList) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
+    }
+  }
 
   return (
     <div
@@ -85,6 +97,9 @@ const SearchAndSelectSignatory = ({
           <img src={caret} width={15} height={10} />
         </span>
       </div>
+      {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>{unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text.trim()) ? `${text} is required!` : null}</p>
+      ) : null}
     </div>
   )
 }
