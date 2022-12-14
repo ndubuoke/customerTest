@@ -16,6 +16,8 @@ import {
   showWaiverModalInFormReducer,
   ShowModalInFormType,
   activePageReducer,
+  unfilledRequiredSignatoryListReducer,
+  UnfilledRequiredSignatoryListReducerType,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -42,6 +44,7 @@ import {
   getActivityLogReducer,
   updateRequestReducer,
 } from './reducers/CustomerManagement.reducer'
+import { UnfilledRequiredSignatoryListType } from './actions/FormManagement.actions'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -66,6 +69,7 @@ export type ReducersType = {
   statusForCanProceed: any
   showWaiverModalInForm: ShowModalInFormType
   activePage: any
+  unfilledRequiredSignatoryList: UnfilledRequiredSignatoryListReducerType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -91,6 +95,7 @@ const reducer = combineReducers<ReducersType>({
   statusForCanProceed: statusForCanProceedReducer,
   showWaiverModalInForm: showWaiverModalInFormReducer,
   activePage: activePageReducer,
+  unfilledRequiredSignatoryList: unfilledRequiredSignatoryListReducer,
 })
 
 const middleware = [thunk]

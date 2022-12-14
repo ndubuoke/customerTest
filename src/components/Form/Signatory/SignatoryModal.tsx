@@ -3,10 +3,12 @@ import FileUploadComponent from 'Components/CustomerManagement/FileUploadCompone
 import Button from 'Components/Shareables/Button'
 import DropDown from 'Components/Shareables/DropDown'
 import React, { memo, useEffect, useState } from 'react'
+import { useDispatch } from 'react-redux'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { generateID } from 'Utilities/generateId'
 import { SignatoryDetailType, SignatoryDetailsType } from '../Types/SignatoryTypes'
-import { SignatoryDetailsInitial } from './InitialData'
+import { SignatoryDetailsInitial, SignatoryDetailsRequiredDataStatus } from './InitialData'
+import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
 import SignatoryDropDown from './Signatory-UIs/DropDown'
 import FileUploadSignatory from './Signatory-UIs/FileUploadSignatory'
 import PhoneInputSignatory from './Signatory-UIs/PhoneInputSIgnatory'
@@ -26,6 +28,7 @@ type Props = {
 
 const SignatoryModal = memo(
   ({ closeModalFunction, setSignatories, signatories, modification = false, setModification, signatoryDetails, setSignatoryDetails }: Props) => {
+    const dispatch = useDispatch()
     const [signatoryPrefillInput, setSignatoryPrefillInput] = useState<{ 'Identification Method': string; 'ID Number': string }>({
       'Identification Method': '',
       'ID Number': '',
@@ -43,9 +46,11 @@ const SignatoryModal = memo(
 
     // Add a check
     const handleAddSignatory = (id: string | number) => {
-      setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
-      setSignatoryDetails({ ...SignatoryDetailsInitial })
-      closeModalFunction()
+      // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
+      // setSignatoryDetails({ ...SignatoryDetailsInitial })
+      // closeModalFunction()
+
+      checkRequiredFields()
     }
 
     const handleModifySignatory = (id: string | number) => {
@@ -58,6 +63,31 @@ const SignatoryModal = memo(
       })
       setSignatoryDetails({ ...SignatoryDetailsInitial })
       closeModalFunction()
+    }
+
+    const checkRequiredFields = () => {
+      const allItems = Object.entries(SignatoryDetailsRequiredDataStatus)
+
+      const requiredItems = allItems?.filter((x) => {
+        return x[1] === 'required'
+      })
+
+      const copiedAllSignatoryDetails = { ...signatoryDetails }
+
+      const copiedAllSignatoryDetailsArray = Object.entries(copiedAllSignatoryDetails)
+
+      const unfilledRequiredFields = []
+
+      copiedAllSignatoryDetailsArray.forEach((x) => {
+        const itemKey = x[0]
+        const checkItemIsRequired = requiredItems.find((y) => y[0] === itemKey)
+        if (checkItemIsRequired && !x[1]) {
+          unfilledRequiredFields.push(checkItemIsRequired)
+        }
+      })
+
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(unfilledRequiredFields) as any)
     }
 
     return (
@@ -346,7 +376,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='Email address'
                   placeholder='Enter Email address'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Email address']}
@@ -377,7 +407,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='ID Issue Date'
                   placeholder='Enter ID Issue Date'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['ID Issue Date']}

@@ -35,3 +35,43 @@ export const SignatoryDetailsInitial: SignatoryDetailsType = {
   Nationality: '',
   State: '',
 }
+
+export interface SignatoryDetailsRequiredDataStatusType {
+  [key: string]: 'required' | 'not required'
+}
+
+export const SignatoryDetailsRequiredDataStatus: SignatoryDetailsRequiredDataStatusType = {
+  Title: 'required',
+  Surname: 'required',
+  'First Name': 'required',
+  'Other Names': 'not required',
+  "Mother's Maiden Name": 'not required',
+  'Date of Birth': 'required',
+  'Marital Status': 'required',
+  Gender: 'required',
+  'Alternate Phone Number': 'not required',
+  'City/Town': 'required',
+  'Detailed Description of Address': 'not required',
+  'Dual Citizenship': 'required',
+  'Email address': 'required',
+  'Employment Status': 'required',
+  'ID Expiry Date': 'not required',
+  'ID Issue Date': 'not required',
+  'ID Number': 'required',
+  'If yes, specify': 'not required',
+  'LGA-RA': 'required',
+  'Means of Identification': 'required',
+  'Mobile Number': 'required',
+  'Nature of Business/Occupation': 'required',
+  'P.O. Box': 'not required',
+  'Position/Rank': 'not required',
+  'Residential Address': 'required',
+  'State of Origin': 'required',
+  'Upload Passport Photograph': 'required',
+  'Upload Proof of Address': 'required',
+  'Upload Proof of Identity': 'required',
+  Country: 'required',
+  LGA: 'required',
+  Nationality: 'required',
+  State: 'required',
+}
