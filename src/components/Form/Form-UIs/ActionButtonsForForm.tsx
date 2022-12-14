@@ -186,7 +186,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   return (
     <div className='flex justify-center gap-6 py-4'>
       <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
-      <Button disabled={false} onClick={() => console.log('Clicked 2')} text='Save to draft' />
+      <Button disabled={false} onClick={() => console.log('test saved to draft')} text='Save to draft' />
       <Button
         disabled={false}
         onClick={() =>

@@ -1,3 +1,4 @@
+import { caret } from 'Assets/svgs'
 import { ExecutiveDetailType } from 'Components/Form/Types/ExecutiveTypes'
 import React, { useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
@@ -47,6 +48,9 @@ const ExecutiveDropDown = ({ required, label, optionsField, colspan = 1, selecte
               <span className={`text-text-disabled`}>Select</span>
             )}
           </div>
+          <span>
+            <img src={caret} width={15} height={10} />
+          </span>
 
           {showLists && (
             <div

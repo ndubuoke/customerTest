@@ -27,8 +27,9 @@ const Signatories = memo((props: Props) => {
   }
 
   const handleRemoveSignatory = (id: string | number) => {
-    const filtered = signatories.find((x) => x?.id !== id)
-    setSignatoryDetails(filtered)
+    const filtered = signatories.filter((x) => x?.id !== id)
+    setSignatories(filtered)
+    console.log('delete', setSignatories(filtered))
   }
 
   const handleModify = (id: string | number) => {
