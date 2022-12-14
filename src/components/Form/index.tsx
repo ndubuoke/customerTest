@@ -8,6 +8,7 @@ import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { getProperty } from 'Utilities/getProperty'
+import AdditionalDetails from './AdditionalInfo'
 import Executives from './ExecutiveandDirector'
 import { FormLayout, Steps } from './Form-UIs'
 import ActionButtonsForForm from './Form-UIs/ActionButtonsForForm'
@@ -17,6 +18,7 @@ import { PageInstance } from './Types'
 
 type Props = {
   kind: 'new' | 'modification'
+  customerType: 'sme' | 'individual'
   formFields: any
   fillingFormState: FormStructureType
   setFillingFormState: any
@@ -29,6 +31,7 @@ type Props = {
 const Form = memo(
   ({
     kind,
+    customerType,
     formFields,
     fillingFormState,
     publishedFormState,
@@ -113,6 +116,7 @@ const Form = memo(
         {publishedFormState?.serverResponse?.status ? (
           <div>
             <Steps
+              customerType={customerType}
               setActivePageState={setActivePageState}
               activePageState={activePageState}
               canSubmit={canSubmit}
@@ -142,6 +146,7 @@ const Form = memo(
                   })
                 : null}
               {activePage && activePage?.theIndex === 3 ? <Executives /> : null}
+              {activePage && activePage?.theIndex === 4 ? <AdditionalDetails /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}

@@ -184,6 +184,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
             </>
           ) : (
             <Form
+              // SME SHOW ONLY EXECUTIVE CHECK
+              customerType={customerType}
               kind='new'
               formFields={''}
               setFillingFormState={setFillingFormState}

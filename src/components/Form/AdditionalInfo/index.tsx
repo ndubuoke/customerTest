@@ -1,23 +1,23 @@
 import { add, Plus } from 'Assets/svgs'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useState, useEffect } from 'react'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { SignatoryDetailsInitial } from '../Signatory/InitialData'
+import SignatoriesTable from '../Signatory/SignatoriesTable'
 import SignatoryModal from '../Signatory/SignatoryModal'
-import { ExecutiveDetailsType, ExecutiveField } from '../Types/ExecutiveTypes'
-import AddExecutiveModal from './ExecutiveModal'
-import ExecutivesTable from './ExecutiveTable'
-import { ExecutiveDetailsInitial } from './initialData'
-// import ExecutivesTable from './ExecutivesTable'
+import { SignatoryDetailsType } from '../Types/SignatoryTypes'
+// import { SignatoryDetailsInitial } from './InitialData'
+// import SignatoriesTable from './SignatoriesTable'
 // import SignatoryModal from './SignatoryModal'
 
 type Props = {}
 
-const Executives = memo((props: Props) => {
+const AdditionalDetails = memo((props: Props) => {
   const [showSignatoryForm, setShowSignatoryForm] = useState<boolean>(false)
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [executives, setExecutives] = useState<Array<ExecutiveDetailsType>>([])
+  const [signatories, setSignatories] = useState<Array<SignatoryDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [executiveDetails, setExecutiveDetails] = useState<ExecutiveField[]>(ExecutiveDetailsInitial)
   const [modification, setModification] = useState<boolean>(false)
+  const [signatoryDetails, setSignatoryDetails] = useState<SignatoryDetailsType>(SignatoryDetailsInitial)
 
   const handleCollapseSection = () => {
     setCollapsed((prev) => !prev)
@@ -25,42 +25,37 @@ const Executives = memo((props: Props) => {
 
   const closeModalFunction = () => {
     setOpenModal((prev) => !prev)
+    setModification(false)
+    setSignatoryDetails(SignatoryDetailsInitial)
   }
 
-  const handleRemoveExecutive = (id: string | number) => {
-    const filtered = executives.filter((x) => x?.id !== id)
-    setExecutives(filtered)
+  const handleRemoveSignatory = (id: string | number) => {
+    const filtered = signatories.filter((x) => x?.id !== id)
+    setSignatories(filtered)
+    console.log('delete', setSignatories(filtered))
   }
 
   const handleModify = (id: string | number) => {
-    const item = executives.find((x) => x?.id === id)
-    setExecutiveDetails(
-      ExecutiveDetailsInitial.map((field) => {
-        if (item[field.fieldLabel]) {
-          field.value = item[field.fieldLabel]
-        }
-        return field
-      })
-    )
+    const item = signatories.find((x) => x?.id === id)
+    setSignatoryDetails(item)
     setModification(true)
     setOpenModal((prev) => !prev)
   }
-  useEffect(() => {
-    if (executives.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE, JSON.stringify(executives))
-    } else {
-      sessionStorage.removeItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE)
-    }
-  }, [executives])
 
   useEffect(() => {
-    if (executives.length === 0) {
-      const executiveInStorage = sessionStorage.getItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE)
-        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE))
+    if (signatories.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE, JSON.stringify(signatories))
+    }
+  }, [signatories])
+
+  useEffect(() => {
+    if (signatories.length === 0) {
+      const signatoryInStorage = sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE))
         : null
 
-      if (executiveInStorage) {
-        setExecutives(executiveInStorage)
+      if (signatoryInStorage) {
+        setSignatories(signatoryInStorage)
       }
     }
   }, [])
@@ -74,7 +69,7 @@ const Executives = memo((props: Props) => {
         }}
       >
         <div className='flex items-center'>
-          <h6>Executive/Directors Information</h6>
+          <h6>Accounts Held with Other Banks </h6>
         </div>
         <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
           <svg
@@ -99,30 +94,30 @@ const Executives = memo((props: Props) => {
             type='button'
           >
             <img src={add} />
-            Add Executive/Directors
+            Add Details
           </button>
         </div>
-        <ExecutivesTable
+        <SignatoriesTable
           collapsed={collapsed}
-          setExecutives={setExecutives}
-          executives={executives}
-          handleRemoveExecutive={handleRemoveExecutive}
+          setSignatories={setSignatories}
+          signatories={signatories}
+          handleRemoveSignatory={handleRemoveSignatory}
           handleModify={handleModify}
         />
       </div>
       {openModal ? (
-        <AddExecutiveModal
+        <SignatoryModal
           closeModalFunction={closeModalFunction}
-          setExecutives={setExecutives}
-          executives={executives}
-          executiveDetails={executiveDetails}
-          setExecutiveDetails={setExecutiveDetails}
+          setSignatories={setSignatories}
+          signatories={signatories}
           modification={modification}
           setModification={setModification}
+          signatoryDetails={signatoryDetails}
+          setSignatoryDetails={setSignatoryDetails}
         />
       ) : null}
     </section>
   )
 })
 
-export default Executives
+export default AdditionalDetails

@@ -9,358 +9,58 @@ import { generateID } from 'Utilities/generateId'
 import TextInput from './ExecutiveandDirectors-UI/TextInput'
 import TextArea from './ExecutiveandDirectors-UI/TextArea'
 import ExecutiveDropDown from './ExecutiveandDirectors-UI/Dropdown'
-import { ExecutiveDetailType } from 'Components/Form/Types/ExecutiveTypes'
-// import FormDate from '../Sharables/IndependentFormDate'
-// import IndependentFormDropdown from '../Sharables/IndependentFormDropdown'
-// import FormTextArea from '../Sharables/IndependentFormTextArea'
+import { ExecutiveDetailsType, ExecutiveDetailType, ExecutiveField } from 'Components/Form/Types/ExecutiveTypes'
+import Button from 'Components/Shareables/Button'
+import { ExecutiveDetailsInitial } from './initialData'
 
 type Props = {
   closeModalFunction: () => void
+  executives?: Array<any>
+  setExecutives?: (value: any) => void
+  executiveDetails: ExecutiveField[]
+  setExecutiveDetails: (data: ExecutiveField[]) => void
+  modification: boolean
+  setModification: (prev: boolean) => void
 }
 
-type Field = {
-  id: string
-  type: 'dropdown' | 'text' | 'date' | 'textarea'
-  defaultValue: string
-  value: string
-  error: string
-  required: 'on' | 'off'
-  colSpan: number
-  fieldLabel: ExecutiveDetailType
-  placeholder: string
-  options?: string[]
-  maxLength?: number
-}
-
-const AddExecutiveModal = ({ closeModalFunction }: Props) => {
-  const [fields, setFields] = useState<Field[]>([
-    {
-      id: generateID(),
-      type: 'dropdown',
-      fieldLabel: 'Title',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'on',
-      colSpan: 1,
-      placeholder: 'select',
-      options: ['mr', 'mrs', 'pastor', 'herbalist'],
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Enter Surname',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'on',
-      colSpan: 2,
-      placeholder: 'enter surname',
-      maxLength: 30,
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Enter FirstName',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter First name',
-      maxLength: 30,
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Enter Other Names',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Other Names',
-      maxLength: 30,
-    },
-    {
-      id: generateID(),
-      type: 'date',
-      fieldLabel: 'Date of Birth',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: '',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: "Mother's Maiden Name",
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Name',
-      maxLength: 30,
-    },
-    {
-      id: generateID(),
-      type: 'dropdown',
-      fieldLabel: 'Gender',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Select ',
-      options: ['male', 'female', 'others'],
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Residential Address',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Address',
-      maxLength: 160,
-    },
-    {
-      id: generateID(),
-      type: 'dropdown',
-      fieldLabel: 'Marital Status',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Select ',
-      options: ['single', 'married', 'complicated', 'divorced'],
-    },
-    {
-      id: generateID(),
-      type: 'textarea',
-      fieldLabel: 'Detailed Description of Address',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Description ',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Mobile Number',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Mobile Number',
-    },
-    {
-      id: generateID(),
-      type: 'dropdown',
-      fieldLabel: 'Means of Identification',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Select ',
-      options: ['bvn', 'pvc', 'drivers license', 'nin'],
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Enter ID Number',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'ID Number',
-    },
-    {
-      id: generateID(),
-      type: 'date',
-      fieldLabel: 'ID Issue Date',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: '',
-    },
-    {
-      id: generateID(),
-      type: 'date',
-      fieldLabel: 'ID Expiry Date',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: '',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Biometric ID Number',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Biometric ID Number',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Nationality',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Nationality',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'State of Origin',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter State of Origin',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'LGA',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter LGA',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'City/Town',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter City/Town',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Occupation',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Occupation',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Status/Job Title',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Status/Job Title',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Position/office of the officer',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Position',
-    },
-    {
-      id: generateID(),
-      type: 'dropdown',
-      fieldLabel: 'Do you have Dual Citizenship',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Select ',
-      options: ['yes', 'no'],
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'If yes, specify',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: '',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Social Secret Number',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter SSN',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Employee Identification Number',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter EIN',
-    },
-    {
-      id: generateID(),
-      type: 'text',
-      fieldLabel: 'Percentage Holding',
-      defaultValue: '',
-      value: '',
-      error: '',
-      required: 'off',
-      colSpan: 2,
-      placeholder: 'Enter Percentage Holding',
-    },
-  ])
+const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveDetails, modification, executives, setExecutives }: Props) => {
   const handleUpdateFields = (id: string, value: string) => {
-    const updatedFields = fields.map((field) => {
+    const updatedFields = executiveDetails.map((field) => {
       if (field.id === id) {
         field = { ...field, value }
       }
       return field
     })
-    setFields(updatedFields)
+    setExecutiveDetails(updatedFields)
+  }
+
+  const handleAddExecutive = (id: string | number) => {
+    setExecutives((prev: ExecutiveDetailsType[]) => [
+      ...prev,
+      executiveDetails.reduce(
+        (acc, curr) => {
+          acc[curr.fieldLabel] = curr.value
+          return acc
+        },
+        { id }
+      ),
+    ])
+    // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
+    // setSignatoryDetails({ ...SignatoryDetailsInitial })
+    setExecutiveDetails(ExecutiveDetailsInitial)
+    closeModalFunction()
+  }
+
+  const handleModifyExecutive = (id: string | number) => {
+    // const signatoryIndex = executives.findIndex((x) => x?.id === id)
+    // setExecutives((prev) => {
+    //   const copied = [...prev]
+
+    //   copied.splice(signatoryIndex, 1, executiveDetails)
+    //   return copied
+    // })
+    setExecutiveDetails({ ...ExecutiveDetailsInitial })
+    closeModalFunction()
   }
 
   return (
@@ -383,16 +83,16 @@ const AddExecutiveModal = ({ closeModalFunction }: Props) => {
           <div
             className=' flex'
             style={{
-              //   display: 'grid',
-              //   gridTemplateColumns: '1fr 1fr 1fr',
-              //   gridGap: '20px',
+              display: 'grid',
+              gridTemplateColumns: '1fr',
+              gridGap: '20px',
               padding: '10px',
               paddingBottom: '3rem',
               paddingTop: '1rem',
             }}
           >
             <div className=' w-full flex flex-col gap-6 overflow-y-scroll max-h-[500px] ' style={{ paddingRight: '5rem' }}>
-              {fields.map((field) => {
+              {executiveDetails.map((field) => {
                 if (field.type === 'dropdown') {
                   return (
                     <div key={field.id}>
@@ -431,24 +131,10 @@ const AddExecutiveModal = ({ closeModalFunction }: Props) => {
                     </div>
                   )
                 }
-                // if (field.type === 'date') {
-                //   return (
-                //     <div className='flex flex-col border-b '>
-                //       {field.fieldLabel}
-                //       <input
-                //         type='date'
-                //         value={field.value}
-                //         placeholder={field.placeholder}
-                //         defaultValue={field.defaultValue}
-                //         onChange={(ev) => handleUpdateFields(field.id, ev.target.value)}
-                //       />
-                //     </div>
-                //   )
-                // }
+
                 if (field.type === 'textarea') {
                   return (
-                    <div key={field.id} className='flex flex-col'>
-                      {/* {field.fieldLabel} */}
+                    <div key={field.id}>
                       <TextArea
                         maximumNumbersOfCharacters={field.maxLength}
                         placeholder={field.placeholder}
@@ -458,19 +144,25 @@ const AddExecutiveModal = ({ closeModalFunction }: Props) => {
                         value={field.value}
                         setValue={(val: string) => handleUpdateFields(field.id, val)}
                       />
-                      {/* <textarea
-                        className='border rounded-lg min-h-[190px] pl-2 pt-2'
-                        value={field.value}
-                        placeholder={field.placeholder}
-                        defaultValue={field.defaultValue}
-                        onChange={(ev) => handleUpdateFields(field.id, ev.target.value)}
-                      /> */}
                     </div>
                   )
                 }
               })}
             </div>
           </div>
+        </div>
+        <div className='flex justify-center my-6'>
+          <Button
+            disabled={false}
+            onClick={() => {
+              if (modification) {
+                handleModifyExecutive(executiveDetails['id'])
+              } else {
+                handleAddExecutive(generateID())
+              }
+            }}
+            text='Done'
+          />
         </div>
       </div>
     </div>

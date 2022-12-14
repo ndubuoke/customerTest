@@ -1,6 +1,7 @@
 export type ExecutiveDetailsType = {
   // 'Identification Method': string
   // 'ID Number': string
+  id?: string | number
   Title: string
   'Enter Surname': string
   'Enter FirstName': string
@@ -80,3 +81,17 @@ export type ExecutiveDetailType =
   | 'State of Origin'
   | 'Biometric ID Number'
   | 'Enter ID Number'
+
+export type ExecutiveField = {
+  id: string
+  type: 'dropdown' | 'text' | 'date' | 'textarea'
+  defaultValue: string
+  value: string
+  error: string
+  required: 'on' | 'off'
+  colSpan: number
+  fieldLabel: ExecutiveDetailType
+  placeholder: string
+  options?: string[]
+  maxLength?: number
+}

@@ -1,12 +1,15 @@
+import { closeRed, editRed } from 'Assets/svgs'
 import React, { memo } from 'react'
 
 type Props = {
-  Executives?: Array<any>
+  executives?: Array<any>
   setExecutives?: (value: any) => void
   collapsed
+  handleRemoveExecutive: (id: number | string) => void
+  handleModify: (id: number | string) => void
 }
 
-const ExecutivesTable = memo(({ setExecutives, Executives = [], collapsed }: Props) => {
+const ExecutivesTable = memo(({ setExecutives, executives = [], collapsed, handleModify, handleRemoveExecutive }: Props) => {
   return (
     <div className={`py-6 w-[987px] overflow-x-auto ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'px-3'}  `}>
       <table className='w-full  '>
@@ -25,16 +28,36 @@ const ExecutivesTable = memo(({ setExecutives, Executives = [], collapsed }: Pro
           </tr>
         </thead>
         <tbody>
-          {Executives.length < 1 ? (
+          {executives.length < 1 ? (
             <tr className=' h-[40px]'>
               <td className=' align-middle font-bold text-[14px] text-[#aaaaaa]  opacity-0'>S/N</td>
               <td className=' align-middle font-bold text-[14px] text-[#aaaaaa] '>No Executives/Directors</td>
               <td></td>
             </tr>
           ) : null}
-          {Executives.length > 0
-            ? Executives?.map((x, i) => {
-                return <tr key={i}>There are Executive/Directors</tr>
+          {executives.length > 0
+            ? executives?.map((x, i) => {
+                return (
+                  <tr key={i} className=' align-middle font-bold text-[16px] text-[#636363] border-b h-[60px] '>
+                    <td>{i + 1}</td>
+                    <td className=' align-middle font-bold text-[16px] text-[#636363] '>
+                      {x?.['Enter FirstName']} {x?.['Enter Surname']}
+                    </td>
+                    <td className=' align-middle font-bold text-[16px] text-[#636363] '>
+                      <span className='block'>{x?.['Means of Identification']}</span>
+
+                      <span className='block text-[#aaaaaa] '>{x?.['Enter ID Number']}</span>
+                    </td>
+                    <td>
+                      <button type='button' className='p-2 bg-white rounded  shadow mr-2' onClick={() => handleModify(x?.id)}>
+                        <img src={editRed} alt='modify' />
+                      </button>
+                      <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveExecutive(x?.id)}>
+                        <img src={closeRed} alt='remove' />
+                      </button>
+                    </td>
+                  </tr>
+                )
               })
             : null}
         </tbody>

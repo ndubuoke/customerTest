@@ -5,8 +5,10 @@ import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { Form, PageInstance } from '../Types'
 import StepNumbers from './StepNumbers'
+import { getProperty } from 'Utilities/getProperty'
 
 type Props = {
+  customerType?: 'sme' | 'individual'
   setActivePageState: (val: PageInstance) => void
   activePageState: PageInstance
   canSubmit: boolean
@@ -15,7 +17,7 @@ type Props = {
   setCanNext: (prev: boolean) => void
 }
 
-const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit }: Props) => {
+const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, customerType }: Props) => {
   const dispatch = useDispatch()
 
   const [form, setForm] = useState<Form>(null)
@@ -30,7 +32,19 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit }:
 
   useEffect(() => {
     if (publishedForm?.success) {
-      setForm(publishedForm?.serverResponse?.data)
+      setForm(
+        customerType == 'sme'
+          ? publishedForm?.serverResponse?.data
+          : {
+              ...publishedForm?.serverResponse?.data,
+              builtFormMetadata: {
+                ...publishedForm?.serverResponse?.data.builtFormMetadata,
+                pages: publishedForm?.serverResponse?.data.builtFormMetadata.pages.filter(
+                  (page) => getProperty(page?.pageProperties, 'Page name', 'value').text !== 'Executive/Directors Information'
+                ),
+              },
+            }
+      )
     }
   }, [publishedForm])
 
