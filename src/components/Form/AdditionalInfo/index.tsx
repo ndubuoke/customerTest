@@ -4,7 +4,10 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { SignatoryDetailsInitial } from '../Signatory/InitialData'
 import SignatoriesTable from '../Signatory/SignatoriesTable'
 import SignatoryModal from '../Signatory/SignatoryModal'
+import { ExecutiveField } from '../Types/ExecutiveTypes'
 import { SignatoryDetailsType } from '../Types/SignatoryTypes'
+import AdditionalModal from './AdditionalModal'
+import AdditionalDetailsTable from './AdditionalTable'
 // import { SignatoryDetailsInitial } from './InitialData'
 // import SignatoriesTable from './SignatoriesTable'
 // import SignatoryModal from './SignatoryModal'
@@ -60,6 +63,10 @@ const AdditionalDetails = memo((props: Props) => {
     }
   }, [])
 
+  function handleRemoveAdditional(id: string | number): void {
+    throw new Error('Function not implemented.')
+  }
+
   return (
     <section className='max-w-[1060px] mx-4 bg-slate-50'>
       <div
@@ -97,23 +104,19 @@ const AdditionalDetails = memo((props: Props) => {
             Add Details
           </button>
         </div>
-        <SignatoriesTable
-          collapsed={collapsed}
-          setSignatories={setSignatories}
-          signatories={signatories}
-          handleRemoveSignatory={handleRemoveSignatory}
-          handleModify={handleModify}
-        />
+        <AdditionalDetailsTable collapsed={collapsed} handleRemoveAdditional={handleRemoveAdditional} handleModify={handleModify} />
       </div>
       {openModal ? (
-        <SignatoryModal
+        <AdditionalModal
           closeModalFunction={closeModalFunction}
-          setSignatories={setSignatories}
-          signatories={signatories}
-          modification={modification}
-          setModification={setModification}
-          signatoryDetails={signatoryDetails}
-          setSignatoryDetails={setSignatoryDetails}
+          executiveDetails={[]}
+          setExecutiveDetails={function (data: ExecutiveField[]): void {
+            throw new Error('Function not implemented.')
+          }}
+          modification={false}
+          setModification={function (prev: boolean): void {
+            throw new Error('Function not implemented.')
+          }}
         />
       ) : null}
     </section>

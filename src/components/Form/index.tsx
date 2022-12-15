@@ -145,8 +145,8 @@ const Form = memo(
                     )
                   })
                 : null}
-              {activePage && activePage?.theIndex === 3 ? <Executives /> : null}
-              {activePage && activePage?.theIndex === 4 ? <AdditionalDetails /> : null}
+              {activePage && activePage?.theIndex === 2 ? <Executives /> : null}
+              {activePage && activePage?.theIndex === 3 ? <AdditionalDetails /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}
