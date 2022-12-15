@@ -1,8 +1,8 @@
 import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
-import React from 'react'
+import React, { useEffect } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import { useDispatch, useSelector } from 'react-redux'
-import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import FieldLabel from './FieldLabel'
@@ -25,13 +25,16 @@ const PhoneInputSignatory = ({ id, required, setValue, value, text, colspan = 1,
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
     (state) => state.unfilledRequiredSignatoryList
   ) as UnfilledRequiredSignatoryListReducerType
+  const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryListButton
+  ) as UnfilledRequiredSignatoryListReducerType
 
   const handleChange = (phone: string) => {
     setValue((prev: any) => ({
       ...prev,
       [text]: phone,
     }))
-    handleRedispatchOfRequiredFields()
+    // handleRedispatchOfRequiredFields()
   }
 
   const handleRedispatchOfRequiredFields = () => {
@@ -42,7 +45,16 @@ const PhoneInputSignatory = ({ id, required, setValue, value, text, colspan = 1,
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
     }
+
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredListButton) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
+    }
   }
+
   return (
     <div
       style={{

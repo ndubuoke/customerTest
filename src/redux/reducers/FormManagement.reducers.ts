@@ -12,6 +12,7 @@ import {
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
+  UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
 
 export type ResponseType = {
@@ -42,8 +43,8 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      // return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
-      return { ...state, ...publishedForm }
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
@@ -122,6 +123,18 @@ export const unfilledRequiredSignatoryListReducer = (
 ) => {
   switch (action.type) {
     case UNFILLED_REQUIRED_SIGNATORY_LIST:
+      return { ...state, list: action.payload?.list }
+
+    default:
+      return state
+  }
+}
+export const unfilledRequiredSignatoryListButtonReducer = (
+  state: { list: UnfilledRequiredSignatoryListType } = { list: [] },
+  action: { type: string; payload: any }
+) => {
+  switch (action.type) {
+    case UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON:
       return { ...state, list: action.payload?.list }
 
     default:

@@ -8,7 +8,7 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { generateID } from 'Utilities/generateId'
 import { SignatoryDetailType, SignatoryDetailsType } from '../Types/SignatoryTypes'
 import { SignatoryDetailsInitial, SignatoryDetailsRequiredDataStatus } from './InitialData'
-import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 import SignatoryDropDown from './Signatory-UIs/DropDown'
 import FileUploadSignatory from './Signatory-UIs/FileUploadSignatory'
 import PhoneInputSignatory from './Signatory-UIs/PhoneInputSIgnatory'
@@ -36,10 +36,15 @@ const SignatoryModal = memo(
     const unfilledRequiredSignatoryList = useSelector<ReducersType>(
       (state) => state.unfilledRequiredSignatoryList
     ) as UnfilledRequiredSignatoryListReducerType
+    const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+      (state) => state.unfilledRequiredSignatoryListButton
+    ) as UnfilledRequiredSignatoryListReducerType
 
     const [localUploadPassport, setLocalUploadPassport] = useState<any>([])
     const [localUploadIdentity, setLocalUploadIdentity] = useState<any>([])
     const [localUploadAddress, setLocalUploadAddress] = useState<any>([])
+
+    const [hideButton, setHideButton] = useState<boolean>(true)
 
     // Add a check
     const handleAddSignatory = (id: string | number) => {
@@ -62,8 +67,10 @@ const SignatoryModal = memo(
       closeModalFunction()
     }
 
-    const checkRequiredFields = () => {
+    const _checkRequiredFields = () => {
       const allItems = Object.entries(SignatoryDetailsRequiredDataStatus)
+
+      // [[key, value], [key, value]]
 
       const requiredItems = allItems?.filter((x) => {
         return x[1] === 'required'
@@ -83,15 +90,25 @@ const SignatoryModal = memo(
         }
       })
 
-      // Dispatch the list of unfilled Required fields
-      dispatch(unfilledRequiredSignatoryListAction(unfilledRequiredFields) as any)
-
-      return { success: unfilledRequiredFields.length === 0 }
+      return unfilledRequiredFields
     }
 
-    // useEffect(() => {
-    //   checkRequiredFields()
-    // }, [])
+    const checkRequiredFields = () => {
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(_checkRequiredFields()) as any)
+
+      return { success: _checkRequiredFields().length === 0 }
+    }
+
+    const checkRequiredFieldsButton = () => {
+      dispatch(unfilledRequiredSignatoryListButtonAction(_checkRequiredFields()) as any)
+      return { success: _checkRequiredFields().length === 0 }
+    }
+
+    useEffect(() => {
+      checkRequiredFieldsButton()
+      // checkRequiredFields()
+    }, [signatoryDetails])
 
     useEffect(() => {
       console.log(signatoryDetails)
@@ -255,7 +272,7 @@ const SignatoryModal = memo(
                 />
                 <SignatoryDropDown
                   id='If yes, specify'
-                  required='on'
+                  required='off'
                   text='If yes, specify'
                   optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['If yes, specify']}
@@ -265,7 +282,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='Residential Address'
                   placeholder='Enter Residential Address'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Residential Address']}
@@ -374,7 +391,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='ID Number'
                   placeholder='Enter ID Number'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['ID Number']}
@@ -452,7 +469,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Passport Photograph'
                   placeholder='Enter Upload Passport Photograph'
-                  required='on'
+                  required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Passport Photograph']}
@@ -464,7 +481,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Proof of Identity'
                   placeholder='Enter Upload Proof of Identity'
-                  required='on'
+                  required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Proof of Identity']}
@@ -476,7 +493,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Proof of Address'
                   placeholder='Enter Upload Proof of Address'
-                  required='on'
+                  required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Proof of Address']}
@@ -489,7 +506,7 @@ const SignatoryModal = memo(
             </form>
             <div className='flex justify-center my-6'>
               <Button
-                disabled={unfilledRequiredSignatoryList.list.length !== 0}
+                disabled={unfilledRequiredSignatoryListButton.list.length !== 0}
                 onClick={() => {
                   if (modification) {
                     handleModifySignatory(signatoryDetails['id'])

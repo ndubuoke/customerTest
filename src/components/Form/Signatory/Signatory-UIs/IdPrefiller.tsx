@@ -2,12 +2,26 @@ import React, { useEffect, useState } from 'react'
 import SignatoryDropDown from './DropDown'
 import TextInput from './TextInput'
 import { PrefillerIDTypeLengths, PrefillerIDTypeType, useIdFormPrefiller } from '../../../../hooks/useIdFormPrefiller'
-import { SignatoryDetailsType } from 'Components/Form/Types/SignatoryTypes'
+import { SignatoryDetailsType, SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
+import { useDispatch, useSelector } from 'react-redux'
+import { ReducersType } from 'Redux/store'
+import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   setSignatoryDetails: (prev: any) => void
 }
 const IdPrefiller = ({ setSignatoryDetails }: Props) => {
+  const dispatch = useDispatch()
+
+  const unfilledRequiredSignatoryList = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryList
+  ) as UnfilledRequiredSignatoryListReducerType
+
+  const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryListButton
+  ) as UnfilledRequiredSignatoryListReducerType
+
   const { loading, success, error, response, getIdDetails } = useIdFormPrefiller()
 
   const [signatoryPrefillInput, setSignatoryPrefillInput] = useState<{ 'Identification Method': PrefillerIDTypeType; 'ID Number': string }>({
@@ -50,6 +64,8 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
     Title: 'Mr',
   }
 
+  // TODO: Handle the key of the incoming prefiller
+
   useEffect(() => {
     // const k = { man: 'w' }
 
@@ -57,13 +73,13 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
     setSignatoryDetails((prev: any) => {
       const copied = { ...prev }
 
-      const detailsList = Object.entries(details).forEach((x) => {
+      const detailsList = Object.entries(details).forEach((x: Array<any>) => {
         if (copied.hasOwnProperty([x[0]])) {
           if (!copied[x[0]]) {
             copied[x[0]] = x[1]
-            // console.log({ copie: x[1] })
+            console.log(x[0])
+            handleRedispatchOfRequiredFields(x[0])
           }
-          //   copied[x[0]] = x[1]
         }
       })
 
@@ -71,6 +87,24 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
       return copied
     })
   }, [success])
+
+  const handleRedispatchOfRequiredFields = (text: SignatoryDetailType) => {
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredList) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
+    }
+
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredListButton) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
+    }
+  }
 
   return (
     <div

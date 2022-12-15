@@ -5,7 +5,7 @@ import FieldLabel from './FieldLabel'
 import { ReducersType } from 'Redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
-import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   required: 'on' | 'off'
@@ -24,6 +24,10 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
     (state) => state.unfilledRequiredSignatoryList
   ) as UnfilledRequiredSignatoryListReducerType
 
+  const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryListButton
+  ) as UnfilledRequiredSignatoryListReducerType
+
   const [showLists, setShowLists] = useState<boolean>(false)
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
@@ -32,16 +36,25 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
       ...prev,
       [text]: selectedItem.trim(),
     }))
-    handleRedispatchOfRequiredFields()
+    // handleRedispatchOfRequiredFields()
   }
 
   const handleRedispatchOfRequiredFields = () => {
+    // console.log({ text, unfilledRequiredSignatoryList })
     const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
 
     if (isPresentInRequiredList) {
       const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
+    }
+
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredListButton) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
     }
   }
 
