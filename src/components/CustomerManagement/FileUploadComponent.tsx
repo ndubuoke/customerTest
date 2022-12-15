@@ -46,9 +46,9 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
         }
       } catch (err) {
         setLoading(false)
-        setErrorUploading(`failed to upload file - ${file.name}`)
+        setErrorUploading(`failed2to upload file - ${file.name}`)
 
-        // console.error(err.message, `failed to upload file - ${file.name}`)
+        console.error(err.message, `failed to upload file - ${file.name}`)
         return null
       }
     })
@@ -98,25 +98,25 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
           <>
             {' '}
             {uploadedFiles && uploadedFiles?.length === 0 ? (
-              <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
+              <div {...getRootProps()} className='flex items-center justify-between h-full pt-3 pb-3 cursor-pointer'>
                 <input type={`file`} hidden {...getInputProps()} />
                 <div>
                   <img src={upload} className='w-12' width={48} height={48} />
                 </div>
 
-                <p className='mb-2 text-sm   '>
+                <p className='mb-2 text-sm '>
                   <span className='font-semibold text-primay-main'>Click to upload</span>
                   <span> or drag and drop</span>
                 </p>
               </div>
             ) : (
               <div
-                className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2'
+                className='flex flex-col justify-between h-full gap-2 p-2 overflow-x-hidden overflow-y-auto'
                 style={{
                   border: hideAddMoreFiles ? '' : '1px solid #cccccc',
                 }}
               >
-                <div className=' h-full'>
+                <div className='h-full '>
                   {uploadedFiles.map((file: UploadFile, index) => {
                     return (
                       <IndividualFile
@@ -132,7 +132,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
                     <div className='flex items-end mt-auto' {...getRootProps()}>
                       <input type={`file`} hidden {...getInputProps()} />
                       <button className='flex items-end ' style={{ marginTop: 'auto' }}>
-                        <img src={add} className='mr-1 inline' /> Add more files
+                        <img src={add} className='inline mr-1' /> Add more files
                       </button>
                     </div>
                   )}
@@ -150,7 +150,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
                   </button>
                 ) : (
                   <div
-                    className='flex  gap-2 '
+                    className='flex gap-2 '
                     style={{
                       justifyContent: 'space-between',
                     }}
