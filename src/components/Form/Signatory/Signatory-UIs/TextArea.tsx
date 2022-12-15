@@ -67,7 +67,7 @@ const TextArea = ({ id, required, setValue, value, text, colspan = 1, type = 'te
         ></textarea>
         {maximumNumbersOfCharacters ? (
           <div className='absolute bottom-0 right-0 text-sm text-[#9ca3af] z-10 bg-white'>
-            {value.length}/{maximumNumbersOfCharacters}
+            {value?.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}
       </div>

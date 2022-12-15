@@ -17,6 +17,7 @@ import TextArea from './Signatory-UIs/TextArea'
 import TextInput from './Signatory-UIs/TextInput'
 import { ReducersType } from 'Redux/store'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import IdPrefiller from './Signatory-UIs/IdPrefiller'
 
 type Props = {
   signatories?: Array<any>
@@ -35,11 +36,6 @@ const SignatoryModal = memo(
     const unfilledRequiredSignatoryList = useSelector<ReducersType>(
       (state) => state.unfilledRequiredSignatoryList
     ) as UnfilledRequiredSignatoryListReducerType
-
-    const [signatoryPrefillInput, setSignatoryPrefillInput] = useState<{ 'Identification Method': string; 'ID Number': string }>({
-      'Identification Method': '',
-      'ID Number': '',
-    })
 
     const [localUploadPassport, setLocalUploadPassport] = useState<any>([])
     const [localUploadIdentity, setLocalUploadIdentity] = useState<any>([])
@@ -93,9 +89,13 @@ const SignatoryModal = memo(
       return { success: unfilledRequiredFields.length === 0 }
     }
 
+    // useEffect(() => {
+    //   checkRequiredFields()
+    // }, [])
+
     useEffect(() => {
-      checkRequiredFields()
-    }, [])
+      console.log(signatoryDetails)
+    }, [signatoryDetails])
 
     return (
       <aside
@@ -118,36 +118,7 @@ const SignatoryModal = memo(
             <div className='flex gap-2 mt-3 text-[#8F8F8F]'>
               <img src={info} /> Provide signatory&apos;s identification to prefill form or proceed to fill form manually.
             </div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
-                paddingBottom: '3rem',
-                paddingTop: '1rem',
-              }}
-            >
-              <SignatoryDropDown
-                id='Identification Method'
-                required='off'
-                text='Identification Method'
-                optionsField={['BVN', 'NIN', 'Customer ID', 'Customer account number']}
-                selectedDropdownItem={signatoryPrefillInput['Identification Method']}
-                setSelectedDropdownItem={setSignatoryPrefillInput}
-              />
-              <TextInput
-                id='ID Number'
-                placeholder='Enter Number'
-                required='off'
-                maximumNumbersOfCharacters={30}
-                setValue={setSignatoryPrefillInput}
-                value={signatoryPrefillInput['ID Number']}
-                text='ID Number'
-                colspan={2}
-                type='text'
-              />
-            </div>
+            <IdPrefiller setSignatoryDetails={setSignatoryDetails} />
             <form>
               <div
                 style={{
