@@ -6,6 +6,10 @@ import FieldLabel from './FieldLabel'
 import { add, upload, deleteBtn } from 'Assets/svgs'
 import Spinner from 'Components/Shareables/Spinner'
 import IndividualFile from 'Components/Shareables/IndividualFile'
+import { useDispatch, useSelector } from 'react-redux'
+import { ReducersType } from 'Redux/store'
+import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 
 type UploadFile = {
   file: File
@@ -39,12 +43,22 @@ const FileUploadSignatory = ({
   setLocalUpload,
   setUploadKey,
 }: Props) => {
+  const dispatch = useDispatch()
+
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [isUploading, setIsUploading] = useState(false)
   const [fileUploadError, setFileUploadError] = useState({
     isError: false,
     message: '',
   })
+
+  const unfilledRequiredSignatoryList = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryList
+  ) as UnfilledRequiredSignatoryListReducerType
+
+  const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+    (state) => state.unfilledRequiredSignatoryListButton
+  ) as UnfilledRequiredSignatoryListReducerType
 
   const onDrop = useCallback(async (acceptedFiles: Array<File>, fileRejections) => {
     setIsUploading(true)
@@ -103,6 +117,7 @@ const FileUploadSignatory = ({
           signedUrl: filterSuccessUploadedFiles[0].signedUrl,
         },
       }))
+      // handleRedispatchOfRequiredFields()
     }
   }, [])
 
@@ -127,11 +142,23 @@ const FileUploadSignatory = ({
     }))
   }
 
-  useEffect(() => {
-    if (value) {
-      console.log(value)
+  const handleRedispatchOfRequiredFields = () => {
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredList) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
     }
-  }, [])
+
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+
+    if (isPresentInRequiredListButton) {
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
+    }
+  }
 
   return (
     <div>
@@ -226,6 +253,9 @@ const FileUploadSignatory = ({
         </div>
       </div>
       {fileUploadError.isError && <p className='text-red-400'>{fileUploadError.message}</p>}
+      {required.toLowerCase() === 'on' ? (
+        <p className='text-red-500'>{unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text.trim()) ? `${text} is required!` : null}</p>
+      ) : null}
     </div>
   )
 }

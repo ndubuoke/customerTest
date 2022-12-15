@@ -14,6 +14,7 @@ import {
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
+  UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
 import { ReducersType } from 'Redux/store'
 
@@ -110,6 +111,13 @@ export const unfilledRequiredSignatoryListAction =
   (list: UnfilledRequiredSignatoryListType) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     dispatch({
       type: UNFILLED_REQUIRED_SIGNATORY_LIST,
+      payload: { list },
+    })
+  }
+export const unfilledRequiredSignatoryListButtonAction =
+  (list: UnfilledRequiredSignatoryListType) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    dispatch({
+      type: UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
       payload: { list },
     })
   }

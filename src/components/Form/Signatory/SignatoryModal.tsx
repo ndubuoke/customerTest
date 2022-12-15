@@ -3,18 +3,21 @@ import FileUploadComponent from 'Components/CustomerManagement/FileUploadCompone
 import Button from 'Components/Shareables/Button'
 import DropDown from 'Components/Shareables/DropDown'
 import React, { memo, useEffect, useState } from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { generateID } from 'Utilities/generateId'
 import { SignatoryDetailType, SignatoryDetailsType } from '../Types/SignatoryTypes'
 import { SignatoryDetailsInitial, SignatoryDetailsRequiredDataStatus } from './InitialData'
-import { unfilledRequiredSignatoryListAction } from 'Redux/actions/FormManagement.actions'
+import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 import SignatoryDropDown from './Signatory-UIs/DropDown'
 import FileUploadSignatory from './Signatory-UIs/FileUploadSignatory'
 import PhoneInputSignatory from './Signatory-UIs/PhoneInputSIgnatory'
 import SearchAndSelectSignatory from './Signatory-UIs/SearchAndSelectSignatory'
 import TextArea from './Signatory-UIs/TextArea'
 import TextInput from './Signatory-UIs/TextInput'
+import { ReducersType } from 'Redux/store'
+import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import IdPrefiller from './Signatory-UIs/IdPrefiller'
 
 type Props = {
   signatories?: Array<any>
@@ -29,28 +32,27 @@ type Props = {
 const SignatoryModal = memo(
   ({ closeModalFunction, setSignatories, signatories, modification = false, setModification, signatoryDetails, setSignatoryDetails }: Props) => {
     const dispatch = useDispatch()
-    const [signatoryPrefillInput, setSignatoryPrefillInput] = useState<{ 'Identification Method': string; 'ID Number': string }>({
-      'Identification Method': '',
-      'ID Number': '',
-    })
+
+    const unfilledRequiredSignatoryList = useSelector<ReducersType>(
+      (state) => state.unfilledRequiredSignatoryList
+    ) as UnfilledRequiredSignatoryListReducerType
+    const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
+      (state) => state.unfilledRequiredSignatoryListButton
+    ) as UnfilledRequiredSignatoryListReducerType
 
     const [localUploadPassport, setLocalUploadPassport] = useState<any>([])
     const [localUploadIdentity, setLocalUploadIdentity] = useState<any>([])
     const [localUploadAddress, setLocalUploadAddress] = useState<any>([])
 
-    // useEffect(() => {
-    //   console.log(signatoryDetails)
-
-    //   // const add
-    // }, [signatoryDetails])
+    const [hideButton, setHideButton] = useState<boolean>(true)
 
     // Add a check
     const handleAddSignatory = (id: string | number) => {
-      // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
-      // setSignatoryDetails({ ...SignatoryDetailsInitial })
-      // closeModalFunction()
-
-      checkRequiredFields()
+      if (checkRequiredFields().success) {
+        setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
+        setSignatoryDetails({ ...SignatoryDetailsInitial })
+        closeModalFunction()
+      }
     }
 
     const handleModifySignatory = (id: string | number) => {
@@ -65,8 +67,10 @@ const SignatoryModal = memo(
       closeModalFunction()
     }
 
-    const checkRequiredFields = () => {
+    const _checkRequiredFields = () => {
       const allItems = Object.entries(SignatoryDetailsRequiredDataStatus)
+
+      // [[key, value], [key, value]]
 
       const requiredItems = allItems?.filter((x) => {
         return x[1] === 'required'
@@ -86,9 +90,29 @@ const SignatoryModal = memo(
         }
       })
 
-      // Dispatch the list of unfilled Required fields
-      dispatch(unfilledRequiredSignatoryListAction(unfilledRequiredFields) as any)
+      return unfilledRequiredFields
     }
+
+    const checkRequiredFields = () => {
+      // Dispatch the list of unfilled Required fields
+      dispatch(unfilledRequiredSignatoryListAction(_checkRequiredFields()) as any)
+
+      return { success: _checkRequiredFields().length === 0 }
+    }
+
+    const checkRequiredFieldsButton = () => {
+      dispatch(unfilledRequiredSignatoryListButtonAction(_checkRequiredFields()) as any)
+      return { success: _checkRequiredFields().length === 0 }
+    }
+
+    useEffect(() => {
+      checkRequiredFieldsButton()
+      // checkRequiredFields()
+    }, [signatoryDetails])
+
+    useEffect(() => {
+      console.log(signatoryDetails)
+    }, [signatoryDetails])
 
     return (
       <aside
@@ -111,36 +135,7 @@ const SignatoryModal = memo(
             <div className='flex gap-2 mt-3 text-[#8F8F8F]'>
               <img src={info} /> Provide signatory&apos;s identification to prefill form or proceed to fill form manually.
             </div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
-                paddingBottom: '3rem',
-                paddingTop: '1rem',
-              }}
-            >
-              <SignatoryDropDown
-                id='Identification Method'
-                required='off'
-                text='Identification Method'
-                optionsField={['BVN', 'NIN', 'Customer ID', 'Customer account number']}
-                selectedDropdownItem={signatoryPrefillInput['Identification Method']}
-                setSelectedDropdownItem={setSignatoryPrefillInput}
-              />
-              <TextInput
-                id='ID Number'
-                placeholder='Enter Number'
-                required='off'
-                maximumNumbersOfCharacters={30}
-                setValue={setSignatoryPrefillInput}
-                value={signatoryPrefillInput['ID Number']}
-                text='ID Number'
-                colspan={2}
-                type='text'
-              />
-            </div>
+            <IdPrefiller setSignatoryDetails={setSignatoryDetails} />
             <form>
               <div
                 style={{
@@ -277,7 +272,7 @@ const SignatoryModal = memo(
                 />
                 <SignatoryDropDown
                   id='If yes, specify'
-                  required='on'
+                  required='off'
                   text='If yes, specify'
                   optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['If yes, specify']}
@@ -287,7 +282,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='Residential Address'
                   placeholder='Enter Residential Address'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Residential Address']}
@@ -396,7 +391,7 @@ const SignatoryModal = memo(
                 <TextInput
                   id='ID Number'
                   placeholder='Enter ID Number'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['ID Number']}
@@ -511,7 +506,7 @@ const SignatoryModal = memo(
             </form>
             <div className='flex justify-center my-6'>
               <Button
-                disabled={false}
+                disabled={unfilledRequiredSignatoryListButton.list.length !== 0}
                 onClick={() => {
                   if (modification) {
                     handleModifySignatory(signatoryDetails['id'])

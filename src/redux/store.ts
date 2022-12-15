@@ -18,6 +18,7 @@ import {
   activePageReducer,
   unfilledRequiredSignatoryListReducer,
   UnfilledRequiredSignatoryListReducerType,
+  unfilledRequiredSignatoryListButtonReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -70,6 +71,7 @@ export type ReducersType = {
   showWaiverModalInForm: ShowModalInFormType
   activePage: any
   unfilledRequiredSignatoryList: UnfilledRequiredSignatoryListReducerType
+  unfilledRequiredSignatoryListButton: UnfilledRequiredSignatoryListReducerType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -96,6 +98,7 @@ const reducer = combineReducers<ReducersType>({
   showWaiverModalInForm: showWaiverModalInFormReducer,
   activePage: activePageReducer,
   unfilledRequiredSignatoryList: unfilledRequiredSignatoryListReducer,
+  unfilledRequiredSignatoryListButton: unfilledRequiredSignatoryListButtonReducer,
 })
 
 const middleware = [thunk]
