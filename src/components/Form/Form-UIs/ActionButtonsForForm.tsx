@@ -134,6 +134,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         // console.log({ fieldLabelsOfNotFilledRequiredFields })
         if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
           dispatch(showWaiverModalInFormAction('hide') as any)
+          sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('hide'))
           handleProceedToProcessSummary()
         } else {
           handleShowModal()
