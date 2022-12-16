@@ -31,7 +31,7 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
 
   useEffect(() => {
     if (signatoryPrefillInput['Identification Method'] === 'BVN' && signatoryPrefillInput['ID Number'].length === PrefillerIDTypeLengths.BVN) {
-      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: signatoryPrefillInput['Identification Method'] })
+      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: 'bvn' })
       console.log({ ID: signatoryPrefillInput, loading, success, error, response })
     }
 
@@ -39,7 +39,7 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
       signatoryPrefillInput['Identification Method'] === 'Customer ID' &&
       signatoryPrefillInput['ID Number'].length === PrefillerIDTypeLengths['Customer ID']
     ) {
-      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: signatoryPrefillInput['Identification Method'] })
+      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: 'Customer ID' })
       console.log({ ID: signatoryPrefillInput, loading, success, error, response })
     }
 
@@ -47,12 +47,12 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
       signatoryPrefillInput['Identification Method'] === 'Customer Account Number' &&
       signatoryPrefillInput['ID Number'].length === PrefillerIDTypeLengths['Customer Account Number']
     ) {
-      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: signatoryPrefillInput['Identification Method'] })
+      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: 'Customer Account Number' })
       console.log({ ID: signatoryPrefillInput, loading, success, error, response })
     }
 
     if (signatoryPrefillInput['Identification Method'] === 'NIN' && signatoryPrefillInput['ID Number'].length === PrefillerIDTypeLengths['NIN']) {
-      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: signatoryPrefillInput['Identification Method'] })
+      getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: 'nin' })
       console.log({ ID: signatoryPrefillInput, loading, success, error, response })
     }
   }, [signatoryPrefillInput])

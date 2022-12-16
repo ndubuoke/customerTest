@@ -85,10 +85,11 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           </div>
           <ProcessActions waiver={showWaiverTimeline} mode='creation' customerType={customerType} />
         </section>
-        <section className={`w-[25%]`}>
+        <section className={`w-[25%] min-w-[377px]`}>
           <div
-            className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px overflow-y-auto`}
+            className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px] overflow-y-auto`}
           >
+            <div className='font-medium text-[24px] leading-28px text-[#636363]'>Activity Log</div>
             <ActivityLog mode={'creation'} />
           </div>
         </section>

@@ -18,6 +18,7 @@ import TextInput from './Signatory-UIs/TextInput'
 import { ReducersType } from 'Redux/store'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import IdPrefiller from './Signatory-UIs/IdPrefiller'
+import { PrefillerIDTypeLengths, useIdFormPrefiller } from '../../../hooks/useIdFormPrefiller'
 
 type Props = {
   signatories?: Array<any>
@@ -32,6 +33,8 @@ type Props = {
 const SignatoryModal = memo(
   ({ closeModalFunction, setSignatories, signatories, modification = false, setModification, signatoryDetails, setSignatoryDetails }: Props) => {
     const dispatch = useDispatch()
+
+    const { loading, success, error, response, getIdDetails } = useIdFormPrefiller()
 
     const unfilledRequiredSignatoryList = useSelector<ReducersType>(
       (state) => state.unfilledRequiredSignatoryList
@@ -113,6 +116,32 @@ const SignatoryModal = memo(
     useEffect(() => {
       console.log(signatoryDetails)
     }, [signatoryDetails])
+
+    useEffect(() => {
+      if (
+        signatoryDetails['Means of Identification'] &&
+        signatoryDetails['ID Number'].length === PrefillerIDTypeLengths[signatoryDetails['Means of Identification']]
+      ) {
+        if (signatoryDetails['Means of Identification'] === 'BVN') {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'bvn' })
+        }
+        if (signatoryDetails['Means of Identification'] === "Driver's License") {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'dl' })
+        }
+        if (signatoryDetails['Means of Identification'] === 'NIN') {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'nin' })
+        }
+        if (signatoryDetails['Means of Identification'] === "Permanent Voter's Card") {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'pvc' })
+        }
+      }
+    }, [signatoryDetails['ID Number'], signatoryDetails['Means of Identification']])
+
+    useEffect(() => {
+      console.log({
+        [signatoryDetails['Means of Identification']]: PrefillerIDTypeLengths[signatoryDetails['Means of Identification']],
+      })
+    }, [signatoryDetails['Means of Identification']])
 
     return (
       <aside
@@ -392,12 +421,16 @@ const SignatoryModal = memo(
                   id='ID Number'
                   placeholder='Enter ID Number'
                   required='on'
-                  maximumNumbersOfCharacters={20}
+                  maximumNumbersOfCharacters={PrefillerIDTypeLengths[signatoryDetails['Means of Identification']] || 10}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['ID Number']}
                   text='ID Number'
                   colspan={1}
                   type='text'
+                  loading={loading}
+                  success={success}
+                  idPrefiller
+                  error={error?.status}
                 />
                 <TextInput
                   id='ID Issue Date'

@@ -1,3 +1,5 @@
+import { PrefillerIDTypeType } from 'src/hooks/useIdFormPrefiller'
+
 export type SignatoryDetailsType = {
   // 'Identification Method': string
   // 'ID Number': string
@@ -26,7 +28,7 @@ export type SignatoryDetailsType = {
   'Mobile Number': string
   'Alternate Phone Number': string
   'Email address': string
-  'Means of Identification': string
+  'Means of Identification': PrefillerIDTypeType | ''
   'ID Number': string
   'ID Issue Date': string
   'ID Expiry Date': string
