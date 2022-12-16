@@ -18,7 +18,7 @@ type Props = {
   setValue: (value: any) => any
   type?: 'text' | 'number' | 'date' | 'email'
   placeholder: string
-  maximumNumbersOfCharacters: number
+  maximumNumbersOfCharacters: number | string
   idPrefiller?: boolean
   loading?: boolean
   success?: boolean
