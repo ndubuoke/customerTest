@@ -13,9 +13,10 @@ export enum PrefillerIDTypeLengths {
 }
 
 export type PrefillerIDTypeType = 'BVN' | 'NIN' | 'Customer ID' | 'Customer Account Number' | "Permanent Voter's Card" | "Driver's License"
+export type PrefillerIDTypeTypeLower = 'bvn' | 'nin' | 'Customer ID' | 'Customer Account Number' | 'pvc' | 'dl'
 
 export type Props = {
-  idType: PrefillerIDTypeType
+  idType: PrefillerIDTypeTypeLower
   idNumber: string | number
 }
 
@@ -46,13 +47,13 @@ export const useIdFormPrefiller = () => {
         },
       }
 
-      const url = (id: PrefillerIDTypeType, number: string | number) => {
+      const url = (id: string, number: string | number) => {
         switch (id) {
           case 'Customer ID':
             return `${SERVER_URL}/v1/customer-signatory/${number}`
 
           default:
-            return `/v1/verification/${id}/${number}`
+            return `${SERVER_URL}/v1/customer/id/?field=${id}&id=${number}`
         }
       }
 

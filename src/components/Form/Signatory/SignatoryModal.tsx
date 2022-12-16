@@ -122,18 +122,18 @@ const SignatoryModal = memo(
         signatoryDetails['Means of Identification'] &&
         signatoryDetails['ID Number'].length === PrefillerIDTypeLengths[signatoryDetails['Means of Identification']]
       ) {
-        // if (signatoryDetails['Means of Identification'] === ) {
-        getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: signatoryDetails['Means of Identification'] })
-        // }
-        // if (signatoryDetails['Means of Identification'] === "Driver's License") {
-        //   getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: signatoryDetails['Means of Identification'] })
-        // }
-        // if (signatoryDetails['Means of Identification'] === 'NIN') {
-        //   getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: signatoryDetails['Means of Identification'] })
-        // }
-        // if (signatoryDetails['Means of Identification'] === "Permanent Voter's Card") {
-        //   getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: signatoryDetails['Means of Identification'] })
-        // }
+        if (signatoryDetails['Means of Identification'] === 'BVN') {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'bvn' })
+        }
+        if (signatoryDetails['Means of Identification'] === "Driver's License") {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'dl' })
+        }
+        if (signatoryDetails['Means of Identification'] === 'NIN') {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'nin' })
+        }
+        if (signatoryDetails['Means of Identification'] === "Permanent Voter's Card") {
+          getIdDetails({ idNumber: signatoryDetails['ID Number'], idType: 'pvc' })
+        }
       }
     }, [signatoryDetails['ID Number'], signatoryDetails['Means of Identification']])
 
