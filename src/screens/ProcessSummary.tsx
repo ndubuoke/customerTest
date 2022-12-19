@@ -1,15 +1,17 @@
 import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
+import { Form } from 'Components/Form/Types'
 
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import ProcessActions from 'Components/ProcessSummary/ProcessActions'
 import ProgressBar from 'Components/ProcessSummary/ProgressBar'
+import SignatorySummary from 'Components/ProcessSummary/SignatorySummary'
 import SingleSection from 'Components/ProcessSummary/SingleSection'
 import ActivityLog from 'Components/Shareables/ActivityLog'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { showWaiverModalInFormAction } from 'Redux/actions/FormManagement.actions'
-import { ShowModalInFormType } from 'Redux/reducers/FormManagement.reducers'
+import { ResponseType, ShowModalInFormType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { individualCustomerCreationData, smeCustomerCreationData } from '../data/process-summary'
@@ -21,6 +23,10 @@ type Props = {
 
 const ProcessSummary = ({ headerText, customerType }: Props) => {
   const dispatch = useDispatch()
+
+  const publishedFormInStorage: ResponseType = sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE))
+    : null
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
@@ -29,6 +35,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     : null
 
   const [showWaiverTimeline, setShowWaiverTimeline] = useState<'show' | 'hide'>('hide')
+  const [firstPageLength, setFirstLength] = useState<number>(null)
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
 
@@ -49,6 +56,18 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   useEffect(() => {
     console.log({ showWaiverModalInFormStorage, showWaiverTimeline })
   }, [showWaiverModalInFormStorage, showWaiverTimeline])
+
+  // Get the length of first page in the form to propertly position the signatory section
+  useEffect(() => {
+    console.log({ publishedFormInStorage })
+    const form = publishedFormInStorage?.serverResponse?.data as Form
+    if (form?.builtFormMetadata?.pages.length > 0) {
+      const theFirstPageLength = form?.builtFormMetadata?.pages[0].sections.length
+
+      setFirstLength(theFirstPageLength)
+      console.log({ theFirstPageLength })
+    }
+  }, [])
 
   return (
     <>
@@ -85,7 +104,12 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                 {!fillingFormInStorage
                   ? null
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {
-                      return <SingleSection section={x} key={i} />
+                      return (
+                        <>
+                          <SingleSection section={x} key={i} />
+                          {i === firstPageLength ? <SignatorySummary /> : null}
+                        </>
+                      )
                     })}
               </div>
             </div>
