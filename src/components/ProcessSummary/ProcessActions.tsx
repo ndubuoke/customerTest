@@ -6,16 +6,19 @@ import { isForm } from 'Screens/CustomerCreation'
 import { Modal } from 'Components/Modal'
 import CancelFormModal from './CancelFormModal'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import WaiverRequestForm from './WaiverRequestForm'
+import WaiverRequestForm, { WaiverTypeType } from './WaiverRequestForm'
 import { FormStructureType } from 'Components/types/FormStructure.types'
+import FormSubmissionAlert from './FormSubmissionAlert'
+import WaiverRequestFormBoth from './WaiverRequestFormBoth'
 
 type Props = {
-  waiver: 'show' | 'hide'
+  openWaiver: 'show' | 'hide'
   mode: 'creation' | 'modification'
   customerType: 'individual' | 'sme'
+  waiverType: WaiverTypeType
 }
 
-const ProcessActions = ({ waiver, mode, customerType }: Props) => {
+const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both' }: Props) => {
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
@@ -24,6 +27,9 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
 
   const [openCancelFormModal, setOpenCancelFormModal] = useState<boolean>(false)
   const [openWaiverRequestForm, setOpenWaiverRequestForm] = useState<boolean>(false)
+
+  // Remove this later
+  const [openSuccess, setOpenSuccess] = useState<boolean>(false)
 
   const handleBackToForm = () => {
     if (customerType === 'individual') {
@@ -42,6 +48,8 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
 
   const handleOpenWaiverRequestForm = () => {
     setOpenWaiverRequestForm((prev) => !prev)
+
+    // setOpenSuccess(true)
   }
 
   const handleCancelFormCreation = () => {
@@ -52,6 +60,11 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
     sessionStorage.setItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS, JSON.stringify('clear'))
 
     navigate(AppRoutes.mainScreen)
+  }
+
+  const handleSubmitForm = () => {
+    // Simulate success
+    setOpenSuccess(true)
   }
 
   return (
@@ -74,15 +87,25 @@ const ProcessActions = ({ waiver, mode, customerType }: Props) => {
         </div>
         <div className='text-[12px] '>Cancel</div>
       </div>
-      <div className={`text-center flex flex-col items-center max-w-[80px] cursor-pointer`} onClick={handleOpenWaiverRequestForm}>
+      <div
+        className={`text-center flex flex-col items-center max-w-[80px] cursor-pointer`}
+        onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : handleSubmitForm}
+      >
         <div className='w-[35px] h-[35px] mb-2 '>
           <img src={submitForm} alt='go back' width={30} height={24} />
         </div>
-        <div className='text-[12px] '>{waiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}</div>
+        <div className='text-[12px] '>{openWaiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}</div>
       </div>
       {openCancelFormModal ? <CancelFormModal closeModalFunction={handleOpenCancelFormModal} cancelFormCreation={handleCancelFormCreation} /> : null}
 
-      {openWaiverRequestForm ? <WaiverRequestForm closeModalFunction={handleOpenWaiverRequestForm} /> : null}
+      {openWaiverRequestForm ? (
+        waiverType === 'both' ? (
+          <WaiverRequestFormBoth closeModalFunction={handleOpenWaiverRequestForm} waiverType={waiverType} />
+        ) : (
+          <WaiverRequestForm closeModalFunction={handleOpenWaiverRequestForm} waiverType={waiverType} />
+        )
+      ) : null}
+      {openWaiver === 'hide' && openSuccess ? <FormSubmissionAlert closeModalFunction={() => setOpenSuccess(false)} /> : null}
     </div>
   )
 }

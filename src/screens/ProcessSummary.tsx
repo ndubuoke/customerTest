@@ -63,7 +63,14 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
         <section className={`w-[75%] relative `}>
           <div className={`relative rounded-lg text-[#636363] font-[Inter] w-full h-full  min:h-full max:h-full  bg-white py-6`}>
             <div className='p-4'>
-              <ProgressBar mode='creation' waiverRequest={showWaiverTimeline} waiverStatus='not approved' />
+              <ProgressBar
+                mode='creation'
+                waiverRequest='hide'
+                // waiverRequest={showWaiverTimeline}
+                waiverStatus='not approved'
+                eddRequest='hide'
+                eddStatus='not approved'
+              />
             </div>
             <div className='px-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12'>
               <h2
@@ -83,7 +90,13 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               </div>
             </div>
           </div>
-          <ProcessActions waiver={showWaiverTimeline} mode='creation' customerType={customerType} />
+          <ProcessActions
+            // waiver={showWaiverTimeline}
+            openWaiver='hide'
+            mode='creation'
+            customerType={customerType}
+            waiverType='both'
+          />
         </section>
         <section className={`w-[25%] min-w-[377px]`}>
           <div

@@ -10,13 +10,14 @@ type Props = {
   setLocalUpload: (file: any) => void
   hideAddMoreFiles?: boolean
   setUploadKey?: any
+  label?: string
 }
-type UploadFile = {
+export type UploadFile = {
   file: File
   signedUrl: string
 }
 
-const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }: Props) => {
+const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, label = 'Upload Supporting Documents' }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [errorUploading, setErrorUploading] = useState<string>('')
@@ -46,7 +47,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
         }
       } catch (err) {
         setLoading(false)
-        setErrorUploading(`failed2to upload file - ${file.name}`)
+        setErrorUploading(`failed to upload file - ${file.name}`)
 
         console.error(err.message, `failed to upload file - ${file.name}`)
         return null
@@ -84,7 +85,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
   return (
     <div>
       <div className='mb-3'>
-        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>Upload Supporting Documents</label>
+        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>{label}</label>
       </div>
       <div
         className={`flex gap-12 w-full max-w-[392px] min-h-[110px] max-h-[120px] border border-[#c4c4c4] rounded-[10px] items-center px-3  relative `}
