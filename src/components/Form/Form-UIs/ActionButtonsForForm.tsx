@@ -32,14 +32,15 @@ type Props = {
   setActivePageState: (val: PageInstance) => void
   activePageState: PageInstance
   fillingFormState: any
+  pageIndex: number
+  setPageIndex: (prev: React.SetStateAction<number>) => void
 }
 
-const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState }: Props) => {
+const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState, pageIndex, setPageIndex }: Props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const [form, setForm] = useState<Form>(null)
-  const [index, setIndex] = useState<number>(0)
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
 
@@ -50,7 +51,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       if (findIndexOfObject(form, activePageState?.id) === 0) {
         return
       } else {
-        setIndex((prev) => prev - 1)
+        setPageIndex((prev) => prev - 1)
       }
     }
 
@@ -58,7 +59,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
         return
       } else {
-        setIndex((prev) => prev + 1)
+        setPageIndex((prev) => prev + 1)
       }
     }
   }
@@ -176,11 +177,11 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
   useEffect(() => {
     if (publishedForm) {
-      const page = publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[index]
-      dispatch(activePageAction(page, index) as any)
+      const page = publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[pageIndex]
+      dispatch(activePageAction(page, pageIndex) as any)
       setActivePageState(page)
     }
-  }, [publishedForm, index])
+  }, [publishedForm, pageIndex])
 
   // Handle RequiredFields
 
