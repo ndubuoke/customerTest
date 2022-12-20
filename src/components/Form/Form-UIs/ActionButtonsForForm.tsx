@@ -178,6 +178,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const handleDiscardEDDWaiver = () => {
     sessionStorage.setItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM, JSON.stringify('hide'))
     setShowEDDAlert(false)
+    handleActivePage('next')
   }
 
   const handleProceedToProcessSummary = () => {
