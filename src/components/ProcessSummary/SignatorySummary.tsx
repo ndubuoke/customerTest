@@ -13,7 +13,7 @@ const SignatorySummary = (props: Props) => {
 
   const [signatories, setSignatories] = useState<Array<SignatoryDetailsType>>([])
   const [openSignatoryModalSummary, setOpenSignatoryModalSummary] = useState<boolean>(false)
-  //   const [currentSignatory, setCurrentSignatory] = useState<>()
+  const [currentSignatory, setCurrentSignatory] = useState<SignatoryDetailsType>(null)
 
   const handleSignatoryModal = () => {
     setOpenSignatoryModalSummary((prev) => !prev)
@@ -22,6 +22,9 @@ const SignatorySummary = (props: Props) => {
   const handleViewSignatory = (id: number | string) => {
     console.log({ id })
     handleSignatoryModal()
+    const singledOutSignatory = signatories.find((x) => x.id === id)
+
+    setCurrentSignatory(singledOutSignatory)
   }
 
   useEffect(() => {
@@ -34,7 +37,7 @@ const SignatorySummary = (props: Props) => {
     <div className='mx-6'>
       <h3 className='font-roboto font-bold text-[18px] leading-[16px] pt-6 pb-4  ml-12'>Account Signatory Details</h3>
       <SignatoriesTable signatories={signatories} handleViewSignatory={handleViewSignatory} viewSignatory={true} collapsed={false} />
-      {openSignatoryModalSummary ? <SignatoryModalSummary closeModalFunction={handleSignatoryModal} /> : null}
+      {openSignatoryModalSummary ? <SignatoryModalSummary closeModalFunction={handleSignatoryModal} singleSignatory={currentSignatory} /> : null}
     </div>
   )
 }
