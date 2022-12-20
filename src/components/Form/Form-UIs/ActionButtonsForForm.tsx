@@ -20,6 +20,7 @@ import { AppRoutes } from 'Routes/AppRoutes'
 import WaiverAlert from 'Components/ProcessSummary/WaiverAlert'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { isForm } from 'Screens/CustomerCreation'
+import EDDAlert from 'Components/ProcessSummary/EddAlert'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -34,6 +35,8 @@ type Props = {
   fillingFormState: any
 }
 
+const highRiskScore = 90
+
 const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState }: Props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -42,6 +45,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [index, setIndex] = useState<number>(0)
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
+  const [showEDDAlert, setShowEDDAlert] = useState<boolean>(false)
+  const [riskScore, setRiskScore] = useState<number>(90)
+  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -50,15 +56,25 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       if (findIndexOfObject(form, activePageState?.id) === 0) {
         return
       } else {
-        setIndex((prev) => prev - 1)
+        setIndex((prev) => {
+          const dec = prev - 1
+          // console.log({ dec })
+
+          return dec
+        })
       }
     }
 
     if (action === 'next') {
-      if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+      console.log({ theObject: form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)] })
+      if (findIndexOfObject(form, activePageState?.id) >= form?.builtFormMetadata?.pages?.length - 1) {
         return
       } else {
-        setIndex((prev) => prev + 1)
+        setIndex((prev) => {
+          const inc = prev + 1
+          // console.log({ inc })
+          return inc
+        })
       }
     }
   }
@@ -151,6 +167,19 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     setShowWaiverAlert((prev) => !prev)
   }
 
+  // Handle show EDD modal function
+  const handleShowEDDModal = () => {
+    // dispatch show waiver
+    sessionStorage.setItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM, JSON.stringify('show'))
+    // dispatch(showWaiverModalInFormAction('show') as any)
+    setShowEDDAlert((prev) => !prev)
+  }
+
+  const handleDiscardEDDWaiver = () => {
+    sessionStorage.setItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM, JSON.stringify('hide'))
+    setShowEDDAlert(false)
+  }
+
   const handleProceedToProcessSummary = () => {
     // Proceed to process summary
     dispatch(statusForCanProceedAction(true) as any)
@@ -165,6 +194,32 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     if (location.pathname.replace(/[^a-zA-Z0-9 ]/g, '') === AppRoutes.SMECustomerCreationScreen.replace(/[^a-zA-Z0-9 ]/g, '')) {
       navigate(AppRoutes.SMEProcessSummary)
       return
+    }
+  }
+
+  const handleProceedEDD = () => {
+    handleActivePage('next')
+    setShowEDDAlert(false)
+  }
+
+  const handleNextAndOtherAddOns = () => {
+    if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+      handleSubmit()
+    } else {
+      if (flagCustomerStatus) {
+        if (
+          getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
+          'account services'
+        ) {
+          if (riskScore >= highRiskScore) {
+            handleShowEDDModal()
+          }
+        } else {
+          handleActivePage('next')
+        }
+      } else {
+        handleActivePage('next')
+      }
     }
   }
 
@@ -190,12 +245,11 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       <Button disabled={false} onClick={() => console.log('test saved to draft')} text='Save to draft' />
       <Button
         disabled={false}
-        onClick={() =>
-          findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? handleSubmit() : handleActivePage('next')
-        }
+        onClick={handleNextAndOtherAddOns}
         text={findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? 'Proceed' : 'Next'}
       />
       {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
+      {showEDDAlert ? <EDDAlert closeModalFunction={handleDiscardEDDWaiver} proceedToProcessSummary={handleProceedEDD} /> : null}
     </div>
   )
 }
