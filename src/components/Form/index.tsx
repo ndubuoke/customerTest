@@ -52,7 +52,7 @@ const Form = memo(
     const [canNext, setCanNext] = useState<boolean>(false)
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
-console.log('activePage',activePage)
+    console.log('activePage', activePage)
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
