@@ -1,21 +1,22 @@
 import React from 'react'
 import { CancelIcon, ModifyIcon, ProcessStep, sterlingLogoProcess, SterlingStepperImg, SubmitIcon, processSummaryStatus } from 'Assets/svgs'
 import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
+import { FormModeType, StatusType, TimelineType } from 'Screens/ProcessSummary'
 
 type Props = {
-  mode: 'creation' | 'modification'
-  waiverRequest?: 'show' | 'hide'
+  mode: FormModeType
+  docWaiverRequest?: TimelineType
   submitted?: boolean
-  waiverStatus: 'approved' | 'not approved'
-  eddStatus: 'approved' | 'not approved'
-  eddRequest: 'show' | 'hide'
+  docWaiverStatus: StatusType
+  eddStatus: StatusType
+  eddRequest: TimelineType
 }
 // mode
 const ProgressBar = ({
   mode = 'creation',
-  waiverRequest = 'hide',
+  docWaiverRequest = 'hide',
   submitted = false,
-  waiverStatus = 'not approved',
+  docWaiverStatus = 'not approved',
   eddStatus = 'not approved',
   eddRequest = 'show',
 }: Props) => {
@@ -36,8 +37,8 @@ const ProgressBar = ({
           ></div>
 
           <ImageText text='Pending Submission' />
-          {waiverRequest === 'show' ? (
-            <div className={`z-10 ${waiverStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
+          {docWaiverRequest === 'show' ? (
+            <div className={`z-10 ${docWaiverStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
               <ImageText text='Documentation Waiver Approval' />
             </div>
           ) : null}

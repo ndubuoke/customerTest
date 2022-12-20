@@ -169,7 +169,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                         onClick={() => {
                           setFormCreationStarted(true)
                           // navigate(location.pathname + isForm)
-                          sessionStorage.setItem(STORAGE_NAMES.FORM_MODE_STATUS, 'creation')
+                          sessionStorage.setItem(STORAGE_NAMES.FORM_MODE_STATUS, JSON.stringify('creation'))
                         }}
                       />
                     </div>
