@@ -9,11 +9,14 @@ import FileUploadComponent from 'Components/CustomerManagement/FileUploadCompone
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
+export type WaiverTypeType = 'documentation' | 'edd' | 'both'
+
 type Props = {
   closeModalFunction: () => void
+  waiverType: WaiverTypeType
 }
 
-const WaiverRequestForm = ({ closeModalFunction }: Props) => {
+const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation' }: Props) => {
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
@@ -27,14 +30,14 @@ const WaiverRequestForm = ({ closeModalFunction }: Props) => {
     if (localUpload && localUpload.length > 0) {
       if (fillingFormInStorage.data.customerData.length > 0) {
         const updatedData = fillingFormInStorage.data.waiverData
-        fillingFormInStorage.data.waiverData = {
-          ...updatedData,
-          documents: [...updatedData.documents, ...uploadKey],
+        fillingFormInStorage.data.waiverData.push({
+          // ...updatedData,
+          documents: [...uploadKey],
           initiator,
           initiatorId,
-          type: 'documentation',
+          type: waiverType,
           justification,
-        }
+        })
 
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormInStorage))
 
