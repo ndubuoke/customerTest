@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { generateID } from 'Utilities/generateId'
 import { ExecutiveField } from '../Types/ExecutiveTypes'
 
-export const ExecutiveDetailsInitial: ExecutiveField[] = [
+export const additionalDetailsInitial = (): ExecutiveField[] => [
   {
     id: generateID(),
     type: 'dropdown',

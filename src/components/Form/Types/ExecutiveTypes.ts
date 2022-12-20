@@ -94,4 +94,5 @@ export type ExecutiveField = {
   placeholder: string
   options?: string[]
   maxLength?: number
+  apiProperty?: string
 }

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { generateID } from 'Utilities/generateId'
 import { ExecutiveField } from '../Types/ExecutiveTypes'
 
-export const ExecutiveDetailsInitial: ExecutiveField[] = [
+export const executiveDetailsInitial = (): ExecutiveField[] => [
   {
     id: generateID(),
     type: 'dropdown',
@@ -14,6 +14,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     colSpan: 1,
     placeholder: 'select',
     options: ['mr', 'mrs', 'pastor'],
+    apiProperty: 'title',
   },
   {
     id: generateID(),
@@ -26,6 +27,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     colSpan: 2,
     placeholder: 'enter surname',
     maxLength: 30,
+    apiProperty: 'surname',
   },
   {
     id: generateID(),
@@ -38,6 +40,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     colSpan: 2,
     placeholder: 'Enter First name',
     maxLength: 30,
+    apiProperty: 'firstName',
   },
   {
     id: generateID(),
@@ -61,6 +64,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: '',
+    maxLength: 30,
   },
   {
     id: generateID(),
@@ -120,6 +124,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 3,
     placeholder: 'Enter Description ',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -131,6 +136,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'on',
     colSpan: 1,
     placeholder: 'Enter Mobile Number',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -154,6 +160,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'ID Number',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -165,6 +172,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: '',
+    maxLength: 30,
   },
   {
     id: generateID(),
@@ -176,6 +184,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: '',
+    maxLength: 30,
   },
   {
     id: generateID(),
@@ -187,6 +196,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'on',
     colSpan: 1,
     placeholder: 'Biometric ID Number',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -210,6 +220,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter State of Origin',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -221,6 +232,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter LGA',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -232,6 +244,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter City/Town',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -243,6 +256,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter Occupation',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -254,6 +268,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter Status/Job Title',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -265,6 +280,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'on',
     colSpan: 1,
     placeholder: 'Enter Position',
+    maxLength: 160,
   },
   {
     id: generateID(),
@@ -288,6 +304,7 @@ export const ExecutiveDetailsInitial: ExecutiveField[] = [
     required: 'off',
     colSpan: 1,
     placeholder: '',
+    maxLength: 160,
   },
   {
     id: generateID(),
