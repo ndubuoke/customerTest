@@ -9,9 +9,10 @@ import AdditionalTextInput from './Additional-UIs/TextInput'
 import AdditionalDropdown from './Additional-UIs/Dropdown'
 import { ExecutiveDetailsType, ExecutiveDetailType, ExecutiveField } from 'Components/Form/Types/ExecutiveTypes'
 import Button from 'Components/Shareables/Button'
-import { ExecutiveDetailsInitial } from './initialData'
+import { additionalDetailsInitial } from './initialData'
 
 type Props = {
+  detailToModifyId: string
   closeModalFunction: () => void
   executives?: Array<any>
   setExecutives?: (value: any) => void
@@ -21,7 +22,15 @@ type Props = {
   setModification: (prev: boolean) => void
 }
 
-const AdditionalModal = ({ closeModalFunction, executiveDetails, setExecutiveDetails, modification, executives, setExecutives }: Props) => {
+const AdditionalModal = ({
+  closeModalFunction,
+  executiveDetails,
+  setExecutiveDetails,
+  modification,
+  executives,
+  setExecutives,
+  detailToModifyId,
+}: Props) => {
   const handleUpdateFields = (id: string, value: string) => {
     const updatedFields = executiveDetails.map((field) => {
       if (field.id === id) {
@@ -45,7 +54,7 @@ const AdditionalModal = ({ closeModalFunction, executiveDetails, setExecutiveDet
     ])
     // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
     // setSignatoryDetails({ ...SignatoryDetailsInitial })
-    setExecutiveDetails(ExecutiveDetailsInitial)
+    setExecutiveDetails(additionalDetailsInitial())
     closeModalFunction()
   }
 
@@ -57,7 +66,7 @@ const AdditionalModal = ({ closeModalFunction, executiveDetails, setExecutiveDet
     //   copied.splice(signatoryIndex, 1, executiveDetails)
     //   return copied
     // })
-    setExecutiveDetails({ ...ExecutiveDetailsInitial })
+    setExecutiveDetails([...additionalDetailsInitial()])
     closeModalFunction()
   }
 

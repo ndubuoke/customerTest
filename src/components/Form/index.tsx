@@ -50,8 +50,9 @@ const Form = memo(
     const [activePageState, setActivePageState] = useState<PageInstance>(null)
     const [canSubmit, setCanSubmit] = useState<boolean>(false)
     const [canNext, setCanNext] = useState<boolean>(false)
+    const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
-
+    console.log('activePage', activePage)
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
@@ -123,6 +124,8 @@ const Form = memo(
               setCanSubmit={setCanSubmit}
               canNext={canNext}
               setCanNext={setCanNext}
+              pageIndex={pageIndex}
+              setPageIndex={setPageIndex}
             />
             <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
               {activePageState?.sections?.length > 0
@@ -145,8 +148,8 @@ const Form = memo(
                     )
                   })
                 : null}
-              {activePage && activePage?.theIndex === 2 ? <Executives /> : null}
-              {activePage && activePage?.theIndex === 3 ? <AdditionalDetails /> : null}
+              {activePage && activePage?.theIndex === 3 ? <Executives /> : null}
+              {activePage && activePage?.theIndex === 4 ? <AdditionalDetails /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}
@@ -165,7 +168,13 @@ const Form = memo(
         ) : null}
 
         {publishedFormState?.serverResponse?.status ? (
-          <ActionButtonsForForm setActivePageState={setActivePageState} activePageState={activePageState} fillingFormState={fillingFormState} />
+          <ActionButtonsForForm
+            setActivePageState={setActivePageState}
+            activePageState={activePageState}
+            fillingFormState={fillingFormState}
+            pageIndex={pageIndex}
+            setPageIndex={setPageIndex}
+          />
         ) : null}
       </div>
     )

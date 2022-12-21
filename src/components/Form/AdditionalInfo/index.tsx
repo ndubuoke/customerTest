@@ -4,68 +4,73 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { SignatoryDetailsInitial } from '../Signatory/InitialData'
 import SignatoriesTable from '../Signatory/SignatoriesTable'
 import SignatoryModal from '../Signatory/SignatoryModal'
-import { ExecutiveField } from '../Types/ExecutiveTypes'
+import { ExecutiveDetailsType, ExecutiveField } from '../Types/ExecutiveTypes'
 import { SignatoryDetailsType } from '../Types/SignatoryTypes'
 import AdditionalModal from './AdditionalModal'
 import AdditionalDetailsTable from './AdditionalTable'
-// import { SignatoryDetailsInitial } from './InitialData'
+import { additionalDetailsInitial } from './initialData'
 // import SignatoriesTable from './SignatoriesTable'
 // import SignatoryModal from './SignatoryModal'
 
 type Props = {}
 
 const AdditionalDetails = memo((props: Props) => {
-  const [showSignatoryForm, setShowSignatoryForm] = useState<boolean>(false)
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [signatories, setSignatories] = useState<Array<SignatoryDetailsType>>([])
+  const [executives, setExecutives] = useState<Array<ExecutiveDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
+  const [executiveDetails, setExecutiveDetails] = useState<ExecutiveField[]>(additionalDetailsInitial())
+  const [detailToModifyId, setDetailToModifyId] = useState('')
   const [modification, setModification] = useState<boolean>(false)
-  const [signatoryDetails, setSignatoryDetails] = useState<SignatoryDetailsType>(SignatoryDetailsInitial)
 
   const handleCollapseSection = () => {
     setCollapsed((prev) => !prev)
   }
 
   const closeModalFunction = () => {
-    setOpenModal((prev) => !prev)
+    setExecutiveDetails([...additionalDetailsInitial()])
     setModification(false)
-    setSignatoryDetails(SignatoryDetailsInitial)
+    setOpenModal((prev) => !prev)
   }
 
-  const handleRemoveSignatory = (id: string | number) => {
-    const filtered = signatories.filter((x) => x?.id !== id)
-    setSignatories(filtered)
-    console.log('delete', setSignatories(filtered))
+  const handleRemoveExecutive = (id: string | number) => {
+    const filtered = executives.filter((x) => x?.id !== id)
+    setExecutives(filtered)
   }
 
-  const handleModify = (id: string | number) => {
-    const item = signatories.find((x) => x?.id === id)
-    setSignatoryDetails(item)
+  const handleModify = (id: string) => {
+    const item = executives.find((x) => x?.id === id)
+    setExecutiveDetails(
+      additionalDetailsInitial().map((field) => {
+        if (item[field.fieldLabel]) {
+          field.value = item[field.fieldLabel]
+        }
+        return field
+      })
+    )
+    setDetailToModifyId(id)
     setModification(true)
     setOpenModal((prev) => !prev)
   }
 
   useEffect(() => {
-    if (signatories.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE, JSON.stringify(signatories))
-    }
-  }, [signatories])
-
-  useEffect(() => {
-    if (signatories.length === 0) {
-      const signatoryInStorage = sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE)
-        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE))
+    if (executives.length === 0) {
+      const executiveInStorage = sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE))
         : null
 
-      if (signatoryInStorage) {
-        setSignatories(signatoryInStorage)
+      if (executiveInStorage) {
+        setExecutives(executiveInStorage)
       }
     }
   }, [])
 
-  function handleRemoveAdditional(id: string | number): void {
-    throw new Error('Function not implemented.')
-  }
+  useEffect(() => {
+    if (executives.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE, JSON.stringify(executives))
+    } else {
+      sessionStorage.removeItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
+    }
+  }, [executives])
 
   return (
     <section className='max-w-[1060px] mx-4 bg-slate-50'>
@@ -104,19 +109,18 @@ const AdditionalDetails = memo((props: Props) => {
             Add Details
           </button>
         </div>
-        <AdditionalDetailsTable collapsed={collapsed} handleRemoveAdditional={handleRemoveAdditional} handleModify={handleModify} />
+        <AdditionalDetailsTable collapsed={collapsed} handleRemoveAdditional={handleRemoveExecutive} handleModify={handleModify} />
       </div>
       {openModal ? (
         <AdditionalModal
+          detailToModifyId={detailToModifyId}
           closeModalFunction={closeModalFunction}
-          executiveDetails={[]}
-          setExecutiveDetails={function (data: ExecutiveField[]): void {
-            throw new Error('Function not implemented.')
-          }}
-          modification={false}
-          setModification={function (prev: boolean): void {
-            throw new Error('Function not implemented.')
-          }}
+          setExecutives={setExecutives}
+          executives={executives}
+          executiveDetails={executiveDetails}
+          setExecutiveDetails={setExecutiveDetails}
+          modification={modification}
+          setModification={setModification}
         />
       ) : null}
     </section>

@@ -256,7 +256,7 @@ const FormFileUpload = ({
   }, [])
 
   useEffect(() => {
-    // console.log('uploadedFiles', uploadedFiles)
+    console.log('uploadedFiles', uploadedFiles)
     if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
@@ -368,7 +368,7 @@ const FormFileUpload = ({
       title={helpText}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
       <div
@@ -378,22 +378,22 @@ const FormFileUpload = ({
         }}
       >
         {fileUploadError.isError && <p>{fileUploadError.message}</p>}
-
         {uploadedFiles?.length > 0 ? (
-          <div className='cursor-pointer relative flex items-center '>
+          <div className='relative flex items-center cursor-pointer '>
             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
-              {uploadedFiles.map((file: UploadFile, index) => {
-                return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
-              })}
+              {Array.isArray(uploadedFiles) &&
+                uploadedFiles.map((file: UploadFile, index) => {
+                  return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
+                })}
             </div>
           </div>
         ) : isUploading ? (
           <div className='flex items-center  h-[150px]'>
-            <span className='text-3xl mr-4'>Loading</span>
+            <span className='mr-4 text-3xl'>Loading</span>
             <Spinner size={'small'} />
           </div>
         ) : (
-          <div {...getRootProps()} className='cursor-pointer relative h-full '>
+          <div {...getRootProps()} className='relative h-full cursor-pointer '>
             <input type={`file`} hidden {...getInputProps()} multiple={false} className='' />
 
             <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
@@ -424,7 +424,7 @@ export default FormFileUpload
 //       title={helpText}
 //     >
 //       <div className='relative w-fit'>
-//         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+//         {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
 //         <FieldLabel fieldItem={item} />
 //       </div>
 //       {/* loading overlay  */}
@@ -439,7 +439,7 @@ export default FormFileUpload
 //         {isUploading && (
 //           // <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
 //           <div className='flex items-center  h-[150px]'>
-//             <span className='text-3xl mr-4'>Loading</span>
+//             <span className='mr-4 text-3xl'>Loading</span>
 //             {/* loading icon */}
 //             <Spinner size={'small'} />
 //           </div>
@@ -456,7 +456,7 @@ export default FormFileUpload
 //     )} */}
 
 //         {uploadedFiles?.length > 0 ? (
-//           <div className='cursor-pointer relative flex items-center '>
+//           <div className='relative flex items-center cursor-pointer '>
 //             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
 //               {uploadedFiles.map((file: UploadFile, index) => {
 //                 return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
@@ -464,7 +464,7 @@ export default FormFileUpload
 //             </div>
 //           </div>
 //         ) : (
-//           <div {...getRootProps()} className='cursor-pointer relative '>
+//           <div {...getRootProps()} className='relative cursor-pointer '>
 //             <input type={`file`} hidden {...getInputProps()} multiple={false} />
 
 //             <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>

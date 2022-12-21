@@ -8,6 +8,7 @@ import StepNumbers from './StepNumbers'
 import { getProperty } from 'Utilities/getProperty'
 
 type Props = {
+  // SME SHOW ONLY EXECUTIVE CHECK
   customerType?: 'sme' | 'individual'
   setActivePageState: (val: PageInstance) => void
   activePageState: PageInstance
@@ -15,19 +16,22 @@ type Props = {
   setCanSubmit: (prev: boolean) => void
   canNext: boolean
   setCanNext: (prev: boolean) => void
+  pageIndex: number
+  setPageIndex: (prev: React.SetStateAction<number>) => void
 }
 
-const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, customerType }: Props) => {
+const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, customerType, pageIndex, setPageIndex }: Props) => {
   const dispatch = useDispatch()
 
   const [form, setForm] = useState<Form>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
-
+  console.log('publishedForm', publishedForm)
   const handleActivePage = (index: number) => {
     const page = form?.builtFormMetadata?.pages[index]
     dispatch(activePageAction(page, index) as any)
     setActivePageState(page)
+    setPageIndex(index)
   }
 
   useEffect(() => {
@@ -59,7 +63,7 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
   return (
     <div className=' flex justify-center items-center min-h-[120px] '>
       <div className='max-w-[991px] overflow-auto mx-auto '>
-        <div className=' flex justify-end w-fit z-10'>
+        <div className='z-10 flex justify-end  w-fit'>
           {form?.builtFormMetadata?.pages?.map((page: PageInstance, index: number) => {
             return (
               <StepNumbers

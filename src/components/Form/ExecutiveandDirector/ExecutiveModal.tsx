@@ -4,16 +4,17 @@ import DropDown from 'Components/Shareables/DropDown'
 import { Form } from 'Components/types/FormControl.types'
 
 // import Button from 'Components/Shareables/Button'
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { generateID } from 'Utilities/generateId'
 import TextInput from './ExecutiveandDirectors-UI/TextInput'
 import TextArea from './ExecutiveandDirectors-UI/TextArea'
 import ExecutiveDropDown from './ExecutiveandDirectors-UI/Dropdown'
 import { ExecutiveDetailsType, ExecutiveDetailType, ExecutiveField } from 'Components/Form/Types/ExecutiveTypes'
 import Button from 'Components/Shareables/Button'
-import { ExecutiveDetailsInitial } from './initialData'
+import { executiveDetailsInitial } from './initialData'
 
 type Props = {
+  detailToModifyId: string
   closeModalFunction: () => void
   executives?: Array<any>
   setExecutives?: (value: any) => void
@@ -23,7 +24,19 @@ type Props = {
   setModification: (prev: boolean) => void
 }
 
-const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveDetails, modification, executives, setExecutives }: Props) => {
+const AddExecutiveModal = ({
+  closeModalFunction,
+  executiveDetails,
+  setExecutiveDetails,
+  modification,
+  executives,
+  setExecutives,
+  detailToModifyId,
+}: Props) => {
+  const submitBtnIsDisabled = useMemo(() => {
+    console.log('executiveDetails', executiveDetails)
+    return executiveDetails.some((detail) => detail.required === 'on' && !detail.value)
+  }, [executiveDetails])
   const handleUpdateFields = (id: string, value: string) => {
     const updatedFields = executiveDetails.map((field) => {
       if (field.id === id) {
@@ -47,11 +60,13 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
     ])
     // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
     // setSignatoryDetails({ ...SignatoryDetailsInitial })
-    setExecutiveDetails(ExecutiveDetailsInitial)
+    setExecutiveDetails(executiveDetailsInitial())
     closeModalFunction()
   }
 
-  const handleModifyExecutive = (id: string | number) => {
+  const handleModifyExecutive = (id: string) => {
+    console.log('executives-id', id)
+    console.log('executives', executives)
     // const signatoryIndex = executives.findIndex((x) => x?.id === id)
     // setExecutives((prev) => {
     //   const copied = [...prev]
@@ -59,7 +74,21 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
     //   copied.splice(signatoryIndex, 1, executiveDetails)
     //   return copied
     // })
-    setExecutiveDetails({ ...ExecutiveDetailsInitial })
+    setExecutives((prev: ExecutiveDetailsType[]) =>
+      prev.map((executive) => {
+        if (executive.id === id) {
+          executive = executiveDetails.reduce(
+            (acc, curr) => {
+              acc[curr.fieldLabel] = curr.value
+              return acc
+            },
+            { id } as ExecutiveDetailsType
+          )
+        }
+        return executive
+      })
+    )
+    setExecutiveDetails([...executiveDetailsInitial()])
     closeModalFunction()
   }
 
@@ -106,6 +135,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'dropdown') {
                   return (
                     <ExecutiveDropDown
+                      key={field.id}
                       optionsField={field.options}
                       required={field.required}
                       colspan={field.colSpan}
@@ -118,6 +148,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'text' || field.type === 'date') {
                   return (
                     <TextInput
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -133,6 +164,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'textarea') {
                   return (
                     <TextArea
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -159,6 +191,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'dropdown') {
                   return (
                     <ExecutiveDropDown
+                      key={field.id}
                       optionsField={field.options}
                       required={field.required}
                       colspan={field.colSpan}
@@ -175,6 +208,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'text' || field.type === 'date') {
                   return (
                     <TextInput
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -194,6 +228,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'textarea') {
                   return (
                     <TextArea
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -223,6 +258,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'dropdown') {
                   return (
                     <ExecutiveDropDown
+                      key={field.id}
                       optionsField={field.options}
                       required={field.required}
                       colspan={field.colSpan}
@@ -235,6 +271,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'text' || field.type === 'date') {
                   return (
                     <TextInput
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -250,6 +287,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'textarea') {
                   return (
                     <TextArea
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -276,6 +314,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'dropdown') {
                   return (
                     <ExecutiveDropDown
+                      key={field.id}
                       optionsField={field.options}
                       required={field.required}
                       colspan={field.colSpan}
@@ -288,6 +327,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'text' || field.type === 'date') {
                   return (
                     <TextInput
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -303,59 +343,7 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
                 if (field.type === 'textarea') {
                   return (
                     <TextArea
-                      maximumNumbersOfCharacters={field.maxLength}
-                      placeholder={field.placeholder}
-                      required={field.required}
-                      label={field.fieldLabel}
-                      colspan={field.colSpan}
-                      value={field.value}
-                      setValue={(val: string) => handleUpdateFields(field.id, val)}
-                    />
-                  )
-                }
-              })}
-            </div>
-            <div
-              style={{
-                display: 'grid',
-                gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
-                paddingBottom: '3rem',
-                paddingTop: '1rem',
-              }}
-            >
-              {executiveDetails.slice(2).map((field) => {
-                if (field.type === 'dropdown') {
-                  return (
-                    <ExecutiveDropDown
-                      optionsField={field.options}
-                      required={field.required}
-                      colspan={field.colSpan}
-                      label={field.fieldLabel}
-                      selectedDropdownItem={field.value || field.defaultValue}
-                      setSelectedDropdownItem={(val: string) => handleUpdateFields(field.id, val)}
-                    />
-                  )
-                }
-                if (field.type === 'text' || field.type === 'date') {
-                  return (
-                    <TextInput
-                      maximumNumbersOfCharacters={field.maxLength}
-                      placeholder={field.placeholder}
-                      required={field.required}
-                      label={field.fieldLabel}
-                      colspan={field.colSpan}
-                      value={field.value}
-                      type={field.type}
-                      setValue={(val: string) => handleUpdateFields(field.id, val)}
-                    />
-                  )
-                }
-
-                if (field.type === 'textarea') {
-                  return (
-                    <TextArea
+                      key={field.id}
                       maximumNumbersOfCharacters={field.maxLength}
                       placeholder={field.placeholder}
                       required={field.required}
@@ -373,10 +361,10 @@ const AddExecutiveModal = ({ closeModalFunction, executiveDetails, setExecutiveD
         </div>
         <div className='flex justify-center my-6'>
           <Button
-            disabled={false}
+            disabled={submitBtnIsDisabled}
             onClick={() => {
               if (modification) {
-                handleModifyExecutive(executiveDetails['id'])
+                handleModifyExecutive(detailToModifyId)
               } else {
                 handleAddExecutive(generateID())
               }

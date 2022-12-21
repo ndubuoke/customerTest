@@ -5,7 +5,7 @@ import SignatoryModal from '../Signatory/SignatoryModal'
 import { ExecutiveDetailsType, ExecutiveField } from '../Types/ExecutiveTypes'
 import AddExecutiveModal from './ExecutiveModal'
 import ExecutivesTable from './ExecutiveTable'
-import { ExecutiveDetailsInitial } from './initialData'
+import { executiveDetailsInitial } from './initialData'
 // import ExecutivesTable from './ExecutivesTable'
 // import SignatoryModal from './SignatoryModal'
 
@@ -16,7 +16,8 @@ const Executives = memo((props: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [executives, setExecutives] = useState<Array<ExecutiveDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [executiveDetails, setExecutiveDetails] = useState<ExecutiveField[]>(ExecutiveDetailsInitial)
+  const [executiveDetails, setExecutiveDetails] = useState<ExecutiveField[]>(executiveDetailsInitial())
+  const [detailToModifyId, setDetailToModifyId] = useState('')
   const [modification, setModification] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -24,6 +25,8 @@ const Executives = memo((props: Props) => {
   }
 
   const closeModalFunction = () => {
+    setExecutiveDetails([...executiveDetailsInitial()])
+    setModification(false)
     setOpenModal((prev) => !prev)
   }
 
@@ -32,26 +35,20 @@ const Executives = memo((props: Props) => {
     setExecutives(filtered)
   }
 
-  const handleModify = (id: string | number) => {
+  const handleModify = (id: string) => {
     const item = executives.find((x) => x?.id === id)
     setExecutiveDetails(
-      ExecutiveDetailsInitial.map((field) => {
+      executiveDetailsInitial().map((field) => {
         if (item[field.fieldLabel]) {
           field.value = item[field.fieldLabel]
         }
         return field
       })
     )
+    setDetailToModifyId(id)
     setModification(true)
     setOpenModal((prev) => !prev)
   }
-  useEffect(() => {
-    if (executives.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE, JSON.stringify(executives))
-    } else {
-      sessionStorage.removeItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE)
-    }
-  }, [executives])
 
   useEffect(() => {
     if (executives.length === 0) {
@@ -64,6 +61,14 @@ const Executives = memo((props: Props) => {
       }
     }
   }, [])
+
+  useEffect(() => {
+    if (executives.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE, JSON.stringify(executives))
+    } else {
+      sessionStorage.removeItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE)
+    }
+  }, [executives])
 
   return (
     <section className='max-w-[1060px] mx-4 bg-slate-50'>
@@ -95,7 +100,7 @@ const Executives = memo((props: Props) => {
           <button
             className='flex gap-2 font-medium
            leading-[20px] text-[#636363]'
-            onClick={closeModalFunction}
+            onClick={() => setOpenModal(true)}
             type='button'
           >
             <img src={add} />
@@ -112,6 +117,7 @@ const Executives = memo((props: Props) => {
       </div>
       {openModal ? (
         <AddExecutiveModal
+          detailToModifyId={detailToModifyId}
           closeModalFunction={closeModalFunction}
           setExecutives={setExecutives}
           executives={executives}
