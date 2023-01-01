@@ -4,7 +4,7 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { SignatoryDetailsInitial } from '../Signatory/InitialData'
 import SignatoriesTable from '../Signatory/SignatoriesTable'
 import SignatoryModal from '../Signatory/SignatoryModal'
-import { ExecutiveDetailsType, ExecutiveField } from '../Types/ExecutiveTypes'
+import { AdditionalDetailsType, AdditionalDetailField } from '../Types/AdditionalTypes'
 import { SignatoryDetailsType } from '../Types/SignatoryTypes'
 import AdditionalModal from './AdditionalModal'
 import AdditionalDetailsTable from './AdditionalTable'
@@ -16,9 +16,9 @@ type Props = {}
 
 const AdditionalDetails = memo((props: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [executives, setExecutives] = useState<Array<ExecutiveDetailsType>>([])
+  const [details, setDetails] = useState<Array<AdditionalDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
-  const [executiveDetails, setExecutiveDetails] = useState<ExecutiveField[]>(additionalDetailsInitial())
+  const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetailField[]>(additionalDetailsInitial())
   const [detailToModifyId, setDetailToModifyId] = useState('')
   const [modification, setModification] = useState<boolean>(false)
 
@@ -27,19 +27,19 @@ const AdditionalDetails = memo((props: Props) => {
   }
 
   const closeModalFunction = () => {
-    setExecutiveDetails([...additionalDetailsInitial()])
+    setAdditionalDetails([...additionalDetailsInitial()])
     setModification(false)
     setOpenModal((prev) => !prev)
   }
 
-  const handleRemoveExecutive = (id: string | number) => {
-    const filtered = executives.filter((x) => x?.id !== id)
-    setExecutives(filtered)
+  const handleRemoveDetail = (id: string | number) => {
+    const filtered = details.filter((x) => x?.id !== id)
+    setDetails(filtered)
   }
 
   const handleModify = (id: string) => {
-    const item = executives.find((x) => x?.id === id)
-    setExecutiveDetails(
+    const item = details.find((x) => x?.id === id)
+    setAdditionalDetails(
       additionalDetailsInitial().map((field) => {
         if (item[field.fieldLabel]) {
           field.value = item[field.fieldLabel]
@@ -53,24 +53,24 @@ const AdditionalDetails = memo((props: Props) => {
   }
 
   useEffect(() => {
-    if (executives.length === 0) {
+    if (details.length === 0) {
       const executiveInStorage = sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
         ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE))
         : null
 
       if (executiveInStorage) {
-        setExecutives(executiveInStorage)
+        setDetails(executiveInStorage)
       }
     }
   }, [])
 
   useEffect(() => {
-    if (executives.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE, JSON.stringify(executives))
+    if (details.length > 0) {
+      sessionStorage.setItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE, JSON.stringify(details))
     } else {
       sessionStorage.removeItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
     }
-  }, [executives])
+  }, [details])
 
   return (
     <section className='max-w-[1060px] mx-4 bg-slate-50'>
@@ -109,16 +109,22 @@ const AdditionalDetails = memo((props: Props) => {
             Add Details
           </button>
         </div>
-        <AdditionalDetailsTable collapsed={collapsed} handleRemoveAdditional={handleRemoveExecutive} handleModify={handleModify} />
+        <AdditionalDetailsTable
+          collapsed={collapsed}
+          handleRemoveDetail={handleRemoveDetail}
+          handleModify={handleModify}
+          details={details}
+          setDetails={setDetails}
+        />
       </div>
       {openModal ? (
         <AdditionalModal
           detailToModifyId={detailToModifyId}
           closeModalFunction={closeModalFunction}
-          setExecutives={setExecutives}
-          executives={executives}
-          executiveDetails={executiveDetails}
-          setExecutiveDetails={setExecutiveDetails}
+          setDetails={setDetails}
+          details={details}
+          additionalDetails={additionalDetails}
+          setAdditionalDetails={setAdditionalDetails}
           modification={modification}
           setModification={setModification}
         />
