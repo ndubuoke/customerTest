@@ -4,47 +4,46 @@ import { Form } from 'Components/types/FormControl.types'
 
 import React, { useState } from 'react'
 import { generateID } from 'Utilities/generateId'
-import AdditionalTextInput from './Additional-UIs/TextInput'
-
-import AdditionalDropdown from './Additional-UIs/Dropdown'
-import { ExecutiveDetailsType, ExecutiveDetailType, ExecutiveField } from 'Components/Form/Types/ExecutiveTypes'
+import TextInput from './Additional-UIs/TextInput'
+import DropDown from './Additional-UIs/Dropdown'
+import { AdditionalDetailField, AdditionalDetailType, AdditionalDetailsType } from 'Components/Form/Types/AdditionalTypes'
 import Button from 'Components/Shareables/Button'
 import { additionalDetailsInitial } from './initialData'
 
 type Props = {
   detailToModifyId: string
   closeModalFunction: () => void
-  executives?: Array<any>
-  setExecutives?: (value: any) => void
-  executiveDetails: ExecutiveField[]
-  setExecutiveDetails: (data: ExecutiveField[]) => void
+  details?: Array<any>
+  setDetails?: (value: any) => void
+  additionalDetails: AdditionalDetailField[]
+  setAdditionalDetails: (data: AdditionalDetailField[]) => void
   modification: boolean
   setModification: (prev: boolean) => void
 }
 
 const AdditionalModal = ({
   closeModalFunction,
-  executiveDetails,
-  setExecutiveDetails,
+  details,
+  setDetails,
   modification,
-  executives,
-  setExecutives,
+  additionalDetails,
+  setAdditionalDetails,
   detailToModifyId,
 }: Props) => {
   const handleUpdateFields = (id: string, value: string) => {
-    const updatedFields = executiveDetails.map((field) => {
+    const updatedFields = additionalDetails.map((field) => {
       if (field.id === id) {
         field = { ...field, value }
       }
       return field
     })
-    setExecutiveDetails(updatedFields)
+    setAdditionalDetails(updatedFields)
   }
 
   const handleAddExecutive = (id: string | number) => {
-    setExecutives((prev: ExecutiveDetailsType[]) => [
+    setDetails((prev: AdditionalDetailsType[]) => [
       ...prev,
-      executiveDetails.reduce(
+      additionalDetails.reduce(
         (acc, curr) => {
           acc[curr.fieldLabel] = curr.value
           return acc
@@ -54,7 +53,7 @@ const AdditionalModal = ({
     ])
     // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
     // setSignatoryDetails({ ...SignatoryDetailsInitial })
-    setExecutiveDetails(additionalDetailsInitial())
+    setAdditionalDetails(additionalDetailsInitial())
     closeModalFunction()
   }
 
@@ -66,7 +65,7 @@ const AdditionalModal = ({
     //   copied.splice(signatoryIndex, 1, executiveDetails)
     //   return copied
     // })
-    setExecutiveDetails([...additionalDetailsInitial()])
+    setAdditionalDetails([...additionalDetailsInitial()])
     closeModalFunction()
   }
 
@@ -91,49 +90,43 @@ const AdditionalModal = ({
             className='flex '
             style={{
               display: 'grid',
-              gridTemplateColumns: '1fr',
+              gridTemplateColumns: '1fr 1fr 1fr',
               gridGap: '20px',
               padding: '10px',
               paddingBottom: '3rem',
               paddingTop: '1rem',
             }}
           >
-            <div className=' w-full flex flex-col gap-6 overflow-y-scroll max-h-[500px] ' style={{ paddingRight: '5rem' }}>
-              {executiveDetails.map((field) => {
-                if (field.type === 'dropdown') {
-                  return (
-                    <div key={field.id}>
-                      {/* {field.fieldLabel} */}
-                      <AdditionalDropdown
-                      // optionsField={field.options}
-                      // required={field.required}
-                      // colspan={field.colSpan}
-                      // label={field.fieldLabel}
-                      // selectedDropdownItem={field.value || field.defaultValue}
-                      // setSelectedDropdownItem={(val: string) => handleUpdateFields(field.id, val)}
-                      />
-                    </div>
-                  )
-                }
-                if (field.type === 'text' || field.type === 'date') {
-                  return (
-                    <div key={field.id} className='flex flex-col border-b '>
-                      {field.fieldLabel}
-                      <AdditionalTextInput
-                        maximumNumbersOfCharacters={field.maxLength}
-                        placeholder={field.placeholder}
-                        required={field.required}
-                        label={field.fieldLabel}
-                        colspan={field.colSpan}
-                        value={field.value}
-                        // type={field.type}
-                        setValue={(val: string) => handleUpdateFields(field.id, val)}
-                      />
-                    </div>
-                  )
-                }
-              })}
-            </div>
+            {additionalDetails.map((field) => {
+              if (field.type === 'dropdown') {
+                return (
+                  <DropDown
+                    key={field.id}
+                    optionsField={field.options}
+                    required={field.required}
+                    colspan={field.colSpan}
+                    label={field.fieldLabel}
+                    selectedDropdownItem={field.value || field.defaultValue}
+                    setSelectedDropdownItem={(val: string) => handleUpdateFields(field.id, val)}
+                  />
+                )
+              }
+              if (field.type === 'text' || field.type === 'date') {
+                return (
+                  <TextInput
+                    key={field.id}
+                    maximumNumbersOfCharacters={field.maxLength}
+                    placeholder={field.placeholder}
+                    required={field.required}
+                    label={field.fieldLabel}
+                    colspan={field.colSpan}
+                    value={field.value}
+                    type={field.type}
+                    setValue={(val: string) => handleUpdateFields(field.id, val)}
+                  />
+                )
+              }
+            })}
           </div>
         </div>
         <div className='flex justify-center my-6'>
@@ -141,7 +134,7 @@ const AdditionalModal = ({
             disabled={false}
             onClick={() => {
               if (modification) {
-                handleModifyExecutive(executiveDetails['id'])
+                handleModifyExecutive(additionalDetails['id'])
               } else {
                 handleAddExecutive(generateID())
               }

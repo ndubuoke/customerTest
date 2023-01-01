@@ -1,11 +1,11 @@
-import { ExecutiveDetailType } from 'Components/Form/Types/ExecutiveTypes'
+import { AdditionalDetailType } from 'Components/Form/Types/AdditionalTypes'
 import React from 'react'
 import FieldLabel from './FieldLabel'
 
 type Props = {
   required: 'on' | 'off'
   colspan?: number
-  label: ExecutiveDetailType
+  label: AdditionalDetailType
   value: string
   setValue: (val: string) => void
   type?: 'text' | 'number' | 'date' | 'email'

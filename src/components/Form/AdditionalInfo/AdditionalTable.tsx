@@ -2,14 +2,14 @@ import { closeRed, editRed } from 'Assets/svgs'
 import React, { memo } from 'react'
 
 type Props = {
-  additional?: Array<any>
-  setAdditional?: (value: any) => void
+  details?: Array<any>
+  setDetails?: (value: any) => void
   collapsed
-  handleRemoveAdditional: (id: number | string) => void
+  handleRemoveDetail: (id: number | string) => void
   handleModify: (id: number | string) => void
 }
 
-const AdditionalDetailsTable = memo(({ setAdditional, additional = [], collapsed, handleModify, handleRemoveAdditional }: Props) => {
+const AdditionalDetailsTable = memo(({ setDetails, details = [], collapsed, handleModify, handleRemoveDetail }: Props) => {
   return (
     <div className={`py-6 w-[987px] overflow-x-auto ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'px-3'}  `}>
       <table className='w-full '>
@@ -22,26 +22,26 @@ const AdditionalDetailsTable = memo(({ setAdditional, additional = [], collapsed
               <span className='px-3 border-l-2'>NAME</span>
             </th>
             <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[30%] min-w-[155px]'>
-              <span className='px-3 border-l-2'>IDENTIFICATION</span>
+              <span className='px-3 border-l-2'>not identification</span>
             </th>
             <th className=' opacity-0  text-left w-[15%] min-w-[120px] '>Action</th>
           </tr>
         </thead>
         <tbody>
-          {additional.length < 1 ? (
+          {details.length < 1 ? (
             <tr className=' h-[40px]'>
               <td className=' align-middle font-bold text-[14px] text-[#aaaaaa]  opacity-0'>S/N</td>
               <td className=' align-middle font-bold text-[14px] text-[#aaaaaa] '>No Entries</td>
               <td></td>
             </tr>
           ) : null}
-          {additional.length > 0
-            ? additional?.map((x, i) => {
+          {details.length > 0
+            ? details?.map((x, i) => {
                 return (
                   <tr key={i} className=' align-middle font-bold text-[16px] text-[#636363] border-b h-[60px] '>
                     <td>{i + 1}</td>
                     <td className=' align-middle font-bold text-[16px] text-[#636363] '>
-                      {x?.['Enter FirstName']} {x?.['Enter Surname']}
+                      {x?.['Account Name']} {x?.['Account Number']}
                     </td>
                     <td className=' align-middle font-bold text-[16px] text-[#636363] '>
                       <span className='block'>{x?.['Means of Identification']}</span>
@@ -52,7 +52,7 @@ const AdditionalDetailsTable = memo(({ setAdditional, additional = [], collapsed
                       <button type='button' className='p-2 mr-2 bg-white rounded shadow' onClick={() => handleModify(x?.id)}>
                         <img src={editRed} alt='modify' />
                       </button>
-                      <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveAdditional(x?.id)}>
+                      <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveDetail(x?.id)}>
                         <img src={closeRed} alt='remove' />
                       </button>
                     </td>
