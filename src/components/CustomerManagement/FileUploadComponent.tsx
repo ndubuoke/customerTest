@@ -10,13 +10,14 @@ type Props = {
   setLocalUpload: (file: any) => void
   hideAddMoreFiles?: boolean
   setUploadKey?: any
+  label?: string
 }
-type UploadFile = {
+export type UploadFile = {
   file: File
   signedUrl: string
 }
 
-const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }: Props) => {
+const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, label = 'Upload Supporting Documents' }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [loading, setLoading] = useState<boolean>(false)
   const [errorUploading, setErrorUploading] = useState<string>('')
@@ -48,7 +49,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
         setLoading(false)
         setErrorUploading(`failed to upload file - ${file.name}`)
 
-        // console.error(err.message, `failed to upload file - ${file.name}`)
+        console.error(err.message, `failed to upload file - ${file.name}`)
         return null
       }
     })
@@ -84,7 +85,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
   return (
     <div>
       <div className='mb-3'>
-        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>Upload Supporting Documents</label>
+        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>{label}</label>
       </div>
       <div
         className={`flex gap-12 w-full max-w-[392px] min-h-[110px] max-h-[120px] border border-[#c4c4c4] rounded-[10px] items-center px-3  relative `}
@@ -98,25 +99,25 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
           <>
             {' '}
             {uploadedFiles && uploadedFiles?.length === 0 ? (
-              <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
+              <div {...getRootProps()} className='flex items-center justify-between h-full pt-3 pb-3 cursor-pointer'>
                 <input type={`file`} hidden {...getInputProps()} />
                 <div>
                   <img src={upload} className='w-12' width={48} height={48} />
                 </div>
 
-                <p className='mb-2 text-sm   '>
+                <p className='mb-2 text-sm '>
                   <span className='font-semibold text-primay-main'>Click to upload</span>
                   <span> or drag and drop</span>
                 </p>
               </div>
             ) : (
               <div
-                className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2'
+                className='flex flex-col justify-between h-full gap-2 p-2 overflow-x-hidden overflow-y-auto'
                 style={{
                   border: hideAddMoreFiles ? '' : '1px solid #cccccc',
                 }}
               >
-                <div className=' h-full'>
+                <div className='h-full '>
                   {uploadedFiles.map((file: UploadFile, index) => {
                     return (
                       <IndividualFile
@@ -132,7 +133,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
                     <div className='flex items-end mt-auto' {...getRootProps()}>
                       <input type={`file`} hidden {...getInputProps()} />
                       <button className='flex items-end ' style={{ marginTop: 'auto' }}>
-                        <img src={add} className='mr-1 inline' /> Add more files
+                        <img src={add} className='inline mr-1' /> Add more files
                       </button>
                     </div>
                   )}
@@ -150,7 +151,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey }:
                   </button>
                 ) : (
                   <div
-                    className='flex  gap-2 '
+                    className='flex gap-2 '
                     style={{
                       justifyContent: 'space-between',
                     }}

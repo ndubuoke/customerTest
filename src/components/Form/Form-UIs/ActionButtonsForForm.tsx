@@ -7,7 +7,12 @@ import { Form, PageInstance } from '../Types'
 import { findIndexOfObject } from 'Utilities/findIndexOfObject'
 import { getProperty } from 'Utilities/getProperty'
 import { camelize } from 'Utilities/convertStringToCamelCase'
-import { setRequiredFormFieldsAction, showWaiverModalInFormAction, statusForCanProceedAction } from 'Redux/actions/FormManagement.actions'
+import {
+  activePageAction,
+  setRequiredFormFieldsAction,
+  showWaiverModalInFormAction,
+  statusForCanProceedAction,
+} from 'Redux/actions/FormManagement.actions'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { AnyAction } from 'redux'
 import { useLocation, useNavigate } from 'react-router-dom'
@@ -15,6 +20,7 @@ import { AppRoutes } from 'Routes/AppRoutes'
 import WaiverAlert from 'Components/ProcessSummary/WaiverAlert'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { isForm } from 'Screens/CustomerCreation'
+import EDDAlert from 'Components/ProcessSummary/EddAlert'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -27,16 +33,22 @@ type Props = {
   setActivePageState: (val: PageInstance) => void
   activePageState: PageInstance
   fillingFormState: any
+  pageIndex: number
+  setPageIndex: (prev: React.SetStateAction<number>) => void
 }
 
-const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState }: Props) => {
+const highRiskScore = 90
+
+const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState, pageIndex, setPageIndex }: Props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
   const [form, setForm] = useState<Form>(null)
-  const [index, setIndex] = useState<number>(0)
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
+  const [showEDDAlert, setShowEDDAlert] = useState<boolean>(false)
+  const [riskScore, setRiskScore] = useState<number>(90)
+  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -45,15 +57,16 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       if (findIndexOfObject(form, activePageState?.id) === 0) {
         return
       } else {
-        setIndex((prev) => prev - 1)
+        setPageIndex((prev) => prev - 1)
       }
     }
 
     if (action === 'next') {
-      if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+      console.log({ theObject: form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)] })
+      if (findIndexOfObject(form, activePageState?.id) >= form?.builtFormMetadata?.pages?.length - 1) {
         return
       } else {
-        setIndex((prev) => prev + 1)
+        setPageIndex((prev) => prev + 1)
       }
     }
   }
@@ -129,6 +142,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         // console.log({ fieldLabelsOfNotFilledRequiredFields })
         if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
           dispatch(showWaiverModalInFormAction('hide') as any)
+          sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('hide'))
           handleProceedToProcessSummary()
         } else {
           handleShowModal()
@@ -143,6 +157,20 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('show'))
     // dispatch(showWaiverModalInFormAction('show') as any)
     setShowWaiverAlert((prev) => !prev)
+  }
+
+  // Handle show EDD modal function
+  const handleShowEDDModal = () => {
+    // dispatch show waiver
+    sessionStorage.setItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM, JSON.stringify('show'))
+    // dispatch(showWaiverModalInFormAction('show') as any)
+    setShowEDDAlert((prev) => !prev)
+  }
+
+  const handleDiscardEDDWaiver = () => {
+    sessionStorage.setItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM, JSON.stringify('hide'))
+    setShowEDDAlert(false)
+    handleActivePage('next')
   }
 
   const handleProceedToProcessSummary = () => {
@@ -162,6 +190,32 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     }
   }
 
+  const handleProceedEDD = () => {
+    handleActivePage('next')
+    setShowEDDAlert(false)
+  }
+
+  const handleNextAndOtherAddOns = () => {
+    if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+      handleSubmit()
+    } else {
+      if (flagCustomerStatus) {
+        if (
+          getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
+          'account services'
+        ) {
+          if (riskScore >= highRiskScore) {
+            handleShowEDDModal()
+          }
+        } else {
+          handleActivePage('next')
+        }
+      } else {
+        handleActivePage('next')
+      }
+    }
+  }
+
   useEffect(() => {
     if (publishedForm?.success) {
       setForm(publishedForm?.serverResponse?.data)
@@ -170,24 +224,25 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
   useEffect(() => {
     if (publishedForm) {
-      setActivePageState(publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[index])
+      const page = publishedForm?.serverResponse?.data?.builtFormMetadata?.pages[pageIndex]
+      dispatch(activePageAction(page, pageIndex) as any)
+      setActivePageState(page)
     }
-  }, [publishedForm, index])
+  }, [publishedForm, pageIndex])
 
   // Handle RequiredFields
 
   return (
     <div className='flex justify-center gap-6 py-4'>
       <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
-      <Button disabled={false} onClick={() => console.log('Clicked 2')} text='Save to draft' />
+      <Button disabled={false} onClick={() => console.log('test saved to draft')} text='Save to draft' />
       <Button
         disabled={false}
-        onClick={() =>
-          findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? handleSubmit() : handleActivePage('next')
-        }
+        onClick={handleNextAndOtherAddOns}
         text={findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? 'Proceed' : 'Next'}
       />
       {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
+      {showEDDAlert ? <EDDAlert closeModalFunction={handleDiscardEDDWaiver} proceedToProcessSummary={handleProceedEDD} /> : null}
     </div>
   )
 }

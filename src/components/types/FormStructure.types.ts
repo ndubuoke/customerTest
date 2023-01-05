@@ -5,6 +5,14 @@ export type FormSectionType = {
   pageId: string | number
 }
 
+export type WaiverDataType = {
+  initiator: string
+  initiatorId: string
+  justification: string
+  type: string | 'documentation' | 'edd'
+  documents: Array<string>
+}
+
 export type FormStructureType = {
   data: {
     customerData: Array<FormSectionType>
@@ -12,13 +20,7 @@ export type FormStructureType = {
       formId: string | number
       formType: string | number
     }
-    waiverData: {
-      initiator: string
-      initiatorId: string
-      justification: string
-      type: string | 'documentation' | 'edd'
-      documents: Array<string>
-    }
+    waiverData: Array<WaiverDataType>
     requestData: {
       initiator: string
       initiatorId: string

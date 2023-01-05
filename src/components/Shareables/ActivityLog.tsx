@@ -5,15 +5,16 @@ import { getActivityLogAction } from '../../redux/actions/CustomerManagement.act
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from '../../redux/reducers/CustomerManagement.reducer'
 import Spinner from 'Components/Shareables/Spinner'
+import LogDots from 'Components/ProcessSummary/LogDots'
 
 type Props = {
   customerId?: string
-  mode?: 'creation' | 'modification'
+  mode: 'creation' | 'modification'
 }
 
 const ActivityLog = ({ customerId, mode }: Props) => {
   const activityLog = useSelector<ReducersType>((state: ReducersType) => state?.customerActivityLog) as customersManagementResponseType
-  const logs = activityLog.serverResponse.data
+  const logs = activityLog?.serverResponse?.data
   const dispatch = useDispatch()
   useEffect(() => {
     if (customerId === undefined) {
@@ -22,6 +23,30 @@ const ActivityLog = ({ customerId, mode }: Props) => {
     dispatch(getActivityLogAction(customerId) as any)
   }, [customerId])
   // console.log(activityLog)
+
+  if (mode === 'creation') {
+    return (
+      <div>
+        <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
+        <br />
+        <div className='text-[14px] leading-[17px] text-[#aaaaaa] mb-2'>No activity found</div>
+
+        <div className='flex gap-4 items-end  '>
+          <LogDots />
+          <div
+            className='mb-4 font-normal text-[#636363] text-[14px] leading-[16px] text-xs'
+            style={{
+              marginBottom: '0rem',
+            }}
+          >
+            Pending Activity <br />
+            <span className=' text-xs text-[#aaaaaa]'>Verify and Submit request for processing</span>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       {activityLog.loading ? (

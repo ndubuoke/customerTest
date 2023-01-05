@@ -1,7 +1,7 @@
 import { Close } from 'Assets/svgs'
 
 import Button from 'Components/Shareables/Button'
-import React from 'react'
+import React, { useState } from 'react'
 import { useCharacterCount } from '../../hooks/use-character-count'
 import FileUploadComponent from './FileUploadComponent'
 import Textarea from './Textarea'
@@ -43,7 +43,7 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
             <FileUploadComponent setLocalUpload={() => {}} />
           </div>
 
-          <div className='w-full text-center mt-12'>
+          <div className='w-full mt-12 text-center'>
             <Button disabled={false} text={'Submit'} onClick={() => {}} />
           </div>
         </div>

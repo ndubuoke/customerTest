@@ -365,7 +365,7 @@ const Main = (props: Props) => {
           {userRole === 'maker' && (
             <div className='ml-6 relative ' ref={createCustomerListRef}>
               <button
-                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main 
+                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main
           py-1'
                 onClick={() => setShowLists(true)}
               >

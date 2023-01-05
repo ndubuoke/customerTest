@@ -14,16 +14,18 @@ export const formStruture = {
       formId: '',
       formType: '',
     },
-    waiverData: {
-      initiator: '',
-      initiatorId: '',
-      justification: '',
-      type: '',
-      documents: [
-        // "key-1",
-        // "key-2"
-      ],
-    },
+    waiverData: [
+      // {
+      //   initiator: '',
+      //   initiatorId: '',
+      //   justification: '',
+      //   type: '',
+      //   documents: [
+      //     // "key-1",
+      //     // "key-2"
+      //   ],
+      // },
+    ],
     requestData: {
       initiator: '',
       initiatorId: '',

@@ -1,15 +1,25 @@
 import React from 'react'
 import { CancelIcon, ModifyIcon, ProcessStep, sterlingLogoProcess, SterlingStepperImg, SubmitIcon, processSummaryStatus } from 'Assets/svgs'
 import { ProcessDoneStateIcon, ProcessPendingStateIcon } from 'Assets/images'
+import { FormModeType, StatusType, TimelineType } from 'Screens/ProcessSummary'
 
 type Props = {
-  mode: 'creation' | 'modification'
-  waiverRequest?: 'show' | 'hide'
+  mode: FormModeType
+  docWaiverRequest?: TimelineType
   submitted?: boolean
-  waiverStatus: 'approved' | 'not approved'
+  docWaiverStatus: StatusType
+  eddStatus: StatusType
+  eddRequest: TimelineType
 }
 // mode
-const ProgressBar = ({ mode = 'creation', waiverRequest = 'hide', submitted = false, waiverStatus = 'not approved' }: Props) => {
+const ProgressBar = ({
+  mode = 'creation',
+  docWaiverRequest = 'hide',
+  submitted = false,
+  docWaiverStatus = 'not approved',
+  eddStatus = 'not approved',
+  eddRequest = 'show',
+}: Props) => {
   if (mode === 'creation') {
     return (
       <section
@@ -27,9 +37,15 @@ const ProgressBar = ({ mode = 'creation', waiverRequest = 'hide', submitted = fa
           ></div>
 
           <ImageText text='Pending Submission' />
-          {waiverRequest === 'show' ? (
-            <div className={`z-10 ${waiverStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
-              <ImageText text='Waiver Approval' />
+          {docWaiverRequest === 'show' ? (
+            <div className={`z-10 ${docWaiverStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
+              <ImageText text='Documentation Waiver Approval' />
+            </div>
+          ) : null}
+
+          {eddRequest === 'show' ? (
+            <div className={`z-10 ${eddStatus === 'approved' ? 'opacity-100' : 'opacity-70'}`}>
+              <ImageText text='Enhanced Due Diligence Check' />
             </div>
           ) : null}
 
@@ -59,7 +75,7 @@ const ProgressBar = ({ mode = 'creation', waiverRequest = 'hide', submitted = fa
 export default ProgressBar
 
 type ImageTextType = {
-  text: 'Pending Submission' | 'Waiver Approval' | 'Customer Creation Approval'
+  text: 'Pending Submission' | 'Documentation Waiver Approval' | 'Customer Creation Approval' | 'Enhanced Due Diligence Check'
 }
 const ImageText = ({ text = 'Pending Submission' }: ImageTextType) => {
   return (
