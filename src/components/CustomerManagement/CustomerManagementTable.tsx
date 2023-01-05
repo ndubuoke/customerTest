@@ -47,7 +47,7 @@ const user = 'John Smith '
 type customerStatusType = 'All' | 'Active' | 'Inactive'
 
 type CustomerManagementTable = {
-  tableType: 'All Customers' | 'Requests'
+  tableType: 'All Customers' | 'Requests' 
   customerType: string | 'Individual' | 'SME'
   AllCustomers: any
   allRequests: any
@@ -1029,7 +1029,7 @@ const CustomerManagementTable = ({
                       .map((customer) => (
                         <CustomerDetailsRow
                           userRole={userRole}
-                          key={customer?.id}
+                          key={customer?.customerId}
                           customerId={customerId}
                           showCustomersFunctionHandler={showCustomersFunctionHandler}
                           customer={customer}
@@ -1055,7 +1055,7 @@ const CustomerManagementTable = ({
                       })
                       .map((customer) => (
                         <CustomerDetailsRow
-                          key={customer?.id}
+                          key={customer?.customerId}
                           userRole={userRole}
                           customerId={customerId}
                           showCustomersFunctionHandler={showCustomersFunctionHandler}
