@@ -39,7 +39,7 @@ type customerStatus = 'All' | 'Active' | 'Inactive'
 type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft' | 'Pending' | 'Rejected'
 type requestType = '' | 'Creation' | 'Modification' | 'Deactivation' | 'Reactivation'
 type customerType = 'Individual' | 'SME'
-type tableType = 'All Customers' | 'Requests' | null 
+type tableType = 'All Customers' | 'Requests' | null
 // const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 
 const Main = (props: Props) => {
@@ -331,7 +331,7 @@ const Main = (props: Props) => {
       }
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
-    // console.log(AllCustomers)
+  // console.log(AllCustomers)
   //  console.log(allRequests)
   //  console.log(allRequestsForChecker)
   // console.log(user)
@@ -481,8 +481,12 @@ const Main = (props: Props) => {
                             )}
                             {customermanagementTableType === 'Requests' && (
                               <span className={`text-[#252C32]`}>
-                                {userRole === 'checker' && <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>}
-                                {userRole === 'maker' && <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>}
+                                {userRole === 'checker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>
+                                )}
+                                {userRole === 'maker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>
+                                )}
                               </span>
                             )}
                           </div>
@@ -528,7 +532,7 @@ const Main = (props: Props) => {
                             )}
                             {customermanagementTableType === 'Requests' && (
                               <>
-                                 {userRole === 'maker' && (
+                                {userRole === 'maker' && (
                                   <>
                                     {requestsDropdownStatusOptionsMaker?.map((status, index) => {
                                       return (
@@ -543,7 +547,7 @@ const Main = (props: Props) => {
                                     })}
                                   </>
                                 )}
-                                 {userRole === 'checker' && (
+                                {userRole === 'checker' && (
                                   <>
                                     {requestsDropdownStatusOptionsChecker?.map((status, index) => {
                                       return (
