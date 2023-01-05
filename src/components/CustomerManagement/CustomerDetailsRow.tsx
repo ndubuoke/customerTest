@@ -5,7 +5,7 @@ import {format, parseISO} from 'date-fns'
 
 type customerDetailsRowType = {
   customer: {
-    id: number
+    customerId: number
     status: string
     updatedAt: string
   }
@@ -28,8 +28,9 @@ const CustomerDetailsRow = ({
   customerFunctionHandler,
   userRole,
 }: customerDetailsRowType) => {
+  // console.log(customer)
   return (
-    <tr key={customer?.id} className='bg-background-lightRed border-b text-text-secondary   '>
+    <tr key={customer?.customerId} className='bg-background-lightRed border-b text-text-secondary   '>
       <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
         {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
         {/* {customer.customer_profiles.firstName} {customer.customer_profiles.surname} */}
@@ -49,8 +50,8 @@ const CustomerDetailsRow = ({
         {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' HH:mm a")}
         {userRole === 'maker' && (
           <>
-            <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.id)} />
-            {showCustomerFunctionOptions && customer.id === customerId && (
+            <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.customerId)} />
+            {showCustomerFunctionOptions && customer.customerId === customerId && (
               <div ref={customerFunctionListRef} className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'>
                 {customerFunctionOptions?.map((option, index) => {
                   if (option === 'View') {
@@ -105,7 +106,7 @@ const CustomerDetailsRow = ({
                         <div
                           key={index}
                           className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                          onClick={customerFunctionHandler.bind(null, { option, customerId: customer.id })}
+                          onClick={customerFunctionHandler.bind(null, { option, customerId: customer.customerId })}
                         >
                           <span className='flex w-full  '>
                             {' '}

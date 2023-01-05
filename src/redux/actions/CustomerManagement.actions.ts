@@ -45,7 +45,7 @@ type dateFilterType = 'day' | 'month'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
 
 export const getCustomersAction =
-  (customerType: string, customerStatus: string = '', order: order = '') =>
+  (customerType: string, customerStatus: string = '', order: order = '', initiatorId: string = '', approverId: string = '') =>
   async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: GET_CUSTOMERS_REQUEST })
@@ -56,9 +56,27 @@ export const getCustomersAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/customer/profile/type/${customerType}?filter=${customerStatus}&sort=${order}`, config)
+      if (initiatorId === '' && approverId === '') {
+        const { data } = await axios.get(`${SERVER_URL}/customer/profile/type/${customerType}?filter=${customerStatus}&sort=${order}`, config)
 
-      dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data })
+        dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data })
+      }
+      if (initiatorId != '') {
+        const { data } = await axios.get(
+          `${SERVER_URL}/customer/profile/type/${customerType}?filter=${customerStatus}&sort=${order}&initiator=${initiatorId}`,
+          config
+        )
+
+        dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data })
+      }
+      if (approverId != '') {
+        const { data } = await axios.get(
+          `${SERVER_URL}/customer/profile/type/${customerType}?filter=${customerStatus}&sort=${order}&approver=${approverId}`,
+          config
+        )
+
+        dispatch({ type: GET_CUSTOMERS_SUCCESS, payload: data })
+      }
     } catch (error) {
       dispatch({
         type: GET_CUSTOMERS_FAIL,
@@ -68,7 +86,7 @@ export const getCustomersAction =
   }
 
 export const getCustomersRequestsAction =
-  (customerType: string, requestStatus: string = '', requestType: string = '') =>
+  (customerType: string, requestStatus: string = '', requestType: string = '', initiatorId: string = '') =>
   async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: GET_REQUESTS_REQUEST })
@@ -79,7 +97,10 @@ export const getCustomersRequestsAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/request/customer/${customerType}?filter=${requestStatus}&requestType=${requestType}`, config)
+      const { data } = await axios.get(
+        `${SERVER_URL}/request/customer/${customerType}?filter=${requestStatus}&requestType=${requestType}&initiator=${initiatorId}`,
+        config
+      )
 
       dispatch({ type: GET_REQUESTS_SUCCESS, payload: data })
     } catch (error) {
@@ -201,7 +222,8 @@ export const getTotalRequestStatusCustomersAction =
   }
 
 export const getRequestsForCheckerAction =
-  (requestStatus: string, customerType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  (requestStatus: string, customerType: string, requestType: string = '') =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: GET_REQUESTS_FOR_CHECKER_REQUEST })
 
@@ -211,7 +233,10 @@ export const getRequestsForCheckerAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/request/data/checker?status=${requestStatus}&customerType=${customerType}`, config)
+      const { data } = await axios.get(
+        `${SERVER_URL}/request/data/checker?status=${requestStatus}&customerType=${customerType}&requestType=${requestType}`,
+        config
+      )
 
       dispatch({ type: GET_REQUESTS_FOR_CHECKER_SUCCESS, payload: data })
     } catch (error) {
