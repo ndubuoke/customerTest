@@ -143,7 +143,9 @@ const Form = memo(
                           setBackupForSwitchFormState={setBackupForSwitchFormState}
                           backupForSwitchFormState={backupForSwitchFormState}
                         />
-                        {activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? <Signatories /> : null}
+                        {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
+                          <Signatories />
+                        ) : null}
                       </>
                     )
                   })
@@ -175,6 +177,7 @@ const Form = memo(
             fillingFormState={fillingFormState}
             pageIndex={pageIndex}
             setPageIndex={setPageIndex}
+            customerType={customerType}
           />
         ) : null}
       </div>

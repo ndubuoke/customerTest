@@ -37,7 +37,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[600px] min-w-[1000px] bg-white py-6 px-8 rounded-2xl `}>
+      <div className={` min-h-[800px] min-w-[1000px] bg-white py-6 px-8 rounded-2xl `}>
         <div className=' w-full  min-h-[300px] flex flex-col  justify-between'>
           <div className='flex   justify-between  pb-4'>
             <h6 className='text-text-secondary text-3xl'>
@@ -53,7 +53,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
               <div className='justify-center w-full flex'>
                 <img src={Avatar} />
               </div>
-              <div className='flex gap-24 mt-4   text-[#636363] max-h-[160px] overflow-y-scroll'>
+              <div className='flex gap-24 mt-4   text-[#636363] max-h-[280px] py-4 overflow-y-scroll'>
                 <div className=' font-bold   w-full items-end flex  flex-col '>
                   <p className='mb-2'>Surname</p>
                   <p className='mb-2'>First Name</p>

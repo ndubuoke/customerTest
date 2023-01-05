@@ -14,17 +14,17 @@ export type WaiverTypeType = 'documentation' | 'edd' | 'both'
 type Props = {
   closeModalFunction: () => void
   waiverType: WaiverTypeType
+  initiator: string
+  initiatorId: string
 }
 
-const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation' }: Props) => {
+const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation', initiator, initiatorId }: Props) => {
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
   const [localUpload, setLocalUpload] = useState<Array<any>>([])
   const [justification, setJustification] = useState<string>('')
   const [uploadKey, setUploadKey] = useState<Array<string>>([])
-  const [initiator, setInitiator] = useState('Bona name')
-  const [initiatorId, setInitiatorId] = useState('rhyme id')
 
   const handleSubmitWaiver = () => {
     if (localUpload && localUpload.length > 0) {
@@ -56,7 +56,9 @@ const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation' }:
     >
       <section className='bg-white min-w-[600px]  w-full max-w-[704px] h-[628px] rounded-[11px] py-6 px-[40px] flex flex-col justify-between '>
         <div className='flex justify-between relative border-b py-3'>
-          <div className='font-bold text-[24px] leading-[29px] text-[#747373]'>Waiver Request</div>
+          <div className='font-bold text-[24px] leading-[29px] text-[#747373]'>
+            {waiverType === 'edd' ? 'Enhanced Due Dilligence Waiver Request' : 'Waiver Request'}
+          </div>
           <button onClick={closeModalFunction} className=''>
             <img src={Close} width={20} height={20} alt='close' />
           </button>

@@ -19,6 +19,7 @@ import {
   unfilledRequiredSignatoryListReducer,
   UnfilledRequiredSignatoryListReducerType,
   unfilledRequiredSignatoryListButtonReducer,
+  submitFormReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -72,6 +73,7 @@ export type ReducersType = {
   activePage: any
   unfilledRequiredSignatoryList: UnfilledRequiredSignatoryListReducerType
   unfilledRequiredSignatoryListButton: UnfilledRequiredSignatoryListReducerType
+  submitForm: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -99,6 +101,7 @@ const reducer = combineReducers<ReducersType>({
   activePage: activePageReducer,
   unfilledRequiredSignatoryList: unfilledRequiredSignatoryListReducer,
   unfilledRequiredSignatoryListButton: unfilledRequiredSignatoryListButtonReducer,
+  submitForm: submitFormReducer,
 })
 
 const middleware = [thunk]
