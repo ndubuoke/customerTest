@@ -24,12 +24,22 @@ import SearchBar from 'Components/CustomerManagement/SearchBar'
 type Props = {}
 
 const customerTypeoptions = ['Individual', 'SME']
-const customersDropdownStatusOptions = ['Created by me', 'Created by my team', 'Created system-wide']
-const requestsDropdownStatusOptions = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide']
+const customersDropdownStatusOptionsMaker = ['Created by me', 'Created by my team', 'Created system-wide']
+const customersDropdownStatusOptionsChecker = ['Approved by me', 'Approved by my team', 'Approved system-wide']
+const requestsDropdownStatusOptionsMaker = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide']
+const requestsDropdownStatusOptionsChecker = ['Sent to me', 'Sent to my team', 'Sent system-wide']
+type DropdownSelectedStatusType =
+  | 'Created by me'
+  | 'Created by my team'
+  | 'Created system-wide'
+  | 'Initiated by me'
+  | 'Initiated by my team'
+  | 'Initiated system-wide'
 type customerStatus = 'All' | 'Active' | 'Inactive'
 type requestStatusType = 'All' | 'Approved' | 'In Issue' | 'In-Review' | 'Interim Approval' | 'Draft' | 'Pending' | 'Rejected'
+type requestType = '' | 'Creation' | 'Modification' | 'Deactivation' | 'Reactivation'
 type customerType = 'Individual' | 'SME'
-type tableType = 'All Customers' | 'Requests'
+type tableType = 'All Customers' | 'Requests' | null
 // const requestStatus = ['Select all', 'Approved', 'Interim Approval', 'In-Review', 'In-Issue']
 
 const Main = (props: Props) => {
@@ -48,14 +58,15 @@ const Main = (props: Props) => {
   const AllCustomers = useSelector<ReducersType>((state: ReducersType) => state?.allCustomers) as customersManagementResponseType
 
   const allRequests = useSelector<ReducersType>((state: ReducersType) => state?.allRequests) as customersManagementResponseType
-  const user = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
+  const userData = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
   const totalStatusCustomers = useSelector<ReducersType>((state: ReducersType) => state?.totalStatusCustomers) as customersManagementResponseType
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
   type userType = 'maker' | 'checker'
   const [showLists, setShowLists] = useState(false)
-  const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>('All Customers')
+  const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>(null)
   const [customerStatus, setCustomerStatus] = useState<customerStatus>('All')
   const [requestStatus, setRequestStatus] = useState<requestStatusType>('All')
+  const [requestTypeName, setRequestTypeName] = useState<requestType>('')
   const [showStatusLists, setShowStatusLists] = useState(false)
   const [showCustomerFunctionOptions, setShowCustomerFunctionOptions] = useState(false)
   const [showRequestFunctionOptions, setShowRequestFunctionOptions] = useState(false)
@@ -63,7 +74,7 @@ const Main = (props: Props) => {
   const [showFilterRequestStatusOptions, setShowFilterRequestStatusOptions] = useState(false)
   const [ShowFilterTypeOptions, setShowFilterTypeOptions] = useState(false)
   const [ShowFilterInitiatorOptions, setShowFilterInitiatorOptions] = useState(false)
-  const [customersSelectedStatus, setCustomersSelectedStatus] = useState('')
+  const [customersSelectedStatus, setCustomersSelectedStatus] = useState<DropdownSelectedStatusType>(null)
   const [requestsSelectedStatus, setRequestsSelectedStatus] = useState('')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
@@ -84,12 +95,30 @@ const Main = (props: Props) => {
     }
   }
 
-  const statusSelectForm = (list) => {
+  const statusSelectForm = (list: DropdownSelectedStatusType) => {
     if (customermanagementTableType === 'All Customers') {
       setCustomersSelectedStatus(list)
+      if (list === 'Created by me') {
+        dispatch(getCustomersAction(customerType, '', '', userData.user?.id) as any)
+      }
+      if (list === 'Created by my team') {
+        dispatch(getCustomersAction(customerType) as any)
+      }
+      if (list === 'Created system-wide') {
+        dispatch(getCustomersAction(customerType) as any)
+      }
     }
     if (customermanagementTableType === 'Requests') {
       setRequestsSelectedStatus(list)
+      if (list === 'Initiated by me') {
+        dispatch(getCustomersRequestsAction(customerType, '', '', userData.user?.id) as any)
+      }
+      if (list === 'Initiated by my team') {
+        dispatch(getCustomersRequestsAction(customerType) as any)
+      }
+      if (list === 'Initiated system-wide') {
+        dispatch(getCustomersRequestsAction(customerType) as any)
+      }
     }
     setShowStatusLists(false)
   }
@@ -211,14 +240,15 @@ const Main = (props: Props) => {
     }
   }
 
-  const requestStatusHandler = (status: requestStatusType, requestType) => {
+  const requestStatusHandler = (status: requestStatusType, requestType: requestType) => {
     if (status === 'All') {
       setRequestStatus(status)
+
       if (userRole === 'maker') {
         return dispatch(getCustomersRequestsAction(customerType, '', requestType) as any)
       }
       if (userRole === 'checker') {
-        return dispatch(getRequestsForCheckerAction('', customerType) as any)
+        return dispatch(getRequestsForCheckerAction('', customerType, requestType) as any)
       }
     }
 
@@ -228,6 +258,7 @@ const Main = (props: Props) => {
     }
     if (status === 'In Issue') {
       setRequestStatus(status)
+
       return dispatch(getCustomersRequestsAction(customerType, 'In Issue', requestType) as any)
     }
 
@@ -241,7 +272,7 @@ const Main = (props: Props) => {
     }
     if (status === 'Pending') {
       setRequestStatus(status)
-      return dispatch(getRequestsForCheckerAction('Pending', customerType) as any)
+      return dispatch(getRequestsForCheckerAction('Pending', customerType, requestType) as any)
     }
 
     if (status === 'Approved') {
@@ -250,12 +281,12 @@ const Main = (props: Props) => {
         return dispatch(getCustomersRequestsAction(customerType, 'Approved', requestType) as any)
       }
       if (userRole === 'checker') {
-        return dispatch(getRequestsForCheckerAction('Approved', customerType) as any)
+        return dispatch(getRequestsForCheckerAction('Approved', customerType, requestType) as any)
       }
     }
     if (status === 'Rejected') {
       setRequestStatus(status)
-      return dispatch(getRequestsForCheckerAction('Rejected', customerType) as any)
+      return dispatch(getRequestsForCheckerAction('Rejected', customerType, requestType) as any)
     }
   }
 
@@ -263,6 +294,10 @@ const Main = (props: Props) => {
     if (userRole === 'checker') {
       setNextLevelButtonId(2)
       setCustomerManagementTableType('Requests')
+    }
+    if (userRole === 'maker') {
+      setNextLevelButtonId(1)
+      setCustomerManagementTableType('All Customers')
     }
   }, [])
 
@@ -297,15 +332,15 @@ const Main = (props: Props) => {
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
-  // console.log(allRequests)
-  // console.log(allRequestsForChecker)
-  //  console.log(user)
+  //  console.log(allRequests)
+  //  console.log(allRequestsForChecker)
+  // console.log(user)
 
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
 
-      {/* {showSystemAlert && (
+      {showSystemAlert && (
         <>
           {userRole === 'maker' && (
             <SystemAlert
@@ -321,7 +356,7 @@ const Main = (props: Props) => {
             />
           )}
         </>
-      )} */}
+      )}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
@@ -436,12 +471,22 @@ const Main = (props: Props) => {
                           <div>
                             {customermanagementTableType === 'All Customers' && (
                               <span className={`text-[#252C32]`}>
-                                {customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptions[0]}
+                                {userRole === 'maker' && (
+                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsMaker[0]}</>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsChecker[0]}</>
+                                )}
                               </span>
                             )}
                             {customermanagementTableType === 'Requests' && (
                               <span className={`text-[#252C32]`}>
-                                {requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptions[0]}
+                                {userRole === 'checker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>
+                                )}
+                                {userRole === 'maker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>
+                                )}
                               </span>
                             )}
                           </div>
@@ -453,32 +498,70 @@ const Main = (props: Props) => {
                           <div ref={statusListRef} className=' w-full  absolute z-20  bg-background-paper  flex flex-col  border rounded-md'>
                             {customermanagementTableType === 'All Customers' && (
                               <>
-                                {customersDropdownStatusOptions?.map((status, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                      onClick={statusSelectForm.bind(null, status)}
-                                    >
-                                      {status}
-                                    </div>
-                                  )
-                                })}
+                                {userRole === 'maker' && (
+                                  <>
+                                    {customersDropdownStatusOptionsMaker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>
+                                    {customersDropdownStatusOptionsChecker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
                               </>
                             )}
                             {customermanagementTableType === 'Requests' && (
                               <>
-                                {requestsDropdownStatusOptions?.map((status, index) => {
-                                  return (
-                                    <div
-                                      key={index}
-                                      className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                      onClick={statusSelectForm.bind(null, status)}
-                                    >
-                                      {status}
-                                    </div>
-                                  )
-                                })}
+                                {userRole === 'maker' && (
+                                  <>
+                                    {requestsDropdownStatusOptionsMaker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>
+                                    {requestsDropdownStatusOptionsChecker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
                               </>
                             )}
                           </div>
@@ -526,7 +609,7 @@ const Main = (props: Props) => {
                       {nextLevelButtonId === 2 && customermanagementTableType === 'Requests' ? (
                         <div className=' flex gap-2 '>
                           <div
-                            onClick={requestStatusHandler.bind(null, 'All')}
+                            onClick={requestStatusHandler.bind(null, 'All', '')}
                             className={` py-1 px-4 cursor-pointer flex flex-col justify-center items-center hover:border rounded-md hover:border-[#EFEFEF] ${
                               requestStatus === 'All' ? 'bg-[#EFEFEF]' : ''
                             }`}
@@ -539,7 +622,7 @@ const Main = (props: Props) => {
                           </div>
                           <div className='border'></div>
                           <div
-                            onClick={requestStatusHandler.bind(null, 'Approved')}
+                            onClick={requestStatusHandler.bind(null, 'Approved', '')}
                             className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                               requestStatus === 'Approved' ? 'bg-[#EFEFEF]' : ''
                             }`}
@@ -556,7 +639,7 @@ const Main = (props: Props) => {
                           {userRole === 'checker' && (
                             <>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Pending')}
+                                onClick={requestStatusHandler.bind(null, 'Pending', '')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'Pending' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -567,7 +650,7 @@ const Main = (props: Props) => {
                               </div>
                               <div className='border'></div>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Rejected')}
+                                onClick={requestStatusHandler.bind(null, 'Rejected', '')}
                                 className={` py-1 px-4 cursor-pointer rounded-md flex flex-col justify-center items-center hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'Rejected' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -582,7 +665,7 @@ const Main = (props: Props) => {
                           {userRole === 'maker' && (
                             <>
                               <div
-                                onClick={requestStatusHandler.bind(null, 'In-Review')}
+                                onClick={requestStatusHandler.bind(null, 'In-Review', '')}
                                 className={` py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF]  ${
                                   requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
                                 }`}
@@ -593,7 +676,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Interim Approval')}
+                                onClick={requestStatusHandler.bind(null, 'Interim Approval', '')}
                                 className={` ${
                                   requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
@@ -604,7 +687,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'In Issue')}
+                                onClick={requestStatusHandler.bind(null, 'In Issue', '')}
                                 className={` ${
                                   requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
@@ -615,7 +698,7 @@ const Main = (props: Props) => {
                               <div className='border'></div>
 
                               <div
-                                onClick={requestStatusHandler.bind(null, 'Draft')}
+                                onClick={requestStatusHandler.bind(null, 'Draft', '')}
                                 className={` ${
                                   requestStatus === 'Draft' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
