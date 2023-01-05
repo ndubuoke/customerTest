@@ -23,7 +23,7 @@ import Calender from './Calender/Calender'
 import CustomerDetailsRow from './CustomerDetailsRow'
 import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
-import getRequestDetail from '../../utilities/getRequestDetail';
+import getRequestDetail from '../../utilities/getRequestDetail'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -549,7 +549,7 @@ const CustomerManagementTable = ({
         />
       )}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-screen overflow-auto '>
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-screen  '>
         <table className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
@@ -1014,7 +1014,7 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              {AllCustomers?.success && !allCustomersByDate?.success && (
+              {AllCustomers && AllCustomers?.success && !allCustomersByDate?.success ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
@@ -1040,8 +1040,8 @@ const CustomerManagementTable = ({
                         />
                       ))}
                 </tbody>
-              )}
-              {allCustomersByDate?.success && !AllCustomers?.success && (
+              ) : null}
+              {allCustomersByDate && allCustomersByDate?.success && !AllCustomers?.success && (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&

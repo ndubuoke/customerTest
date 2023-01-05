@@ -502,7 +502,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Passport Photograph'
                   placeholder='Enter Upload Passport Photograph'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Passport Photograph']}
@@ -514,7 +514,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Proof of Identity'
                   placeholder='Enter Upload Proof of Identity'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Proof of Identity']}
@@ -526,7 +526,7 @@ const SignatoryModal = memo(
                 <FileUploadSignatory
                   id='Upload Proof of Address'
                   placeholder='Enter Upload Proof of Address'
-                  required='off'
+                  required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
                   value={signatoryDetails['Upload Proof of Address']}
