@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { goBackToForm, cancelForm, submitForm, ModifyIcon } from 'Assets/svgs'
 import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
@@ -10,26 +10,38 @@ import WaiverRequestForm, { WaiverTypeType } from './WaiverRequestForm'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import FormSubmissionAlert from './FormSubmissionAlert'
 import WaiverRequestFormBoth from './WaiverRequestFormBoth'
+import { useDispatch, useSelector } from 'react-redux'
+import { ReducersType } from 'Redux/store'
+import { submitFormAction } from 'Redux/actions/FormManagement.actions'
+import { FormTypeType } from 'Screens/ProcessSummary'
+import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import FormSubmissionLoader from './Loader'
 
 type Props = {
   openWaiver: 'show' | 'hide'
   mode: 'creation' | 'modification'
   customerType: 'individual' | 'sme'
   waiverType: WaiverTypeType
+  formType: FormTypeType
+  initiator: string
+  initiatorId: string
 }
 
-const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both' }: Props) => {
+const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', formType, initiator, initiatorId }: Props) => {
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [openCancelFormModal, setOpenCancelFormModal] = useState<boolean>(false)
   const [openWaiverRequestForm, setOpenWaiverRequestForm] = useState<boolean>(false)
 
   // Remove this later
   const [openSuccess, setOpenSuccess] = useState<boolean>(false)
+
+  const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as ResponseType
 
   const handleBackToForm = () => {
     if (customerType === 'individual') {
@@ -65,7 +77,28 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both' }:
   const handleSubmitForm = () => {
     // Simulate success
     setOpenSuccess(true)
+    if (customerType === 'individual') {
+      fillingFormInStorage.data.requestData = {
+        initiator,
+        initiatorId,
+        requestType: mode,
+      }
+      // console.log(fillingFormInStorage)
+      dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    }
   }
+
+  useEffect(() => {
+    if (submitFormRedux?.success) {
+      console.log(submitFormRedux)
+    }
+  }, [submitFormRedux?.success])
+
+  useEffect(() => {
+    if (submitFormRedux?.serverError) {
+      console.log(submitFormRedux)
+    }
+  }, [submitFormRedux.serverError])
 
   return (
     <div
@@ -102,10 +135,18 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both' }:
         waiverType === 'both' ? (
           <WaiverRequestFormBoth closeModalFunction={handleOpenWaiverRequestForm} waiverType={waiverType} />
         ) : (
-          <WaiverRequestForm closeModalFunction={handleOpenWaiverRequestForm} waiverType={waiverType} />
+          <WaiverRequestForm
+            closeModalFunction={handleOpenWaiverRequestForm}
+            waiverType={waiverType}
+            initiator={initiator}
+            initiatorId={initiatorId}
+          />
         )
       ) : null}
-      {openWaiver === 'hide' && openSuccess ? <FormSubmissionAlert closeModalFunction={() => setOpenSuccess(false)} /> : null}
+      {openWaiver === 'hide' && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
+      {openWaiver === 'hide' && openSuccess ? (
+        <> {submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenSuccess(false)} /> : null}</>
+      ) : null}
     </div>
   )
 }

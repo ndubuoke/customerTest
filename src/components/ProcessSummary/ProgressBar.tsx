@@ -50,7 +50,7 @@ const ProgressBar = ({
           ) : null}
 
           <div className={`z-10 ${submitted ? 'opacity-100' : 'opacity-70'}`}>
-            <ImageText text='Pending Submission' />
+            <ImageText text={mode === 'creation' ? 'Customer Creation Approval' : 'Pending Submission'} />
           </div>
         </div>
       </section>

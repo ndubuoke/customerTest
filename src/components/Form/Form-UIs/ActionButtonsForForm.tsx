@@ -21,6 +21,7 @@ import WaiverAlert from 'Components/ProcessSummary/WaiverAlert'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { isForm } from 'Screens/CustomerCreation'
 import EDDAlert from 'Components/ProcessSummary/EddAlert'
+import { CustomerTypeType } from 'Screens/ProcessSummary'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -35,11 +36,12 @@ type Props = {
   fillingFormState: any
   pageIndex: number
   setPageIndex: (prev: React.SetStateAction<number>) => void
+  customerType: CustomerTypeType
 }
 
 const highRiskScore = 90
 
-const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState, pageIndex, setPageIndex }: Props) => {
+const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingFormState, pageIndex, setPageIndex, customerType }: Props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const location = useLocation()
@@ -199,7 +201,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
       handleSubmit()
     } else {
-      if (flagCustomerStatus) {
+      if (customerType === 'sme' && flagCustomerStatus) {
         if (
           getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
           'account services'

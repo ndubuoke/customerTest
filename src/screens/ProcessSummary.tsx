@@ -23,6 +23,7 @@ export type TimelineType = 'show' | 'hide'
 export type StatusType = 'not approved' | 'approved'
 export type ProgressStatusType = 'both' | 'edd' | 'documentation'
 export type CustomerTypeType = 'individual' | 'sme'
+export type FormTypeType = 'legacy' | 'accelerated'
 
 type Props = {
   headerText: string
@@ -58,6 +59,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const [formSubmitted, setFormSubmitted] = useState<boolean>(false)
   const [processActionsMode, setProcessActionsMode] = useState<ProgressStatusType>(null)
   const [openWaiver, setOpenWaiver] = useState<TimelineType>('hide')
+  const [formType, setFormType] = useState<FormTypeType>(null)
+  const [initiator, setInitiator] = useState('Bona name')
+  const [initiatorId, setInitiatorId] = useState('rhyme id')
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
 
@@ -103,7 +107,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
 
   useEffect(() => {
     const form = publishedFormInStorage?.serverResponse?.data as Form
-    // const formType = convertCamelCaseToTitleCaseText(form?.formType)?.split(' ')[0]?.toLowerCase() as CustomerTypeType
+    const formType = convertCamelCaseToTitleCaseText(form?.formType)?.split(' ')[1]?.toLowerCase() as FormTypeType
+    setFormType(formType)
 
     // setCustomerType(formType)
 
@@ -161,16 +166,24 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                   ? null
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {
                       return (
-                        <>
-                          <SingleSection section={x} key={i} />
-                          {i === firstPageLength ? <SignatorySummary /> : null}
-                        </>
+                        <div key={i}>
+                          <SingleSection section={x} />
+                          {customerType === 'sme' && i === firstPageLength ? <SignatorySummary /> : null}
+                        </div>
                       )
                     })}
               </div>
             </div>
           </div>
-          <ProcessActions mode={formMode} waiverType={processActionsMode} customerType={customerType} openWaiver={openWaiver} />
+          <ProcessActions
+            mode={formMode}
+            waiverType={processActionsMode}
+            customerType={customerType}
+            openWaiver={openWaiver}
+            formType={formType}
+            initiator={initiator}
+            initiatorId={initiatorId}
+          />
         </section>
         <section className={`w-[25%] min-w-[377px]`}>
           <div
