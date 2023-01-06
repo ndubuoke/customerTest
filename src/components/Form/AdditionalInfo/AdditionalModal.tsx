@@ -40,7 +40,7 @@ const AdditionalModal = ({
     setAdditionalDetails(updatedFields)
   }
 
-  const handleAddExecutive = (id: string | number) => {
+  const handleAddAdditionalDetail = (id: string | number) => {
     setDetails((prev: AdditionalDetailsType[]) => [
       ...prev,
       additionalDetails.reduce(
@@ -57,14 +57,22 @@ const AdditionalModal = ({
     closeModalFunction()
   }
 
-  const handleModifyExecutive = (id: string | number) => {
-    // const signatoryIndex = executives.findIndex((x) => x?.id === id)
-    // setExecutives((prev) => {
-    //   const copied = [...prev]
-
-    //   copied.splice(signatoryIndex, 1, executiveDetails)
-    //   return copied
-    // })
+  const handleModifyAdditionalDetails = (id: string | number) => {
+    console.log('id', id)
+    setDetails((prev: AdditionalDetailsType[]) =>
+      prev.map((executive) => {
+        if (executive.id === id) {
+          executive = additionalDetails.reduce(
+            (acc, curr) => {
+              acc[curr.fieldLabel as any] = curr.value
+              return acc
+            },
+            { id } as AdditionalDetailsType
+          )
+        }
+        return executive
+      })
+    )
     setAdditionalDetails([...additionalDetailsInitial()])
     closeModalFunction()
   }
@@ -134,9 +142,9 @@ const AdditionalModal = ({
             disabled={false}
             onClick={() => {
               if (modification) {
-                handleModifyExecutive(additionalDetails['id'])
+                handleModifyAdditionalDetails(detailToModifyId)
               } else {
-                handleAddExecutive(generateID())
+                handleAddAdditionalDetail(generateID())
               }
             }}
             text='Done'

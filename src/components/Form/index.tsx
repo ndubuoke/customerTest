@@ -150,9 +150,9 @@ const Form = memo(
                     )
                   })
                 : null}
-              {customerType === 'sme' && activePage && activePage?.theIndex === 3 ? <Executives /> : null}
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives /> : null}
 
-              {customerType === 'sme' && activePage && activePage?.theIndex === 4 ? <AdditionalDetails /> : null}
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}

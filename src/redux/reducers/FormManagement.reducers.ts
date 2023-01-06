@@ -1,4 +1,4 @@
-import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
+import { publishedForm, defaultPublishedFormPages } from 'Components/Form/Form-UIs/sampleForm'
 import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.actions'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
@@ -46,7 +46,23 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+      console.log('action.payload', action.payload)
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        serverResponse: {
+          ...action.payload,
+          data: {
+            ...action.payload.data,
+            builtFormMetadata: {
+              ...action.payload.data.builtFormMetadata,
+              pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+            },
+          },
+        },
+        serverError: {},
+      }
     // return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
