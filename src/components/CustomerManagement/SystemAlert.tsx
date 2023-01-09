@@ -12,10 +12,10 @@ const SystemAlert = ({ setShowSystemAlert, message }: systemAlertType) => {
   }
   return (
     <div
-      className={`fixed   z-50 w-screen h-screen grid content-end    `}
+      className={`fixed   z-50 w-screen h-screen grid content-end     `}
     
     >
-      <div className={` h-[150px] w-[400px]  bg-white relative  bottom-8 rounded   `}>
+      <div className={` h-[150px] w-[400px]  bg-white relative  bottom-14 rounded    `}>
         <div className='flex  my-6 mx-8 '>
           <img className=' h-fit' src={Substract2} />
 
@@ -26,7 +26,7 @@ const SystemAlert = ({ setShowSystemAlert, message }: systemAlertType) => {
                 <img src={Close} className={"w-4"} />
               </button>
             </div>
-            <div className='absolute bottom-8 color-[#666666] '>
+            <div className='absolute bottom-8 color-[#666666]  '>
               <p>{message}</p>
             </div>
           </div>

@@ -47,13 +47,14 @@ const user = 'John Smith '
 type customerStatusType = 'All' | 'Active' | 'Inactive'
 
 type CustomerManagementTable = {
-  tableType: 'All Customers' | 'Requests' 
+  tableType: 'All Customers' | 'Requests'
   customerType: string | 'Individual' | 'SME'
   AllCustomers: any
   allRequests: any
   showCustomerFunctionOptions: boolean
   showCalender: boolean
   selectedStatus: string
+
   setShowCustomerFunctionOptions: (e) => void
   customerFunctionListRef: any
   filterStateOptionsRef: any
@@ -120,6 +121,7 @@ const CustomerManagementTable = ({
   setShowCalender,
   userRole,
   searchTerm,
+ 
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
   const [requestId, setRequestId] = useState(0)
@@ -426,6 +428,8 @@ const CustomerManagementTable = ({
     }
   }
 
+  
+
   useEffect(() => {
     if (tableType === 'All Customers') {
       if (customerStatus === 'All') {
@@ -549,8 +553,8 @@ const CustomerManagementTable = ({
         />
       )}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-screen  '>
-        <table className='w-full text-sm text-left table-fixed '>
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[300px] overflow-auto '>
+        <table  className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
@@ -1101,7 +1105,7 @@ const CustomerManagementTable = ({
                         if (request.customerType === customerType) {
                           return (
                             <RequestDetailsRow
-                              key={request?.id}
+                              key={request?.requestId}
                               requestFunctionListRef={requestFunctionListRef}
                               showRequestFunctionOptions={showRequestFunctionOptions}
                               request={request}

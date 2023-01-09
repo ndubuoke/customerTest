@@ -20,6 +20,7 @@ import { AppRoutes } from 'Routes/AppRoutes'
 import SystemAlert from 'Components/CustomerManagement/SystemAlert'
 import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmissions'
 import SearchBar from 'Components/CustomerManagement/SearchBar'
+import * as XLSX from 'xlsx'
 
 type Props = {}
 
@@ -290,6 +291,29 @@ const Main = (props: Props) => {
     }
   }
 
+  const downloadCustomersDataHandler = () => {
+    let data = undefined
+    if (customermanagementTableType === 'All Customers') {
+      data = AllCustomers?.serverResponse?.data?.customer.map((c) => {
+        return c?.customer_profiles[0]
+      })
+    }
+    if (customermanagementTableType === 'Requests') {
+      // data = allRequests?.serverResponse?.data?.customer.map((c) => {
+      //   return c?.customer_profiles[0]
+      // })
+
+      data = allRequests.serverResponse.data?.res.map((c) => {
+        return c
+      })
+    }
+
+    var wb = XLSX.utils.book_new()
+    var ws = XLSX.utils.json_to_sheet(data)
+    XLSX.utils.book_append_sheet(wb, ws, 'Customer Details')
+    XLSX.writeFile(wb, 'Customer Details.csv')
+  }
+
   useEffect(() => {
     if (userRole === 'checker') {
       setNextLevelButtonId(2)
@@ -328,21 +352,26 @@ const Main = (props: Props) => {
       }
       if (userRole === 'checker') {
         dispatch(getRequestsForCheckerAction('', customerType) as any)
+        dispatch(getTotalRequestStatusCustomersAction('Interim Approval') as any)
       }
+      setTimeout(() => {
+        setShowSystemAlert(true)
+      }, 3000)
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
   //  console.log(allRequests)
   //  console.log(allRequestsForChecker)
   // console.log(user)
+  // console.log(totalStatusCustomers?.serverResponse?.data?.total)
+  
 
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
-
       {showSystemAlert && (
         <>
-          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total && (
+          {userRole === 'maker'  && (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!
@@ -723,9 +752,22 @@ const Main = (props: Props) => {
                     <span className='text-sm text-[#636363]'>Refresh Table</span>
                   </div>
                   <div className='border'></div>
-                  <div className='flex  justify-center items-center px-2 cursor-pointer'>
+                  <div onClick={downloadCustomersDataHandler} className='flex  justify-center items-center px-2 cursor-pointer '>
                     <img src={Download} />
                     <span className='text-sm text-[#636363]'>Download</span>
+                    {/* <ReactHTMLTableToExcel
+                      id='test-table-xls-button'
+                      className='w-full download-table-xls-button rounded '
+                      table='table-to-xlsx'
+                      filename='Customer Management Table Details'
+                      sheet='Customer Management Table Details'
+                      buttonText={
+                        <div className='flex justify-center items-center'>
+                          <img src={Download} />
+                          <span className='text-sm text-[#636363]'>Download</span>
+                        </div>
+                      }
+                    /> */}
                   </div>
                 </div>
 
