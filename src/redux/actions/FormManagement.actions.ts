@@ -25,6 +25,7 @@ import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
+// const SERVER_URL = 'https://9e39-102-89-46-93.eu.ngrok.io'
 
 const SERVER_URL_PUBLISHED_FORM = 'https://formbuilder-api-dev.reventtechnologies.com'
 
@@ -146,9 +147,10 @@ export const submitFormAction =
       // localStorage.removeItem('form')
     } catch (error) {
       // localStorage.removeItem('form')
+      console.log(error)
       dispatch({
         type: SUBMIT_FORM_FAIL,
-        payload: error?.response && error?.response?.data?.message,
+        payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
       })
     }
   }
