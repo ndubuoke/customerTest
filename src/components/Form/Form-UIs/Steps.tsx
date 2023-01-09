@@ -26,7 +26,7 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
   const [form, setForm] = useState<Form>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
-  console.log('publishedForm', publishedForm)
+  // console.log('publishedForm', publishedForm)
   const handleActivePage = (index: number) => {
     const page = form?.builtFormMetadata?.pages[index]
     dispatch(activePageAction(page, index) as any)

@@ -52,7 +52,7 @@ const Form = memo(
     const [canNext, setCanNext] = useState<boolean>(false)
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
-    console.log('activePage', activePage)
+    // console.log('activePage', activePage)
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
@@ -85,6 +85,19 @@ const Form = memo(
     }, [fillingFormState])
 
     useEffect(() => {
+      if (fillingFormState?.data?.customerData?.length === 0) {
+        const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+          ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
+          : null
+
+        if (backupInStorage) {
+          // console.log(backupInStorage)
+          setBackupForSwitchFormState(backupInStorage)
+        }
+      }
+    }, [fillingFormState, publishedFormState])
+
+    useEffect(() => {
       // const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
       //   ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
       //   : null
@@ -92,18 +105,6 @@ const Form = memo(
         sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(backupForSwitchFormState))
       }
     }, [backupForSwitchFormState])
-
-    useEffect(() => {
-      if (fillingFormState?.data?.customerData?.length === 0) {
-        const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
-          ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE))
-          : null
-
-        if (backupInStorage) {
-          setBackupForSwitchFormState(backupInStorage)
-        }
-      }
-    }, [fillingFormState, publishedFormState])
 
     return (
       <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>
@@ -131,7 +132,7 @@ const Form = memo(
               {activePageState?.sections?.length > 0
                 ? activePageState?.sections?.map((sects, index) => {
                     return (
-                      <>
+                      <div key={index}>
                         <FormLayout
                           isSection={true}
                           item={sects}
@@ -144,15 +145,15 @@ const Form = memo(
                           backupForSwitchFormState={backupForSwitchFormState}
                         />
                         {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
-                          <Signatories />
+                          <Signatories key={'Signatories' + index} />
                         ) : null}
-                      </>
+                      </div>
                     )
                   })
                 : null}
-              {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives /> : null}
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives key='executives' /> : null}
 
-              {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails /> : null}
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails key='aditional' /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}

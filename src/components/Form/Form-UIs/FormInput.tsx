@@ -161,6 +161,8 @@ const FormInput = ({
     if (theData) {
       // console.log({ theData })
       setText(theData)
+    } else {
+      setText('')
     }
   }, [])
 

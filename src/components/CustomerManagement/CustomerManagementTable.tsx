@@ -24,6 +24,7 @@ import CustomerDetailsRow from './CustomerDetailsRow'
 import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
 import getRequestDetail from '../../utilities/getRequestDetail'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -47,7 +48,7 @@ const user = 'John Smith '
 type customerStatusType = 'All' | 'Active' | 'Inactive'
 
 type CustomerManagementTable = {
-  tableType: 'All Customers' | 'Requests' 
+  tableType: 'All Customers' | 'Requests'
   customerType: string | 'Individual' | 'SME'
   AllCustomers: any
   allRequests: any
@@ -357,11 +358,20 @@ const CustomerManagementTable = ({
   }
 
   const customerFunctionHandler = ({ option, customer }) => {
+    console.log({ option, customer })
     if (option === 'View') {
       setShowCustomerModal(true)
       setCustomer(customer)
     } else if (option === 'Modify') {
-      //  navigate(AppRoutes.SMECustomerCreationScreen)
+      sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('modification'))
+
+      if (customer?.customerType?.toLowerCase() === 'individual') {
+        navigate(`${AppRoutes.individualCustomerCreationScreen}/?isForm=true`)
+      } else {
+        navigate(`${AppRoutes.SMECustomerCreationScreen}/?isForm=true`)
+      }
+      sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+      sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
     } else if (option === 'Deactivate') {
       setShowDeactivationModal(customer)
     } else if (option === 'Activate') {

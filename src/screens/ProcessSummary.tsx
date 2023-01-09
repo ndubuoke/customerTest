@@ -122,12 +122,11 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   // TODO: Handle submitted state when form is submitted successfully
 
   useEffect(() => {
+    console.log(FormModeInStorage)
     if (FormModeInStorage && FormModeInStorage === 'creation') {
-      if (FormModeInStorage === 'creation') {
-        setFormMode('creation')
-      } else {
-        setFormMode('modification')
-      }
+      setFormMode('creation')
+    } else {
+      setFormMode('modification')
     }
   }, [])
 

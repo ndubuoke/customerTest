@@ -44,7 +44,8 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as any // ResponseType
 
-  const handleBackToForm = () => {
+  const handleBackToForm = (e: any) => {
+    e.stopPropagation()
     if (customerType === 'individual') {
       navigate(AppRoutes.individualCustomerCreationScreen + isForm)
       return
@@ -65,7 +66,8 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
     // setOpenModal(true)
   }
 
-  const handleCancelFormCreation = () => {
+  const handleCancelFormCreation = (e: any) => {
+    e.stopPropagation()
     sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.FORM_MODE_STATUS)
