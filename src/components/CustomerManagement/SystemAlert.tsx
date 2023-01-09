@@ -15,7 +15,7 @@ const SystemAlert = ({ setShowSystemAlert, message }: systemAlertType) => {
       className={`fixed   z-50 w-screen h-screen grid content-end    `}
     
     >
-      <div className={` h-[150px] w-[400px]  bg-white relative  bottom-8 rounded   `}>
+      <div className={` h-[150px] w-[400px]  bg-white relative  bottom-14 rounded   `}>
         <div className='flex  my-6 mx-8 '>
           <img className=' h-fit' src={Substract2} />
 

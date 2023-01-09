@@ -74,8 +74,8 @@ const RequestDetailsRow = ({
           )}
           {userRole === 'maker' && (
             <>
-              <img src={Menu} alt='' className='cursor-pointer' onClick={showRequestFunctionHandler.bind(null, request?.id)} />
-              {showRequestFunctionOptions && request.id === requestId && (
+              <img src={Menu} alt='' className='cursor-pointer' onClick={showRequestFunctionHandler.bind(null, request?.requestId)} />
+              {showRequestFunctionOptions && request?.requestId === requestId && (
                 <div ref={requestFunctionListRef} className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'>
                   {requestFunctionOptions?.map((option, index) => {
                     if (request.status === 'Approved') {
