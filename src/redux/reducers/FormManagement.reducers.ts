@@ -1,4 +1,4 @@
-import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
+import { publishedForm, defaultPublishedFormPages } from 'Components/Form/Form-UIs/sampleForm'
 import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.actions'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
@@ -11,6 +11,9 @@ import {
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
+  SUBMIT_FORM_FAIL,
+  SUBMIT_FORM_REQUEST,
+  SUBMIT_FORM_SUCCESS,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
@@ -43,8 +46,24 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      // return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
-      return { ...state, ...publishedForm }
+      console.log('action.payload', action.payload)
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        serverResponse: {
+          ...action.payload,
+          data: {
+            ...action.payload.data,
+            builtFormMetadata: {
+              ...action.payload.data.builtFormMetadata,
+              pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+            },
+          },
+        },
+        serverError: {},
+      }
+    // return { ...state, ...publishedForm }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
@@ -137,6 +156,25 @@ export const unfilledRequiredSignatoryListButtonReducer = (
     case UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON:
       return { ...state, list: action.payload?.list }
 
+    default:
+      return state
+  }
+}
+
+export const submitFormReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case SUBMIT_FORM_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case SUBMIT_FORM_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case SUBMIT_FORM_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
     default:
       return state
   }

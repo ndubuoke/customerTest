@@ -367,17 +367,16 @@ const Main = (props: Props) => {
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
-
       {showSystemAlert && (
         <>
-          {userRole === 'maker' && (
+          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total && (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!
         Kindly review and update.`}
             />
           )}
-          {userRole === 'checker' && (
+          {userRole === 'checker' && totalStatusCustomers?.serverResponse?.data?.total > 0 && (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} new requests submitted for approval since last login. Kindly review and update.`}

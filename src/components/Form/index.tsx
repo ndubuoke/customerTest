@@ -143,13 +143,16 @@ const Form = memo(
                           setBackupForSwitchFormState={setBackupForSwitchFormState}
                           backupForSwitchFormState={backupForSwitchFormState}
                         />
-                        {activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? <Signatories /> : null}
+                        {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
+                          <Signatories />
+                        ) : null}
                       </>
                     )
                   })
                 : null}
-              {activePage && activePage?.theIndex === 3 ? <Executives /> : null}
-              {activePage && activePage?.theIndex === 4 ? <AdditionalDetails /> : null}
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives /> : null}
+
+              {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails /> : null}
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}
@@ -174,6 +177,7 @@ const Form = memo(
             fillingFormState={fillingFormState}
             pageIndex={pageIndex}
             setPageIndex={setPageIndex}
+            customerType={customerType}
           />
         ) : null}
       </div>

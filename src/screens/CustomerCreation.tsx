@@ -183,18 +183,20 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               </section>
             </>
           ) : (
-            <Form
-              // SME SHOW ONLY EXECUTIVE CHECK
-              customerType={customerType}
-              kind='new'
-              formFields={''}
-              setFillingFormState={setFillingFormState}
-              setPublishedFormState={setPublishedFormState}
-              fillingFormState={fillingFormState}
-              publishedFormState={publishedFormState}
-              setBackupForSwitchFormState={setBackupForSwitchFormState}
-              backupForSwitchFormState={backupForSwitchFormState}
-            />
+            <>
+              <Form
+                // SME SHOW ONLY EXECUTIVE CHECK
+                customerType={customerType}
+                kind='new'
+                formFields={''}
+                setFillingFormState={setFillingFormState}
+                setPublishedFormState={setPublishedFormState}
+                fillingFormState={fillingFormState}
+                publishedFormState={publishedFormState}
+                setBackupForSwitchFormState={setBackupForSwitchFormState}
+                backupForSwitchFormState={backupForSwitchFormState}
+              />
+            </>
           )}
         </div>
       </main>

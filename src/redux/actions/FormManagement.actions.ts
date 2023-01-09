@@ -1,6 +1,7 @@
 import axios from 'axios'
 import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
 import { SignatoryDetailsRequiredDataStatusType } from 'Components/Form/Signatory/InitialData'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 import { Dispatch } from 'redux'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
@@ -13,10 +14,14 @@ import {
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
+  SUBMIT_FORM_FAIL,
+  SUBMIT_FORM_REQUEST,
+  SUBMIT_FORM_SUCCESS,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
 import { ReducersType } from 'Redux/store'
+import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
@@ -33,8 +38,8 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
       },
     }
 
-    // const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form/customer/published/type/${formType}`, config)
-    const data = null
+    const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form/customer/published/type/${formType}`, config)
+    // const data = null
 
     // 74448975208 -bvn
 
@@ -120,4 +125,30 @@ export const unfilledRequiredSignatoryListButtonAction =
       type: UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
       payload: { list },
     })
+  }
+
+export const submitFormAction =
+  (formType: FormTypeType, customerType: CustomerTypeType, filledForm: FormStructureType) =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: SUBMIT_FORM_REQUEST })
+
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      }
+
+      const { data } = await axios.post(`${SERVER_URL}/v1/customer/${customerType}/${formType}`, filledForm, config)
+
+      dispatch({ type: SUBMIT_FORM_SUCCESS, payload: data })
+
+      // localStorage.removeItem('form')
+    } catch (error) {
+      // localStorage.removeItem('form')
+      dispatch({
+        type: SUBMIT_FORM_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
   }
