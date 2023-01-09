@@ -363,13 +363,15 @@ const Main = (props: Props) => {
   //  console.log(allRequests)
   //  console.log(allRequestsForChecker)
   // console.log(user)
+  // console.log(totalStatusCustomers?.serverResponse?.data?.total)
+  
 
   return (
     <>
       {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
       {showSystemAlert && (
         <>
-          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total && (
+          {userRole === 'maker'  && (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!
