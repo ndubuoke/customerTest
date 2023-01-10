@@ -1,8 +1,9 @@
 import { caret } from 'Assets/svgs'
+import Spinner from 'Components/Shareables/Spinner'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { getCountriesAction, getStatesAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -111,7 +112,13 @@ const FormDropdown = ({
       ? importFromURLListValue
       : null
 
-  const optionsField = _optionsField?.split(',')?.map((oneItem) => oneItem.trim())
+  const _optionsFieldForm = _optionsField?.split(',')?.map((oneItem) => oneItem.trim())
+
+  const [optionsField, setOptionsField] = useState<any>([])
+
+  // Save countries locally
+  const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
+  const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
 
   const theItemFieldNameCamelCase = camelize(fieldLabel)
 
@@ -120,6 +127,8 @@ const FormDropdown = ({
   const [multipleSelectedDropdownItems, setMultipleSelectedDropdownItems] = useState<Array<string>>([])
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+  const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
+  const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
 
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
     setSelectedDropdownItem(selectedItem.trim())
@@ -132,6 +141,56 @@ const FormDropdown = ({
       dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
     }
   }
+  // Get Countries list if it contains country in the field lable
+  useEffect(() => {
+    if (fieldLabel.toLowerCase().includes('country')) {
+      // if (!getCountriesRedux?.success) {
+      dispatch(getCountriesAction() as any)
+      // }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (fieldLabel.toLowerCase().includes('country')) {
+      if (getCountriesRedux?.success) {
+        setOptionsField(getCountriesRedux?.serverResponse?.data?.map((x) => x?.countryName))
+        setCountries(
+          getCountriesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName }
+          })
+        )
+        console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+      }
+    }
+  }, [getCountriesRedux])
+
+  const checkIfItemIsState = (_item: FormControlType | FormControlTypeWithSection) => {
+    const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
+      ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
+      : null
+
+    if (checkCountriesInStorage?.sectionId === item?.sectionId || checkCountriesInStorage?.pageId === item?.pageId) {
+      dispatch(getStatesAction(checkCountriesInStorage?.country?.countryId) as any)
+    }
+  }
+
+  // Save states lists to state
+
+  // TODO---
+  // CHange this to state and not city
+  useEffect(() => {
+    if (fieldLabel.toLowerCase().includes('state') && getStatesRedux) {
+      if (getStatesRedux?.success) {
+        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setStates(
+          getStatesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.cityId, stateName: x?.cityName }
+          })
+        )
+        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+      }
+    }
+  }, [getStatesRedux])
 
   const handleMultipleSelectedDropdownItem = (selectedItem, action: 'remove' | 'add') => {
     if (action === 'add') {
@@ -519,7 +578,12 @@ const FormDropdown = ({
       <div className={`relative`}>
         <div
           className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
-          onClick={() => setShowLists((prev) => !prev)}
+          onClick={() => {
+            setShowLists((prev) => !prev)
+            if (fieldLabel.toLowerCase().includes('state')) {
+              checkIfItemIsState(item)
+            }
+          }}
           title={selectedDropdownItem && selectedDropdownItem}
         >
           {enableMultipleSelection.toLowerCase() === 'off' ? (
@@ -551,11 +615,21 @@ const FormDropdown = ({
         ) : null}
         {showLists && (
           <div
-            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg'
+            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-[200px] overflow-y-auto'
             style={{
               zIndex: 999,
             }}
           >
+            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
+              <div className='h-full flex justify-center items-center w-full'>
+                <Spinner size='large' />
+              </div>
+            ) : null}
+            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state') && getStatesRedux?.loading ? (
+              <div className='h-full flex justify-center items-center w-full'>
+                <Spinner size='large' />
+              </div>
+            ) : null}
             {enableMultipleSelection.toLowerCase() === 'off'
               ? optionsField?.length > 0 &&
                 optionsField?.map((selected, index) => {
@@ -567,6 +641,11 @@ const FormDropdown = ({
                         e.stopPropagation()
                         handleSelectedDropdownItem(selected, item)
 
+                        const country = countries.find((x) => x.countryName === selected)
+                        sessionStorage.setItem(
+                          `${item?.sectionId || item?.pageId}`,
+                          JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+                        )
                         setShowLists((prev) => !prev)
                       }}
                     >
@@ -579,12 +658,16 @@ const FormDropdown = ({
               ? optionsField?.length > 0 &&
                 optionsField?.map((selected: string, index: number) => {
                   return (
-                    <MultipleSelectionItem
-                      multipleSelectedDropdownItems={multipleSelectedDropdownItems}
-                      handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
-                      selected={selected}
-                      key={index}
-                    />
+                    <>
+                      {
+                        <MultipleSelectionItem
+                          multipleSelectedDropdownItems={multipleSelectedDropdownItems}
+                          handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
+                          selected={selected}
+                          key={index}
+                        />
+                      }
+                    </>
                   )
                 })
               : null}
