@@ -16,6 +16,7 @@ import { submitFormAction } from 'Redux/actions/FormManagement.actions'
 import { FormTypeType } from 'Screens/ProcessSummary'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import FormSubmissionLoader from './Loader'
+import FormSubmissionError from './FormSubmissionError'
 
 type Props = {
   openWaiver: 'show' | 'hide'
@@ -39,9 +40,9 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
   const [openWaiverRequestForm, setOpenWaiverRequestForm] = useState<boolean>(false)
 
   // Remove this later
-  const [openSuccess, setOpenSuccess] = useState<boolean>(false)
+  const [openModal, setOpenModal] = useState<boolean>(false)
 
-  const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as ResponseType
+  const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as any // ResponseType
 
   const handleBackToForm = () => {
     if (customerType === 'individual') {
@@ -61,7 +62,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
   const handleOpenWaiverRequestForm = () => {
     setOpenWaiverRequestForm((prev) => !prev)
 
-    // setOpenSuccess(true)
+    // setOpenModal(true)
   }
 
   const handleCancelFormCreation = () => {
@@ -76,7 +77,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   const handleSubmitForm = () => {
     // Simulate success
-    setOpenSuccess(true)
+    setOpenModal(true)
     if (customerType === 'individual') {
       fillingFormInStorage.data.requestData = {
         initiator,
@@ -144,8 +145,19 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
         )
       ) : null}
       {openWaiver === 'hide' && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
-      {openWaiver === 'hide' && openSuccess ? (
-        <> {submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenSuccess(false)} /> : null}</>
+      {openWaiver === 'hide' && openModal ? (
+        <> {submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenModal(false)} /> : null}</>
+      ) : null}
+      {openWaiver === 'hide' && openModal ? (
+        <>
+          {' '}
+          {submitFormRedux?.serverError?.status || submitFormRedux?.serverError ? (
+            <FormSubmissionError
+              error={submitFormRedux?.serverError?.error?.message || 'An error occured. Could not save the form'}
+              closeModalFunction={() => setOpenModal(false)}
+            />
+          ) : null}
+        </>
       ) : null}
     </div>
   )

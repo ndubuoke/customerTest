@@ -30,7 +30,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const [customer, setCustomer] = useState(null)
   const [showCustomerModal, setShowCustomerModal] = useState(false)
 
-  const MAX_FIELD_LENGTH = 12
+  const MAX_FIELD_LENGTH = 11
 
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
     const { value } = ev.target
