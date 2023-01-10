@@ -16,7 +16,12 @@ import { ResponseType, ShowModalInFormType } from 'Redux/reducers/FormManagement
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import convertCamelCaseToTitleCaseText from 'Utilities/convertCamelCaseToTitleCaseText'
-import { individualCustomerCreationData, smeCustomerCreationData } from '../data/process-summary'
+import {
+  individualCustomerCreationData,
+  individualCustomerModificationData,
+  smeCustomerCreationData,
+  smeCustomerModificationData,
+} from '../data/process-summary'
 import { CreationModeType } from './CustomerCreation'
 
 export type FormModeType = 'creation' | 'modification'
@@ -43,6 +48,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     : null
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
+    : null
+  const customerManagementDataInStorage: any = sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA))
     : null
   const showWaiverModalInFormStorage: TimelineType = sessionStorage.getItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM))
@@ -123,13 +131,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   // TODO: Handle submitted state when form is submitted successfully
 
   useEffect(() => {
-    if (FormModeInStorage && FormModeInStorage === 'creation') {
-      if (FormModeInStorage === 'creation') {
-        setFormMode('creation')
-      } else {
-        setFormMode('modification')
-      }
-    }
+    // console.log({ FormModeInStorage })
+    setFormMode(FormModeInStorage)
   }, [])
 
   return (
@@ -137,7 +140,15 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       <nav>
         <GoBack
           headerText='PROCESS SUMMARY'
-          breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData}
+          breadCrumbsList={
+            customerType === 'individual'
+              ? formMode === 'creation'
+                ? individualCustomerCreationData
+                : individualCustomerModificationData
+              : formMode === 'creation'
+              ? smeCustomerCreationData
+              : smeCustomerModificationData
+          }
         />
       </nav>
 
@@ -151,6 +162,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                 docWaiverStatus={docWaiverStatus}
                 eddRequest={eddRequest}
                 eddStatus={eddStatus}
+                customerType={customerManagementDataInStorage?.customerType.toLowerCase()}
               />
             </div>
             <div className='px-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12'>
@@ -195,8 +207,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           <div
             className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px] overflow-y-auto`}
           >
-            <div className='font-medium text-[24px] leading-28px text-[#636363]'>Activity Log</div>
-            <ActivityLog mode={formMode} />
+            {/* <div className='font-medium text-[24px] leading-28px text-[#636363]'>Activity Log</div> */}
+            <ActivityLog customerId={customerManagementDataInStorage?.customerId} mode={formMode} />
           </div>
         </section>
       </main>

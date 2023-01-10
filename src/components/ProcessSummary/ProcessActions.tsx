@@ -44,7 +44,8 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as any // ResponseType
 
-  const handleBackToForm = () => {
+  const handleBackToForm = (e: any) => {
+    e.stopPropagation()
     if (customerType === 'individual') {
       navigate(AppRoutes.individualCustomerCreationScreen + isForm)
       return
@@ -65,7 +66,8 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
     // setOpenModal(true)
   }
 
-  const handleCancelFormCreation = () => {
+  const handleCancelFormCreation = (e: any) => {
+    e.stopPropagation()
     sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.FORM_MODE_STATUS)
@@ -86,6 +88,20 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
       }
       // console.log(fillingFormInStorage)
       dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    }
+  }
+
+  const handleSubmitModifiedForm = () => {
+    // Simulate success
+    setOpenModal(true)
+    if (customerType === 'individual') {
+      fillingFormInStorage.data.requestData = {
+        initiator,
+        initiatorId,
+        requestType: mode,
+      }
+      // console.log(fillingFormInStorage)
+      // dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
     }
   }
 
@@ -123,7 +139,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
       </div>
       <div
         className={`text-center flex flex-col items-center max-w-[80px] cursor-pointer`}
-        onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : handleSubmitForm}
+        onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : mode === 'creation' ? handleSubmitForm : handleSubmitModifiedForm}
       >
         <div className='w-[35px] h-[35px] mb-2 '>
           <img src={submitForm} alt='go back' width={30} height={24} />

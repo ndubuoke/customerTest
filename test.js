@@ -9,20 +9,30 @@
 
 // console.log(camelize('firsT name'))
 
-const a = ['films', 'film', 'some other', 'Prince', 'Bonaventure']
-const b = ['film', 'king', 'Bonaventure', 'Ebuka', '']
+// const a = ['films', 'film', 'some other', 'Prince', 'Bonaventure']
+// const b = ['film', 'king', 'Bonaventure', 'Ebuka', '']
 
-const newArray = []
+// const newArray = []
 
-function matchValues(arr, matcher) {
-  return arr.forEach((valueInsideA) => {
-    const foundValue = matcher.find((valueInsideB) => valueInsideA === valueInsideB)
+// function matchValues(arr, matcher) {
+//   return arr.forEach((valueInsideA) => {
+//     const foundValue = matcher.find((valueInsideB) => valueInsideA === valueInsideB)
 
-    if (!foundValue) {
-      newArray.push(valueInsideA)
-    }
-  })
+//     if (!foundValue) {
+//       newArray.push(valueInsideA)
+//     }
+//   })
+// }
+
+// matchValues(a, b)
+// console.log(newArray)
+
+function camelize(str) {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase()
+    })
+    .replace(/\s+/g, '')
 }
 
-matchValues(a, b)
-console.log(newArray)
+console.log(camelize('fsirst name'))

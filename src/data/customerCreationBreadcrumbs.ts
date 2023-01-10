@@ -20,3 +20,24 @@ export const smeCustomerCreationData = [
     link: AppRoutes.individualCustomerCreationScreen,
   },
 ]
+
+export const individualCustomerModificationData = [
+  {
+    text: 'CUSTOMER MANAGEMENT',
+    link: AppRoutes.mainScreen,
+  },
+  {
+    text: 'INDIVIDUAL CUSTOMER MODIFICATION',
+    link: AppRoutes.individualCustomerCreationScreen,
+  },
+]
+export const smeCustomerModificationData = [
+  {
+    text: 'CUSTOMER MANAGEMENT',
+    link: AppRoutes.mainScreen,
+  },
+  {
+    text: 'SME CUSTOMER MODIFICATION',
+    link: AppRoutes.individualCustomerCreationScreen,
+  },
+]

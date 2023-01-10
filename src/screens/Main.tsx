@@ -20,6 +20,7 @@ import { AppRoutes } from 'Routes/AppRoutes'
 import SystemAlert from 'Components/CustomerManagement/SystemAlert'
 import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmissions'
 import SearchBar from 'Components/CustomerManagement/SearchBar'
+import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import * as XLSX from 'xlsx'
 
 type Props = {}
@@ -89,6 +90,9 @@ const Main = (props: Props) => {
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
 
   const handleSelectForm = (list) => {
+    clearAllItemsInStorageForCustomerMGT()
+
+    sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('creation'))
     if (list === 'Individual') {
       navigate(AppRoutes.individualCustomerCreationScreen)
     } else if (list === 'SME') {
@@ -364,28 +368,29 @@ const Main = (props: Props) => {
   //  console.log(allRequestsForChecker)
   // console.log(user)
   // console.log(totalStatusCustomers?.serverResponse?.data?.total)
-  
+
 
   return (
     <>
-      {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
-      {showSystemAlert && (
+      {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}
+
+      {showSystemAlert ? (
         <>
-          {userRole === 'maker'  && (
+          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total ? (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!
         Kindly review and update.`}
             />
-          )}
-          {userRole === 'checker' && totalStatusCustomers?.serverResponse?.data?.total > 0 && (
+          ) : null}
+          {userRole === 'checker' && totalStatusCustomers?.serverResponse?.data?.total > 0 ? (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} new requests submitted for approval since last login. Kindly review and update.`}
             />
-          )}
+          ) : null}
         </>
-      )}
+      ) : null}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
