@@ -5,6 +5,7 @@ import GoBack from 'Components/MainScreenLayout/GoBack'
 import ProcessActions from 'Components/ProcessSummary/ProcessActions'
 import ProgressBar from 'Components/ProcessSummary/ProgressBar'
 import SignatorySummary from 'Components/ProcessSummary/SignatorySummary'
+import ExecutiveSummary from 'Components/ProcessSummary/ExecutiveSummary'
 import SingleSection from 'Components/ProcessSummary/SingleSection'
 import ActivityLog from 'Components/Shareables/ActivityLog'
 import { FormStructureType } from 'Components/types/FormStructure.types'
@@ -168,7 +169,12 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                       return (
                         <div key={i}>
                           <SingleSection section={x} />
-                          {customerType === 'sme' && i === firstPageLength ? <SignatorySummary /> : null}
+                          {customerType === 'sme' && i === firstPageLength ? (
+                            <>
+                              <SignatorySummary />
+                              <ExecutiveSummary />
+                            </>
+                          ) : null}
                         </div>
                       )
                     })}

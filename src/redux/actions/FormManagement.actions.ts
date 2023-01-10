@@ -30,6 +30,7 @@ const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
 const SERVER_URL_PUBLISHED_FORM = 'https://formbuilder-api-dev.reventtechnologies.com'
 
 export const getFormAction = (formType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  console.log('formtype', formType)
   try {
     dispatch({ type: GET_FORM_REQUEST })
 

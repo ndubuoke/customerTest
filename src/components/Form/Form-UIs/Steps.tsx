@@ -26,9 +26,12 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
   const [form, setForm] = useState<Form>(null)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
-  console.log('publishedForm', publishedForm)
+  // console.log('publishedForm', publishedForm)
   const handleActivePage = (index: number) => {
     const page = form?.builtFormMetadata?.pages[index]
+    console.log('form', form?.builtFormMetadata?.pages)
+    console.log('page-index', index)
+    console.log('page', page)
     dispatch(activePageAction(page, index) as any)
     setActivePageState(page)
     setPageIndex(index)
@@ -36,19 +39,20 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
 
   useEffect(() => {
     if (publishedForm?.success) {
-      setForm(
-        customerType == 'sme'
-          ? publishedForm?.serverResponse?.data
-          : {
-              ...publishedForm?.serverResponse?.data,
-              builtFormMetadata: {
-                ...publishedForm?.serverResponse?.data.builtFormMetadata,
-                pages: publishedForm?.serverResponse?.data.builtFormMetadata.pages.filter(
-                  (page) => getProperty(page?.pageProperties, 'Page name', 'value').text !== 'Executive/Directors Information'
-                ),
-              },
-            }
-      )
+      setForm(publishedForm?.serverResponse?.data)
+      // setForm(
+      //   customerType === 'sme'
+      //     ? publishedForm?.serverResponse?.data
+      //     : {
+      //         ...publishedForm?.serverResponse?.data,
+      //         builtFormMetadata: {
+      //           ...publishedForm?.serverResponse?.data.builtFormMetadata,
+      //           pages: publishedForm?.serverResponse?.data.builtFormMetadata.pages.filter(
+      //             (page) => getProperty(page?.pageProperties, 'Page name', 'value').text !== 'Executive/Directors Information'
+      //           ),
+      //         },
+      //       }
+      // )
     }
   }, [publishedForm])
 
