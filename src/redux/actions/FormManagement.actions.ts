@@ -6,12 +6,18 @@ import { Dispatch } from 'redux'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   ACTIVE_PAGE,
+  GET_COUNTRIES_FAIL,
+  GET_COUNTRIES_REQUEST,
+  GET_COUNTRIES_SUCCESS,
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  GET_STATES_FAIL,
+  GET_STATES_REQUEST,
+  GET_STATES_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -155,3 +161,53 @@ export const submitFormAction =
       })
     }
   }
+
+export const getCountriesAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_COUNTRIES_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL}/v1/country`, config)
+
+    dispatch({ type: GET_COUNTRIES_SUCCESS, payload: data })
+
+    // localStorage.removeItem('form')
+  } catch (error) {
+    // localStorage.removeItem('form')
+    console.log(error)
+    dispatch({
+      type: GET_COUNTRIES_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
+
+export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_STATES_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL}/v1/country/city/${stateId}`, config)
+
+    dispatch({ type: GET_STATES_SUCCESS, payload: data })
+
+    // localStorage.removeItem('form')
+  } catch (error) {
+    // localStorage.removeItem('form')
+    console.log(error)
+    dispatch({
+      type: GET_STATES_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
