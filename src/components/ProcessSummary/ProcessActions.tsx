@@ -91,6 +91,20 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
     }
   }
 
+  const handleSubmitModifiedForm = () => {
+    // Simulate success
+    setOpenModal(true)
+    if (customerType === 'individual') {
+      fillingFormInStorage.data.requestData = {
+        initiator,
+        initiatorId,
+        requestType: mode,
+      }
+      // console.log(fillingFormInStorage)
+      // dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    }
+  }
+
   useEffect(() => {
     if (submitFormRedux?.success) {
       console.log(submitFormRedux)
@@ -125,7 +139,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
       </div>
       <div
         className={`text-center flex flex-col items-center max-w-[80px] cursor-pointer`}
-        onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : handleSubmitForm}
+        onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : mode === 'creation' ? handleSubmitForm : handleSubmitModifiedForm}
       >
         <div className='w-[35px] h-[35px] mb-2 '>
           <img src={submitForm} alt='go back' width={30} height={24} />

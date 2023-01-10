@@ -1,6 +1,11 @@
 import { useState, useCallback, useEffect, memo } from 'react'
 import GoBack from 'Components/MainScreenLayout/GoBack'
-import { individualCustomerCreationData, smeCustomerCreationData } from '../data/customerCreationBreadcrumbs'
+import {
+  individualCustomerCreationData,
+  individualCustomerModificationData,
+  smeCustomerCreationData,
+  smeCustomerModificationData,
+} from '../data/customerCreationBreadcrumbs'
 import SwitchToFormType from 'Components/Shareables/SwitchToFormType'
 import WizardChanger from 'Components/Shareables/WizardChanger'
 import MatchModal from 'Components/Shareables/MatchModal'
@@ -45,7 +50,18 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const location = useLocation()
   const navigate = useNavigate()
 
-  const headerText = customerType === 'individual' ? 'INDIVIDUAL CUSTOMER CREATION' : 'SME CUSTOMER CREATION'
+  const formModeStatusInStorage = sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS))
+    : null
+
+  const headerText =
+    customerType === 'individual'
+      ? formModeStatusInStorage === 'creation'
+        ? 'INDIVIDUAL CUSTOMER CREATION'
+        : 'INDIVIDUAL CUSTOMER MODIFICATION'
+      : formModeStatusInStorage === 'creation'
+      ? 'SME CUSTOMER CREATION'
+      : 'SME CUSTOMER MODIFICATION'
   const {
     loading,
     showResultModal,
@@ -127,23 +143,48 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     }
   }, [])
 
+  // Change the value of form form mode using the storage
+
+  useEffect(() => {
+    const formModeStatus = sessionStorage.getItem(STORAGE_NAMES.FORM_MODE_STATUS)
+      ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FORM_MODE_STATUS))
+      : null
+
+    if (formModeStatus === 'modification') {
+      setFormMode('legacy')
+      setFormCreationStarted(true)
+    }
+  }, [])
   return (
     <>
       <nav>
-        <GoBack headerText={headerText} breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData} />
+        <GoBack
+          headerText={headerText}
+          breadCrumbsList={
+            customerType === 'individual'
+              ? formModeStatusInStorage === 'creation'
+                ? individualCustomerCreationData
+                : individualCustomerModificationData
+              : formModeStatusInStorage === 'creation'
+              ? smeCustomerCreationData
+              : smeCustomerModificationData
+          }
+        />
       </nav>
 
       <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
         <div className={`${formCreationStarted ? '' : 'h-[845px]'} min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
-          <SwitchToFormType
-            customerType={customerType}
-            formCreationStarted={formCreationStarted}
-            mode={formMode}
-            onSetFormMode={onSetFormMode}
-            fillingFormState={fillingFormState}
-            setFillingFormState={setFillingFormState}
-            setPublishedFormState={setPublishedFormState}
-          />
+          {formModeStatusInStorage === 'creation' ? (
+            <SwitchToFormType
+              customerType={customerType}
+              formCreationStarted={formCreationStarted}
+              mode={formMode}
+              onSetFormMode={onSetFormMode}
+              fillingFormState={fillingFormState}
+              setFillingFormState={setFillingFormState}
+              setPublishedFormState={setPublishedFormState}
+            />
+          ) : null}
 
           {!formCreationStarted ? (
             <>
