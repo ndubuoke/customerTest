@@ -636,7 +636,7 @@ const FormDropdown = ({
                   return (
                     <div
                       key={index}
-                      className={`hover:bg-slate-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-slate-200' : ''} `}
+                      className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
                       onClick={(e) => {
                         e.stopPropagation()
                         handleSelectedDropdownItem(selected, item)

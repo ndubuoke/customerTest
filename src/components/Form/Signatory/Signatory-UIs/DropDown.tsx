@@ -4,20 +4,26 @@ import React, { useEffect, useState } from 'react'
 import FieldLabel from './FieldLabel'
 import { ReducersType } from 'Redux/store'
 import { useDispatch, useSelector } from 'react-redux'
-import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
-import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
+import { ResponseType, UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
+import {
+  getCountriesAction,
+  unfilledRequiredSignatoryListAction,
+  unfilledRequiredSignatoryListButtonAction,
+} from 'Redux/actions/FormManagement.actions'
 
 type Props = {
   required: 'on' | 'off'
   text: string
   id: SignatoryDetailType
-  optionsField: Array<string>
+  _optionsField: Array<string>
   colspan?: number
   setSelectedDropdownItem: (value: any) => any
   selectedDropdownItem: string
 }
 
-const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
+// TODO: Handle states and LGAS
+
+const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
   const dispatch = useDispatch()
 
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
@@ -29,6 +35,37 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
   ) as UnfilledRequiredSignatoryListReducerType
 
   const [showLists, setShowLists] = useState<boolean>(false)
+  const [optionsField, setOptionsField] = useState<Array<string>>(_optionsField)
+
+  // Save countries locally
+  const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
+  const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
+
+  const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
+  const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
+
+  // Get Countries list if it contains country in the field lable
+  useEffect(() => {
+    if (text.toLowerCase().includes('country') || text.toLowerCase().includes('nationality')) {
+      // if (!getCountriesRedux?.success) {
+      dispatch(getCountriesAction() as any)
+      // }
+    }
+  }, [])
+
+  useEffect(() => {
+    if (text.toLowerCase().includes('country') || text.toLowerCase().includes('nationality')) {
+      if (getCountriesRedux?.success) {
+        setOptionsField(getCountriesRedux?.serverResponse?.data?.map((x) => x?.countryName))
+        setCountries(
+          getCountriesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName }
+          })
+        )
+        // console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+      }
+    }
+  }, [getCountriesRedux])
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
     setShowLists((prev) => !prev)
@@ -36,7 +73,7 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
       ...prev,
       [text]: selectedItem.trim(),
     }))
-    // handleRedispatchOfRequiredFields()
+    handleRedispatchOfRequiredFields()
   }
 
   const handleRedispatchOfRequiredFields = () => {
@@ -93,7 +130,7 @@ const SignatoryDropDown = ({ required, text, id, optionsField, colspan = 1, sele
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg'
+              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg  rounded-lg h-[200px] overflow-y-auto'
               style={{
                 zIndex: 999,
               }}

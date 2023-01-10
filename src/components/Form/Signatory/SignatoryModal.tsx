@@ -180,7 +180,7 @@ const SignatoryModal = memo(
                   id='Title'
                   required='on'
                   text='Title'
-                  optionsField={['Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Engr']}
+                  _optionsField={['Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Engr']}
                   selectedDropdownItem={signatoryDetails['Title']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -232,7 +232,7 @@ const SignatoryModal = memo(
                   id='Gender'
                   required='on'
                   text='Gender'
-                  optionsField={['Male', 'Female']}
+                  _optionsField={['Male', 'Female']}
                   selectedDropdownItem={signatoryDetails['Gender']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -251,7 +251,7 @@ const SignatoryModal = memo(
                   id='Marital Status'
                   required='on'
                   text='Marital Status'
-                  optionsField={['Single', 'Married', 'Widowed', 'Divorced', 'Seperated']}
+                  _optionsField={['Single', 'Married', 'Widowed', 'Divorced', 'Seperated']}
                   selectedDropdownItem={signatoryDetails['Marital Status']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -271,7 +271,7 @@ const SignatoryModal = memo(
                   id='Nationality'
                   required='on'
                   text='Nationality'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['Nationality']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -279,7 +279,7 @@ const SignatoryModal = memo(
                   id='State of Origin'
                   required='on'
                   text='State of Origin'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['State of Origin']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -287,7 +287,7 @@ const SignatoryModal = memo(
                   id='LGA'
                   required='on'
                   text='LGA'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['LGA']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -295,7 +295,7 @@ const SignatoryModal = memo(
                   id='Dual Citizenship'
                   required='on'
                   text='Dual Citizenship'
-                  optionsField={['Yes', 'No']}
+                  _optionsField={['Yes', 'No']}
                   selectedDropdownItem={signatoryDetails['Dual Citizenship']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -303,7 +303,7 @@ const SignatoryModal = memo(
                   id='If yes, specify'
                   required='off'
                   text='If yes, specify'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['If yes, specify']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -334,7 +334,7 @@ const SignatoryModal = memo(
                   id='Country'
                   required='on'
                   text='Country'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['Country']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -342,7 +342,7 @@ const SignatoryModal = memo(
                   id='State'
                   required='on'
                   text='State'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['State']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -350,7 +350,7 @@ const SignatoryModal = memo(
                   id='City/Town'
                   required='on'
                   text='City/Town'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['City/Town']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -358,7 +358,7 @@ const SignatoryModal = memo(
                   id='LGA-RA'
                   required='on'
                   text='LGA-RA'
-                  optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['LGA-RA']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -412,7 +412,7 @@ const SignatoryModal = memo(
                   id='Means of Identification'
                   required='on'
                   text='Means of Identification'
-                  optionsField={['BVN', 'NIN', "Permanent Voter's Card", "Driver's License"]}
+                  _optionsField={['BVN', 'NIN', "Permanent Voter's Card", "Driver's License"]}
                   selectedDropdownItem={signatoryDetails['Means of Identification']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -469,7 +469,7 @@ const SignatoryModal = memo(
                   id='Employment Status'
                   required='on'
                   text='Employment Status'
-                  optionsField={['Employed', 'Self Employed', 'Unemployed', 'Retired', 'Student', 'Others']}
+                  _optionsField={['Employed', 'Self Employed', 'Unemployed', 'Retired', 'Student', 'Others']}
                   selectedDropdownItem={signatoryDetails['Employment Status']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />

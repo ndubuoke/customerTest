@@ -121,7 +121,7 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
         id='Identification Method'
         required='off'
         text='Identification Method'
-        optionsField={['BVN', 'NIN', 'Customer ID', 'Customer account number']}
+        _optionsField={['BVN', 'NIN', 'Customer ID', 'Customer account number']}
         selectedDropdownItem={signatoryPrefillInput['Identification Method']}
         setSelectedDropdownItem={setSignatoryPrefillInput}
       />
