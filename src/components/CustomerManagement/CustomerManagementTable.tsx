@@ -370,6 +370,7 @@ const CustomerManagementTable = ({
       } else {
         navigate(`${AppRoutes.SMECustomerCreationScreen}/?isForm=true`)
       }
+      sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA, JSON.stringify(customer))
       sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
       sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
     } else if (option === 'Deactivate') {

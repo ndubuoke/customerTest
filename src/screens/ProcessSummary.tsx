@@ -43,6 +43,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
+  const customerManagementDataInStorage: any = sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA)
+    ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA))
+    : null
   const showWaiverModalInFormStorage: TimelineType = sessionStorage.getItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM))
     : null
@@ -122,12 +125,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   // TODO: Handle submitted state when form is submitted successfully
 
   useEffect(() => {
-    console.log(FormModeInStorage)
-    if (FormModeInStorage && FormModeInStorage === 'creation') {
-      setFormMode('creation')
-    } else {
-      setFormMode('modification')
-    }
+    // console.log({ FormModeInStorage })
+    setFormMode(FormModeInStorage)
   }, [])
 
   return (
@@ -149,6 +148,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                 docWaiverStatus={docWaiverStatus}
                 eddRequest={eddRequest}
                 eddStatus={eddStatus}
+                customerType={customerManagementDataInStorage?.customerType.toLowerCase()}
               />
             </div>
             <div className='px-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12'>
@@ -188,8 +188,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           <div
             className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px] overflow-y-auto`}
           >
-            <div className='font-medium text-[24px] leading-28px text-[#636363]'>Activity Log</div>
-            <ActivityLog mode={formMode} />
+            {/* <div className='font-medium text-[24px] leading-28px text-[#636363]'>Activity Log</div> */}
+            <ActivityLog customerId={customerManagementDataInStorage?.customerId} mode={formMode} />
           </div>
         </section>
       </main>

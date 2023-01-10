@@ -64,16 +64,16 @@ const Form = memo(
 
     useEffect(() => {
       // console.log({ fillingFormState })
-      if (!fillingFormState.data?.formInfomation?.formId) {
-        const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
-          ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)) as FormStructureType)
-          : null
+      // if (!fillingFormState.data?.formInfomation?.formId) {
+      const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+        ? (JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)) as FormStructureType)
+        : null
 
-        if (fillingFormInStorage) {
-          // console.log({ fillingFormInStorage })
-          setFillingFormState(fillingFormInStorage)
-        }
+      if (fillingFormInStorage) {
+        // console.log({ fillingFormInStorage })
+        setFillingFormState(fillingFormInStorage)
       }
+      // }
     }, [])
 
     useEffect(() => {
@@ -84,6 +84,7 @@ const Form = memo(
       }
     }, [fillingFormState])
 
+    // Populate backup state using what is in backup storage
     useEffect(() => {
       if (fillingFormState?.data?.customerData?.length === 0) {
         const backupInStorage = sessionStorage.getItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)

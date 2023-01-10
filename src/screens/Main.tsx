@@ -338,25 +338,25 @@ const Main = (props: Props) => {
 
   return (
     <>
-      {showDeactivationModal && <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} />}
+      {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}
 
-      {showSystemAlert && (
+      {showSystemAlert ? (
         <>
-          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total && (
+          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total ? (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!
         Kindly review and update.`}
             />
-          )}
-          {userRole === 'checker' && totalStatusCustomers?.serverResponse?.data?.total > 0 && (
+          ) : null}
+          {userRole === 'checker' && totalStatusCustomers?.serverResponse?.data?.total > 0 ? (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} new requests submitted for approval since last login. Kindly review and update.`}
             />
-          )}
+          ) : null}
         </>
-      )}
+      ) : null}
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
