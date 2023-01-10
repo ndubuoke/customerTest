@@ -504,7 +504,7 @@ const FormDropdown = ({
 
   return (
     <div
-      className={`${collapsed ? 'hidden' : ''} `}
+      className={`${collapsed ? 'hidden' : ''}`}
       style={{
         gridColumn: ` span ${span}`,
         // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',

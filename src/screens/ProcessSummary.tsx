@@ -15,7 +15,12 @@ import { ResponseType, ShowModalInFormType } from 'Redux/reducers/FormManagement
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import convertCamelCaseToTitleCaseText from 'Utilities/convertCamelCaseToTitleCaseText'
-import { individualCustomerCreationData, smeCustomerCreationData } from '../data/process-summary'
+import {
+  individualCustomerCreationData,
+  individualCustomerModificationData,
+  smeCustomerCreationData,
+  smeCustomerModificationData,
+} from '../data/process-summary'
 import { CreationModeType } from './CustomerCreation'
 
 export type FormModeType = 'creation' | 'modification'
@@ -134,7 +139,15 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       <nav>
         <GoBack
           headerText='PROCESS SUMMARY'
-          breadCrumbsList={customerType === 'individual' ? individualCustomerCreationData : smeCustomerCreationData}
+          breadCrumbsList={
+            customerType === 'individual'
+              ? formMode === 'creation'
+                ? individualCustomerCreationData
+                : individualCustomerModificationData
+              : formMode === 'creation'
+              ? smeCustomerCreationData
+              : smeCustomerModificationData
+          }
         />
       </nav>
 
