@@ -52,24 +52,26 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      console.log('action.payload', action.payload)
       return {
         ...state,
         loading: false,
         success: true,
-        serverResponse: {
-          ...action.payload,
-          data: {
-            ...action.payload.data,
-            builtFormMetadata: {
-              ...action.payload.data.builtFormMetadata,
-              pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
-            },
-          },
-        },
+        serverResponse:
+          action.payload.data.formType === 'smeAccelerated'
+            ? {
+                ...action.payload,
+                data: {
+                  ...action.payload.data,
+                  builtFormMetadata: {
+                    ...action.payload.data.builtFormMetadata,
+                    pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+                  },
+                },
+              }
+            : action.payload,
         serverError: {},
       }
-    // return { ...state, ...publishedForm }
+    // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
