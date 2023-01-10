@@ -42,7 +42,8 @@ import {
 type order = '' | 'asc' | 'desc'
 
 type dateFilterType = 'day' | 'month'
-const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
+// const SERVER_URL = 'https://9e99-18-133-131-7.eu.ngrok.io/v1'
+  const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
 
 export const getCustomersAction =
   (customerType: string, customerStatus: string = '', order: order = '', initiatorId: string = '', approverId: string = '') =>
