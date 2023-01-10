@@ -146,83 +146,152 @@ const FormDropdown = ({
     // setSelectedDropdownItem(prev => ([]...prev, }))
   }
 
+  // This fills the filling form state with the data input
   useEffect(() => {
     if (enableMultipleSelection.toLowerCase() === 'on') {
       //   console.log(multipleSelectedDropdownItems)
       // if (multipleSelectedDropdownItems.length === 0) {
       //   return
       // } else {
-      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+      // Remove the item from required when a value is selected
+      if (multipleSelectedDropdownItems.length > 0) {
+        const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
 
-      if (requiredFieldsFromRedux) {
-        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+        if (requiredFieldsFromRedux) {
+          const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
 
-        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+          dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+        }
+        setFillingFormState((prev: FormStructureType) => {
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
+
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
+          }
+
+          // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+          const sectionId = item?.sectionId
+          let sectionIndex
+
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+              theSection.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
+                },
+                pageId,
+                sectionId,
+              })
+            }
+          }
+
+          if (!sectionId) {
+            const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+            const pageNameCamelCase = camelize(pageName)
+            const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+            const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+            if (theSectionlessPage) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+              theSectionlessPage.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: pageNameToBeUsed,
+                data: {
+                  [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
+                },
+                pageId,
+                sectionId: null,
+              })
+            }
+          }
+
+          return copiedPrev
+        })
+      } else {
+        setFillingFormState((prev: FormStructureType) => {
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
+
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
+          }
+
+          // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+          const sectionId = item?.sectionId
+          let sectionIndex
+
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+              theSection.data[theItemFieldNameCamelCase] = ''
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: '',
+                },
+                pageId,
+                sectionId,
+              })
+            }
+          }
+
+          if (!sectionId) {
+            const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+            const pageNameCamelCase = camelize(pageName)
+            const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+            const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+            if (theSectionlessPage) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: pageNameToBeUsed,
+                data: {
+                  [theItemFieldNameCamelCase]: '',
+                },
+                pageId,
+                sectionId: null,
+              })
+            }
+          }
+
+          return copiedPrev
+        })
       }
-      setFillingFormState((prev: FormStructureType) => {
-        const copiedPrev = { ...prev }
-        const pageId = item?.pageId
-
-        if (!copiedPrev?.data?.formInfomation?.formId) {
-          copiedPrev.data.formInfomation.formId = theForm?._id
-          copiedPrev.data.formInfomation.formType = theForm?.formType
-        }
-
-        // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
-
-        const sectionId = item?.sectionId
-        let sectionIndex
-
-        if (sectionId) {
-          const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
-          const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
-          const theItemSectionNameCamelCase = camelize(theItemSectionName)
-
-          const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-
-          if (theSection) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-
-            theSection.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: theItemSectionNameCamelCase,
-              data: {
-                [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
-              },
-              pageId,
-              sectionId,
-            })
-          }
-        }
-
-        if (!sectionId) {
-          const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
-          const pageNameCamelCase = camelize(pageName)
-          const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
-
-          const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
-
-          if (theSectionlessPage) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
-
-            theSectionlessPage.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: pageNameToBeUsed,
-              data: {
-                [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
-              },
-              pageId,
-              sectionId: null,
-            })
-          }
-        }
-
-        return copiedPrev
-      })
       // }
     }
   }, [multipleSelectedDropdownItems])
@@ -232,70 +301,137 @@ const FormDropdown = ({
       // if (!selectedDropdownItem) {
       //   return
       // } else {
-      setFillingFormState((prev: FormStructureType) => {
-        const copiedPrev = { ...prev }
-        const pageId = item?.pageId
+      if (selectedDropdownItem?.length > 0) {
+        setFillingFormState((prev: FormStructureType) => {
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
 
-        if (!copiedPrev?.data?.formInfomation?.formId) {
-          copiedPrev.data.formInfomation.formId = theForm?._id
-          copiedPrev.data.formInfomation.formType = theForm?.formType
-        }
-
-        // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
-
-        const sectionId = item?.sectionId
-        let sectionIndex
-
-        if (sectionId) {
-          const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
-          const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
-          const theItemSectionNameCamelCase = camelize(theItemSectionName)
-
-          const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-
-          if (theSection) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-
-            theSection.data[theItemFieldNameCamelCase] = selectedDropdownItem
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: theItemSectionNameCamelCase,
-              data: {
-                [theItemFieldNameCamelCase]: selectedDropdownItem,
-              },
-              pageId,
-              sectionId,
-            })
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
           }
-        }
 
-        if (!sectionId) {
-          const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
-          const pageNameCamelCase = camelize(pageName)
-          const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+          // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
 
-          const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+          const sectionId = item?.sectionId
+          let sectionIndex
 
-          if (theSectionlessPage) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
-            theSectionlessPage.data[theItemFieldNameCamelCase] = selectedDropdownItem
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: pageNameToBeUsed,
-              data: {
-                [theItemFieldNameCamelCase]: selectedDropdownItem,
-              },
-              pageId,
-              sectionId: null,
-            })
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+              theSection.data[theItemFieldNameCamelCase] = selectedDropdownItem
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: selectedDropdownItem,
+                },
+                pageId,
+                sectionId,
+              })
+            }
           }
-        }
 
-        return copiedPrev
-      })
+          if (!sectionId) {
+            const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+            const pageNameCamelCase = camelize(pageName)
+            const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+            const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+            if (theSectionlessPage) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+              theSectionlessPage.data[theItemFieldNameCamelCase] = selectedDropdownItem
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: pageNameToBeUsed,
+                data: {
+                  [theItemFieldNameCamelCase]: selectedDropdownItem,
+                },
+                pageId,
+                sectionId: null,
+              })
+            }
+          }
+
+          return copiedPrev
+        })
+      } else {
+        setFillingFormState((prev: FormStructureType) => {
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
+
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
+          }
+
+          // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
+
+          const sectionId = item?.sectionId
+          let sectionIndex
+
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
+
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
+
+              theSection.data[theItemFieldNameCamelCase] = ''
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: '',
+                },
+                pageId,
+                sectionId,
+              })
+            }
+          }
+
+          if (!sectionId) {
+            const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
+            const pageNameCamelCase = camelize(pageName)
+            const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
+
+            const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
+
+            if (theSectionlessPage) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
+
+              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: pageNameToBeUsed,
+                data: {
+                  [theItemFieldNameCamelCase]: '',
+                },
+                pageId,
+                sectionId: null,
+              })
+            }
+          }
+
+          return copiedPrev
+        })
+      }
       // }
     }
   }, [selectedDropdownItem])
