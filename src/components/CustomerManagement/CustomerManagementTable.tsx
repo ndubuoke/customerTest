@@ -24,7 +24,7 @@ import CustomerDetailsRow from './CustomerDetailsRow'
 import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
 import getRequestDetail from '../../utilities/getRequestDetail'
-import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -363,6 +363,7 @@ const CustomerManagementTable = ({
       setShowCustomerModal(true)
       setCustomer(customer)
     } else if (option === 'Modify') {
+      clearAllItemsInStorageForCustomerMGT()
       sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('modification'))
 
       if (customer?.customerType?.toLowerCase() === 'individual') {

@@ -13,35 +13,17 @@ export enum STORAGE_NAMES {
   CUSTOMER_MANAGEMENT_MODIFICATION_DATA = 'CUSTOMER_MANAGEMENT_MODIFICATION_DATA',
 }
 
-// type StorageType = 'localStorage' | 'sessionStorage'
-// export type StorageNameType = 'activeFormSection'
-// export type StorageAction = 'getItem' | 'setItem' | 'removeItem' | 'clear'
-
-// export function browserStorage(storageType: StorageType, action: StorageAction, storageName: StorageNameType, itemToStore?: any) {
-//   if (!itemToStore && action === 'setItem') {
-//     const name = storageName ? storageName : 'browser storage'
-//     throw Error(`You cannot set an empty item to ${name}`)
-//   }
-
-//   if (itemToStore && action !== 'setItem') {
-//     throw Error(`You cannot perform this operation`)
-//   }
-
-//   if (action === 'setItem') {
-//     const storage = storageType === "localStorage" ? "localStorage" : "sessionStorage"
-//     const theAction = action === "setItem" ? ""
-//     return [storageType][action](`${storageName}`, JSON.stringify(itemToStore))
-//   }
-
-//   if (action === 'removeItem') {
-//     return [storageType][action](`${storageName}`)
-//   }
-
-//   if (action === 'getItem') {
-//     return [storageType][action](`${storageName}`)
-//   }
-
-//   if (action === 'clear') {
-//     return [storageType][action]()
-//   }
-// }
+export const clearAllItemsInStorageForCustomerMGT = () => {
+  sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.FORM_MODE_STATUS)
+  sessionStorage.removeItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS)
+  sessionStorage.removeItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM)
+  sessionStorage.removeItem(STORAGE_NAMES.SIGNATORY_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.EXECUTIVE_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
+  sessionStorage.removeItem(STORAGE_NAMES.SHOW_EDD_MODAL_IN_FORM)
+  sessionStorage.removeItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS)
+  sessionStorage.removeItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA)
+}

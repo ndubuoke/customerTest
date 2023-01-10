@@ -20,7 +20,7 @@ import { AppRoutes } from 'Routes/AppRoutes'
 import SystemAlert from 'Components/CustomerManagement/SystemAlert'
 import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmissions'
 import SearchBar from 'Components/CustomerManagement/SearchBar'
-import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type Props = {}
 
@@ -89,6 +89,8 @@ const Main = (props: Props) => {
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
 
   const handleSelectForm = (list) => {
+    clearAllItemsInStorageForCustomerMGT()
+
     sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('creation'))
     if (list === 'Individual') {
       navigate(AppRoutes.individualCustomerCreationScreen)
