@@ -159,7 +159,7 @@ const FormDropdown = ({
             return { countryId: x?.countryId, countryName: x?.countryName }
           })
         )
-        console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+        // console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
   }, [getCountriesRedux])
@@ -642,11 +642,14 @@ const FormDropdown = ({
                         handleSelectedDropdownItem(selected, item)
 
                         const country = countries.find((x) => x.countryName === selected)
-                        sessionStorage.setItem(
-                          `${item?.sectionId || item?.pageId}`,
-                          JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
-                        )
-                        setShowLists((prev) => !prev)
+                        if (country) {
+                          sessionStorage.setItem(
+                            `${item?.sectionId || item?.pageId}`,
+                            JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+                          )
+                        }
+
+                        setShowLists(false)
                       }}
                     >
                       {selected.trim()}

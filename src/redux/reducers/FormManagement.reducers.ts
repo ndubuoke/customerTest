@@ -3,6 +3,9 @@ import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   ACTIVE_PAGE,
+  GET_CITIES_FAIL,
+  GET_CITIES_REQUEST,
+  GET_CITIES_SUCCESS,
   GET_COUNTRIES_FAIL,
   GET_COUNTRIES_REQUEST,
   GET_COUNTRIES_SUCCESS,
@@ -217,6 +220,25 @@ export const getStatesReducer = (state: ResponseType = initialStateRequest, acti
     // return { ...state, ...publishedForm }
 
     case GET_STATES_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const getCitiesReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CITIES_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CITIES_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case GET_CITIES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     //   case RESET_STATe:
