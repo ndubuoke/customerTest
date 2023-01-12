@@ -18,6 +18,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
 import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -64,7 +65,10 @@ const FormFileUpload = ({
     message: '',
   })
 
-  const theItemFieldNameCamelCase = camelize(fieldLabel)
+  const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+  const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+  const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 

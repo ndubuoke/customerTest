@@ -13,6 +13,7 @@ import { fieldsNames } from './FormLayout'
 import DataListInput from 'react-datalist-input'
 import { ReducersType } from 'Redux/store'
 import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -64,7 +65,10 @@ const FormSearchAndSelect = memo(
         ? importFromURLListValue
         : null
 
-    const theItemFieldNameCamelCase = camelize(fieldLabel)
+    const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+    const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+    const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
     const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
 

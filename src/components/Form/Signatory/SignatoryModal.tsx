@@ -279,7 +279,7 @@ const SignatoryModal = memo(
                   id='State of Origin'
                   required='on'
                   text='State of Origin'
-                  _optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={[]}
                   selectedDropdownItem={signatoryDetails['State of Origin']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -342,7 +342,7 @@ const SignatoryModal = memo(
                   id='State'
                   required='on'
                   text='State'
-                  _optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={[]}
                   selectedDropdownItem={signatoryDetails['State']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
