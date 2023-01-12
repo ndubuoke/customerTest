@@ -11,6 +11,7 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { generateID } from 'Utilities/generateId'
 import { getProperty } from 'Utilities/getProperty'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
@@ -121,7 +122,10 @@ const FormDropdown = ({
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [cities, setCities] = useState<Array<any>>([])
 
-  const theItemFieldNameCamelCase = camelize(fieldLabel)
+  const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+  const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+  const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const [showLists, setShowLists] = useState<boolean>(false)
   const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
@@ -613,7 +617,6 @@ const FormDropdown = ({
             }
             if (fieldLabel.toLowerCase().includes('city')) {
               checkIfItemIsCity()
-              console.log('This is a city')
             }
           }}
           title={selectedDropdownItem && selectedDropdownItem}
