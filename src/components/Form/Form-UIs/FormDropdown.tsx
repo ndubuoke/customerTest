@@ -3,7 +3,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCountriesAction, getStatesAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { getCitiesAction, getCountriesAction, getStatesAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -119,6 +119,7 @@ const FormDropdown = ({
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
+  const [cities, setCities] = useState<Array<any>>([])
 
   const theItemFieldNameCamelCase = camelize(fieldLabel)
 
@@ -129,6 +130,7 @@ const FormDropdown = ({
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
   const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
   const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
+  const getCitiesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCities) as ResponseType
 
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
     setSelectedDropdownItem(selectedItem.trim())
@@ -174,6 +176,16 @@ const FormDropdown = ({
     }
   }
 
+  const checkIfItemIsCity = () => {
+    const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
+      ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
+      : null
+
+    if (checkCountriesInStorage?.sectionId === item?.sectionId || checkCountriesInStorage?.pageId === item?.pageId) {
+      dispatch(getCitiesAction(checkCountriesInStorage?.country?.countryId) as any)
+    }
+  }
+
   // Save states lists to state
 
   // TODO---
@@ -204,6 +216,22 @@ const FormDropdown = ({
     }
     // setSelectedDropdownItem(prev => ([]...prev, }))
   }
+
+  //This is city
+  useEffect(() => {
+    // console.log(first)
+    if (fieldLabel.toLowerCase().includes('city') && getCitiesRedux) {
+      if (getCitiesRedux?.success) {
+        setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setCities(
+          getCitiesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName, cityId: x?.cityId, cityName: x?.cityName }
+          })
+        )
+        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+      }
+    }
+  }, [getCitiesRedux])
 
   // This fills the filling form state with the data input
   useEffect(() => {
@@ -583,6 +611,10 @@ const FormDropdown = ({
             if (fieldLabel.toLowerCase().includes('state')) {
               checkIfItemIsState(item)
             }
+            if (fieldLabel.toLowerCase().includes('city')) {
+              checkIfItemIsCity()
+              console.log('This is a city')
+            }
           }}
           title={selectedDropdownItem && selectedDropdownItem}
         >
@@ -626,6 +658,11 @@ const FormDropdown = ({
               </div>
             ) : null}
             {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state') && getStatesRedux?.loading ? (
+              <div className='h-full flex justify-center items-center w-full'>
+                <Spinner size='large' />
+              </div>
+            ) : null}
+            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
               <div className='h-full flex justify-center items-center w-full'>
                 <Spinner size='large' />
               </div>
