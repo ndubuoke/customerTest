@@ -100,8 +100,9 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
         initiatorId,
         requestType: mode,
       }
+
       // console.log(fillingFormInStorage)
-      // dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+      dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
     }
   }
 

@@ -263,7 +263,7 @@ const FormDate = ({
       </div>
       <div>
         <input
-          className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-text-secondary`}
+          className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]`}
           type={
             item.name === fieldsNames.DATE
               ? 'date'

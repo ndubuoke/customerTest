@@ -147,7 +147,7 @@ const AdditionalModal = ({
                 handleAddAdditionalDetail(generateID())
               }
             }}
-            text='Done'
+            text='Add'
           />
         </div>
       </div>

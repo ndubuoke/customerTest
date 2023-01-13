@@ -69,10 +69,21 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const [processActionsMode, setProcessActionsMode] = useState<ProgressStatusType>(null)
   const [openWaiver, setOpenWaiver] = useState<TimelineType>('hide')
   const [formType, setFormType] = useState<FormTypeType>(null)
-  const [initiator, setInitiator] = useState('Bona name')
-  const [initiatorId, setInitiatorId] = useState('rhyme id')
+
+  const [initiator, setInitiator] = useState('John Olawale')
+  const [initiatorId, setInitiatorId] = useState('abf93efb-18c5-4c5e-a8d3-2692675ee3e6')
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
+
+  const userProfileRedux = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as any
+
+  // handle initiator
+  useEffect(() => {
+    if (userProfileRedux?.user?.id) {
+      setInitiatorId(userProfileRedux?.user?.id)
+      setInitiator(userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname)
+    }
+  }, [userProfileRedux])
 
   useEffect(() => {
     if (showWaiverModalInFormStorage && showWaiverModalInFormStorage === 'show') {
@@ -180,7 +191,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {
                       return (
                         <div key={i}>
-                          <SingleSection section={x} />
+                          <SingleSection section={x} name={x?.sectionName} />
                           {customerType === 'sme' && i === firstPageLength ? (
                             <>
                               <SignatorySummary />
