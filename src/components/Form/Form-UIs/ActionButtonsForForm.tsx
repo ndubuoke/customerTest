@@ -22,6 +22,7 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { isForm } from 'Screens/CustomerCreation'
 import EDDAlert from 'Components/ProcessSummary/EddAlert'
 import { CustomerTypeType } from 'Screens/ProcessSummary'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -64,7 +65,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
     }
 
     if (action === 'next') {
-      console.log({ theObject: form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)] })
+      // console.log({ theObject: form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)] })
       if (findIndexOfObject(form, activePageState?.id) >= form?.builtFormMetadata?.pages?.length - 1) {
         return
       } else {
@@ -94,7 +95,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         ?.map((x) => {
           return getProperty(x?.formControlProperties, 'Set as Required', 'value').text.toLowerCase() === 'on'
             ? {
-                fieldLabel: camelize(getProperty(x?.formControlProperties, 'Field label', 'value').text),
+                fieldLabel: camelize(replaceSpecialCharacters(getProperty(x?.formControlProperties, 'Field label', 'value').text)),
                 sectionId: x?.sectionId,
                 pageId: x?.pageId,
                 formType: x?.name,

@@ -369,7 +369,7 @@ const AddExecutiveModal = ({
                 handleAddExecutive(generateID())
               }
             }}
-            text='Done'
+            text='Add'
           />
         </div>
       </div>

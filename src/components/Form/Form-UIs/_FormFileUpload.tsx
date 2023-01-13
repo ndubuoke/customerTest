@@ -47,7 +47,7 @@ const FormFileUpload = ({
   setBackupForSwitchFormState,
   backupForSwitchFormState,
   activePageState,
-}) => {
+}: Props) => {
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
@@ -59,8 +59,9 @@ const FormFileUpload = ({
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
   const allowableFileTypes = formGetProperty(item.formControlProperties, 'Allowable File Types', 'png, jpg, pdf')
 
-  const [isUploading, setIsUploading] = useState(false)
+  const [uploadedFiles, setuploadedFiles] = useState<Array<any>>(null)
   const [fileUrl, setFileUrl] = useState<string>('')
+  const [isUploading, setIsUploading] = useState(false)
   const [fileUploadError, setFileUploadError] = useState({
     isError: false,
     message: '',
@@ -73,99 +74,101 @@ const FormFileUpload = ({
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
-  const onDrop = useCallback(async (acceptedFiles: Array<File>, fileRejections) => {
-    setIsUploading(true)
+  const onDrop = useCallback(
+    async (acceptedFiles: Array<File>, fileRejections) => {
+      // console.log({ file: acceptedFiles[0], key: Date.now() })
+      setIsUploading(true)
 
-    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+      const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
 
-    if (requiredFieldsFromRedux) {
-      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+      if (requiredFieldsFromRedux) {
+        const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
 
-      dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
-    }
-
-    const uploadedFiles = acceptedFiles.map(async (file): Promise<any> => {
-      try {
-        const formdata = new FormData()
-        formdata.append('fileName', file)
-        const response = await API.post('/file/upload', formdata)
-
+        dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
+      }
+      const uploadedFiles = acceptedFiles.map(async (file): Promise<UploadFile> => {
         try {
-          const signedUrlResponse = await API.get('/file/signedurl/' + response.data.data.fileKey)
-          return {
-            file,
-            signedUrl: signedUrlResponse.data.data,
+          const formdata = new FormData()
+          formdata.append('fileName', file)
+          const response = await API.post('/file/upload', formdata)
+          try {
+            const signedUrlResponse = await API.get('/file/signedurl/' + response.data.data.fileKey)
+            return {
+              file,
+              signedUrl: signedUrlResponse.data.data,
+            }
+          } catch (err) {
+            console.error(err.message, `failed to get signed url - ${file.name}`)
+            setFileUploadError({
+              isError: true,
+              message: `failed to get signed url - ${file.name}`,
+            })
+            return null
           }
         } catch (err) {
+          console.error(err.message, `failed to upload file - ${file.name}`)
           setFileUploadError({
             isError: true,
-            message: `failed to get signed url - ${file.name}`,
+            message: `failed to upload file - ${file.name}`,
           })
           return null
         }
-      } catch (error) {
-        setIsUploading(false)
+      })
+      if (fileRejections.length) {
         setFileUploadError({
           isError: true,
-          message: `failed to upload file - ${file.name}`,
+          message: 'File not accepted',
         })
-        return null
+        return
       }
-    }, [])
+      const awaitUploadedFiles = await Promise.all(uploadedFiles)
+      const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
+      setuploadedFiles(filterSuccessUploadedFiles)
+      //
+      setFileUrl(awaitUploadedFiles.map((x) => x.signedUrl)[0])
 
-    if (fileRejections.length) {
-      setFileUploadError({
-        isError: true,
-        message: 'File not accepted',
-      })
-      return
-    }
+      setIsUploading(false)
+      // setuploadedFiles([{ file: acceptedFiles[0], key: Date.now().toString() }])
+      if (filterSuccessUploadedFiles.length) {
+        setFillingFormState((prev: FormStructureType) => {
+          const copiedPrev = { ...prev }
+          const pageId = item?.pageId
+          if (!copiedPrev?.data?.formInfomation?.formId) {
+            copiedPrev.data.formInfomation.formId = theForm?._id
+            copiedPrev.data.formInfomation.formType = theForm?.formType
+          }
 
-    const awaitUploadedFiles = await Promise.all(uploadedFiles)
+          const sectionId = item?.sectionId
+          let sectionIndex
+          if (sectionId) {
+            const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
+            const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
+            const theItemSectionNameCamelCase = camelize(theItemSectionName)
 
-    const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
-    setFileUrl(awaitUploadedFiles?.map((x) => x?.signedUrl)[0])
+            const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
+            console.log('customerData-sectionId', copiedPrev?.data?.customerData)
+            if (theSection) {
+              sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-    setIsUploading(false)
-
-    // if (filterSuccessUploadedFiles.length) {
-    //   setFillingFormState((prev: FormStructureType) => {
-    //     const copiedPrev = { ...prev }
-    //     const pageId = item?.pageId
-    //     if (!copiedPrev?.data?.formInfomation?.formId) {
-    //       copiedPrev.data.formInfomation.formId = theForm?._id
-    //       copiedPrev.data.formInfomation.formType = theForm?.formType
-    //     }
-
-    //     const sectionId = item?.sectionId
-    //     let sectionIndex
-    //     if (sectionId) {
-    //       const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
-    //       const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
-    //       const theItemSectionNameCamelCase = camelize(theItemSectionName)
-
-    //       const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-    //       console.log('customerData-sectionId', copiedPrev?.data?.customerData)
-    //       if (theSection) {
-    //         sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-
-    //         theSection.data[theItemFieldNameCamelCase] = filterSuccessUploadedFiles[0].signedUrl
-    //         copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-    //       } else {
-    //         copiedPrev.data.customerData.push({
-    //           sectionName: theItemSectionNameCamelCase,
-    //           data: {
-    //             [theItemFieldNameCamelCase]: filterSuccessUploadedFiles[0].signedUrl,
-    //           },
-    //           pageId,
-    //           sectionId,
-    //         })
-    //       }
-    //     }
-    //     return copiedPrev
-    //   })
-    // }
-  }, [])
+              theSection.data[theItemFieldNameCamelCase] = filterSuccessUploadedFiles[0].signedUrl
+              copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
+            } else {
+              copiedPrev.data.customerData.push({
+                sectionName: theItemSectionNameCamelCase,
+                data: {
+                  [theItemFieldNameCamelCase]: filterSuccessUploadedFiles[0].signedUrl,
+                },
+                pageId,
+                sectionId,
+              })
+            }
+          }
+          return copiedPrev
+        })
+      }
+    },
+    [item, theForm]
+  )
 
   const onDropRejected = useCallback((fileRejections: FileRejection[]) => {
     console.log('fileRejections', fileRejections)
@@ -203,10 +206,10 @@ const FormFileUpload = ({
       : null,
   })
 
-  const handleRemoveFile = (e: any) => {
+  const handleRemoveFile = (e: any, index: number) => {
     e.stopPropagation()
-    setFileUrl('')
-
+    const newFiles = uploadedFiles.filter((item, i) => i !== index)
+    setuploadedFiles((prev) => newFiles)
     setFillingFormState((prev: FormStructureType) => {
       const copiedPrev = { ...prev }
       const pageId = item?.pageId
@@ -220,7 +223,7 @@ const FormFileUpload = ({
         const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-          // console.log('theSect', theSection)
+          console.log('theSect', theSection)
           delete theSection.data[theItemFieldNameCamelCase]
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         }
@@ -235,7 +238,6 @@ const FormFileUpload = ({
     })
   }
 
-  // Handle backup
   useEffect(() => {
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
       if (x.sectionId) {
@@ -246,82 +248,19 @@ const FormFileUpload = ({
     })
 
     const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+    console.log('theData', theData)
     if (theData) {
       setFileUrl(theData)
+      setuploadedFiles([theData])
     }
   }, [])
 
   useEffect(() => {
     // console.log('uploadedFiles', uploadedFiles)
-    if (fileUrl) {
+    if (uploadedFiles?.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
-        copiedPrev[theItemFieldNameCamelCase] = fileUrl
-
-        return copiedPrev
-      })
-      setFillingFormState((prev: FormStructureType) => {
-        // console.log('prev', prev)
-        const copiedPrev = { ...prev }
-        const pageId = item?.pageId
-
-        if (!copiedPrev?.data?.formInfomation?.formId) {
-          copiedPrev.data.formInfomation.formId = theForm?._id
-          copiedPrev.data.formInfomation.formType = theForm?.formType
-        }
-
-        // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
-
-        const sectionId = item?.sectionId
-        let sectionIndex
-
-        if (sectionId) {
-          const theItemSection = theForm?.builtFormMetadata?.pages.find((x) => x?.id === pageId)?.sections?.find((x) => x.id === sectionId)
-          const theItemSectionName = formGetProperty(theItemSection?.formControlProperties, 'Section name', 'Section')
-          const theItemSectionNameCamelCase = camelize(theItemSectionName)
-
-          const theSection = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === theItemSectionNameCamelCase) as FormSectionType
-
-          if (theSection) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
-
-            theSection.data[theItemFieldNameCamelCase] = fileUrl
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: theItemSectionNameCamelCase,
-              data: {
-                [theItemFieldNameCamelCase]: fileUrl,
-              },
-              pageId,
-              sectionId,
-            })
-          }
-        }
-
-        if (!sectionId) {
-          const pageName = formGetProperty(activePageState?.pageProperties, 'Page name', 'Page Name')
-          const pageNameCamelCase = camelize(pageName)
-          const pageNameToBeUsed = pageNameCamelCase + '-SECTIONLESS'
-
-          const theSectionlessPage = copiedPrev?.data?.customerData?.find((x) => x?.sectionName === pageNameToBeUsed) as FormSectionType
-
-          if (theSectionlessPage) {
-            sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
-
-            theSectionlessPage.data[theItemFieldNameCamelCase] = fileUrl
-            copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
-          } else {
-            copiedPrev.data.customerData.push({
-              sectionName: pageNameToBeUsed,
-              data: {
-                [theItemFieldNameCamelCase]: fileUrl,
-              },
-              pageId,
-              sectionId,
-            })
-          }
-        }
+        copiedPrev[theItemFieldNameCamelCase] = uploadedFiles[0].signedUrl
 
         return copiedPrev
       })
@@ -333,16 +272,18 @@ const FormFileUpload = ({
         return copiedPrev
       })
     }
-  }, [fileUrl])
+  }, [uploadedFiles])
 
   useEffect(() => {
     const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
     // console.log('backup', backup)
-    if (!fileUrl) {
+    if (!uploadedFiles?.length) {
       if (backup) {
+        setuploadedFiles(backup)
         setFileUrl(backup)
       } else {
-        setFileUrl('')
+        setuploadedFiles(null)
+        setFileUrl(null)
         setFillingFormState((prev: FormStructureType) => {
           // console.log('prev', prev)
           const copiedPrev = { ...prev }
@@ -368,13 +309,13 @@ const FormFileUpload = ({
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = ''
+              theSection.data[theItemFieldNameCamelCase] = null
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [theItemFieldNameCamelCase]: null,
                 },
                 pageId,
                 sectionId,
@@ -392,16 +333,16 @@ const FormFileUpload = ({
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              theSectionlessPage.data[theItemFieldNameCamelCase] = null
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [theItemFieldNameCamelCase]: null,
                 },
                 pageId,
-                sectionId,
+                sectionId: null,
               })
             }
           }
@@ -417,6 +358,7 @@ const FormFileUpload = ({
       className={`${collapsed ? 'hidden' : ''}`}
       style={{
         gridColumn: ` span ${span}`,
+        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
       }}
       title={helpText}
     >
@@ -424,19 +366,20 @@ const FormFileUpload = ({
         {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-
       <div
         className=' w-full border  rounded-[12px]  h-[150px] p-2'
         style={{
           border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? '1px solid red' : '1px solid #AAAAAA',
         }}
       >
-        {fileUploadError.isError && <p className='py-0'>{fileUploadError.message}</p>}
-
-        {fileUrl ? (
+        {fileUploadError.isError && <p>{fileUploadError.message}</p>}
+        {uploadedFiles?.length > 0 ? (
           <div className='relative flex items-center cursor-pointer '>
             <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
-              <IndividualFileForm file={fileUrl} removeFile={(e) => handleRemoveFile(e)} />
+              {Array.isArray(uploadedFiles) &&
+                uploadedFiles.map((file, index) => {
+                  return <IndividualFileForm file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />
+                })}
             </div>
           </div>
         ) : isUploading ? (

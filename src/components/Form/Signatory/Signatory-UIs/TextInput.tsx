@@ -103,13 +103,13 @@ const TextInput = ({
             {value?.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}
-        <div className='absolute bottom-2 right-4  z-10 '>
+        <div className='absolute bottom-2 right-10  z-10 '>
           {loading ? (
             <Spinner size='medium' />
           ) : success ? (
             <GreenCheck />
           ) : error ? (
-            <img src={closeRed} alt='error' width={30} height={30} className='w-10 h-10' />
+            <img src={closeRed} alt='error' width={17} height={17} className='w-[17px] h-[17px]' />
           ) : null}
         </div>
       </div>

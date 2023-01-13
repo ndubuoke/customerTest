@@ -163,7 +163,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
       <div className={`relative`}>
         <div
-          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
+          className='flex items-center justify-between w-full gap-6 py-1 pb-[5px] leading-6 border-b border-b-[#AAAAAA]  cursor-pointer'
           onClick={() => {
             setShowLists((prev) => !prev)
             if (text.toLowerCase().includes('state')) {

@@ -43,9 +43,9 @@ const SignatoryModal = memo(
       (state) => state.unfilledRequiredSignatoryListButton
     ) as UnfilledRequiredSignatoryListReducerType
 
-    const [localUploadPassport, setLocalUploadPassport] = useState<any>([])
-    const [localUploadIdentity, setLocalUploadIdentity] = useState<any>([])
-    const [localUploadAddress, setLocalUploadAddress] = useState<any>([])
+    const [localUploadPassport, setLocalUploadPassport] = useState<any>('')
+    const [localUploadIdentity, setLocalUploadIdentity] = useState<any>('')
+    const [localUploadAddress, setLocalUploadAddress] = useState<any>('')
 
     const [hideButton, setHideButton] = useState<boolean>(true)
 
@@ -548,7 +548,7 @@ const SignatoryModal = memo(
                     handleAddSignatory(generateID())
                   }
                 }}
-                text='Done'
+                text='Add'
               />
             </div>
           </div>
