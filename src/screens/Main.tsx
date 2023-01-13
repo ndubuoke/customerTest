@@ -369,7 +369,6 @@ const Main = (props: Props) => {
   // console.log(user)
   // console.log(totalStatusCustomers?.serverResponse?.data?.total)
 
-
   return (
     <>
       {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}

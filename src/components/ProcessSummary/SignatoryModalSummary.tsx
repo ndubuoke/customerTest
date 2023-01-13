@@ -35,10 +35,7 @@ const SignatoryModalSummary = ({ closeModalFunction, singleSignatory }: Props) =
                   <div className='w-[300px] text-right text-[base] leading-[16px] font-medium'>{reverseCamelCase(x[0])}</div>
                   {/* <span>:</span> */}
                   <div className='text-[base] leading-[16px] font-normal'>
-                    {typeof x[1] === 'object' ? <div>{x[1]?.signedUrl ? 'Uploaded' : 'Not uploaded'}</div> : null}
-                    {typeof x[1] === 'string' ? <div>{x[1] || '-'}</div> : null}
-                    {typeof x[1] === 'boolean' ? <div>{x[1] ? 'True' : 'False'}</div> : null}
-                    {typeof x[1] === 'number' ? <div>{x[1]}</div> : null}
+                    {x[0]?.toLowerCase().includes('upload') ? (x[1] ? 'Uploaded' : 'Not Uploaded') : x[1] ? x[1] : '-'}
                   </div>
                 </div>
               )
