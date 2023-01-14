@@ -16,7 +16,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
         zIndex: '1000',
       }}
     >
-      <section className='bg-white min-w-[400px] w-[400px] min-h-[280px] h-[280px] rounded-[8px] py-6 px-6 flex flex-col gap-6'>
+      <section className='bg-white min-w-[400px] w-[400px] min-h-[280px] rounded-[8px] py-6 px-6 flex flex-col gap-6'>
         <div className='flex justify-between '>
           <div>
             <img src={danger} width={30} height={30} alt='danger' />

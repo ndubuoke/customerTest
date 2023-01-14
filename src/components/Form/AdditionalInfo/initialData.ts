@@ -12,7 +12,7 @@ export const additionalDetailsInitial = (): AdditionalDetailField[] => [
     required: 'on',
     colSpan: 2,
     placeholder: 'Enter Bank Name',
-    maxLength: 30,
+    maxLength: 60,
   },
   {
     id: generateID(),
@@ -36,7 +36,7 @@ export const additionalDetailsInitial = (): AdditionalDetailField[] => [
     required: 'off',
     colSpan: 2,
     placeholder: 'Enter Account Name',
-    maxLength: 160,
+    maxLength: 90,
   },
   {
     id: generateID(),
@@ -48,7 +48,7 @@ export const additionalDetailsInitial = (): AdditionalDetailField[] => [
     required: 'off',
     colSpan: 2,
     placeholder: 'Enter Account Number',
-    maxLength: 160,
+    maxLength: 30,
   },
   {
     id: generateID(),
@@ -71,6 +71,6 @@ export const additionalDetailsInitial = (): AdditionalDetailField[] => [
     required: 'on',
     colSpan: 1,
     placeholder: 'Select',
-    options: ['active', 'dormant'],
+    options: ['Active', 'Dormant'],
   },
 ]
