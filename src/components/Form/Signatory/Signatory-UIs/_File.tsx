@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
-import IndividualFileForm from 'Components/Form/Form-UIs/IndividualFileForm'
 
 type UploadFile = {
   file: File
@@ -22,7 +21,7 @@ type Props = {
   id: SignatoryDetailType
   colspan?: number
   text: SignatoryDetailType
-  value: string
+  value: UploadFile
   setValue: (value: any) => any
   type?: 'text' | 'number' | 'date' | 'email'
   placeholder: string
@@ -46,8 +45,7 @@ const FileUploadSignatory = ({
 }: Props) => {
   const dispatch = useDispatch()
 
-  const [fileUrl, setFileUrl] = useState<string>('')
-
+  const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [isUploading, setIsUploading] = useState(false)
   const [fileUploadError, setFileUploadError] = useState({
     isError: false,
@@ -105,14 +103,19 @@ const FileUploadSignatory = ({
     }
     const awaitUploadedFiles = await Promise.all(uploadedFiles)
     const filterSuccessUploadedFiles = awaitUploadedFiles.filter((file) => file !== null)
-    setFileUrl(filterSuccessUploadedFiles[0]?.signedUrl)
+    setuploadedFiles(filterSuccessUploadedFiles)
     setIsUploading(false)
 
     if (filterSuccessUploadedFiles.length) {
       // console.log({ fileName: filterSuccessUploadedFiles[0].signedUrl })
       setValue((prev: any) => ({
         ...prev,
-        [text]: filterSuccessUploadedFiles[0].signedUrl,
+        [text]: {
+          file: {
+            type: filterSuccessUploadedFiles[0].file.type,
+          },
+          signedUrl: filterSuccessUploadedFiles[0].signedUrl,
+        },
       }))
       // handleRedispatchOfRequiredFields()
     }
@@ -127,14 +130,15 @@ const FileUploadSignatory = ({
     },
   })
 
-  const handleRemoveFile = (e: any) => {
+  const handleRemoveFile = (e: any, index: number) => {
     e.stopPropagation()
-    setFileUrl('')
-    setLocalUpload('')
+    const newFiles = uploadedFiles.filter((item, i) => i !== index)
+    setuploadedFiles((prev) => newFiles)
+    setLocalUpload((prev) => newFiles)
 
     setValue((prev: any) => ({
       ...prev,
-      [text]: '',
+      [text]: null,
     }))
   }
 
@@ -174,44 +178,78 @@ const FileUploadSignatory = ({
             </div>
           ) : (
             <>
-              {fileUrl ? (
-                <>
+              {' '}
+              {uploadedFiles && uploadedFiles?.length === 0 ? (
+                !value?.signedUrl ? (
+                  <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
+                    <input type={`file`} hidden {...getInputProps()} />
+                    <div>
+                      <img src={upload} className='w-12' width={48} height={48} />
+                    </div>
+
+                    <p className='mb-2 text-sm   '>
+                      <span className='font-semibold text-primay-main'>Click to upload</span>
+                      <span> or drag and drop</span>
+                    </p>
+                  </div>
+                ) : (
                   <div
-                    className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2 max-h-[95px]  w-[90%]'
+                    className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2 max-h-[95px] w-[90%]'
                     style={{
                       border: '1px solid #cccccc',
                     }}
                   >
-                    <div>{fileUrl}</div>
+                    <div> {value?.signedUrl ? value?.signedUrl : null}</div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
-                        handleRemoveFile(e)
+                        handleRemoveFile(e, 0)
                       }}
                       className='absolute right-1 bottom-1'
                     >
                       <img src={deleteBtn} />
                     </button>
                   </div>
-                </>
+                )
               ) : (
-                <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
-                  <input type={`file`} hidden {...getInputProps()} />
-                  <div>
-                    <img src={upload} className='w-12' width={48} height={48} />
-                  </div>
-
-                  <p className='mb-2 text-sm   '>
-                    <span className='font-semibold text-primay-main'>Click to upload</span>
-                    <span> or drag and drop</span>
-                  </p>
+                <div
+                  className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2 max-h-[95px]  w-[90%]'
+                  style={{
+                    border: '1px solid #cccccc',
+                  }}
+                >
+                  <div> {uploadedFiles[0]?.file?.name ? uploadedFiles[0]?.file?.name : value?.signedUrl ? value?.signedUrl : null}</div>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation()
+                      handleRemoveFile(e, 0)
+                    }}
+                    className='absolute right-1 bottom-1'
+                  >
+                    <img src={deleteBtn} />
+                  </button>
                 </div>
               )}
             </>
           )}
         </div>
         <div className=' h-full mx-4'>
-          {fileUrl || value ? <IndividualFileForm file={fileUrl || value} removeFile={(e) => handleRemoveFile(e)} height={90} /> : null}
+          {uploadedFiles.length > 0 ? (
+            uploadedFiles.map((file: UploadFile, index) => {
+              return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} height={90} />
+            })
+          ) : value?.signedUrl ? (
+            <IndividualFile
+              file={value}
+              removeFile={(e) =>
+                setValue((prev: any) => ({
+                  ...prev,
+                  [text]: null,
+                }))
+              }
+              height={90}
+            />
+          ) : null}
         </div>
       </div>
       {fileUploadError.isError && <p className='text-red-400'>{fileUploadError.message}</p>}

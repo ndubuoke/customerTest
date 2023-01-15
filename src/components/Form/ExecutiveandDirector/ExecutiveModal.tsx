@@ -187,7 +187,7 @@ const AddExecutiveModal = ({
                 paddingTop: '1rem',
               }}
             >
-              {executiveDetails.slice(6, 12).map((field) => {
+              {executiveDetails.slice(6, 32).map((field) => {
                 if (field.type === 'dropdown') {
                   return (
                     <ExecutiveDropDown
@@ -199,10 +199,6 @@ const AddExecutiveModal = ({
                       selectedDropdownItem={field.value || field.defaultValue}
                       setSelectedDropdownItem={(val: string) => handleUpdateFields(field.id, val)}
                     />
-                    // <div key={field.id}>
-                    //   {/* {field.fieldLabel} */}
-
-                    // </div>
                   )
                 }
                 if (field.type === 'text' || field.type === 'date') {
@@ -218,10 +214,6 @@ const AddExecutiveModal = ({
                       type={field.type}
                       setValue={(val: string) => handleUpdateFields(field.id, val)}
                     />
-                    // <div key={field.id} className='flex flex-col border-b '>
-                    //   {/* {field.fieldLabel} */}
-
-                    // </div>
                   )
                 }
 
@@ -237,14 +229,11 @@ const AddExecutiveModal = ({
                       value={field.value}
                       setValue={(val: string) => handleUpdateFields(field.id, val)}
                     />
-                    // <div key={field.id}>
-
-                    // </div>
                   )
                 }
               })}
             </div>
-            <div
+            {/* <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
@@ -355,7 +344,7 @@ const AddExecutiveModal = ({
                   )
                 }
               })}
-            </div>
+            </div> */}
           </div>
           {/* </div> */}
         </div>

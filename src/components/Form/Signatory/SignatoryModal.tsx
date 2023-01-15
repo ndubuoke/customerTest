@@ -137,11 +137,11 @@ const SignatoryModal = memo(
       }
     }, [signatoryDetails['ID Number'], signatoryDetails['Means of Identification']])
 
-    useEffect(() => {
-      console.log({
-        [signatoryDetails['Means of Identification']]: PrefillerIDTypeLengths[signatoryDetails['Means of Identification']],
-      })
-    }, [signatoryDetails['Means of Identification']])
+    // useEffect(() => {
+    //   console.log({
+    //     [signatoryDetails['Means of Identification']]: PrefillerIDTypeLengths[signatoryDetails['Means of Identification']],
+    //   })
+    // }, [signatoryDetails['Means of Identification']])
 
     return (
       <aside
