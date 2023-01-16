@@ -43,9 +43,9 @@ const SignatoryModal = memo(
       (state) => state.unfilledRequiredSignatoryListButton
     ) as UnfilledRequiredSignatoryListReducerType
 
-    const [localUploadPassport, setLocalUploadPassport] = useState<any>([])
-    const [localUploadIdentity, setLocalUploadIdentity] = useState<any>([])
-    const [localUploadAddress, setLocalUploadAddress] = useState<any>([])
+    const [localUploadPassport, setLocalUploadPassport] = useState<any>('')
+    const [localUploadIdentity, setLocalUploadIdentity] = useState<any>('')
+    const [localUploadAddress, setLocalUploadAddress] = useState<any>('')
 
     const [hideButton, setHideButton] = useState<boolean>(true)
 
@@ -137,11 +137,11 @@ const SignatoryModal = memo(
       }
     }, [signatoryDetails['ID Number'], signatoryDetails['Means of Identification']])
 
-    useEffect(() => {
-      console.log({
-        [signatoryDetails['Means of Identification']]: PrefillerIDTypeLengths[signatoryDetails['Means of Identification']],
-      })
-    }, [signatoryDetails['Means of Identification']])
+    // useEffect(() => {
+    //   console.log({
+    //     [signatoryDetails['Means of Identification']]: PrefillerIDTypeLengths[signatoryDetails['Means of Identification']],
+    //   })
+    // }, [signatoryDetails['Means of Identification']])
 
     return (
       <aside
@@ -279,7 +279,7 @@ const SignatoryModal = memo(
                   id='State of Origin'
                   required='on'
                   text='State of Origin'
-                  _optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={[]}
                   selectedDropdownItem={signatoryDetails['State of Origin']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -342,7 +342,7 @@ const SignatoryModal = memo(
                   id='State'
                   required='on'
                   text='State'
-                  _optionsField={['Nigerian', 'Ghanaian']}
+                  _optionsField={[]}
                   selectedDropdownItem={signatoryDetails['State']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
@@ -548,7 +548,7 @@ const SignatoryModal = memo(
                     handleAddSignatory(generateID())
                   }
                 }}
-                text='Done'
+                text='Add'
               />
             </div>
           </div>

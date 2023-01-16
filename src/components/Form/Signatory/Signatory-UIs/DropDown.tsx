@@ -6,10 +6,13 @@ import { ReducersType } from 'Redux/store'
 import { useDispatch, useSelector } from 'react-redux'
 import { ResponseType, UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import {
+  getCitiesAction,
   getCountriesAction,
+  getStatesAction,
   unfilledRequiredSignatoryListAction,
   unfilledRequiredSignatoryListButtonAction,
 } from 'Redux/actions/FormManagement.actions'
+import Spinner from 'Components/Shareables/Spinner'
 
 type Props = {
   required: 'on' | 'off'
@@ -40,9 +43,11 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
+  const [cities, setCities] = useState<Array<any>>([])
 
   const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
   const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
+  const getCitiesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCities) as ResponseType
 
   // Get Countries list if it contains country in the field lable
   useEffect(() => {
@@ -95,6 +100,56 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
     }
   }
 
+  const checkIfItemIsState = () => {
+    const checkCountriesInStorage = sessionStorage.getItem('SIGNNATORIES--country')
+      ? JSON.parse(sessionStorage.getItem('SIGNNATORIES--country'))
+      : null
+
+    if (checkCountriesInStorage) {
+      dispatch(getStatesAction(checkCountriesInStorage?.country?.countryId) as any)
+    }
+  }
+
+  const checkIfItemIsCity = () => {
+    const checkCountriesInStorage = sessionStorage.getItem('SIGNNATORIES--country')
+      ? JSON.parse(sessionStorage.getItem('SIGNNATORIES--country'))
+      : null
+
+    if (checkCountriesInStorage) {
+      dispatch(getCitiesAction(checkCountriesInStorage?.country?.countryId) as any)
+    }
+  }
+  // CHange this to state and not city
+  useEffect(() => {
+    if (text.toLowerCase().includes('state') && getStatesRedux) {
+      if (getStatesRedux?.success) {
+        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setStates(
+          getStatesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.cityId, stateName: x?.cityName }
+          })
+        )
+        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+      }
+    }
+  }, [getStatesRedux])
+
+  //This is city
+  useEffect(() => {
+    // console.log(first)
+    if (text.toLowerCase().includes('city') && getCitiesRedux) {
+      if (getCitiesRedux?.success) {
+        setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setStates(
+          getCitiesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName, cityId: x?.cityId, cityName: x?.cityName }
+          })
+        )
+        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+      }
+    }
+  }, [getCitiesRedux])
+
   return (
     <div
       style={{
@@ -108,8 +163,16 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
       <div className={`relative`}>
         <div
-          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
-          onClick={() => setShowLists((prev) => !prev)}
+          className='flex items-center justify-between w-full gap-6 py-1 pb-[5px] leading-6 border-b border-b-[#AAAAAA]  cursor-pointer'
+          onClick={() => {
+            setShowLists((prev) => !prev)
+            if (text.toLowerCase().includes('state')) {
+              checkIfItemIsState()
+            }
+            if (text.toLowerCase().includes('city')) {
+              checkIfItemIsCity()
+            }
+          }}
           title={selectedDropdownItem && selectedDropdownItem}
         >
           <div className='overflow-hidden'>
@@ -130,11 +193,26 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg  rounded-lg h-[200px] overflow-y-auto'
+              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg   h-[200px] overflow-y-auto'
               style={{
                 zIndex: 999,
               }}
             >
+              {text.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
+                <div className='h-full flex justify-center items-center w-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
+              {text.toLowerCase().includes('state') && getStatesRedux?.loading ? (
+                <div className='h-full flex justify-center items-center w-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
+              {text.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
+                <div className='h-full flex justify-center items-center w-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
               {optionsField?.length > 0
                 ? optionsField?.map((selected, index) => {
                     return (
@@ -144,6 +222,13 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
                         onClick={(e) => {
                           e.stopPropagation()
                           handleSelectedDropdownItem(selected)
+                          // if (text.toLowerCase().includes('state')) {
+                          const country = countries?.find((x) => x.countryName === selected)
+                          if (country) {
+                            sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
+                          }
+                          // }
+                          setShowLists(false)
                         }}
                       >
                         {selected.trim()}

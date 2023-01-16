@@ -7,6 +7,7 @@ import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
@@ -52,10 +53,14 @@ const FormActionToggle = ({
     : getProperty(item.formControlProperties, 'Swap label position', 'defaultState').text
 
   let labelPosition = _labelPosition.toLowerCase() === 'on' ? 'right' : 'left'
-  const theItemFieldNameCamelCase = camelize(fieldLabel)
+
+  const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+  const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+  const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const [text, setText] = useState<string>('')
-  const [checked, setChecked] = useState(false)
+  const [checked, setChecked] = useState('off')
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
@@ -68,9 +73,9 @@ const FormActionToggle = ({
       dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
     }
     if (e.target.checked) {
-      setChecked(true)
+      setChecked('on')
     } else {
-      setChecked(false)
+      setChecked('off')
     }
 
     setFillingFormState((prev: FormStructureType) => {
@@ -97,13 +102,13 @@ const FormActionToggle = ({
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-          theSection.data[theItemFieldNameCamelCase] = e.target.checked
+          theSection.data[theItemFieldNameCamelCase] = e.target.checked ? 'on' : 'off'
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: theItemSectionNameCamelCase,
             data: {
-              [theItemFieldNameCamelCase]: e.target.checked,
+              [theItemFieldNameCamelCase]: e.target.checked ? 'on' : 'off',
             },
             pageId,
             sectionId,
@@ -121,13 +126,13 @@ const FormActionToggle = ({
         if (theSectionlessPage) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-          theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.checked
+          theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.checked ? 'on' : 'off'
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: pageNameToBeUsed,
             data: {
-              [theItemFieldNameCamelCase]: e.target.checked,
+              [theItemFieldNameCamelCase]: e.target.checked ? 'on' : 'off',
             },
             pageId,
             sectionId: null,
@@ -173,7 +178,7 @@ const FormActionToggle = ({
       if (backup) {
         setChecked(backup)
       } else {
-        setChecked(false)
+        setChecked('off')
         setFillingFormState((prev: FormStructureType) => {
           // console.log('prev', prev)
           const copiedPrev = { ...prev }
@@ -199,13 +204,13 @@ const FormActionToggle = ({
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = false
+              theSection.data[theItemFieldNameCamelCase] = 'off'
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: false,
+                  [theItemFieldNameCamelCase]: 'off',
                 },
                 pageId,
                 sectionId,
@@ -223,13 +228,13 @@ const FormActionToggle = ({
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = false
+              theSectionlessPage.data[theItemFieldNameCamelCase] = 'off'
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: false,
+                  [theItemFieldNameCamelCase]: 'off',
                 },
                 pageId,
                 sectionId: null,
@@ -260,7 +265,7 @@ const FormActionToggle = ({
               value=''
               id='default-toggle'
               className='sr-only peer cursor-pointer'
-              checked={checked}
+              checked={checked === 'on'}
               onChange={(e) => handleChange(e, item)}
             />
             <div className="w-11 h-6 border-primay-main border peer-focus:outline-none  peer-focus:ring-0 rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-primay-main after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primay-main"></div>
@@ -277,7 +282,7 @@ const FormActionToggle = ({
           <input
             type='checkbox'
             className={`accent-primay-main w-4 h-4 ${labelPosition === 'left' ? 'order-1' : 'order-2'}`}
-            checked={checked}
+            checked={checked === 'on'}
             onChange={(e) => handleChange(e, item)}
           />
           <div className={`relative w-fit ${labelPosition === 'left' ? 'order-2' : 'order-1'}`}>

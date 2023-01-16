@@ -7,6 +7,7 @@ import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
@@ -56,7 +57,10 @@ const FormRange = ({
 
   let labelPosition = _labelPosition.toLowerCase() === 'on' ? 'right' : 'left'
 
-  const theItemFieldNameCamelCase = camelize(fieldLabel)
+  const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+  const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+  const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const [text, setText] = useState<string>('0')
 

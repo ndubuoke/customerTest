@@ -7,6 +7,7 @@ import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { getProperty } from 'Utilities/getProperty'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
 import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
@@ -56,7 +57,11 @@ const FormDate = ({
     : getProperty(item.formControlProperties, 'Help text', 'defaultState').text
     ? getProperty(item.formControlProperties, 'Help text', 'defaultState').text
     : fieldLabel
-  const theItemFieldNameCamelCase = camelize(fieldLabel)
+
+  const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
+  const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
+
+  const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const [text, setText] = useState<string>('')
 
@@ -258,7 +263,7 @@ const FormDate = ({
       </div>
       <div>
         <input
-          className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-text-secondary`}
+          className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]`}
           type={
             item.name === fieldsNames.DATE
               ? 'date'

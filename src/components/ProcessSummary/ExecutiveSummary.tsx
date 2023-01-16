@@ -1,9 +1,10 @@
 import { SignatoryDetailsType } from 'Components/Form/Types/SignatoryTypes'
 import { ExecutiveDetailsType } from 'Components/Form/Types/ExecutiveTypes'
 import ExecutivesTable from 'Components/Form/ExecutiveandDirector/ExecutiveTable'
-import ExecutiveModalSummary from './ExecutiveModalSummary'
+
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { useState, useEffect } from 'react'
+import ExecutiveModalSummary from './ExecutiveModalSummary'
 
 type Props = {}
 
