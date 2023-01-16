@@ -514,7 +514,7 @@ const CustomerManagementTable = ({
     }
   }, [customerStatus, tableType, requestStatus])
 
-  // console.log(allCustomersByDate)
+    // console.log(allCustomersByDate)
   // console.log(AllCustomers)
   const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
   // console.log(allRequestsForChecker)
@@ -1030,7 +1030,7 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              {AllCustomers && AllCustomers?.success && !allCustomersByDate?.success ? (
+              {AllCustomers && AllCustomers?.success  ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
@@ -1057,7 +1057,7 @@ const CustomerManagementTable = ({
                       ))}
                 </tbody>
               ) : null}
-              {allCustomersByDate && allCustomersByDate?.success && !AllCustomers?.success && (
+              {allCustomersByDate && allCustomersByDate?.success  ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&
@@ -1083,7 +1083,7 @@ const CustomerManagementTable = ({
                         />
                       ))}
                 </tbody>
-              )}
+              ):null}
             </>
           )}
 
