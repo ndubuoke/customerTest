@@ -237,6 +237,12 @@ const FormDropdown = ({
     }
   }, [getCitiesRedux])
 
+  useEffect(()=> {
+if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().includes('state') && !fieldLabel.toLowerCase().includes('city')){
+  setOptionsField(_optionsFieldForm)
+}
+  }, [])
+
   // This fills the filling form state with the data input
   useEffect(() => {
     if (enableMultipleSelection.toLowerCase() === 'on') {
