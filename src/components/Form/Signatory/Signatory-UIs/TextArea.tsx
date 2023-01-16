@@ -4,6 +4,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
+import { camelize } from 'Utilities/convertStringToCamelCase'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import FieldLabel from './FieldLabel'
 
 type Props = {
@@ -30,24 +32,24 @@ const TextArea = ({ id, required, setValue, value, text, colspan = 1, type = 'te
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setValue((prev: any) => ({
       ...prev,
-      [text]: e.target.value.trim(),
+      [camelize(replaceSpecialCharacters(text))]: e.target.value,
     }))
     // handleRedispatchOfRequiredFields()
   }
 
   const handleRedispatchOfRequiredFields = () => {
-    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === camelize(replaceSpecialCharacters(text)))
 
     if (isPresentInRequiredList) {
-      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== camelize(replaceSpecialCharacters(text)))
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
     }
 
-    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === camelize(replaceSpecialCharacters(text)))
 
     if (isPresentInRequiredListButton) {
-      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== camelize(replaceSpecialCharacters(text)))
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
     }

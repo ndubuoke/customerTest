@@ -76,3 +76,80 @@ export type SignatoryDetailType =
   | 'Upload Passport Photograph'
   | 'Upload Proof of Identity'
   | 'Upload Proof of Address'
+
+export type SignatoryInitialDetailsType = {
+  // 'Identification Method': string
+  // 'ID Number': string
+  id?: string | number
+  title: string
+  surname: string
+  firstName: string
+  otherNames: string
+  mothersMaidenName: string
+  dateOfBirth: string
+  maritalStatus: string
+  gender: string
+  nationality: string
+  stateOfOrigin: string
+  lGA: string
+
+  dualCitizenship: string
+  ifYesSpecify: string
+  residentialAddress: string
+  detailedDescriptionOfAddress: string
+  country: string
+  state: string
+  cityTown: string
+  lGARA: string
+  pOBox: string
+  mobileNumber: string
+  alternatePhoneNumber: string
+  emailAddress: string
+  meansOfIdentification: PrefillerIDTypeType | ''
+  iDNumber: string
+  iDIssueDate: string
+  iDExpiryDate: string
+  employmentStatus: string
+  natureOfBusinessOccupation: string
+  positionRank: string
+  uploadPassportPhotograph: any
+  uploadProofOfIdentity: any
+  uploadProofOfAddress: any
+}
+
+export type SignatoryInitialDetailType =
+  | 'Identification Method'
+  | 'ID Number'
+  | 'Title'
+  | 'Surname'
+  | 'First Name'
+  | 'Other Names'
+  | "Mother's Maiden Name"
+  | 'Date of Birth'
+  | 'Marital Status'
+  | 'Gender'
+  | 'Nationality'
+  | 'State of Origin'
+  | 'LGA'
+  | 'Dual Citizenship'
+  | 'If yes, specify'
+  | 'Residential Address'
+  | 'Detailed Description of Address'
+  | 'Country'
+  | 'State'
+  | 'City/Town'
+  | 'LGA-RA'
+  | 'P.O. Box'
+  | 'Mobile Number'
+  | 'Alternate Phone Number'
+  | 'Email address'
+  | 'Means of Identification'
+  | 'ID Number'
+  | 'ID Issue Date'
+  | 'ID Expiry Date'
+  | 'Employment Status'
+  | 'Nature of Business/Occupation'
+  | 'Position/Rank'
+  | 'Upload Passport Photograph'
+  | 'Upload Proof of Identity'
+  | 'Upload Proof of Address'

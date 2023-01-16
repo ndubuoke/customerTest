@@ -27,13 +27,13 @@
 // matchValues(a, b)
 // console.log(newArray)
 
-// function camelize(str) {
-//   return str
-//     .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
-//       return index === 0 ? word.toLowerCase() : word.toUpperCase()
-//     })
-//     .replace(/\s+/g, '')
-// }
+function camelize(str) {
+  return str
+    .replace(/(?:^\w|[A-Z]|\b\w)/g, function (word, index) {
+      return index === 0 ? word.toLowerCase() : word.toUpperCase()
+    })
+    .replace(/\s+/g, '')
+}
 
 // console.log(camelize('fsirst name'))
 
@@ -41,4 +41,4 @@ function replaceSpecialCharacters(text) {
   return text?.replace(/[^\w\s]/gi, '')
 }
 
-console.log(replaceSpecialCharacters("mother'SMaidenName"))
+console.log(camelize(replaceSpecialCharacters('LGA')))
