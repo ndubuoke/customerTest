@@ -3,7 +3,7 @@ import React from 'react'
 
 type Props = {
   closeModalFunction: () => void
-  cancelFormCreation: () => void
+  cancelFormCreation: any
 }
 
 const CancelFormModal = ({ closeModalFunction, cancelFormCreation }: Props) => {

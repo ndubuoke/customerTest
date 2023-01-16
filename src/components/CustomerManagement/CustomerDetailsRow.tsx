@@ -1,7 +1,7 @@
 import { Disable, Edit, Enable, Eye, Menu } from 'Assets/svgs'
 import React from 'react'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
-import {format, parseISO} from 'date-fns'
+import { format, parseISO } from 'date-fns'
 
 type customerDetailsRowType = {
   customer: {
@@ -28,7 +28,7 @@ const CustomerDetailsRow = ({
   customerFunctionHandler,
   userRole,
 }: customerDetailsRowType) => {
-  // console.log(customer)
+  //  console.log(customer)
   return (
     <tr key={customer?.customerId} className='bg-background-lightRed border-b text-text-secondary   '>
       <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
@@ -74,7 +74,7 @@ const CustomerDetailsRow = ({
                       <div
                         key={index}
                         className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                        onClick={customerFunctionHandler.bind(null, option)}
+                        onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                       >
                         <span className='flex w-full  '>
                           {' '}

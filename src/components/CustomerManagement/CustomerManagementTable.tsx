@@ -24,6 +24,7 @@ import CustomerDetailsRow from './CustomerDetailsRow'
 import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction } from '../../redux/actions/CustomerManagement.actions'
 import RequestDetailsRow from './RequestDetailsRow'
 import getRequestDetail from '../../utilities/getRequestDetail'
+import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -359,11 +360,22 @@ const CustomerManagementTable = ({
   }
 
   const customerFunctionHandler = ({ option, customer }) => {
+    console.log({ option, customer })
     if (option === 'View') {
       setShowCustomerModal(true)
       setCustomer(customer)
     } else if (option === 'Modify') {
-      //  navigate(AppRoutes.SMECustomerCreationScreen)
+      clearAllItemsInStorageForCustomerMGT()
+      sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('modification'))
+
+      if (customer?.customerType?.toLowerCase() === 'individual') {
+        navigate(`${AppRoutes.individualCustomerCreationScreen}/?isForm=true`)
+      } else {
+        navigate(`${AppRoutes.SMECustomerCreationScreen}/?isForm=true`)
+      }
+      sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA, JSON.stringify(customer))
+      sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+      sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
     } else if (option === 'Deactivate') {
       setShowDeactivationModal(customer)
     } else if (option === 'Activate') {
@@ -502,7 +514,7 @@ const CustomerManagementTable = ({
     }
   }, [customerStatus, tableType, requestStatus])
 
-  // console.log(allCustomersByDate)
+    // console.log(allCustomersByDate)
   // console.log(AllCustomers)
   const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
   // console.log(allRequestsForChecker)
@@ -1018,7 +1030,7 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              {AllCustomers && AllCustomers?.success && !allCustomersByDate?.success ? (
+              {AllCustomers && AllCustomers?.success  ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
@@ -1045,7 +1057,7 @@ const CustomerManagementTable = ({
                       ))}
                 </tbody>
               ) : null}
-              {allCustomersByDate && allCustomersByDate?.success && !AllCustomers?.success && (
+              {allCustomersByDate && allCustomersByDate?.success  ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&
@@ -1071,7 +1083,7 @@ const CustomerManagementTable = ({
                         />
                       ))}
                 </tbody>
-              )}
+              ):null}
             </>
           )}
 

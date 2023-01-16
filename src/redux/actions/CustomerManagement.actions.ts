@@ -41,9 +41,9 @@ import {
 
 type order = '' | 'asc' | 'desc'
 
-type dateFilterType = 'day' | 'month'
+type dateFilterType = 'day' | 'month' | ''
 // const SERVER_URL = 'https://9e99-18-133-131-7.eu.ngrok.io/v1'
-  const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
+const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
 
 export const getCustomersAction =
   (customerType: string, customerStatus: string = '', order: order = '', initiatorId: string = '', approverId: string = '') =>
@@ -166,9 +166,13 @@ export const getCustomersByDateAction =
         },
       }
 
-      const { data } = await axios.get(`${SERVER_URL}/customer/by/date?filterBy=${filter}&number=${number}`, config)
-
-      dispatch({ type: GET_CUSTOMERS_BY_DATE_SUCCESS, payload: data })
+      if (number === 0 && filter === '') {
+        const { data } = await axios.get(`${SERVER_URL}/customer/by/date`, config)
+        dispatch({ type: GET_CUSTOMERS_BY_DATE_SUCCESS, payload: data })
+      } else {
+        const { data } = await axios.get(`${SERVER_URL}/customer/by/date?filterBy=${filter}&number=${number}`, config)
+        dispatch({ type: GET_CUSTOMERS_BY_DATE_SUCCESS, payload: data })
+      }
     } catch (error) {
       dispatch({
         type: GET_CUSTOMERS_BY_DATE_FAIL,

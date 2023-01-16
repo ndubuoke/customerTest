@@ -3,12 +3,18 @@ import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   ACTIVE_PAGE,
+  GET_COUNTRIES_FAIL,
+  GET_COUNTRIES_REQUEST,
+  GET_COUNTRIES_SUCCESS,
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
+  GET_STATES_FAIL,
+  GET_STATES_REQUEST,
+  GET_STATES_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -46,24 +52,26 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      console.log('action.payload', action.payload)
       return {
         ...state,
         loading: false,
         success: true,
-        serverResponse: {
-          ...action.payload,
-          data: {
-            ...action.payload.data,
-            builtFormMetadata: {
-              ...action.payload.data.builtFormMetadata,
-              pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
-            },
-          },
-        },
+        serverResponse:
+          action.payload.data.formType === 'smeAccelerated'
+            ? {
+                ...action.payload,
+                data: {
+                  ...action.payload.data,
+                  builtFormMetadata: {
+                    ...action.payload.data.builtFormMetadata,
+                    pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+                  },
+                },
+              }
+            : action.payload,
         serverError: {},
       }
-    // return { ...state, ...publishedForm }
+    // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }
 
     case GET_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
@@ -171,6 +179,44 @@ export const submitFormReducer = (state: ResponseType = initialStateRequest, act
     // return { ...state, ...publishedForm }
 
     case SUBMIT_FORM_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const getCountriesReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_COUNTRIES_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_COUNTRIES_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case GET_COUNTRIES_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const getStatesReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_STATES_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_STATES_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case GET_STATES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     //   case RESET_STATe:
