@@ -4,6 +4,8 @@ import Button from 'Components/Shareables/Button'
 import React from 'react'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
 import { useNavigate } from 'react-router-dom'
+import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
+import { AppRoutes } from 'Routes/AppRoutes'
 
 type props = {
   setShowCustomerModal: (e) => void
@@ -29,7 +31,20 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
     })
     // console.log(request[0].requestId)
   }
-  // console.log(customer)
+
+  const modifyCustomerHandler = () => {
+    clearAllItemsInStorageForCustomerMGT()
+    sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('modification'))
+    if (customer?.customerType?.toLowerCase() === 'individual') {
+      navigate(`${AppRoutes.individualCustomerCreationScreen}/?isForm=true`)
+    } else {
+      navigate(`${AppRoutes.SMECustomerCreationScreen}/?isForm=true`)
+    }
+    sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA, JSON.stringify(customer))
+    sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
+  }
+
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -92,7 +107,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
 
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[80px] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer ' onClick={modifyCustomerHandler}>
                     {' '}
                     <img src={Edit} />
                     <span>Modify</span>

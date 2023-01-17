@@ -335,15 +335,15 @@ const Main = (props: Props) => {
         dispatch(getCustomersAction(customerType) as any)
         if (userRole === 'maker') {
           dispatch(getTotalRequestStatusCustomersAction('In Issue') as any)
+          setTimeout(() => {
+            setShowSystemAlert(true)
+          }, 3000)
         }
 
         if (userRole === 'checker') {
           dispatch(getTotalRequestStatusCustomersAction('Interim Approval') as any)
         }
 
-        setTimeout(() => {
-          setShowSystemAlert(true)
-        }, 3000)
       }
       if (customerType === 'SME') {
         dispatch(getCustomersAction(customerType) as any)
@@ -357,10 +357,11 @@ const Main = (props: Props) => {
       if (userRole === 'checker') {
         dispatch(getRequestsForCheckerAction('', customerType) as any)
         dispatch(getTotalRequestStatusCustomersAction('Interim Approval') as any)
+        setTimeout(() => {
+          setShowSystemAlert(true)
+        }, 3000)
       }
-      setTimeout(() => {
-        setShowSystemAlert(true)
-      }, 3000)
+      
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
@@ -375,7 +376,7 @@ const Main = (props: Props) => {
 
       {showSystemAlert ? (
         <>
-          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total ? (
+          {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total > 0 ? (
             <SystemAlert
               setShowSystemAlert={setShowSystemAlert}
               message={`${totalStatusCustomers?.serverResponse?.data?.total} customers accounts in issue!

@@ -9,12 +9,8 @@ import { SignatoryDetailsType } from '../Types/SignatoryTypes'
 import AdditionalModal from './AdditionalModal'
 import AdditionalDetailsTable from './AdditionalTable'
 import { additionalDetailsInitial } from './initialData'
-// import SignatoriesTable from './SignatoriesTable'
-// import SignatoryModal from './SignatoryModal'
 
-type Props = {}
-
-const AdditionalDetails = memo((props: Props) => {
+const AdditionalDetails = memo(() => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [details, setDetails] = useState<Array<AdditionalDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)

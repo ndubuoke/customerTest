@@ -2,7 +2,7 @@ import { add, Avatar, Close, customer360, Disable, Edit } from 'Assets/svgs'
 
 import { Form } from 'Components/types/FormControl.types'
 
-import React, { useState } from 'react'
+import React, { useState, useMemo } from 'react'
 import { generateID } from 'Utilities/generateId'
 import TextInput from './Additional-UIs/TextInput'
 import DropDown from './Additional-UIs/Dropdown'
@@ -30,6 +30,9 @@ const AdditionalModal = ({
   setAdditionalDetails,
   detailToModifyId,
 }: Props) => {
+  const submitBtnIsDisabled = useMemo(() => {
+    return additionalDetails.some((detail) => detail.required === 'on' && !detail.value)
+  }, [additionalDetails])
   const handleUpdateFields = (id: string, value: string) => {
     const updatedFields = additionalDetails.map((field) => {
       if (field.id === id) {
@@ -139,7 +142,7 @@ const AdditionalModal = ({
         </div>
         <div className='flex justify-center my-6'>
           <Button
-            disabled={false}
+            disabled={submitBtnIsDisabled}
             onClick={() => {
               if (modification) {
                 handleModifyAdditionalDetails(detailToModifyId)
