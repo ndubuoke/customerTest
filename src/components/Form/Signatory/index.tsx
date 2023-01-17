@@ -1,7 +1,7 @@
 import { add, Plus } from 'Assets/svgs'
 import React, { memo, useState, useEffect } from 'react'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import { SignatoryDetailsType } from '../Types/SignatoryTypes'
+import { SignatoryDetailsType, SignatoryInitialDetailsType } from '../Types/SignatoryTypes'
 import { SignatoryDetailsInitial } from './InitialData'
 import SignatoriesTable from './SignatoriesTable'
 import SignatoryModal from './SignatoryModal'
@@ -11,10 +11,10 @@ type Props = {}
 const Signatories = memo((props: Props) => {
   const [showSignatoryForm, setShowSignatoryForm] = useState<boolean>(false)
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [signatories, setSignatories] = useState<Array<SignatoryDetailsType>>([])
+  const [signatories, setSignatories] = useState<Array<SignatoryInitialDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [modification, setModification] = useState<boolean>(false)
-  const [signatoryDetails, setSignatoryDetails] = useState<SignatoryDetailsType>(SignatoryDetailsInitial)
+  const [signatoryDetails, setSignatoryDetails] = useState<SignatoryInitialDetailsType>(SignatoryDetailsInitial)
 
   const handleCollapseSection = () => {
     setCollapsed((prev) => !prev)
