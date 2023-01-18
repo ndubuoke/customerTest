@@ -6,7 +6,7 @@ import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { generateID } from 'Utilities/generateId'
-import { SignatoryDetailType, SignatoryDetailsType } from '../Types/SignatoryTypes'
+import { SignatoryDetailType, SignatoryDetailsType, SignatoryInitialDetailsType } from '../Types/SignatoryTypes'
 import { SignatoryDetailsInitial, SignatoryDetailsRequiredDataStatus } from './InitialData'
 import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 import SignatoryDropDown from './Signatory-UIs/DropDown'
@@ -19,6 +19,8 @@ import { ReducersType } from 'Redux/store'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import IdPrefiller from './Signatory-UIs/IdPrefiller'
 import { PrefillerIDTypeLengths, useIdFormPrefiller } from '../../../hooks/useIdFormPrefiller'
+import { camelize } from 'Utilities/convertStringToCamelCase'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   signatories?: Array<any>
@@ -26,8 +28,8 @@ type Props = {
   closeModalFunction: () => void
   modification: boolean
   setModification: (prev: boolean) => void
-  signatoryDetails: SignatoryDetailsType
-  setSignatoryDetails: (prev: SignatoryDetailsType) => void
+  signatoryDetails: SignatoryInitialDetailsType
+  setSignatoryDetails: (prev: SignatoryInitialDetailsType) => void
 }
 
 const SignatoryModal = memo(
@@ -87,7 +89,7 @@ const SignatoryModal = memo(
 
       copiedAllSignatoryDetailsArray.forEach((x) => {
         const itemKey = x[0]
-        const checkItemIsRequired = requiredItems.find((y) => y[0] === itemKey)
+        const checkItemIsRequired = requiredItems.find((y) => camelize(replaceSpecialCharacters(y[0])) === itemKey)
         if (checkItemIsRequired && !x[1]) {
           unfilledRequiredFields.push(checkItemIsRequired)
         }
@@ -181,7 +183,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Title'
                   _optionsField={['Mr', 'Mrs', 'Ms', 'Dr', 'Prof', 'Engr']}
-                  selectedDropdownItem={signatoryDetails['Title']}
+                  selectedDropdownItem={signatoryDetails['title']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <TextInput
@@ -190,7 +192,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={30}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Surname']}
+                  value={signatoryDetails['surname']}
                   text='Surname'
                   colspan={2}
                   type='text'
@@ -201,7 +203,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['First Name']}
+                  value={signatoryDetails['firstName']}
                   text='First Name'
                   colspan={2}
                   type='text'
@@ -212,7 +214,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Other Names']}
+                  value={signatoryDetails['otherNames']}
                   text='Other Names'
                   colspan={2}
                   type='text'
@@ -223,7 +225,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails["Mother's Maiden Name"]}
+                  value={signatoryDetails['mothersMaidenName']}
                   text="Mother's Maiden Name"
                   colspan={2}
                   type='text'
@@ -233,7 +235,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Gender'
                   _optionsField={['Male', 'Female']}
-                  selectedDropdownItem={signatoryDetails['Gender']}
+                  selectedDropdownItem={signatoryDetails['gender']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <TextInput
@@ -242,7 +244,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Date of Birth']}
+                  value={signatoryDetails['dateOfBirth']}
                   text='Date of Birth'
                   colspan={1}
                   type='date'
@@ -252,7 +254,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Marital Status'
                   _optionsField={['Single', 'Married', 'Widowed', 'Divorced', 'Seperated']}
-                  selectedDropdownItem={signatoryDetails['Marital Status']}
+                  selectedDropdownItem={signatoryDetails['maritalStatus']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
               </div>
@@ -272,7 +274,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Nationality'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['Nationality']}
+                  selectedDropdownItem={signatoryDetails['nationality']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -280,7 +282,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='State of Origin'
                   _optionsField={[]}
-                  selectedDropdownItem={signatoryDetails['State of Origin']}
+                  selectedDropdownItem={signatoryDetails['stateOfOrigin']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -288,7 +290,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='LGA'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['LGA']}
+                  selectedDropdownItem={signatoryDetails['lGA']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -296,7 +298,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Dual Citizenship'
                   _optionsField={['Yes', 'No']}
-                  selectedDropdownItem={signatoryDetails['Dual Citizenship']}
+                  selectedDropdownItem={signatoryDetails['dualCitizenship']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -304,7 +306,7 @@ const SignatoryModal = memo(
                   required='off'
                   text='If yes, specify'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['If yes, specify']}
+                  selectedDropdownItem={signatoryDetails['ifYesSpecify']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
 
@@ -314,7 +316,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Residential Address']}
+                  value={signatoryDetails['residentialAddress']}
                   text='Residential Address'
                   colspan={1}
                   type='text'
@@ -323,9 +325,9 @@ const SignatoryModal = memo(
                   id='Detailed Description of Address'
                   placeholder='Enter Detailed Description of Address'
                   required='off'
-                  maximumNumbersOfCharacters={20}
+                  maximumNumbersOfCharacters={160}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Detailed Description of Address']}
+                  value={signatoryDetails['detailedDescriptionOfAddress']}
                   text='Detailed Description of Address'
                   colspan={3}
                   type='text'
@@ -335,7 +337,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Country'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['Country']}
+                  selectedDropdownItem={signatoryDetails['country']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -343,7 +345,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='State'
                   _optionsField={[]}
-                  selectedDropdownItem={signatoryDetails['State']}
+                  selectedDropdownItem={signatoryDetails['state']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -351,7 +353,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='City/Town'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['City/Town']}
+                  selectedDropdownItem={signatoryDetails['cityTown']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SignatoryDropDown
@@ -359,7 +361,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='LGA-RA'
                   _optionsField={['Nigerian', 'Ghanaian']}
-                  selectedDropdownItem={signatoryDetails['LGA-RA']}
+                  selectedDropdownItem={signatoryDetails['lGARA']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
 
@@ -369,7 +371,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['P.O. Box']}
+                  value={signatoryDetails['pOBox']}
                   text='P.O. Box'
                   colspan={2}
                   type='text'
@@ -380,7 +382,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Mobile Number']}
+                  value={signatoryDetails['mobileNumber']}
                   text='Mobile Number'
                   colspan={1}
                   type='tel'
@@ -391,7 +393,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Alternate Phone Number']}
+                  value={signatoryDetails['alternatePhoneNumber']}
                   text='Alternate Phone Number'
                   colspan={1}
                   type='tel'
@@ -403,7 +405,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Email address']}
+                  value={signatoryDetails['emailAddress']}
                   text='Email address'
                   colspan={2}
                   type='email'
@@ -413,7 +415,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Means of Identification'
                   _optionsField={['BVN', 'NIN', "Permanent Voter's Card", "Driver's License"]}
-                  selectedDropdownItem={signatoryDetails['Means of Identification']}
+                  selectedDropdownItem={signatoryDetails['meansOfIdentification']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
 
@@ -423,7 +425,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={PrefillerIDTypeLengths[signatoryDetails['Means of Identification']] || 10}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['ID Number']}
+                  value={signatoryDetails['iDNumber']}
                   text='ID Number'
                   colspan={1}
                   type='text'
@@ -438,7 +440,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['ID Issue Date']}
+                  value={signatoryDetails['iDIssueDate']}
                   text='ID Issue Date'
                   colspan={1}
                   type='date'
@@ -449,7 +451,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['ID Expiry Date']}
+                  value={signatoryDetails['iDExpiryDate']}
                   text='ID Expiry Date'
                   colspan={1}
                   type='date'
@@ -470,7 +472,7 @@ const SignatoryModal = memo(
                   required='on'
                   text='Employment Status'
                   _optionsField={['Employed', 'Self Employed', 'Unemployed', 'Retired', 'Student', 'Others']}
-                  selectedDropdownItem={signatoryDetails['Employment Status']}
+                  selectedDropdownItem={signatoryDetails['employmentStatus']}
                   setSelectedDropdownItem={setSignatoryDetails}
                 />
                 <SearchAndSelectSignatory
@@ -482,7 +484,7 @@ const SignatoryModal = memo(
                     { label: 'Aviation', key: 'Aviation' },
                     { label: 'Military', key: 'Military' },
                   ]}
-                  selectedDropdownItem={signatoryDetails['Nature of Business/Occupation']}
+                  selectedDropdownItem={signatoryDetails['natureOfBusinessOccupation']}
                   setSelectedDropdownItem={setSignatoryDetails}
                   placeholder='Nature of Business/Occupation'
                 />
@@ -492,7 +494,7 @@ const SignatoryModal = memo(
                   required='off'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Position/Rank']}
+                  value={signatoryDetails['positionRank']}
                   text='Position/Rank'
                   colspan={1}
                   type='text'
@@ -505,7 +507,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Upload Passport Photograph']}
+                  value={signatoryDetails['uploadPassportPhotograph']}
                   text='Upload Passport Photograph'
                   colspan={1}
                   type='text'
@@ -517,7 +519,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Upload Proof of Identity']}
+                  value={signatoryDetails['uploadProofOfIdentity']}
                   text='Upload Proof of Identity'
                   colspan={1}
                   type='text'
@@ -529,7 +531,7 @@ const SignatoryModal = memo(
                   required='on'
                   maximumNumbersOfCharacters={20}
                   setValue={setSignatoryDetails}
-                  value={signatoryDetails['Upload Proof of Address']}
+                  value={signatoryDetails['uploadProofOfAddress']}
                   text='Upload Proof of Address'
                   colspan={1}
                   type='text'

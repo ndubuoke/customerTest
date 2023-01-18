@@ -13,6 +13,8 @@ import {
   unfilledRequiredSignatoryListButtonAction,
 } from 'Redux/actions/FormManagement.actions'
 import Spinner from 'Components/Shareables/Spinner'
+import { camelize } from 'Utilities/convertStringToCamelCase'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   required: 'on' | 'off'
@@ -51,7 +53,11 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
   // Get Countries list if it contains country in the field lable
   useEffect(() => {
-    if (text.toLowerCase().includes('country') || text.toLowerCase().includes('nationality')) {
+    if (
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('country') ||
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('nationality') ||
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('ifyesspecify')
+    ) {
       // if (!getCountriesRedux?.success) {
       dispatch(getCountriesAction() as any)
       // }
@@ -59,8 +65,13 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   }, [])
 
   useEffect(() => {
-    if (text.toLowerCase().includes('country') || text.toLowerCase().includes('nationality')) {
+    if (
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('country') ||
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('nationality') ||
+      camelize(replaceSpecialCharacters(text)).toLowerCase().includes('ifyesspecify')
+    ) {
       if (getCountriesRedux?.success) {
+        console.log(getCountriesRedux)
         setOptionsField(getCountriesRedux?.serverResponse?.data?.map((x) => x?.countryName))
         setCountries(
           getCountriesRedux?.serverResponse?.data?.map((x) => {
@@ -76,25 +87,25 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
     setShowLists((prev) => !prev)
     setSelectedDropdownItem((prev: any) => ({
       ...prev,
-      [text]: selectedItem.trim(),
+      [camelize(replaceSpecialCharacters(text))]: selectedItem.trim(),
     }))
     handleRedispatchOfRequiredFields()
   }
 
   const handleRedispatchOfRequiredFields = () => {
     // console.log({ text, unfilledRequiredSignatoryList })
-    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
+    const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === camelize(replaceSpecialCharacters(text)))
 
     if (isPresentInRequiredList) {
-      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== text)
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryList?.list?.filter((x) => x?.[0] !== camelize(replaceSpecialCharacters(text)))
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListAction(newUnfilledRequiredFields) as any)
     }
 
-    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === text)
+    const isPresentInRequiredListButton = unfilledRequiredSignatoryListButton?.list?.find((x) => x[0] === camelize(replaceSpecialCharacters(text)))
 
     if (isPresentInRequiredListButton) {
-      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== text)
+      const newUnfilledRequiredFields = unfilledRequiredSignatoryListButton?.list?.filter((x) => x?.[0] !== camelize(replaceSpecialCharacters(text)))
       // Dispatch the list of unfilled Required fields
       dispatch(unfilledRequiredSignatoryListButtonAction(newUnfilledRequiredFields) as any)
     }
@@ -121,7 +132,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   }
   // CHange this to state and not city
   useEffect(() => {
-    if (text.toLowerCase().includes('state') && getStatesRedux) {
+    if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('state') && getStatesRedux) {
       if (getStatesRedux?.success) {
         setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.cityName))
         setStates(
@@ -137,7 +148,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   //This is city
   useEffect(() => {
     // console.log(first)
-    if (text.toLowerCase().includes('city') && getCitiesRedux) {
+    if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('city') && getCitiesRedux) {
       if (getCitiesRedux?.success) {
         setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.cityName))
         setStates(
