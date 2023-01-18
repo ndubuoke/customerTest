@@ -11,10 +11,13 @@ type props = {
 }
 
 const DeactivationModal = ({ setShowDeactivationModal }: props) => {
+  const [localUpload, setLocalUpload] = useState<Array<any>>([])
+   const [uploadKey, setUploadKey] = useState<Array<string>>([])
   const { characterCount, characterLengthChangeHandler, character } = useCharacterCount()
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
+  console.log(uploadKey)
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -40,7 +43,7 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
           </div>
 
           <div className='mt-6'>
-            <FileUploadComponent setLocalUpload={() => {}} />
+            <FileUploadComponent setLocalUpload={setLocalUpload} setUploadKey={setUploadKey} />
           </div>
 
           <div className='w-full mt-12 text-center'>
