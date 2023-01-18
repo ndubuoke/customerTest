@@ -1,10 +1,11 @@
 import { useState, ChangeEvent } from 'react'
-import { ExclaimateIcon, GreenCheck, info } from 'Assets/svgs'
+import { ExclaimateIcon, GreenCheck, closeRed, info } from 'Assets/svgs'
 import { CustomerType, IdentificationDetailsType } from 'Screens/CustomerCreation'
 import DropDown from './DropDown'
 import { API } from '../../utilities/api'
 import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
 import Spinner from './Spinner'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   customerType: CustomerType
@@ -33,13 +34,21 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const MAX_FIELD_LENGTH = 11
 
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
-    const { value } = ev.target
-    setIdentificationNumber(value)
+    const { value, validity } = ev.target
+    // console.log('ev.target', ev)
+    setIdentificationNumber((prev) => {
+      if (validity.patternMismatch) {
+        return prev
+      } else {
+        return value
+      }
+    })
     setStatus(null)
     if (value.length === MAX_FIELD_LENGTH) {
       try {
         setStatus('loading')
         const response = await API.get(`/verification/${selectedIdentificationType}/${value.trim()}`)
+        console.log('response.data', response.data)
         if (response.data && response.status == 200) {
           setIsVerified(true)
           setStatus('success')
@@ -47,13 +56,13 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             setIdentificationDetails({
               identificationType: selectedIdentificationType,
               identificationNumber: value.trim(),
-              identityData: response.data.data.response,
+              identityData: response.data.data,
             })
           } else if (selectedIdentificationType === 'nin') {
             setIdentificationDetails({
               identificationType: selectedIdentificationType,
               identificationNumber: value.trim(),
-              identityData: response.data.data.response[0],
+              identityData: response.data.data,
             })
           } else if (selectedIdentificationType === 'cac') {
             setIdentificationDetails({
@@ -141,6 +150,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             </div>
           ) : null}
         </div>
+        {console.log('status', status)}
         <div
           className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${
             status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
@@ -153,8 +163,12 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             maxLength={MAX_FIELD_LENGTH}
             readOnly={!selectedIdentificationType}
             value={identificationNumber}
+            pattern='[0-9]+'
           />
-          {status === 'loading' ? <Spinner size='medium' /> : status === 'success' ? <GreenCheck /> : null}
+
+          {status === 'loading' && <Spinner size='medium' />}
+          {status === 'success' && <GreenCheck />}
+          {status === 'error' && <img src={closeRed} alt='error' width={17} height={17} className='w-[17px] h-[17px]' />}
         </div>
       </div>
       {customer && (

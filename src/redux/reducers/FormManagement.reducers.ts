@@ -53,6 +53,7 @@ export const initialStateRequest = {
 }
 
 export const getFormReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  console.log('action.payload', action.payload)
   switch (action.type) {
     case GET_FORM_REQUEST:
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
@@ -63,7 +64,7 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
         loading: false,
         success: true,
         serverResponse:
-          action.payload.data.formType === 'smeAccelerated'
+          action.payload.data.formType === 'smeLegacy'
             ? {
                 ...action.payload,
                 data: {

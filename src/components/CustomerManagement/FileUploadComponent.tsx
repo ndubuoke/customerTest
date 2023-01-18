@@ -31,8 +31,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, l
         const response = await API.post('/file/upload', formdata)
         setLoading(false)
 
-        console.log(response?.data?.data)
-        setUploadKey((prev) => [...prev, response?.data?.data?.fileKey])
+         setUploadKey((prev) => [...prev, response?.data?.data?.fileKey])
         try {
           const signedUrlResponse = await API.get('/file/signedurl/' + response?.data?.data?.fileKey)
           return {

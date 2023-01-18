@@ -360,7 +360,7 @@ const CustomerManagementTable = ({
   }
 
   const customerFunctionHandler = ({ option, customer }) => {
-    console.log({ option, customer })
+    // console.log({ option, customer })
     if (option === 'View') {
       setShowCustomerModal(true)
       setCustomer(customer)
@@ -565,7 +565,7 @@ const CustomerManagementTable = ({
         />
       )}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[300px] overflow-auto '>
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[400px] overflow-auto '>
         <table  className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
