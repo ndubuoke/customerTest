@@ -23,6 +23,7 @@ import {
   getCountriesReducer,
   getStatesReducer,
   getCitiesReducer,
+  getColumnMapReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -80,6 +81,7 @@ export type ReducersType = {
   getCountries: ResponseType
   getStates: ResponseType
   getCities: ResponseType
+  getColumnMap: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -111,6 +113,7 @@ const reducer = combineReducers<ReducersType>({
   getCountries: getCountriesReducer,
   getStates: getStatesReducer,
   getCities: getCitiesReducer,
+  getColumnMap: getColumnMapReducer,
 })
 
 const middleware = [thunk]

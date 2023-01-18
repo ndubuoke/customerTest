@@ -9,6 +9,9 @@ import {
   GET_CITIES_FAIL,
   GET_CITIES_REQUEST,
   GET_CITIES_SUCCESS,
+  GET_COLUMN_MAP_FAIL,
+  GET_COLUMN_MAP_REQUEST,
+  GET_COLUMN_MAP_SUCCESS,
   GET_COUNTRIES_FAIL,
   GET_COUNTRIES_REQUEST,
   GET_COUNTRIES_SUCCESS,
@@ -235,6 +238,31 @@ export const getCitiesAction = (cityId: string) => async (dispatch: Dispatch, ge
     console.log(error)
     dispatch({
       type: GET_CITIES_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
+
+export const getColumnMapAction = (formId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_COLUMN_MAP_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL}/v1/column-map/form/${formId}`, config)
+
+    dispatch({ type: GET_COLUMN_MAP_SUCCESS, payload: data })
+
+    // localStorage.removeItem('form')
+  } catch (error) {
+    // localStorage.removeItem('form')
+    console.log(error)
+    dispatch({
+      type: GET_COLUMN_MAP_FAIL,
       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
     })
   }
