@@ -25,7 +25,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'off',
     colSpan: 2,
     placeholder: 'ID Number',
-    maxLength: 40,
+    maxLength: 20,
   },
   {
     id: generateID(),
@@ -51,7 +51,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     colSpan: 1,
     placeholder: 'enter surname',
     maxLength: 90,
-    apiProperty: 'surname',
+    apiProperty: 'lastName',
   },
   {
     id: generateID(),
@@ -88,6 +88,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'on',
     colSpan: 1,
     placeholder: '',
+    apiProperty: 'dateOfBirth',
   },
   {
     id: generateID(),
@@ -112,6 +113,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     colSpan: 1,
     placeholder: 'Select ',
     options: ['male', 'female', 'others'],
+    apiProperty: 'gender',
   },
   {
     id: generateID(),
@@ -160,6 +162,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     colSpan: 1,
     placeholder: 'Enter Mobile Number',
     maxLength: 160,
+    apiProperty: 'mobile',
   },
 
   {
@@ -200,7 +203,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
   },
   {
     id: generateID(),
-    type: 'text',
+    type: 'dropdown',
     fieldLabel: 'Nationality',
     defaultValue: '',
     value: '',
@@ -208,11 +211,12 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'on',
     colSpan: 1,
     placeholder: 'Enter Nationality',
-    maxLength: 160,
+    apiProperty: 'country',
+    options: ['Nigeria', 'Ghana', 'Algeria', 'Egypt'],
   },
   {
     id: generateID(),
-    type: 'text',
+    type: 'dropdown',
     fieldLabel: 'State of Origin',
     defaultValue: '',
     value: '',
@@ -220,11 +224,11 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter State of Origin',
-    maxLength: 160,
+    options: ['Nigeria', 'Ghana', 'Algeria', 'Egypt'],
   },
   {
     id: generateID(),
-    type: 'text',
+    type: 'dropdown',
     fieldLabel: 'LGA',
     defaultValue: '',
     value: '',
@@ -232,7 +236,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'off',
     colSpan: 1,
     placeholder: 'Enter LGA',
-    maxLength: 160,
+    options: ['Nigeria', 'Ghana', 'Algeria', 'Egypt'],
   },
   {
     id: generateID(),
@@ -245,6 +249,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     colSpan: 1,
     placeholder: 'Enter City/Town',
     maxLength: 160,
+    options: ['Nigeria', 'Ghana', 'Algeria', 'Egypt'],
   },
   {
     id: generateID(),

@@ -4,8 +4,9 @@ import DropDown from 'Components/Shareables/DropDown'
 import { Form } from 'Components/types/FormControl.types'
 
 // import Button from 'Components/Shareables/Button'
-import React, { useState, useMemo } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import { generateID } from 'Utilities/generateId'
+import { API } from 'Utilities/api'
 import TextInput from './ExecutiveandDirectors-UI/TextInput'
 import TextArea from './ExecutiveandDirectors-UI/TextArea'
 import ExecutiveDropDown from './ExecutiveandDirectors-UI/Dropdown'
@@ -24,6 +25,13 @@ type Props = {
   setModification: (prev: boolean) => void
 }
 
+const meansOfIdentificationLength = {
+  bvn: 11,
+  pvc: 11,
+  'Drivers license': 11,
+  nin: 11,
+}
+
 const AddExecutiveModal = ({
   closeModalFunction,
   executiveDetails,
@@ -33,14 +41,50 @@ const AddExecutiveModal = ({
   setExecutives,
   detailToModifyId,
 }: Props) => {
+  const [identification, setIdentification] = useState({ meansOfIdentification: '', idNumber: '' })
   const submitBtnIsDisabled = useMemo(() => {
     console.log('executiveDetails', executiveDetails)
     return executiveDetails.some((detail) => detail.required === 'on' && !detail.value)
   }, [executiveDetails])
+
+  useEffect(() => {
+    console.log('identification', identification)
+    if (
+      identification.meansOfIdentification &&
+      identification.idNumber.length === meansOfIdentificationLength[identification.meansOfIdentification]
+    ) {
+      //call the required API
+      API.get(`/verification/${identification.meansOfIdentification}/${identification.idNumber.trim()}`)
+        .then((response) => {
+          //handle response
+          console.log('response', response)
+          if (response.status == 200 && response.data?.data) {
+            const updatedFields = executiveDetails.map((field) => {
+              if (field.apiProperty) {
+                field['value'] = response.data.data[field.apiProperty]
+              }
+              return field
+            })
+            setExecutiveDetails(updatedFields)
+          }
+        })
+        .catch((err) => {
+          //handle error
+          console.log('err', err)
+        })
+    }
+  }, [identification.meansOfIdentification, identification.idNumber])
+
   const handleUpdateFields = (id: string, value: string) => {
     const updatedFields = executiveDetails.map((field) => {
       if (field.id === id) {
+        console.log('field', field)
         field = { ...field, value }
+        if (field.fieldLabel === 'Means of Identification') {
+          setIdentification((prev) => ({ ...prev, meansOfIdentification: value.toLowerCase() }))
+        } else if (field.fieldLabel === 'Enter ID Number') {
+          setIdentification((prev) => ({ ...prev, idNumber: value }))
+        }
       }
       return field
     })
