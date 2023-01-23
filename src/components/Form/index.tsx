@@ -3,7 +3,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getColumnMapAction, getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
+import { createColumnMapAction, getColumnMapAction, getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -58,7 +58,7 @@ const Form = memo(
         // publishedForm?.serverResponse?.data[0]
         setPublishedFormState(publishedForm)
         sessionStorage.setItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE, JSON.stringify(publishedForm))
-        dispatch(getColumnMapAction(publishedForm?.serverResponse?.data?._id) as any)
+        dispatch(createColumnMapAction(publishedForm?.serverResponse?.data?._id, publishedForm?.serverResponse?.data) as any)
       }
       // }
     }, [publishedForm])

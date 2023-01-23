@@ -3,6 +3,9 @@ import { UnfilledRequiredSignatoryListType } from 'Redux/actions/FormManagement.
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
   ACTIVE_PAGE,
+  CREATE_COLUMN_MAP_FAIL,
+  CREATE_COLUMN_MAP_REQUEST,
+  CREATE_COLUMN_MAP_SUCCESS,
   GET_CITIES_FAIL,
   GET_CITIES_REQUEST,
   GET_CITIES_SUCCESS,
@@ -262,6 +265,25 @@ export const getColumnMapReducer = (state: ResponseType = initialStateRequest, a
     // return { ...state, ...publishedForm }
 
     case GET_COLUMN_MAP_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const createColumnMapReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case CREATE_COLUMN_MAP_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case CREATE_COLUMN_MAP_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case CREATE_COLUMN_MAP_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     //   case RESET_STATe:
