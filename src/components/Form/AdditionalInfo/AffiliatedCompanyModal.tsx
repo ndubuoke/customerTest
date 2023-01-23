@@ -1,14 +1,10 @@
 import { add, Avatar, Close, customer360, Disable, Edit } from 'Assets/svgs'
 
-import { Form } from 'Components/types/FormControl.types'
-
 import React, { useState, useMemo } from 'react'
 import { generateID } from 'Utilities/generateId'
-import TextInput from './Additional-UIs/TextInput'
-import DropDown from './Additional-UIs/Dropdown'
-import { AdditionalDetailField, AdditionalDetailType, AdditionalDetailsType } from 'Components/Form/Types/AdditionalTypes'
+import { AffiliatedCompanyDetailField, AffiliatedCompanyDetailsType } from 'Components/Form/Types/AdditionalTypes'
 import Button from 'Components/Shareables/Button'
-import { additionalDetailsInitial } from './initialData'
+import { affiliatedCompanyDetailsInitial } from './initialData'
 import AdditionalTextInput from './Additional-UIs/TextInput'
 import AdditionalDropDown from './Additional-UIs/Dropdown'
 
@@ -17,38 +13,38 @@ type Props = {
   closeModalFunction: () => void
   details?: Array<any>
   setDetails?: (value: any) => void
-  additionalDetails: AdditionalDetailField[]
-  setAdditionalDetails: (data: AdditionalDetailField[]) => void
+  affiliatedCompanyDetails: AffiliatedCompanyDetailField[]
+  setAffiliatedCompanyDetails: (data: AffiliatedCompanyDetailField[]) => void
   modification: boolean
   setModification: (prev: boolean) => void
 }
 
-const AdditionalModal = ({
+const AffiliatedCompanyModal = ({
   closeModalFunction,
   details,
   setDetails,
   modification,
-  additionalDetails,
-  setAdditionalDetails,
+  affiliatedCompanyDetails,
+  setAffiliatedCompanyDetails,
   detailToModifyId,
 }: Props) => {
   const submitBtnIsDisabled = useMemo(() => {
-    return additionalDetails.some((detail) => detail.required === 'on' && !detail.value)
-  }, [additionalDetails])
+    return affiliatedCompanyDetails.some((detail) => detail.required === 'on' && !detail.value)
+  }, [affiliatedCompanyDetails])
   const handleUpdateFields = (id: string, value: string) => {
-    const updatedFields = additionalDetails.map((field) => {
+    const updatedFields = affiliatedCompanyDetails.map((field) => {
       if (field.id === id) {
         field = { ...field, value }
       }
       return field
     })
-    setAdditionalDetails(updatedFields)
+    setAffiliatedCompanyDetails(updatedFields)
   }
 
   const handleAddAdditionalDetail = (id: string | number) => {
-    setDetails((prev: AdditionalDetailsType[]) => [
+    setDetails((prev: AffiliatedCompanyDetailsType[]) => [
       ...prev,
-      additionalDetails.reduce(
+      affiliatedCompanyDetails.reduce(
         (acc, curr) => {
           acc[curr.fieldLabel] = curr.value
           return acc
@@ -58,27 +54,27 @@ const AdditionalModal = ({
     ])
     // setSignatories((prev: Array<any>) => [...prev, { ...signatoryDetails, id }])
     // setSignatoryDetails({ ...SignatoryDetailsInitial })
-    setAdditionalDetails(additionalDetailsInitial())
+    setAffiliatedCompanyDetails(affiliatedCompanyDetailsInitial())
     closeModalFunction()
   }
 
   const handleModifyAdditionalDetails = (id: string | number) => {
     console.log('id', id)
-    setDetails((prev: AdditionalDetailsType[]) =>
+    setDetails((prev: AffiliatedCompanyDetailsType[]) =>
       prev.map((executive) => {
         if (executive.id === id) {
-          executive = additionalDetails.reduce(
+          executive = affiliatedCompanyDetails.reduce(
             (acc, curr) => {
               acc[curr.fieldLabel as any] = curr.value
               return acc
             },
-            { id } as AdditionalDetailsType
+            { id } as AffiliatedCompanyDetailsType
           )
         }
         return executive
       })
     )
-    setAdditionalDetails([...additionalDetailsInitial()])
+    setAffiliatedCompanyDetails([...affiliatedCompanyDetailsInitial()])
     closeModalFunction()
   }
 
@@ -110,7 +106,7 @@ const AdditionalModal = ({
               paddingTop: '1rem',
             }}
           >
-            {additionalDetails.map((field) => {
+            {affiliatedCompanyDetails.map((field) => {
               if (field.type === 'dropdown') {
                 return (
                   <AdditionalDropDown
@@ -160,4 +156,4 @@ const AdditionalModal = ({
   )
 }
 
-export default AdditionalModal
+export default AffiliatedCompanyModal

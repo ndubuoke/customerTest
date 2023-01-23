@@ -1,11 +1,11 @@
-import { AdditionalDetailType } from 'Components/Form/Types/AdditionalTypes'
+import { AdditionalDetailType, AffiliatedCompanyDetailType } from 'Components/Form/Types/AdditionalTypes'
 import React from 'react'
 import FieldLabel from './FieldLabel'
 
 type Props = {
   required: 'on' | 'off'
   colspan?: number
-  label: AdditionalDetailType
+  label: AdditionalDetailType | AffiliatedCompanyDetailType
   value: string
   setValue: (val: string) => void
   type?: 'text' | 'number' | 'date' | 'email'
@@ -30,7 +30,7 @@ const AdditionalTextInput = ({ required, setValue, value, label, colspan = 1, ty
 
       <div className={`relative w-full border-b border-b-[#AAAAAA]`}>
         <input
-          className={`flex w-full  py-1 leading-6 `}
+          className={`flex w-full  py-1 leading-6 bg-transparent`}
           type={type}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
