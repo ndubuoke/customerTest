@@ -1,8 +1,8 @@
-import { AdditionalDetailType } from 'Components/Form/Types/AdditionalTypes'
+import { AdditionalDetailType, AffiliatedCompanyDetailType } from 'Components/Form/Types/AdditionalTypes'
 import React from 'react'
 
 type Props = {
-  id: AdditionalDetailType
+  id: AdditionalDetailType | AffiliatedCompanyDetailType
   text: string
   colspan: number
 }

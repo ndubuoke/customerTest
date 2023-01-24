@@ -1,5 +1,5 @@
 import { generateID } from 'Utilities/generateId'
-import { AdditionalDetailField } from '../Types/AdditionalTypes'
+import { AdditionalDetailField, AffiliatedCompanyDetailField } from '../Types/AdditionalTypes'
 
 export const additionalDetailsInitial = (): AdditionalDetailField[] => [
   {
@@ -72,5 +72,55 @@ export const additionalDetailsInitial = (): AdditionalDetailField[] => [
     colSpan: 1,
     placeholder: 'Select',
     options: ['Active', 'Dormant'],
+  },
+]
+export const affiliatedCompanyDetailsInitial = (): AffiliatedCompanyDetailField[] => [
+  {
+    id: generateID(),
+    type: 'text',
+    fieldLabel: 'Name of Company/Body 1',
+    defaultValue: '',
+    value: '',
+    error: '',
+    required: 'on',
+    colSpan: 2,
+    placeholder: 'Naza concept SA ltd',
+    maxLength: 60,
+  },
+  {
+    id: generateID(),
+    type: 'text',
+    fieldLabel: 'Name of Company/Body 2',
+    defaultValue: '',
+    value: '',
+    error: '',
+    required: 'on',
+    colSpan: 2,
+    placeholder: 'Naza concept SA ltd',
+    maxLength: 160,
+  },
+  {
+    id: generateID(),
+    type: 'text',
+    fieldLabel: 'Name of Company/Body 3',
+    defaultValue: '',
+    value: '',
+    error: '',
+    required: 'off',
+    colSpan: 2,
+    placeholder: 'Naza concept SA ltd',
+    maxLength: 90,
+  },
+  {
+    id: generateID(),
+    type: 'dropdown',
+    fieldLabel: "Parent Company's Country of Incorporation",
+    defaultValue: '',
+    value: '',
+    error: '',
+    required: 'on',
+    colSpan: 1,
+    placeholder: 'Select',
+    options: ['Nigeria'],
   },
 ]
