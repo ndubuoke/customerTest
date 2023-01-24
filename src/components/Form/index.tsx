@@ -52,13 +52,16 @@ const Form = memo(
     const [canNext, setCanNext] = useState<boolean>(false)
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
+
+    const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
     // console.log('activePage', activePage)
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
         setPublishedFormState(publishedForm)
         sessionStorage.setItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE, JSON.stringify(publishedForm))
-        dispatch(createColumnMapAction(publishedForm?.serverResponse?.data?._id, publishedForm?.serverResponse?.data) as any)
+        dispatch(getColumnMapAction(publishedForm?.serverResponse?.data?._id) as any)
       }
       // }
     }, [publishedForm])
@@ -77,8 +80,19 @@ const Form = memo(
       // }
     }, [])
 
+    // New implementation
     useEffect(() => {
-      // console.log({ fillingFormState })
+      const newFillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.NEW_FILLING_FORM_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.NEW_FILLING_FORM_IN_STORAGE))
+        : null
+
+      if (newFillingFormInStorage) {
+        setFillingFormState(newFillingFormInStorage)
+      }
+    }, [getColumnMap])
+
+    useEffect(() => {
+      console.log({ fillingFormState })
 
       if (fillingFormState?.data?.customerData?.length > 0) {
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
