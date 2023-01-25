@@ -1,7 +1,6 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
 body {
   scroll-behavior: smooth;
   /* color: #db353905 */
@@ -20,37 +19,33 @@ body {
   width: 100%;
   z-index: 99999999;
 }
+
 .cus-m-close {
   position: absolute;
   right: 40px;
   top: 40px;
   cursor: pointer;
 }
+
 @layer base {
   h1 {
     @apply font-bold text-5xl;
   }
-
   h2 {
     @apply font-bold text-3xl;
   }
-
   h3 {
     @apply font-semibold text-2xl;
   }
-
   h4 {
     @apply font-semibold text-xl;
   }
-
   h5 {
     @apply font-semibold text-lg;
   }
-
   h6 {
     @apply font-semibold text-lg;
   }
-
   img {
     @apply max-w-fit;
   }
@@ -60,7 +55,6 @@ body {
   .subtitle1 {
     @apply font-semibold text-base;
   }
-
   .subtitle2 {
     @apply font-semibold text-sm;
   }
@@ -74,6 +68,7 @@ body {
 }
 
 /* Scroll bar custom styles */
+
 ::-webkit-scrollbar {
   width: 9px;
   height: 4px;
@@ -106,6 +101,7 @@ body {
 }
 
 /* hide scroll bar */
+
 .hide-scrollbar::-webkit-scrollbar {
   width: 0;
   height: 0;
@@ -133,6 +129,7 @@ body {
 }
 
 /* Handle collapsing of section... This is to reduce the amount useState being used */
+
 .collapsed-section {
   height: 40px;
 }
@@ -141,19 +138,29 @@ body {
   height: 0;
   opacity: 0;
 }
+
 /* End collapsing of section */
 
 /* Handle show plus button in form control */
+
 .parent-button:hover .show-button {
   display: inline-block;
 }
 
 /* Style Datalist */
+
 .datalist-input {
   color: #363636 !important;
 }
+
 .datalist-input .datalist-active-item {
   background: #ebe9e9 !important;
   color: #363636 !important;
 }
+
+.datalist-input .default-datalist-items {
+  max-height: 190px;
+  overflow-y: scroll;
+}
+
 /* End Style datalist */
