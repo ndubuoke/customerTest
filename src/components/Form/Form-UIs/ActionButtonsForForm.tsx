@@ -23,6 +23,7 @@ import { isForm } from 'Screens/CustomerCreation'
 import EDDAlert from 'Components/ProcessSummary/EddAlert'
 import { CustomerTypeType } from 'Screens/ProcessSummary'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
+import { getColumnName } from 'Utilities/getColumnName'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -54,6 +55,8 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
+
+  const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
 
   const handleActivePage = (action: 'next' | 'prev') => {
     if (action === 'prev') {
@@ -95,7 +98,14 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         ?.map((x) => {
           return getProperty(x?.formControlProperties, 'Set as Required', 'value').text.toLowerCase() === 'on'
             ? {
-                fieldLabel: camelize(replaceSpecialCharacters(getProperty(x?.formControlProperties, 'Field label', 'value').text)),
+                // fieldLabel: camelize(replaceSpecialCharacters(getProperty(x?.formControlProperties, 'Field label', 'value').text)),
+                fieldLabel: getColumnName({
+                  columns: getColumnMap?.serverResponse?.data,
+                  sectionId: x?.sectionId,
+                  pageId: x?.pageId,
+                  fieldId: x?.fieldId,
+                  fieldName: camelize(replaceSpecialCharacters(getProperty(x?.formControlProperties, 'Field label', 'value').text)),
+                }),
                 sectionId: x?.sectionId,
                 pageId: x?.pageId,
                 formType: x?.name,

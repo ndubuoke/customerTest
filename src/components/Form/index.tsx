@@ -3,7 +3,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
+import { createColumnMapAction, getColumnMapAction, getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -52,12 +52,16 @@ const Form = memo(
     const [canNext, setCanNext] = useState<boolean>(false)
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
+
+    const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
     // console.log('activePage', activePage)
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
         setPublishedFormState(publishedForm)
         sessionStorage.setItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE, JSON.stringify(publishedForm))
+        dispatch(getColumnMapAction(publishedForm?.serverResponse?.data?._id) as any)
       }
       // }
     }, [publishedForm])
@@ -76,8 +80,19 @@ const Form = memo(
       // }
     }, [])
 
+    // New implementation
     useEffect(() => {
-      // console.log({ fillingFormState })
+      const newFillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.NEW_FILLING_FORM_IN_STORAGE)
+        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.NEW_FILLING_FORM_IN_STORAGE))
+        : null
+
+      if (newFillingFormInStorage) {
+        setFillingFormState(newFillingFormInStorage)
+      }
+    }, [getColumnMap])
+
+    useEffect(() => {
+      console.log({ fillingFormState })
 
       if (fillingFormState?.data?.customerData?.length > 0) {
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))

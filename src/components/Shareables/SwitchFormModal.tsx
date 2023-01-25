@@ -16,7 +16,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
         zIndex: '1000',
       }}
     >
-      <section className='bg-white min-w-[400px] w-[400px] min-h-[280px] rounded-[8px] py-6 px-6 flex flex-col gap-6'>
+      <section className='bg-white min-w-[400px] w-[400px] min-h-[380px] rounded-[8px] py-6 px-6 flex flex-col gap-6'>
         <div className='flex justify-between '>
           <div>
             <img src={danger} width={30} height={30} alt='danger' />
@@ -39,7 +39,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
             }}
             onClick={closeModalFunction}
           >
-            Cancel
+            No
           </button>
           <button
             className='border  border-[#DC5A5D] bg-[#DC5A5D] rounded-[8px] w-[166px] h-[44px] flex items-center justify-center text-white'
@@ -49,7 +49,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
             }}
             onClick={switchFunction}
           >
-            Confirm
+            Yes
           </button>
         </div>
       </section>

@@ -6,6 +6,7 @@ import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { camelize } from 'Utilities/convertStringToCamelCase'
+import { getColumnName } from 'Utilities/getColumnName'
 import { getProperty } from 'Utilities/getProperty'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
@@ -61,9 +62,12 @@ const FormDate = ({
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
+  const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
   const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
   const [text, setText] = useState<string>('')
+  const [columnName, setColumnName] = useState<string>('')
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
@@ -102,13 +106,13 @@ const FormDate = ({
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-          theSection.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          theSection.data[columnName] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: theItemSectionNameCamelCase,
             data: {
-              [theItemFieldNameCamelCase]: e.target.value.trim(),
+              [columnName]: e.target.value.trim(),
             },
             pageId,
             sectionId,
@@ -126,13 +130,13 @@ const FormDate = ({
         if (theSectionlessPage) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-          theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          theSectionlessPage.data[columnName] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: pageNameToBeUsed,
             data: {
-              [theItemFieldNameCamelCase]: e.target.value.trim(),
+              [columnName]: e.target.value.trim(),
             },
             pageId,
             sectionId: null,
@@ -145,6 +149,26 @@ const FormDate = ({
   }
 
   useEffect(() => {
+    if (getColumnMap?.serverResponse?.status) {
+      // console.log({
+      const _columnName = getColumnName({
+        columns: getColumnMap?.serverResponse?.data,
+        sectionId: item?.sectionId,
+        pageId: item?.pageId,
+        fieldId: item?.id,
+        fieldName: theItemFieldNameCamelCase,
+      })
+
+      if (_columnName) {
+        setColumnName(_columnName)
+      }
+    }
+  }, [getColumnMap?.serverResponse?.status])
+
+  useEffect(() => {
+    if (!columnName) {
+      return
+    }
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
       if (x.sectionId) {
         return x.sectionId === item.sectionId
@@ -153,18 +177,18 @@ const FormDate = ({
       }
     })
 
-    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+    const theData = theItemSectionOrPage?.data[columnName]
 
     if (theData) {
       setText(theData)
     }
-  }, [])
+  }, [columnName])
 
   useEffect(() => {
     if (text) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
-        copiedPrev[theItemFieldNameCamelCase] = text
+        copiedPrev[columnName] = text
 
         return copiedPrev
       })
@@ -172,7 +196,7 @@ const FormDate = ({
   }, [text])
 
   useEffect(() => {
-    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+    const backup = backupForSwitchFormState?.hasOwnProperty(columnName) ? backupForSwitchFormState[columnName] : null
 
     if (!text) {
       if (backup) {
@@ -204,13 +228,13 @@ const FormDate = ({
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = ''
+              theSection.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId,
@@ -228,13 +252,13 @@ const FormDate = ({
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              theSectionlessPage.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId: null,
@@ -246,7 +270,7 @@ const FormDate = ({
         })
       }
     }
-  }, [publishedFormState])
+  }, [publishedFormState, columnName])
 
   return (
     <div
@@ -286,7 +310,7 @@ const FormDate = ({
       </div>
       {required.toLowerCase() === 'on' ? (
         <p className='text-red-500'>
-          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+          {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName) ? `${fieldLabel} is required!` : null}
         </p>
       ) : null}
     </div>
