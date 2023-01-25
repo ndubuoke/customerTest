@@ -79,9 +79,12 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
   const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
+  const [newFillingFormState, setNewFillingFormState] = useState<any>(null)
+
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
   const { serverResponse } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
+  const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
 
   const handleModalDisplay = (isVisible: boolean) => {
     dispatch(validateCustomerResultModalAction(isVisible) as any)
@@ -138,6 +141,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     if (clearFormStatus) {
       setBackupForSwitchFormState(null)
       setFillingFormState(formStruture)
+
       setPublishedFormState(null)
       sessionStorage.removeItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS)
     }

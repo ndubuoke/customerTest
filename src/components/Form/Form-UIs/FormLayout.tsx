@@ -99,7 +99,7 @@ const FormLayout = memo(
                   : 'Section label'}
               </h6>
               {setRequiredFormFieldsRedux.list.some((requiredField) => requiredField.sectionId === item.id) && (
-                <span className='ml-6 flex items-center gap-2'>
+                <span className='flex items-center gap-2 ml-6'>
                   {' '}
                   <ExclaimateIcon /> Some Information missing
                 </span>
@@ -127,7 +127,7 @@ const FormLayout = memo(
             gridTemplateColumns: '1fr 1fr 1fr',
             gridGap: '20px',
             padding: '10px',
-            paddingBottom: '3rem',
+            paddingBottom: '0',
             paddingTop: '1rem',
           }}
         >

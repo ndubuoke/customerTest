@@ -282,10 +282,10 @@ const FormSearchAndSelect = memo(
         title={helpText}
       >
         <div className='relative w-fit'>
-          {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+          {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
           <FieldLabel fieldItem={item} />
         </div>
-        <div className='w-full border-b border-b-[#AAAAAA] relative mt-2 pl-2'>
+        <div className='w-full border-b border-b-[#AAAAAA] relative mt-2 pl-2 '>
           <div className=' w-full   py-1 pl-2 ml-1`'>
             <DataListInput
               placeholder={selectedDropdownItem || placeholder}
@@ -298,7 +298,7 @@ const FormSearchAndSelect = memo(
             />
           </div>
           <span
-            className='absolute z-50 -left-1   h-full pt-4'
+            className='absolute z-50 h-full pt-4 -left-1'
             style={{
               top: '-6px',
               right: '4.7px',
@@ -308,7 +308,7 @@ const FormSearchAndSelect = memo(
             <img src={search} width={15} height={10} />
           </span>
           <span
-            className='absolute z-50 -right-1   h-full pt-4'
+            className='absolute z-50 h-full pt-4 -right-1'
             style={{
               top: '-6px',
               right: '4.7px',
