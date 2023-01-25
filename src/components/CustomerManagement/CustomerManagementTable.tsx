@@ -595,7 +595,7 @@ const CustomerManagementTable = ({
                                   className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full  '>
+                                  <span className='flex w-full normal-case  '>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
@@ -616,7 +616,7 @@ const CustomerManagementTable = ({
                                   className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full  '>
+                                  <span className='flex w-full normal-case  '>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
@@ -637,7 +637,7 @@ const CustomerManagementTable = ({
                                   className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full  '>
+                                  <span className='flex w-full  normal-case '>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
