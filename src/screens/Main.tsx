@@ -343,7 +343,6 @@ const Main = (props: Props) => {
         if (userRole === 'checker') {
           dispatch(getTotalRequestStatusCustomersAction('Interim Approval') as any)
         }
-
       }
       if (customerType === 'SME') {
         dispatch(getCustomersAction(customerType) as any)
@@ -361,7 +360,6 @@ const Main = (props: Props) => {
           setShowSystemAlert(true)
         }, 3000)
       }
-      
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
   // console.log(AllCustomers)
@@ -494,117 +492,10 @@ const Main = (props: Props) => {
                   </button>
                 </div>
                 <div className=' w-full pl-[5%]  '>
-                  <div className=' flex flex-col h-full'>
-                    <div className='flex justify-end mt-2 pr-4'>
-                      <div className='relative  text-sm   '>
-                        <button
-                          className='flex cursor-pointer border border-[#D0D5DD]   rounded-md justify-between px-2 items-center
-          py-1'
-                          onClick={() => setShowStatusLists(!showStatusLists)}
-                        >
-                          <div>
-                            {customermanagementTableType === 'All Customers' && (
-                              <span className={`text-[#252C32]`}>
-                                {userRole === 'maker' && (
-                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsMaker[0]}</>
-                                )}
-                                {userRole === 'checker' && (
-                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsChecker[0]}</>
-                                )}
-                              </span>
-                            )}
-                            {customermanagementTableType === 'Requests' && (
-                              <span className={`text-[#252C32]`}>
-                                {userRole === 'checker' && (
-                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>
-                                )}
-                                {userRole === 'maker' && (
-                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>
-                                )}
-                              </span>
-                            )}
-                          </div>
-                          <span>
-                            <img src={chevron} className='' />
-                          </span>
-                        </button>
-                        {showStatusLists && (
-                          <div ref={statusListRef} className=' w-full  absolute z-20  bg-background-paper  flex flex-col  border rounded-md'>
-                            {customermanagementTableType === 'All Customers' && (
-                              <>
-                                {userRole === 'maker' && (
-                                  <>
-                                    {customersDropdownStatusOptionsMaker?.map((status, index) => {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                          onClick={statusSelectForm.bind(null, status)}
-                                        >
-                                          {status}
-                                        </div>
-                                      )
-                                    })}
-                                  </>
-                                )}
-                                {userRole === 'checker' && (
-                                  <>
-                                    {customersDropdownStatusOptionsChecker?.map((status, index) => {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                          onClick={statusSelectForm.bind(null, status)}
-                                        >
-                                          {status}
-                                        </div>
-                                      )
-                                    })}
-                                  </>
-                                )}
-                              </>
-                            )}
-                            {customermanagementTableType === 'Requests' && (
-                              <>
-                                {userRole === 'maker' && (
-                                  <>
-                                    {requestsDropdownStatusOptionsMaker?.map((status, index) => {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                          onClick={statusSelectForm.bind(null, status)}
-                                        >
-                                          {status}
-                                        </div>
-                                      )
-                                    })}
-                                  </>
-                                )}
-                                {userRole === 'checker' && (
-                                  <>
-                                    {requestsDropdownStatusOptionsChecker?.map((status, index) => {
-                                      return (
-                                        <div
-                                          key={index}
-                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
-                                          onClick={statusSelectForm.bind(null, status)}
-                                        >
-                                          {status}
-                                        </div>
-                                      )
-                                    })}
-                                  </>
-                                )}
-                              </>
-                            )}
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                    <div className=' '>
+                  <div className=' flex  h-full'>
+                    <div className=' w-[80%] mt-6 '>
                       {nextLevelButtonId === 1 && customermanagementTableType === 'All Customers' ? (
-                        <div className=' flex gap-2 '>
+                        <div className=' flex gap-2  '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
                             className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
@@ -744,6 +635,114 @@ const Main = (props: Props) => {
                           )}
                         </div>
                       ) : null}
+                    </div>
+
+                    <div className='flex  mt-2 pr-4  ml-auto w-fit'>
+                      <div className='relative  text-sm   '>
+                        <button
+                          className='flex cursor-pointer border border-[#D0D5DD]   rounded-md justify-between px-2 items-center
+          py-1'
+                          onClick={() => setShowStatusLists(!showStatusLists)}
+                        >
+                          <div>
+                            {customermanagementTableType === 'All Customers' && (
+                              <span className={`text-[#252C32]`}>
+                                {userRole === 'maker' && (
+                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsMaker[0]}</>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsChecker[0]}</>
+                                )}
+                              </span>
+                            )}
+                            {customermanagementTableType === 'Requests' && (
+                              <span className={`text-[#252C32]`}>
+                                {userRole === 'checker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>
+                                )}
+                                {userRole === 'maker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>
+                                )}
+                              </span>
+                            )}
+                          </div>
+                          <span>
+                            <img src={chevron} className='' />
+                          </span>
+                        </button>
+                        {showStatusLists && (
+                          <div ref={statusListRef} className=' w-full  absolute z-20  bg-background-paper  flex flex-col  border rounded-md'>
+                            {customermanagementTableType === 'All Customers' && (
+                              <>
+                                {userRole === 'maker' && (
+                                  <>
+                                    {customersDropdownStatusOptionsMaker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>
+                                    {customersDropdownStatusOptionsChecker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                              </>
+                            )}
+                            {customermanagementTableType === 'Requests' && (
+                              <>
+                                {userRole === 'maker' && (
+                                  <>
+                                    {requestsDropdownStatusOptionsMaker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'checker' && (
+                                  <>
+                                    {requestsDropdownStatusOptionsChecker?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                              </>
+                            )}
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
                 </div>

@@ -29,7 +29,7 @@ const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
         value={searchTerm}
         onChange={searchBarHandler}
         className='block border-b-2  py-1 pl-10 w-full text-sm text-gray-900 border border-gray-300'
-        placeholder='Search by customer name or id'
+        placeholder='Search by customer name'
       />
     </div>
   )
