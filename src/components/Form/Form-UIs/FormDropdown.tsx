@@ -10,6 +10,7 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { generateID } from 'Utilities/generateId'
+import { getColumnName } from 'Utilities/getColumnName'
 import { getProperty } from 'Utilities/getProperty'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { Form, FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
@@ -116,6 +117,7 @@ const FormDropdown = ({
   const _optionsFieldForm = _optionsField?.split(',')?.map((oneItem) => oneItem.trim())
 
   const [optionsField, setOptionsField] = useState<any>([])
+  const [columnName, setColumnName] = useState<string>('')
 
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
@@ -131,6 +133,8 @@ const FormDropdown = ({
   const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
   const [multipleSelectedDropdownItems, setMultipleSelectedDropdownItems] = useState<Array<string>>([])
 
+  const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
   const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
   const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
@@ -139,14 +143,31 @@ const FormDropdown = ({
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
     setSelectedDropdownItem(selectedItem.trim())
 
-    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName)
 
     if (requiredFieldsFromRedux) {
-      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== columnName)
 
       dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
     }
   }
+
+  useEffect(() => {
+    if (getColumnMap?.serverResponse?.status) {
+      // console.log({
+      const _columnName = getColumnName({
+        columns: getColumnMap?.serverResponse?.data,
+        sectionId: item?.sectionId,
+        pageId: item?.pageId,
+        fieldId: item?.id,
+        fieldName: theItemFieldNameCamelCase,
+      })
+
+      if (_columnName) {
+        setColumnName(_columnName)
+      }
+    }
+  }, [getColumnMap?.serverResponse?.status])
   // Get Countries list if it contains country in the field lable
   useEffect(() => {
     if (fieldLabel.toLowerCase().includes('country')) {
@@ -237,14 +258,17 @@ const FormDropdown = ({
     }
   }, [getCitiesRedux])
 
-  useEffect(()=> {
-if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().includes('state') && !fieldLabel.toLowerCase().includes('city')){
-  setOptionsField(_optionsFieldForm)
-}
+  useEffect(() => {
+    if (!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().includes('state') && !fieldLabel.toLowerCase().includes('city')) {
+      setOptionsField(_optionsFieldForm)
+    }
   }, [])
 
   // This fills the filling form state with the data input
   useEffect(() => {
+    if (!columnName) {
+      return
+    }
     if (enableMultipleSelection.toLowerCase() === 'on') {
       //   console.log(multipleSelectedDropdownItems)
       // if (multipleSelectedDropdownItems.length === 0) {
@@ -252,10 +276,10 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
       // } else {
       // Remove the item from required when a value is selected
       if (multipleSelectedDropdownItems.length > 0) {
-        const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+        const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName)
 
         if (requiredFieldsFromRedux) {
-          const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+          const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== columnName)
 
           dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
         }
@@ -283,13 +307,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
+              theSection.data[columnName] = multipleSelectedDropdownItems.toString()
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
+                  [columnName]: multipleSelectedDropdownItems.toString(),
                 },
                 pageId,
                 sectionId,
@@ -307,13 +331,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = multipleSelectedDropdownItems.toString()
+              theSectionlessPage.data[columnName] = multipleSelectedDropdownItems.toString()
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: multipleSelectedDropdownItems.toString(),
+                  [columnName]: multipleSelectedDropdownItems.toString(),
                 },
                 pageId,
                 sectionId: null,
@@ -348,13 +372,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = ''
+              theSection.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId,
@@ -372,13 +396,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              theSectionlessPage.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId: null,
@@ -394,6 +418,9 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
   }, [multipleSelectedDropdownItems])
 
   useEffect(() => {
+    if (!columnName) {
+      return
+    }
     if (enableMultipleSelection.toLowerCase() === 'off') {
       // if (!selectedDropdownItem) {
       //   return
@@ -423,13 +450,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = selectedDropdownItem
+              theSection.data[columnName] = selectedDropdownItem
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: selectedDropdownItem,
+                  [columnName]: selectedDropdownItem,
                 },
                 pageId,
                 sectionId,
@@ -447,13 +474,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = selectedDropdownItem
+              theSectionlessPage.data[columnName] = selectedDropdownItem
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: selectedDropdownItem,
+                  [columnName]: selectedDropdownItem,
                 },
                 pageId,
                 sectionId: null,
@@ -488,13 +515,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSection) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-              theSection.data[theItemFieldNameCamelCase] = ''
+              theSection.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: theItemSectionNameCamelCase,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId,
@@ -512,13 +539,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
             if (theSectionlessPage) {
               sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-              theSectionlessPage.data[theItemFieldNameCamelCase] = ''
+              theSectionlessPage.data[columnName] = ''
               copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
             } else {
               copiedPrev.data.customerData.push({
                 sectionName: pageNameToBeUsed,
                 data: {
-                  [theItemFieldNameCamelCase]: '',
+                  [columnName]: '',
                 },
                 pageId,
                 sectionId: null,
@@ -534,6 +561,9 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
   }, [selectedDropdownItem])
 
   useEffect(() => {
+    if (!columnName) {
+      return
+    }
     const theItemSectionOrPage = fillingFormState.data.customerData.find((x) => {
       if (x.sectionId) {
         return x?.sectionId === item?.sectionId
@@ -542,7 +572,7 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
       }
     })
 
-    const theData = theItemSectionOrPage?.data[theItemFieldNameCamelCase]
+    const theData = theItemSectionOrPage?.data[columnName]
 
     if (enableMultipleSelection.toLowerCase() === 'on') {
       if (theData?.length > 0) {
@@ -551,13 +581,13 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
     } else {
       setSelectedDropdownItem(theData)
     }
-  }, [])
+  }, [columnName])
 
   useEffect(() => {
     if (selectedDropdownItem) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
-        copiedPrev[theItemFieldNameCamelCase] = selectedDropdownItem
+        copiedPrev[columnName] = selectedDropdownItem
 
         return copiedPrev
       })
@@ -568,7 +598,7 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
     if (multipleSelectedDropdownItems.length > 0) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
-        copiedPrev[theItemFieldNameCamelCase] = multipleSelectedDropdownItems
+        copiedPrev[columnName] = multipleSelectedDropdownItems
 
         return copiedPrev
       })
@@ -576,7 +606,7 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
   }, [multipleSelectedDropdownItems])
 
   useEffect(() => {
-    const backup = backupForSwitchFormState?.hasOwnProperty(theItemFieldNameCamelCase) ? backupForSwitchFormState[theItemFieldNameCamelCase] : null
+    const backup = backupForSwitchFormState?.hasOwnProperty(columnName) ? backupForSwitchFormState[columnName] : null
 
     if (backup) {
       if (enableMultipleSelection.toLowerCase() === 'off') {
@@ -597,7 +627,7 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
         setMultipleSelectedDropdownItems([])
       }
     }
-  }, [publishedFormState])
+  }, [publishedFormState, columnName])
 
   return (
     <div
@@ -651,7 +681,7 @@ if(!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().in
         </div>
         {!showLists && required.toLowerCase() === 'on' ? (
           <p className='text-red-500'>
-            {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? `${fieldLabel} is required!` : null}
+            {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName) ? `${fieldLabel} is required!` : null}
           </p>
         ) : null}
         {showLists && (
