@@ -1,3 +1,8 @@
+/**
+ *
+ * @param FieldName is passes as a placeholder iuncase it returns undefined
+ * @returns
+ */
 export const getColumnName = ({ columns, pageId, sectionId, fieldId, fieldName }) => {
   let columnName, columnFound
 

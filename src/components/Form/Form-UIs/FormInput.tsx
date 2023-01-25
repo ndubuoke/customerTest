@@ -67,10 +67,10 @@ const FormInput = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)
 
-    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+    const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName)
 
     if (requiredFieldsFromRedux) {
-      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
+      const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== columnName)
 
       dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
     }
@@ -100,13 +100,13 @@ const FormInput = ({
         if (theSection) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-          theSection.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          theSection.data[columnName] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: theItemSectionNameCamelCase,
             data: {
-              [theItemFieldNameCamelCase]: e.target.value.trim(),
+              [columnName]: e.target.value.trim(),
             },
             pageId,
             sectionId,
@@ -124,13 +124,13 @@ const FormInput = ({
         if (theSectionlessPage) {
           sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-          theSectionlessPage.data[theItemFieldNameCamelCase] = e.target.value.trim()
+          theSectionlessPage.data[columnName] = e.target.value.trim()
           copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
         } else {
           copiedPrev.data.customerData.push({
             sectionName: pageNameToBeUsed,
             data: {
-              [theItemFieldNameCamelCase]: e.target.value.trim(),
+              [columnName]: e.target.value.trim(),
             },
             pageId,
             sectionId: null,
