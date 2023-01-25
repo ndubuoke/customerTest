@@ -192,21 +192,21 @@ const RequestDetailsRow = ({
                           </div>
                         )
                       }
-                      if (option === 'Regularize Documents') {
-                        return (
-                          <div
-                            key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
-                            onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
-                          >
-                            <span className='flex w-full  '>
-                              {' '}
-                              <img className='mr-2' src={Edit} />
-                              Regularize Documents
-                            </span>
-                          </div>
-                        )
-                      }
+                      // if (option === 'Regularize Documents') {
+                      //   return (
+                      //     <div
+                      //       key={index}
+                      //       className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                      //       onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
+                      //     >
+                      //       <span className='flex w-full  '>
+                      //         {' '}
+                      //         <img className='mr-2' src={Edit} />
+                      //         Regularize Documents
+                      //       </span>
+                      //     </div>
+                      //   )
+                      // }
                     }
                     if (request.status === 'Draft') {
                       if (option === 'Continue Request') {

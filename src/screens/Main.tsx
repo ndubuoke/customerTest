@@ -430,7 +430,7 @@ const Main = (props: Props) => {
           <div>
             <button
               className={` ${
-                customerType === 'Individual' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                customerType === 'Individual' ? 'border-b-4 border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
               } `}
               onClick={highLevelButtonHandler.bind(null, 'Individual')}
             >
@@ -438,7 +438,7 @@ const Main = (props: Props) => {
             </button>
             <button
               className={` ${
-                customerType === 'SME' ? 'border-b border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
+                customerType === 'SME' ? 'border-b-4 border-b-primay-main font-bold text-[20px] text-black' : 'text-[14px] text-text-secondary'
               } ml-4`}
               onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
@@ -635,7 +635,7 @@ const Main = (props: Props) => {
                               customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
-                            <span className='text-[14px] text-[#AAAAAA]'>inActive</span>
+                            <span className='text-[14px] text-[#AAAAAA]'>InActive</span>
                             <h3 className='font-bold text-[24px]'>{customerStatusResponsedata?.inactive}</h3>
                           </div>
                         </div>
@@ -704,7 +704,7 @@ const Main = (props: Props) => {
                                   requestStatus === 'In-Review' ? 'bg-[#EFEFEF]' : ''
                                 }`}
                               >
-                                <span className='text-[14px] text-[#3FA2F7]'>in-Review</span>
+                                <span className='text-[14px] text-[#3FA2F7]'>In-Review</span>
                                 <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InReview}</h3>
                               </div>
                               <div className='border'></div>
@@ -715,7 +715,7 @@ const Main = (props: Props) => {
                                   requestStatus === 'Interim Approval' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
                               >
-                                <span className='text-[14px] text-[#D4A62F]'>interim Approval</span>
+                                <span className='text-[14px] text-[#D4A62F]'>Interim Approval</span>
                                 <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InterimApproval}</h3>
                               </div>
                               <div className='border'></div>
@@ -726,7 +726,7 @@ const Main = (props: Props) => {
                                   requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
                               >
-                                <span className='text-[14px] text-[#CF2A2A]'>in-issue</span>
+                                <span className='text-[14px] text-[#CF2A2A]'>In-issue</span>
                                 <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
                               </div>
                               <div className='border'></div>
