@@ -17,7 +17,7 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
-  console.log(uploadKey)
+  // console.log(uploadKey)
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
