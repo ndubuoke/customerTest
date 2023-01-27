@@ -153,16 +153,16 @@ const SignatoryModal = memo(
           zIndex: '1000',
         }}
       >
-        <section className='bg-white min-w-[600px]   w-full max-w-[1060px] min-h-[400px] h-full  max-h-[880px]  rounded-[11px] py-6 px-[40px] flex flex-col '>
+        <section className='bg-white min-w-[37.5rem]   w-full max-w-[66.25rem] min-h-[25rem] h-full  max-h-[55rem]  rounded-[.6875rem] py-6 px-[2.5rem] flex flex-col '>
           <div>
             <div className='relative flex justify-between py-3 border-b'>
-              <div className='font-bold text-[24px] leading-[29px] text-[#747373]'>Signatory Details</div>
+              <div className='font-bold text-[1.5rem] leading-[1.8125rem] text-[#747373]'>Signatory Details</div>
               <button onClick={closeModalFunction} type='button' className=''>
                 <img src={Close} width={20} height={20} alt='close' />
               </button>
             </div>
           </div>
-          <div className='h-full overflow-y-auto  max-h-[780px] p-2'>
+          <div className='h-full overflow-y-auto  max-h-[48.75rem] p-2'>
             <div className='flex gap-2 mt-3 text-[#8F8F8F]'>
               <img src={info} /> Provide signatory&apos;s identification to prefill form or proceed to fill form manually.
             </div>
@@ -172,10 +172,10 @@ const SignatoryModal = memo(
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  gridGap: '20px',
-                  padding: '10px',
-                  paddingBottom: '3rem',
-                  paddingTop: '1rem',
+                  gridGap: '1.25rem',
+                  padding: '.625rem',
+                  paddingBottom: '48px',
+                  paddingTop: '16px',
                 }}
               >
                 <SignatoryDropDown
@@ -263,10 +263,10 @@ const SignatoryModal = memo(
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  gridGap: '20px',
-                  padding: '10px',
-                  paddingBottom: '3rem',
-                  paddingTop: '1rem',
+                  gridGap: '1.25rem',
+                  padding: '.625rem',
+                  paddingBottom: '48px',
+                  paddingTop: '16px',
                 }}
               >
                 <SignatoryDropDown
@@ -461,10 +461,10 @@ const SignatoryModal = memo(
                 style={{
                   display: 'grid',
                   gridTemplateColumns: '1fr 1fr 1fr',
-                  gridGap: '20px',
-                  padding: '10px',
-                  paddingBottom: '3rem',
-                  paddingTop: '1rem',
+                  gridGap: '1.25rem',
+                  padding: '.625rem',
+                  paddingBottom: '48px',
+                  paddingTop: '16px',
                 }}
               >
                 <SignatoryDropDown

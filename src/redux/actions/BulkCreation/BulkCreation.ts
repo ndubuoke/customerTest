@@ -13,7 +13,8 @@ import {
   SAVE_BULK_CUSTOMER_SUCCESS
 } from 'Redux/constants/BulkCreation'
 
-const SERVER_URL = `https://retailcore-customerservice.herokuapp.com`
+const SERVER_URL = `https://customer-management-api-dev.reventtechnologies.com`
+
 interface ActionTypes {
   SET_FILE_UPLOADED: any,
   SET_BULK_CREATION_SUMMARY: any

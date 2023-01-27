@@ -9,8 +9,8 @@ const ExtractInfoModal = () => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[190px] min-w-[280px] bg-white  rounded-xl `}>
-        <div className=' w-full  min-h-[190px] flex flex-col items-center justify-center'>
+      <div className={` min-h-[11.875rem] min-w-[17.5rem] bg-white  rounded-xl `}>
+        <div className=' w-full  min-h-[11.875rem] flex flex-col items-center justify-center'>
           <Spinner size={'large'} />
           <p className='text-[#636363] text-md mt-4'>Extracting Information</p>
         </div>

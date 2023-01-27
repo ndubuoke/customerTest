@@ -639,7 +639,7 @@ const FormDropdown = ({
       title={helpText}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
 
@@ -689,20 +689,21 @@ const FormDropdown = ({
             className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-[12.5rem] overflow-y-auto'
             style={{
               zIndex: 999,
+              maxHeight: '12.5rem',
             }}
           >
             {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
-              <div className='h-full flex justify-center items-center w-full'>
+              <div className='flex items-center justify-center w-full h-full'>
                 <Spinner size='large' />
               </div>
             ) : null}
             {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state') && getStatesRedux?.loading ? (
-              <div className='h-full flex justify-center items-center w-full'>
+              <div className='flex items-center justify-center w-full h-full'>
                 <Spinner size='large' />
               </div>
             ) : null}
             {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
-              <div className='h-full flex justify-center items-center w-full'>
+              <div className='flex items-center justify-center w-full h-full'>
                 <Spinner size='large' />
               </div>
             ) : null}

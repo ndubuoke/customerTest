@@ -4,16 +4,16 @@ type Props = {}
 
 const LogDots = () => {
   return (
-    <div className='flex flex-col gap-1 items-center'>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='w-[4px] h-[4px] bg-[#aaaaaa] rounded-full'></div>
-      <div className='border border-[#636363] rounded-full w-[24px] h-[24px] min-w-[24px] min-h-[24px] flex items-center justify-center'>
-        <div className='border border-[#aaaaaa]  rounded-full min-w-[19px] min-h-[19px] w-[19px] h-[19px]'></div>
+    <div className='flex flex-col items-center gap-1'>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='w-[.25rem] h-[.25rem] bg-[#aaaaaa] rounded-full'></div>
+      <div className='border border-[#636363] rounded-full w-[1.5rem] h-[1.5rem] min-w-[1.5rem] min-h-[1.5rem] flex items-center justify-center'>
+        <div className='border border-[#aaaaaa]  rounded-full min-w-[1.1875rem] min-h-[1.1875rem] w-[1.1875rem] h-[1.1875rem]'></div>
       </div>
     </div>
   )

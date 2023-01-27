@@ -55,11 +55,11 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
   }
 
   return (
-    <div ref={calenderRef} className='w-[450px] h-[350px] border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '>
+    <div ref={calenderRef} className='w-[28.125rem] h-[21.875rem] border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '>
       <div className='grid grid-cols-3 '>
         <div className=' h-full  pt-2  grid grid-cols-1'>
           {dateActions.map((func) => (
-            <span onClick={dateFunctionHandler.bind(null, func)} key={func} className='pl-4 cursor-pointer flex items-center  hover:bg-[#F9E5E5]'>
+            <span onClick={dateFunctionHandler.bind(null, func)} key={func} className='pl-4 normal-case cursor-pointer flex items-center  hover:bg-[#F9E5E5]'>
               {func}
             </span>
           ))}
@@ -75,7 +75,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
             {'>'}
           </Cell>
           {daysOfTheWeek.map((day, index) => (
-            <span key={index} className='text-xs mt-6 h-[35px] text-[#AAAAAA]  flex items-center justify-center'>
+            <span key={index} className='text-xs mt-6 h-[2.1875rem] text-[#AAAAAA]  flex items-center justify-center'>
               {day}
             </span>
           ))}
@@ -103,7 +103,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
           <div className='mt-4 col-end-6 '>
             <button
               className={`font-bold   text-white bg-[#DC5A5D]  cursor-pointer h-full w-fit px-10 py-1   rounded `}
-              // onClick={}
+            // onClick={}
             >
               Reset
             </button>

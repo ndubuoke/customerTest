@@ -25,13 +25,13 @@ const ProgressBar = ({
   if (mode === 'creation') {
     return (
       <section
-        className={`mb-8  w-full  max-w-[839px] h-[108px] mx-auto rounded-[20px] border border-[#d2d2d2] bg-transparent flex flex-col justify-center items-center relative`}
+        className={`mb-8  w-full  max-w-[52.4375rem] h-[6.75rem] mx-auto rounded-[1.25rem] border border-[#d2d2d2] bg-transparent flex flex-col justify-center items-center relative`}
       >
         <div className={`absolute bg-white border-none -top-3 left-7 px-2  `}>Processing Status</div>
 
-        <div className='relative w-full max-w-[700px] h-fit flex justify-between'>
+        <div className='relative w-full max-w-[43.75rem] h-fit flex justify-between'>
           <div
-            className=' h-[10px] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
+            className=' h-[.625rem] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
             style={{
               transform: `translateY('-50% ') `,
               zIndex: 9,
@@ -62,13 +62,13 @@ const ProgressBar = ({
   if (mode === 'modification') {
     return (
       <section
-        className={`mb-8  w-full  max-w-[839px] h-[108px] mx-auto rounded-[20px] border border-[#d2d2d2] bg-transparent flex flex-col justify-center items-center relative`}
+        className={`mb-8  w-full  max-w-[52.4375rem] h-[6.75rem] mx-auto rounded-[1.25rem] border border-[#d2d2d2] bg-transparent flex flex-col justify-center items-center relative`}
       >
         <div className={`absolute bg-white border-none -top-3 left-7 px-2  `}>Processing Status</div>
 
-        <div className='relative w-full max-w-[700px] h-fit flex justify-between'>
+        <div className='relative w-full max-w-[43.75rem] h-fit flex justify-between'>
           <div
-            className=' h-[10px] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
+            className=' h-[.625rem] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
             style={{
               transform: `translateY('-50% ') `,
               zIndex: 9,
@@ -96,15 +96,15 @@ const ProgressBar = ({
     )
   }
   return (
-    <div className={`my-8 relative ml-20 mb-5 h-[108px] w-[60%] rounded-[20px] border border-[#d2d2d2] flex justify-center items-center`}>
+    <div className={`my-8 relative ml-20 mb-5 h-[6.75rem] w-[60%] rounded-[1.25rem] border border-[#d2d2d2] flex justify-center items-center`}>
       <div className={`w-[80%] flex justify-center items-center`}>
         <div className={`absolute bg-white border-none -top-3 left-7`}>Processing Status:</div>
-        <div className={`w-[90%] relative h-[50px]`}>
-          <div className={`w-full m-auto absolute inset-0 bg-[#d9d9d9] h-[10px]`}></div>
-          <img className={`absolute m-auto inset-y-0 left-0 w-[36px] rounded-full`} src={sterlingLogoProcess} alt='' />
-          <div className={`absolute m-auto -bottom-[30px] -left-[50px] h-[30px] `}>Pending Submission</div>
-          <img className={`absolute m-auto inset-y-0 right-0 w-[36px] rounded-full`} src={ProcessPendingStateIcon} alt='' />
-          <div className={`absolute m-auto -bottom-[30px] text-center -right-[60px] w-[150px] h-[30px]`}>Approval</div>
+        <div className={`w-[90%] relative h-[3.125rem]`}>
+          <div className={`w-full m-auto absolute inset-0 bg-[#d9d9d9] h-[.625rem]`}></div>
+          <img className={`absolute m-auto inset-y-0 left-0 w-[2.25rem] rounded-full`} src={sterlingLogoProcess} alt='' />
+          <div className={`absolute m-auto -bottom-[1.875rem] -left-[3.125rem] h-[1.875rem] `}>Pending Submission</div>
+          <img className={`absolute m-auto inset-y-0 right-0 w-[2.25rem] rounded-full`} src={ProcessPendingStateIcon} alt='' />
+          <div className={`absolute m-auto -bottom-[1.875rem] text-center -right-[3.75rem] w-[9.375rem] h-[1.875rem]`}>Approval</div>
         </div>
       </div>
     </div>
@@ -122,7 +122,7 @@ const ImageText = ({ text = 'Pending Submission' }: ImageTextType) => {
       <div className='z-10'>
         <img src={sterlingLogoProcess} alt={text} height={36} width={36} />
       </div>
-      <p className='text-[12px] leading-[13px] text-[#636363] font-bold'>{text}</p>
+      <p className='text-[.75rem] leading-[.8125rem] text-[#636363] font-bold'>{text}</p>
     </div>
   )
 }

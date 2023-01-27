@@ -87,8 +87,8 @@ const SearchAndSelectSignatory = memo(
           <span
             className='absolute z-50 -left-1   h-full pt-4'
             style={{
-              top: '-6px',
-              right: '4.7px',
+              top: '-0.375rem',
+              right: '.2938rem',
               pointerEvents: 'none',
             }}
           >
@@ -97,8 +97,8 @@ const SearchAndSelectSignatory = memo(
           <span
             className='absolute z-50 -right-1   h-full pt-4'
             style={{
-              top: '-6px',
-              right: '4.7px',
+              top: '-0.375rem',
+              right: '.2938rem',
               pointerEvents: 'none',
             }}
           >

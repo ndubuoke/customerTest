@@ -64,28 +64,30 @@ const WaiverRequestFormBoth = ({ closeModalFunction, waiverType = 'both' }: Prop
 
   return (
     <aside
-      className='fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center '
+      className='fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center '
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: '1000',
       }}
     >
-      <section className='bg-white min-w-[600px]  w-full max-w-[704px] h-[628px] rounded-[11px] py-6 px-[40px] flex flex-col justify-between overflow-y-auto gap-8'>
-        <div className='flex justify-between relative border-b py-3'>
-          <div className='font-bold text-[24px] leading-[29px] text-[#747373]'>Waiver Request</div>
+      <section className='bg-white min-w-[37.5rem]  w-full max-w-[44rem] h-[39.25rem] rounded-[.6875rem] py-6 px-[2.5rem] flex flex-col justify-between overflow-y-auto gap-8'>
+        <div className='relative flex justify-between py-3 border-b'>
+          <div className='font-bold text-[1.5rem] leading-[1.8125rem] text-[#747373]'>Waiver Request</div>
           <button onClick={closeModalFunction} className=''>
             <img src={Close} width={20} height={20} alt='close' />
           </button>
         </div>
         <div>
-          <div className='text-[#333333] text-[16px] font-normal leading-[19px] mb-3'>Provide justification for documentation waiver request:</div>
+          <div className='text-[#333333] text-[1rem] font-normal leading-[1.1875rem] mb-3'>
+            Provide justification for documentation waiver request:
+          </div>
           <div>
             <textarea
-              className='border border-[#aaaaaa] rounded-[4px] h-[120px] max-h-[140px] w-full placeholder:text-[#bcbbbb] text-[#121212] p-3'
+              className='border border-[#aaaaaa] rounded-[.25rem] h-[7.5rem] max-h-[8.75rem] w-full placeholder:text-[#bcbbbb] text-[#121212] p-3'
               placeholder='Enter text'
               style={{
-                border: '1px solid #aaaaaa',
-                borderRadius: '4px',
+                border: '.0625rem solid #aaaaaa',
+                borderRadius: '.25rem',
               }}
               value={justificationDOC}
               onChange={(e) => setJustificationDOC(e.target.value)}
@@ -99,14 +101,14 @@ const WaiverRequestFormBoth = ({ closeModalFunction, waiverType = 'both' }: Prop
           label='Upload Documentation Supporting Documents'
         />
         <div>
-          <div className='text-[#333333] text-[16px] font-normal leading-[19px] mb-3'>Provide justification for EDD waiver request:</div>
+          <div className='text-[#333333] text-[1rem] font-normal leading-[1.1875rem] mb-3'>Provide justification for EDD waiver request:</div>
           <div>
             <textarea
-              className='border border-[#aaaaaa] rounded-[4px] h-[120px] max-h-[140px] w-full placeholder:text-[#bcbbbb] text-[#121212] p-3'
+              className='border border-[#aaaaaa] rounded-[.25rem] h-[7.5rem] max-h-[8.75rem] w-full placeholder:text-[#bcbbbb] text-[#121212] p-3'
               placeholder='Enter text'
               style={{
-                border: '1px solid #aaaaaa',
-                borderRadius: '4px',
+                border: '.0625rem solid #aaaaaa',
+                borderRadius: '.25rem',
               }}
               value={justificationEDD}
               onChange={(e) => setJustificationEDD(e.target.value)}

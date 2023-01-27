@@ -119,11 +119,11 @@ const AdditionalDetails = memo(() => {
   return (
     <>
       {/* affiliated company details section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50 m-8'>
+      <section className='max-w-[66.25rem] mx-4 bg-slate-50 m-8'>
         <div
           className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
           style={{
-            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
           }}
         >
           <div className='flex items-center'>
@@ -143,7 +143,7 @@ const AdditionalDetails = memo(() => {
           </div>
         </div>
 
-        <div className={`${collapsedAffiliatedCompany ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626]'} py-6`}>
+        <div className={`${collapsedAffiliatedCompany ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'} py-6`}>
           <AffiliatedSection affiliatedCompanyDetails={companyDetails} setAffiliatedCompanyDetails={setCompanyDetails} />
         </div>
       </section>
@@ -151,9 +151,9 @@ const AdditionalDetails = memo(() => {
       {/* accounts held with other banks section */}
       <section className='max-w-[1060px] mx-4 bg-slate-50'>
         <div
-          className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
+          className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
-            boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
           }}
         >
           <div className='flex items-center'>
