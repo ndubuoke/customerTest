@@ -12,8 +12,8 @@ const WizardChanger = ({ formMode, creationMode, customerType }: Props) => {
   return (
     <>
       {creationMode === 'single' ? (
-        <div className='mt-10 max-w-[770px]   m-auto  flex flex-col justify-center items-center font-roboto'>
-          <h2 className='font-bold text-lg text-[#636363]  h-[62px]'>
+        <div className='mt-10 max-w-[48.125rem]   m-auto  flex flex-col justify-center items-center font-roboto'>
+          <h2 className='font-bold text-lg text-[#636363]  h-[3.875rem]'>
             Welcome to the {formMode === 'accelerated' ? 'Accelerated' : 'Legacy'} Customer Creation Wizard
           </h2>
 
@@ -35,8 +35,8 @@ const WizardChanger = ({ formMode, creationMode, customerType }: Props) => {
           </div>
         </div>
       ) : (
-        <div className='mt-10 max-w-[770px]   m-auto  flex flex-col justify-center items-center font-roboto'>
-          <h2 className='font-bold text-lg text-[#636363]  h-[62px]'>Welcome to the Accelerated Bulk Customer Creation Wizard</h2>
+        <div className='mt-10 max-w-[48.125rem]   m-auto  flex flex-col justify-center items-center font-roboto'>
+          <h2 className='font-bold text-lg text-[#636363]  h-[3.875rem]'>Welcome to the Accelerated Bulk Customer Creation Wizard</h2>
 
           <div className='flex items-center gap-3'>
             <p className='text-18 font-normal text-[#8F8F8F] text-center'>

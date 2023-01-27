@@ -14,7 +14,7 @@ const Checkbox = ({ disabled, externalFunctionToDoSomething, checked, setChecked
     externalFunctionToDoSomething()
   }
 
-  
+
 
   return (
     <div className='flex items-center  mb-2'>

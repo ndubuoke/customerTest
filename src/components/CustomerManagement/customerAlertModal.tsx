@@ -35,9 +35,8 @@ const CustomerAlertModal = ({
       }}
     >
       <div
-        className={`${loading ? 'min-h-[100px] min-w-[120px]' : 'min-h-[300px] min-w-[500px]'}  ${
-          loading ? 'flex justify-center items-center' : ''
-        } bg-white p-6 rounded-2xl `}
+        className={`${loading ? 'min-h-[100px] min-w-[120px]' : 'min-h-[300px] min-w-[500px]'}  ${loading ? 'flex justify-center items-center' : ''
+          } bg-white p-6 rounded-2xl `}
       >
         {loading && (
           <div className='flex flex-col items-center justify-center p-2 text-text-secondary w-fit h-fit'>

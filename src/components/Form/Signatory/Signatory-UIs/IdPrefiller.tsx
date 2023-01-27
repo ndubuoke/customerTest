@@ -111,10 +111,10 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
       style={{
         display: 'grid',
         gridTemplateColumns: '1fr 1fr 1fr',
-        gridGap: '20px',
-        padding: '10px',
-        paddingBottom: '3rem',
-        paddingTop: '1rem',
+        gridGap: '1.25rem',
+        padding: '.625rem',
+        paddingBottom: '48px',
+        paddingTop: '16px',
       }}
     >
       <SignatoryDropDown

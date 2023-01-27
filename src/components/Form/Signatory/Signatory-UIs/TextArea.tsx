@@ -76,7 +76,7 @@ const TextArea = ({ id, required, setValue, value, text, colspan = 1, type = 'te
           maxLength={Number(maximumNumbersOfCharacters)}
           value={value}
           style={{
-            height: '150px',
+            height: '9.375rem',
           }}
         ></textarea>
         {maximumNumbersOfCharacters ? (

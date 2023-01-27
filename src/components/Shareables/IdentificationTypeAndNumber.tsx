@@ -119,7 +119,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         Provide some customer’s basic information and upload relevant <br /> documents to help you fast-track the customer creation process.
       </div>
       <div className='flex gap-10 '>
-        <div className='flex justify-end gap-3 min-w-[200px] items-center '>
+        <div className='flex justify-end gap-3 min-w-[12.5rem] items-center '>
           {customerType === 'sme' ? <span>Identification Type</span> : null}
           {customerType === 'individual' ? <span>Customer's Identification Type</span> : null}
           {customerType === 'sme' ? (
@@ -128,13 +128,13 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             </div>
           ) : null}
         </div>
-        <div className='max-w-[318px] w-full '>
+        <div className='max-w-[19.875rem] w-full '>
           {customerType === 'individual' ? <DropDown options={['bvn', 'nin']} getValue={setSelectedIdentificationType} /> : null}
           {customerType === 'sme' ? <DropDown options={['cac', 'tin']} getValue={setSelectedIdentificationType} /> : null}
         </div>
       </div>
       <div className='flex gap-10 '>
-        <div className='flex  gap-3 justify-end min-w-[200px] items-center '>
+        <div className='flex  gap-3 justify-end min-w-[12.5rem] items-center '>
           <span
             style={{
               visibility: 'hidden',
@@ -152,9 +152,8 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         </div>
         {console.log('status', status)}
         <div
-          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${
-            status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
-          }] text-text-disabled  max-w-[318px]`}
+          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
+            }] text-text-disabled  max-w-[19.875rem]`}
         >
           <input
             type='text'
@@ -168,7 +167,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
 
           {status === 'loading' && <Spinner size='medium' />}
           {status === 'success' && <GreenCheck />}
-          {status === 'error' && <img src={closeRed} alt='error' width={17} height={17} className='w-[17px] h-[17px]' />}
+          {status === 'error' && <img src={closeRed} alt='error' width={17} height={17} className='w-[1.0625rem] h-[1.0625rem]' />}
         </div>
       </div>
       {customer && (

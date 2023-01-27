@@ -103,7 +103,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
           <div className='mt-4 col-end-6 '>
             <button
               className={`font-bold   text-white bg-[#DC5A5D]  cursor-pointer h-full w-fit px-10 py-1   rounded `}
-              // onClick={}
+            // onClick={}
             >
               Reset
             </button>

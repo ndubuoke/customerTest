@@ -29,14 +29,14 @@ const ActivityLog = ({ customerId, mode }: Props) => {
       <div>
         <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
         <br />
-        <div className='text-[14px] leading-[17px] text-[#aaaaaa] mb-2'>No activity found</div>
+        <div className='text-[.875rem] leading-[1.0625rem] text-[#aaaaaa] mb-2'>No activity found</div>
 
         <div className='flex gap-4 items-end  '>
           <LogDots />
           <div
-            className='mb-4 font-normal text-[#636363] text-[14px] leading-[16px] text-xs'
+            className='mb-4 font-normal text-[#636363] text-[.875rem] leading-[1rem] text-xs'
             style={{
-              marginBottom: '0rem',
+              marginBottom: '0px',
             }}
           >
             Pending Activity <br />
@@ -50,12 +50,12 @@ const ActivityLog = ({ customerId, mode }: Props) => {
   return (
     <>
       {activityLog.loading ? (
-        <div className='min-h-[300px] w-screen h-screen   flex items-center justify-center'>
+        <div className='min-h-[18.75rem] w-screen h-screen   flex items-center justify-center'>
           <Spinner size='large' />
         </div>
       ) : (
-        <div className=' h-[650px] overflow-auto'>
-          <p className='ml-4 text-[#636363] text-[24px]'>Activity Log</p>
+        <div className=' h-[40.625rem] overflow-auto'>
+          <p className='ml-4 text-[#636363] text-[1.5rem]'>Activity Log</p>
           <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
           <ol className='relative border-l border-gray-200 dark:border-gray-700 mt-8 ml-6'>
             {logs &&
