@@ -24,10 +24,10 @@ const IndividualFileForm = memo(({ file, removeFile, height = 110, waiverRequest
     )
   }
   return (
-    <div className={`relative h-[${height}px] w-[194px]`} onClick={(e) => e.stopPropagation()}>
+    <div className={`relative h-[${height}px] w-[12.125rem]`} onClick={(e) => e.stopPropagation()}>
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
-      <div className={`h-[${height}px] w-[194px]`}>
-        {isImage && <img src={file} className='object-contain' width={194} height={height} style={{ width: '194', height }} />}
+      <div className={`h-[${height}px] w-[12.125rem]`}>
+        {isImage && <img src={file} className='object-contain' width={194} height={height} style={{ width: '194px', height }} />}
         {/* {file.file.type.endsWith('pdf') && (
 
           <Document file={file.signedUrl || file.file}>

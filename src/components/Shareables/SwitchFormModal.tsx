@@ -16,7 +16,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
         zIndex: '1000',
       }}
     >
-      <section className='bg-white min-w-[400px] w-[400px] min-h-[380px] rounded-[8px] py-6 px-6 flex flex-col gap-6'>
+      <section className='bg-white min-w-[25rem] w-[25rem] min-h-[23.75rem] rounded-[.5rem] py-6 px-6 flex flex-col gap-6'>
         <div className='flex justify-between '>
           <div>
             <img src={danger} width={30} height={30} alt='danger' />
@@ -25,27 +25,27 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
             <img src={Close} width={30} height={30} alt='close' />
           </button>
         </div>
-        <div className='py-3 text-[18px] leading-[28px] text-[#333333] font-medium  '>
+        <div className='py-3 text-[1.125rem] leading-[1.75rem] text-[#333333] font-medium  '>
           Truncate form and proceed?
-          <div className='py-3 text-[16px] leading-[28px] text-[#333333]  '>{message}</div>
+          <div className='py-3 text-[1rem] leading-[1.75rem] text-[#333333]  '>{message}</div>
         </div>
 
-        <div className='flex justify-between font-medium text-[base] leading-[24px]'>
+        <div className='flex justify-between font-medium text-[base] leading-[1.5rem]'>
           <button
-            className='border border-[#d8dae5] rounded-[8px] h-[44px] flex items-center justify-center text-[#667085]'
+            className='border border-[#d8dae5] rounded-[.5rem] h-[2.75rem] flex items-center justify-center text-[#667085]'
             style={{
-              width: '166px',
-              height: '44px',
+              width: '10.375rem',
+              height: '2.75rem',
             }}
             onClick={closeModalFunction}
           >
             No
           </button>
           <button
-            className='border  border-[#DC5A5D] bg-[#DC5A5D] rounded-[8px] w-[166px] h-[44px] flex items-center justify-center text-white'
+            className='border  border-[#DC5A5D] bg-[#DC5A5D] rounded-[.5rem] w-[10.375rem] h-[2.75rem] flex items-center justify-center text-white'
             style={{
-              width: '166px',
-              height: '44px',
+              width: '10.375rem',
+              height: '2.75rem',
             }}
             onClick={switchFunction}
           >

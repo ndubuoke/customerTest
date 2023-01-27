@@ -143,8 +143,8 @@ const AddExecutiveModal = ({
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[500px] min-w-[1000px] bg-white py-6 px-8 rounded-2xl max-h-[650px] `}>
-        <div className=' w-full  min-h-[300px] flex flex-col  justify-between'>
+      <div className={` min-h-[31.25rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl max-h-[40.625rem] `}>
+        <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
           <div className='flex justify-between pb-4'>
             <h6 className='text-3xl text-text-secondary'>Executive/Directors Details</h6>
             <button onClick={closeModalFunction}>
@@ -158,19 +158,19 @@ const AddExecutiveModal = ({
             style={{
               display: 'grid',
               gridTemplateColumns: '1fr',
-              gridGap: '20px',
-              padding: '10px',
-              paddingBottom: '3rem',
-              paddingTop: '1rem',
+              gridGap: '1.25rem',
+              padding: '.625rem',
+              paddingBottom: '48px',
+              paddingTop: '16px',
             }}
           > */}
-          <div className=' w-full flex flex-col gap-6 overflow-y-scroll max-h-[500px] ' style={{ paddingRight: '5rem' }}>
+          <div className=' w-full flex flex-col gap-6 overflow-y-scroll max-h-[31.25rem] ' style={{ paddingRight: '5rem' }}>
             <div
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
+                gridGap: '1.25rem',
+                padding: '.625rem',
                 paddingBottom: '3rem',
                 paddingTop: '1rem',
               }}
@@ -225,8 +225,8 @@ const AddExecutiveModal = ({
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
+                gridGap: '1.25rem',
+                padding: '.625rem',
                 paddingBottom: '3rem',
                 paddingTop: '1rem',
               }}
@@ -281,10 +281,10 @@ const AddExecutiveModal = ({
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
-                paddingBottom: '3rem',
-                paddingTop: '1rem',
+                gridGap: '1.25rem',
+                padding: '.625rem',
+                paddingBottom: '48px',
+                paddingTop: '16px',
               }}
             >
               {executiveDetails.slice(12, 18).map((field) => {
@@ -337,10 +337,10 @@ const AddExecutiveModal = ({
               style={{
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
-                gridGap: '20px',
-                padding: '10px',
-                paddingBottom: '3rem',
-                paddingTop: '1rem',
+                gridGap: '1.25rem',
+                padding: '.625rem',
+                paddingBottom: '48px',
+                paddingTop: '16px',
               }}
             >
               {executiveDetails.slice(18, 24).map((field) => {

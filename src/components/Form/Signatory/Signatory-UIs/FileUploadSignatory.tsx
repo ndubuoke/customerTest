@@ -167,10 +167,10 @@ const FileUploadSignatory = ({
 
       <div className='flex'>
         <div
-          className={`flex gap-12 w-full max-w-[392px] min-h-[100px] max-h-[100px] border border-[#c4c4c4] rounded-[10px] items-center px-3  relative `}
+          className={`flex gap-12 w-full max-w-[24.5rem] min-h-[6.25rem] max-h-[6.25rem] border border-[#c4c4c4] rounded-[.625rem] items-center px-3  relative `}
         >
           {isUploading ? (
-            <div className='flex items-center  h-[100px]'>
+            <div className='flex items-center  h-[6.25rem]'>
               <span>Loading</span>
               <Spinner size={'small'} />
             </div>
@@ -179,9 +179,9 @@ const FileUploadSignatory = ({
               {fileUrl ? (
                 <>
                   <div
-                    className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2 max-h-[95px]  w-[90%]'
+                    className='flex flex-col justify-between  p-2 h-full overflow-y-auto overflow-x-hidden gap-2 max-h-[5.9375rem]  w-[90%]'
                     style={{
-                      border: '1px solid #cccccc',
+                      border: '.0625rem solid #cccccc',
                     }}
                   >
                     <div>{fileUrl}</div>

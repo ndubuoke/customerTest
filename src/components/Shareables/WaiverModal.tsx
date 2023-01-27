@@ -19,8 +19,8 @@ const WaiverModal = ({ setShowWaiverRequestModal }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[300px] min-w-[500px] bg-white py-6 px-8 rounded-2xl `}>
-        <div className=' w-full  min-h-[300px] flex flex-col  justify-between'>
+      <div className={` min-h-[18.75rem] min-w-[31.25rem] bg-white py-6 px-8 rounded-2xl `}>
+        <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
           <div className='flex border-b  justify-between border-b-[#CCCCCC] pb-4'>
             <h6 className='text-text-secondary'>WAIVER REQUEST</h6>
             <button onClick={closeModal}>
@@ -42,11 +42,11 @@ const WaiverModal = ({ setShowWaiverRequestModal }: props) => {
           </div>
 
           <div className='mt-6'>
-            <FileUploadComponent setLocalUpload={() => {}} />
+            <FileUploadComponent setLocalUpload={() => { }} />
           </div>
 
           <div className='w-full text-center mt-12'>
-            <Button disabled={false} text={'Submit'} onClick={() => {}} />
+            <Button disabled={false} text={'Submit'} onClick={() => { }} />
           </div>
         </div>
       </div>

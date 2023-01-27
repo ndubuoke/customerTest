@@ -426,21 +426,23 @@ const FormFileUpload = ({
       </div>
 
       <div
-        className=' w-full border  rounded-[12px]  h-[150px] p-2'
+        className=' w-full border  rounded-[.75rem]  h-[9.375rem] p-2'
         style={{
-          border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase) ? '1px solid red' : '1px solid #AAAAAA',
+          border: setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
+            ? '.0625rem solid red'
+            : '.0625rem solid #AAAAAA',
         }}
       >
         {fileUploadError.isError && <p className='py-0'>{fileUploadError.message}</p>}
 
         {fileUrl ? (
           <div className='relative flex items-center cursor-pointer '>
-            <div className='max-w-[194px] border border-[#aaaaaa] h-[90%] rounded-[12px] p-2'>
+            <div className='max-w-[12.125rem] border border-[#aaaaaa] h-[90%] rounded-[.75rem] p-2'>
               <IndividualFileForm file={fileUrl} removeFile={(e) => handleRemoveFile(e)} />
             </div>
           </div>
         ) : isUploading ? (
-          <div className='flex items-center  h-[150px]'>
+          <div className='flex items-center  h-[9.375rem]'>
             <span className='mr-4 text-3xl'>Loading</span>
             <Spinner size={'small'} />
           </div>

@@ -94,11 +94,11 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
   // }, [uploadedFiles])
 
   return (
-    <div className={`border rounded-md max-w-[599px] h-full `}>
-      <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative min-h-[312px]'>
+    <div className={`border rounded-md max-w-[37.4375rem] h-full `}>
+      <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative min-h-[19.5rem]'>
         {/* loading overlay  */}
         {isProcessing && (
-          <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[312px]'>
+          <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[19.5rem]'>
             <div className='flex items-center'>
               <span className='text-3xl mr-4'>Loading</span>
               {/* loading icon */}
@@ -112,7 +112,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
             <input type={`file`} hidden {...getInputProps()} />
           ) : null}
           {uploadedFiles.length === 0 ? (
-            <div className='flex flex-col items-center justify-center h-full pt-3 pb-3 min-h-[312px]'>
+            <div className='flex flex-col items-center justify-center h-full pt-3 pb-3 min-h-[19.5rem]'>
               <div>
                 <img src={upload} />
               </div>
@@ -125,7 +125,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
               </p>
             </div>
           ) : (
-            <div className='flex flex-col justify-between h-full p-2 overflow-y-auto min-h-[312px]'>
+            <div className='flex flex-col justify-between h-full p-2 overflow-y-auto min-h-[19.5rem]'>
               <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
                 {uploadedFiles.map((file: UploadFile, index) => {
                   return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />

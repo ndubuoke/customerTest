@@ -111,7 +111,7 @@ const TextInput = ({
           ) : success ? (
             <GreenCheck />
           ) : error ? (
-            <img src={closeRed} alt='error' width={17} height={17} className='w-[17px] h-[17px]' />
+            <img src={closeRed} alt='error' width={17} height={17} className='w-[1.0625rem] h-[1.0625rem]' />
           ) : null}
         </div>
       </div>

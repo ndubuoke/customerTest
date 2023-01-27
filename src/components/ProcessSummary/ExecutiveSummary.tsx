@@ -37,7 +37,7 @@ const ExecutiveSummary = (props: Props) => {
 
   return (
     <div className='mx-6'>
-      <h3 className='font-roboto font-bold text-[18px] leading-[16px] pt-6 pb-4  ml-12'>Executive/Directors Details</h3>
+      <h3 className='font-roboto font-bold text-[1.125rem] leading-[1rem] pt-6 pb-4  ml-12'>Executive/Directors Details</h3>
       <ExecutivesTable executives={executives} handleViewExecutive={handleViewExecutive} viewExecutive={true} collapsed={false} />
       {openExecutiveModalSummary ? <ExecutiveModalSummary closeModalFunction={handleExecutiveModal} singleExecutive={currentExecutive} /> : null}
     </div>

@@ -58,7 +58,7 @@ export const BulkCreation = () => {
 
       const fileReader = new FileReader()
       fileReader.onload = (() => {
-        return (e) => {}
+        return (e) => { }
       })()
       fileReader.readAsDataURL(file)
       formData.append('customers', file)
@@ -166,8 +166,8 @@ export const BulkCreation = () => {
       <div className={`max-h-607 overflow-auto w-full`}>
         <div className='flex justify-center gap-16 text-[#636363] mt-3'>
           <div className='flex flex-col justify-center w-1/2'>
-            <div className='flex items-center mb-10 self-end mr-[48px]'>
-              <span className={`text-right w-[200px] leadiing-[0px]`}>Upload Bulk Customer Creation File</span>
+            <div className='flex items-center mb-10 self-end mr-[3rem]'>
+              <span className={`text-right w-[12.5rem] leadiing-[0rem]`}>Upload Bulk Customer Creation File</span>
               <svg className='w-4 h-4' fill='none' stroke='currentColor' viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
                 <path
                   strokeLinecap='round'

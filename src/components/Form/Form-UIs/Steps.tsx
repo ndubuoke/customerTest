@@ -65,8 +65,8 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
   }, [publishedForm])
 
   return (
-    <div className=' flex justify-center items-center min-h-[120px] '>
-      <div className='max-w-[991px] overflow-auto mx-auto '>
+    <div className=' flex justify-center items-center min-h-[7.5rem] '>
+      <div className='max-w-[61.9375rem] overflow-auto mx-auto '>
         <div className='z-10 flex justify-end  w-fit'>
           {form?.builtFormMetadata?.pages?.map((page: PageInstance, index: number) => {
             return (

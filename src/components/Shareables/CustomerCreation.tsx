@@ -23,7 +23,7 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
           </div>
 
           <div className='flex items-center justify-between flex-1 gap-10'>
-            <div className='border-r-2 border-[#96989A]  h-[340px]'></div>
+            <div className='border-r-2 border-[#96989A]  h-[21.25rem]'></div>
             <div className='flex-1'>
               <FileUploader identificationDetails={identificationDetails} setLocalUpload={setLocalUpload} />
             </div>

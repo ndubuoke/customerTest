@@ -24,7 +24,7 @@ const TextInput = ({ required, setValue, value, label, colspan = 1, type = 'text
       }}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={label} colspan={colspan} id={label} />
       </div>
 
