@@ -18,7 +18,7 @@ const ExecutiveModalSummary = ({ closeModalFunction, singleExecutive }: Props) =
         zIndex: '1100',
       }}
     >
-      <section className='bg-white min-w-[700px]   w-full max-w-[1060px] min-h-[500px] h-full  max-h-[880px]  rounded-[11px] py-6 px-[40px] flex flex-col overflow-hidden'>
+      <section className='bg-white min-w-[43.75rem]   w-full max-w-[66.25rem] min-h-[31.25rem] h-full  max-h-[55rem]  rounded-[.6875rem] py-6 px-[2.5rem] flex flex-col overflow-hidden'>
         <div>
           <div className='relative flex justify-between py-3 border-b'>
             <div className='font-bold text-[24px] leading-[29px] text-[#747373]'>Executive/Directors Details</div>
@@ -27,7 +27,7 @@ const ExecutiveModalSummary = ({ closeModalFunction, singleExecutive }: Props) =
             </button>
           </div>
 
-          <div className='  h-[680px] overflow-y-auto flex flex-col gap-4 pt-8 pb-16'>
+          <div className='  h-[42.5rem] overflow-y-auto flex flex-col gap-4 pt-8 pb-16'>
             {Object.entries(singleExecutive).map((x: any, i: number) => {
               // console.log(x[1])
               return (

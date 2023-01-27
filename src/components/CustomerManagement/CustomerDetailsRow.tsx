@@ -58,7 +58,7 @@ const CustomerDetailsRow = ({
                     return (
                       <div
                         key={index}
-                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                         onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                       >
                         <span className='flex w-full  '>
@@ -73,7 +73,7 @@ const CustomerDetailsRow = ({
                     return (
                       <div
                         key={index}
-                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                         onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                       >
                         <span className='flex w-full  '>
@@ -89,7 +89,7 @@ const CustomerDetailsRow = ({
                       return (
                         <div
                           key={index}
-                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                           onClick={customerFunctionHandler.bind(null, { option, customer: customer })}
                         >
                           <span className='flex w-full  '>
@@ -105,7 +105,7 @@ const CustomerDetailsRow = ({
                       return (
                         <div
                           key={index}
-                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                           onClick={customerFunctionHandler.bind(null, { option, customerId: customer.customerId })}
                         >
                           <span className='flex w-full  '>

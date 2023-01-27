@@ -71,11 +71,11 @@ const Executives = memo((props: Props) => {
   }, [executives])
 
   return (
-    <section className='max-w-[1060px] mx-4 bg-slate-50'>
+    <section className='max-w-[66.25rem] mx-4 bg-slate-50'>
       <div
         className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
         style={{
-          boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+          boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
         }}
       >
         <div className='flex items-center'>
@@ -95,11 +95,11 @@ const Executives = memo((props: Props) => {
         </div>
       </div>
 
-      <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626]'} py-6`}>
+      <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'} py-6`}>
         <div className='flex justify-end'>
           <button
             className='flex gap-2 font-medium
-           leading-[20px] text-[#636363]'
+           leading-[1.25rem] text-[#636363]'
             onClick={() => setOpenModal(true)}
             type='button'
           >

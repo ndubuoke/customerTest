@@ -28,10 +28,10 @@ const JustificationModal = ({ setShowJustificationModal, interimApprovalModalSub
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` flex flex-col h-[550px] min-w-[600px] bg-white  py-6 px-8 rounded-2xl `}>
+      <div className={` flex flex-col h-[34.375rem] min-w-[37.5rem] bg-white  py-6 px-8 rounded-2xl `}>
         <div className=' w-full   flex flex-col  justify-between'>
           <div className='flex   justify-between  pb-4'>
-            <h6 className='text-text-secondary text-[24px] text-3xl'>INTERIM APPROVAL</h6>
+            <h6 className='text-text-secondary text-[1.5rem] text-3xl'>INTERIM APPROVAL</h6>
             <button onClick={closeModal}>
               <img src={Close} />
             </button>

@@ -15,11 +15,11 @@ const SystemAlert = ({ setShowSystemAlert, message }: systemAlertType) => {
       className={`fixed   z-50 w-screen h-screen grid content-end     `}
     
     >
-      <div className={` h-[150px] w-[400px]  bg-white relative  bottom-14 rounded    `}>
+      <div className={` h-[9.375rem] w-[25rem]  bg-white relative  bottom-14 rounded    `}>
         <div className='flex  my-6 mx-8 '>
           <img className=' h-fit' src={Substract2} />
 
-          <div className=' w-full ml-8  min-h-[300px] flex flex-col  justify-between'>
+          <div className=' w-full ml-8  min-h-[18.75rem] flex flex-col  justify-between'>
             <div className='flex   justify-between  pb-4'>
               <h6 className='text-text-secondary text-md text-[#333333] font-bold'>System Alert!</h6>
               <button onClick={closeModal}>
