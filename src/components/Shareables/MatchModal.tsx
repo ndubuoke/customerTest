@@ -20,8 +20,8 @@ const MatchModal = ({ setShowMatchModal, setFormCreationStarted, data }: props) 
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[350px] min-w-[500px] bg-white  rounded-xl `}>
-        <div className=' w-full  min-h-[300px] flex flex-col  '>
+      <div className={` min-h-[21.875rem] min-w-[31.25rem] bg-white  rounded-xl `}>
+        <div className=' w-full  min-h-[18.75rem] flex flex-col  '>
           <div className='flex border-b  justify-between  px-8  py-4'>
             <button className='ml-auto' onClick={closeModal}>
               {' '}

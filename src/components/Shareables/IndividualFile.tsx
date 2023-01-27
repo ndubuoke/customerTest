@@ -39,9 +39,9 @@ const IndividualFile = memo(({ file, removeFile, height = 110, waiverRequest = f
     )
   }
   return (
-    <div className={`relative h-[${height}px] w-[194px]`} onClick={(e) => e.stopPropagation()}>
+    <div className={`relative h-[${height}px] w-[12.125rem]`} onClick={(e) => e.stopPropagation()}>
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
-      <div className={`h-[${height}px] w-[194px]`}>
+      <div className={`h-[${height}px] w-[12.125rem]`}>
         {file.file.type.startsWith('image') && (
           <img
             src={file.signedUrl || URL.createObjectURL(file.file)}

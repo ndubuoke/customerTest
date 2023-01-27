@@ -14,15 +14,15 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
       </div>
       <div className="shadow overflow-auto border-b border-gray-200 mt-10">
         <table id='table-to-xlsx' className={`min-w-full divide-y divide-x divide-gray-200`}>
-          <thead className={`bg-gray-50 h-[60px] w-full`}>
-            <tr className={`h-[60px] bg-gray-50`}>
+          <thead className={`bg-gray-50 h-[3.75rem] w-full`}>
+            <tr className={`h-[3.75rem] bg-gray-50`}>
               {bulkTableColumns.map((column, index) => {
                 if (column.accessor !== "") {
                   return (
                     <th
                       key={index}
                       scope="col"
-                      className={`h-[60px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer`}
+                      className={`h-[3.75rem] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer`}
                     >
                       <div className={`flex`}>
                         {column.header}
@@ -41,7 +41,7 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
                 //   return (<th
                 //     key={index}
                 //     scope="col"
-                //     className={`h-[60px] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer`}
+                //     className={`h-[3.75rem] px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer`}
                 //   >
                 //     <div className={`flex`}>
                 //       {column.header}
@@ -62,19 +62,19 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
           <tbody className={`divide-y divide-gray-200`}>
             {records?.length ? records?.map((row, i) => {
               return (
-                <tr key={i} className={`bg-[#db353905] h-[60px]`}>
+                <tr key={i} className={`bg-[#db353905] h-[3.75rem]`}>
                   {bulkTableColumns.map((cell, index) => {
                     // if (cell.accessor === "" && hasControls) {
                     //   return (
                     //     <td
                     //       key={index}
-                    //       className={`h-[60px] px-6 py-4 whitespace-nowrap flex items-center justify-between gap-x-1`}
+                    //       className={`h-[3.75rem] px-6 py-4 whitespace-nowrap flex items-center justify-between gap-x-1`}
                     //     >
                     //       {row.status === 0 ?
                     //         <button
                     //           onClick={() => { }}
-                    //           // 0px 2px 8px rgba(0, 0, 0, 0.25);
-                    //           className={`w-[30px] h-[30px] rounded bg-white shadow-lg flex justify-center items-center`}
+                    //           // 0rem .125rem .5rem rgba(0, 0, 0, 0.25);
+                    //           className={`w-[1.875rem] h-[1.875rem] rounded bg-white shadow-lg flex justify-center items-center`}
                     //         >
                     //           <EditIcon />
                     //         </button>
@@ -83,7 +83,7 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
 
                     //       {/* <button
                     //             onClick={() => onDeleteCustomer(i)}
-                    //             className={`w-[30px] h-[30px] rounded bg-white shadow-lg flex justify-center items-center`}
+                    //             className={`w-[1.875rem] h-[1.875rem] rounded bg-white shadow-lg flex justify-center items-center`}
                     //           >
                     //             <RemoveIcon />
                     //           </button> */}
@@ -95,9 +95,9 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
                       return (
                         <td
                           key={index}
-                          className="h-[60px] px-6 py-4 whitespace-nowrap"
+                          className="h-[3.75rem] px-6 py-4 whitespace-nowrap"
                         >
-                          <span className={`${row[cell.accessor] ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#FFD4D2] text-[#9F1F17]'} h-[26px] px-[8px] py-[1px] rounded font-semibold
+                          <span className={`${row[cell.accessor] ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#FFD4D2] text-[#9F1F17]'} h-[1.625rem] px-[.5rem] py-[.0625rem] rounded font-semibold
                                 `}>
                             {cell.mapping[row[cell.accessor]]}
                           </span>
@@ -108,7 +108,7 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
                       return (
                         <td
                           key={index}
-                          className=" h-[60px] px-6 py-4 whitespace-nowrap"
+                          className=" h-[3.75rem] px-6 py-4 whitespace-nowrap"
                         >
                           {i + 1}
                         </td>
@@ -116,7 +116,7 @@ export const BulkProcessSummaryTable = ({ tableTitle, records, bulkTableColumns,
                     }
                     if (cell.accessor !== "") {
                       return (
-                        <td key={index} className={`h-[60px] px-6 py-4 whitespace-nowrap`}>
+                        <td key={index} className={`h-[3.75rem] px-6 py-4 whitespace-nowrap`}>
                           {row[cell.accessor]}
                         </td>
                       );

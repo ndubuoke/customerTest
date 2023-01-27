@@ -4,7 +4,7 @@ import Button from 'Components/Shareables/Button';
 
 const classes = {
   modal: 'string',
-  modalDialog: 'relative bg-white w-[700px]',
+  modalDialog: 'relative bg-white w-[43.75rem]',
   modalContent: 'string',
   modalHeader: 'string',
   modalTitle: 'string',
@@ -48,10 +48,10 @@ const BulkIndividualModifyRecordModal = ({
       modalHeader
       modalCloseClick={modalCloseClick}
     >
-      <div className={`h-[500px] max-h-[500px] flex flex-col overflow-auto ${'step === EstimateSteps.ContactInformation' ? '' : 'hidden'}`}>
+      <div className={`h-[31.25rem] max-h-[31.25rem] flex flex-col overflow-auto ${'step === EstimateSteps.ContactInformation' ? '' : 'hidden'}`}>
         <div className={`grow`}>
 
-          <div className={`flex w-[30.2rem] mt-6 mb-6 gap-6 justify-between items-center `}>
+          <div className={`flex w-[483.2px] mt-6 mb-6 gap-6 justify-between items-center `}>
             <div className={`w-1/2 flex justify-start items-center `}>Customer Name</div>
             <div
               className={`w-1/2 border-b border-b-[#8F8F8F]`}
@@ -64,7 +64,7 @@ const BulkIndividualModifyRecordModal = ({
             </div>
           </div>
 
-          <div className={`flex w-[30.2rem] mb-6 gap-6 justify-between items-center `}>
+          <div className={`flex w-[483.2px] mb-6 gap-6 justify-between items-center `}>
             <div className={`w-1/2 flex justify-start items-center `}>Identification Type</div>
             <div className={`w-1/2 border-b border-b-[#8F8F8F]`}>
 
@@ -78,7 +78,7 @@ const BulkIndividualModifyRecordModal = ({
 
           </div>
 
-          <div className={`flex w-[30.2rem] mb-6 gap-6 justify-between items-center `}>
+          <div className={`flex w-[483.2px] mb-6 gap-6 justify-between items-center `}>
             <div className={`w-1/2 flex justify-start items-center `}>Identification Number</div>
             <div
               className={`w-1/2 border-b border-b-[#8F8F8F]`}
@@ -91,7 +91,7 @@ const BulkIndividualModifyRecordModal = ({
             </div>
           </div>
         </div>
-        <div className={`h-[44px] w-full flex justify-center items-center`}>
+        <div className={`h-[2.75rem] w-full flex justify-center items-center`}>
 
           <Button
             disabled={false}

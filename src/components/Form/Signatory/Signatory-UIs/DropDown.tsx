@@ -174,7 +174,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
       <div className={`relative`}>
         <div
-          className='flex items-center justify-between w-full gap-6 py-1 pb-[5px] leading-6 border-b border-b-[#AAAAAA]  cursor-pointer'
+          className='flex items-center justify-between w-full gap-6 py-1 pb-[.3125rem] leading-6 border-b border-b-[#AAAAAA]  cursor-pointer'
           onClick={() => {
             setShowLists((prev) => !prev)
             if (text.toLowerCase().includes('state')) {
@@ -204,7 +204,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg   h-[200px] overflow-y-auto'
+              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg   h-[12.5rem] overflow-y-auto'
               style={{
                 zIndex: 999,
               }}
@@ -226,26 +226,26 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
               ) : null}
               {optionsField?.length > 0
                 ? optionsField?.map((selected, index) => {
-                    return (
-                      <div
-                        key={index}
-                        className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleSelectedDropdownItem(selected)
-                          // if (text.toLowerCase().includes('state')) {
-                          const country = countries?.find((x) => x.countryName === selected)
-                          if (country) {
-                            sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
-                          }
-                          // }
-                          setShowLists(false)
-                        }}
-                      >
-                        {selected.trim()}
-                      </div>
-                    )
-                  })
+                  return (
+                    <div
+                      key={index}
+                      className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
+                      onClick={(e) => {
+                        e.stopPropagation()
+                        handleSelectedDropdownItem(selected)
+                        // if (text.toLowerCase().includes('state')) {
+                        const country = countries?.find((x) => x.countryName === selected)
+                        if (country) {
+                          sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
+                        }
+                        // }
+                        setShowLists(false)
+                      }}
+                    >
+                      {selected.trim()}
+                    </div>
+                  )
+                })
                 : null}
             </div>
           )}

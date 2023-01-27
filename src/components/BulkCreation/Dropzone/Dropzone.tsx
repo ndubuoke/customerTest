@@ -20,19 +20,19 @@ export const Dropzone = ({ accept, onDrop, error, fileName, fileUploaded, onDele
       {fileUploaded ?
         <div>
           <div
-            className={`flex items-center rounded-[10px] border-[0.5px] h-[66px] min-w-[392px] max-w-[392px] gap-x-3 pr-0 ${error ? 'border-red-600' : 'border-[#2FB755]'}`}
+            className={`flex items-center rounded-[.625rem] border-[.0313rem] h-[4.125rem] min-w-[24.5rem] max-w-[24.5rem] gap-x-3 pr-0 ${error ? 'border-red-600' : 'border-[#2FB755]'}`}
           >
-            <div className={`pl-[17px]`}>
+            <div className={`pl-[1.0625rem]`}>
               <PlainFileIcon />
             </div>
             <div className={`grow`}>
-              <div title={fileName} className={`min-w-[250px] max-w-[250px] truncate`}>{fileName}</div>
+              <div title={fileName} className={`min-w-[15.625rem] max-w-[15.625rem] truncate`}>{fileName}</div>
             </div>
             <button className={`mb-2 mr-1 p-0 self-end justify-self-end`} onClick={onDeleteUpload}>
               <DeleteIcon />
             </button>
           </div>
-          <p className={`text-[12px] ${error ? 'text-red-600' : 'text-[#2FB755]'}`}>{error ? 'File Format Not Supported!' : 'File Upload Successful'}</p>
+          <p className={`text-[.75rem] ${error ? 'text-red-600' : 'text-[#2FB755]'}`}>{error ? 'File Format Not Supported!' : 'File Upload Successful'}</p>
         </div>
         :
         <div {...getRootProps({ className: `${isDragActive ? "test-center rounded border-2 border-dashed border-[#CF2A2A]" : ''}` })}>
