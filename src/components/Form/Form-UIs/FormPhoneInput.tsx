@@ -241,7 +241,7 @@ const FormPhoneInput = ({
       className={`${collapsed ? 'hidden' : ''} `}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >

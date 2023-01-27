@@ -187,7 +187,7 @@ const FormRange = ({
       className={`${collapsed ? 'hidden' : ''} flex items-center`}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >

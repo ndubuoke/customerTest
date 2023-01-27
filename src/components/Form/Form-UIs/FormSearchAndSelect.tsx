@@ -277,7 +277,7 @@ const FormSearchAndSelect = memo(
         className={`${collapsed ? 'hidden' : ''} `}
         style={{
           gridColumn: ` span ${span}`,
-          // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+          // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
         }}
         title={helpText}
       >
@@ -300,8 +300,8 @@ const FormSearchAndSelect = memo(
           <span
             className='absolute z-50 h-full pt-4 -left-1'
             style={{
-              top: '-6px',
-              right: '4.7px',
+              top: '-0.375rem',
+              right: '.2938rem',
               pointerEvents: 'none',
             }}
           >
@@ -310,8 +310,8 @@ const FormSearchAndSelect = memo(
           <span
             className='absolute z-50 h-full pt-4 -right-1'
             style={{
-              top: '-6px',
-              right: '4.7px',
+              top: '-0.375rem',
+              right: '.2938rem',
               pointerEvents: 'none',
             }}
           >
