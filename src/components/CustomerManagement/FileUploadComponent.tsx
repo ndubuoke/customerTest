@@ -84,13 +84,13 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, l
   return (
     <div>
       <div className='mb-3'>
-        <label className='capitalize text-[#333333] text-[16px] leading-[19px] '>{label}</label>
+        <label className='capitalize text-[#333333] text-[1rem] leading-[1.1875rem] '>{label}</label>
       </div>
       <div
-        className={`flex gap-12 w-full max-w-[392px] min-h-[110px] max-h-[120px] border border-[#c4c4c4] rounded-[10px] items-center px-3  relative `}
+        className={`flex gap-12 w-full max-w-[24.5rem] min-h-[6.875rem] max-h-[7.5rem] border border-[#c4c4c4] rounded-[.625rem] items-center px-3  relative `}
       >
         {loading ? (
-          <div className='flex items-center  h-[150px]'>
+          <div className='flex items-center  h-[9.375rem]'>
             <span>Loading</span>
             <Spinner size={'small'} />
           </div>
@@ -113,7 +113,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, l
               <div
                 className='flex flex-col justify-between h-full gap-2 p-2 overflow-x-hidden overflow-y-auto'
                 style={{
-                  border: hideAddMoreFiles ? '' : '1px solid #cccccc',
+                  border: hideAddMoreFiles ? '' : '.0625rem solid #cccccc',
                 }}
               >
                 <div className='h-full '>

@@ -11,7 +11,7 @@ const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
     setSearchTerm(e.target.value)
   }
   return (
-    <div className='relative w-[250px]'>
+    <div className='relative w-[15.625rem]'>
       <div className='flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none'>
         <svg
           aria-hidden='true'

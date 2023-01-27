@@ -7,17 +7,17 @@ type quickLinksProps = {
 
 const QuickLinks = ({ links }: quickLinksProps) => {
   return (
-    <div className=' w-[250px] bg-white p-2 rounded-md'>
+    <div className=' w-[15.625rem] bg-white p-2 rounded-md'>
       <div className='border-b border-b-line-faint-background p-2'>
-        <h1 className='text-text-secondary text-[24px]'>Quick Links</h1>
+        <h1 className='text-text-secondary text-[1.5rem]'>Quick Links</h1>
       </div>
 
-      <div className=' mt-2 h-[110px] bg-warning-main p-2'>
+      <div className=' mt-2 h-[6.875rem] bg-warning-main p-2'>
         <div className='flex justify-between'>
           <h6 className='text-sm text-[#252C32]'>Suggested from your activity</h6>
           <img src={Close} className='w-3' />
         </div>
-        <div className='text-[14px] text-[#5B6871] mt-2 w-[90%]'>As you use the application, suggested items will automatically show up here.</div>
+        <div className='text-[.875rem] text-[#5B6871] mt-2 w-[90%]'>As you use the application, suggested items will automatically show up here.</div>
       </div>
       <div className=' flex flex-wrap justify-between py-2 px-6 gap-4'>
         {links.map((link) => (

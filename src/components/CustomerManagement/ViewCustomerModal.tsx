@@ -52,8 +52,8 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[800px] min-w-[1000px] bg-white py-6 px-8 rounded-2xl `}>
-        <div className=' w-full  min-h-[300px] flex flex-col  justify-between'>
+      <div className={` min-h-[50rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
+        <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
           <div className='flex   justify-between  pb-4'>
             <h6 className='text-text-secondary text-3xl'>
               {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
@@ -68,7 +68,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
               <div className='justify-center w-full flex'>
                 <img src={Avatar} />
               </div>
-              <div className='flex gap-24 mt-4   text-[#636363] max-h-[280px] py-4 overflow-y-scroll'>
+              <div className='flex gap-24 mt-4   text-[#636363] max-h-[17.5rem] py-4 overflow-y-scroll'>
                 <div className=' font-bold   w-full items-end flex  flex-col '>
                   <p className='mb-2'>Surname</p>
                   <p className='mb-2'>First Name</p>
@@ -105,7 +105,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                 </div>
               </div>
 
-              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[80px] rounded-md'>
+              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[5rem] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
                   <div className='flex gap-2 cursor-pointer ' onClick={modifyCustomerHandler}>
                     {' '}
@@ -136,7 +136,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
             </div>
             <div className='border rounded w-full justify-between flex flex-col  text-[#636363]'>
               <span className='text-2xl mx-4 font-bold'>ASSIGNED PRODUCTS</span>
-              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[80px] rounded-md'>
+              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[5rem] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
                   <div className='flex gap-2 '>
                     {' '}

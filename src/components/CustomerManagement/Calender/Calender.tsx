@@ -55,7 +55,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
   }
 
   return (
-    <div ref={calenderRef} className='w-[450px] h-[350px] border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '>
+    <div ref={calenderRef} className='w-[28.125rem] h-[21.875rem] border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '>
       <div className='grid grid-cols-3 '>
         <div className=' h-full  pt-2  grid grid-cols-1'>
           {dateActions.map((func) => (
@@ -75,7 +75,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
             {'>'}
           </Cell>
           {daysOfTheWeek.map((day, index) => (
-            <span key={index} className='text-xs mt-6 h-[35px] text-[#AAAAAA]  flex items-center justify-center'>
+            <span key={index} className='text-xs mt-6 h-[2.1875rem] text-[#AAAAAA]  flex items-center justify-center'>
               {day}
             </span>
           ))}
