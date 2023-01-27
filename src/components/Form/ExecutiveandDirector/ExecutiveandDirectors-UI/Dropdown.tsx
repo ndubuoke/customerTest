@@ -27,7 +27,7 @@ const ExecutiveDropDown = ({ required, label, optionsField, colspan = 1, selecte
       }}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={label} colspan={colspan} id={label} />
       </div>
 
@@ -54,7 +54,7 @@ const ExecutiveDropDown = ({ required, label, optionsField, colspan = 1, selecte
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg'
+              className='absolute z-50 flex flex-col w-full border rounded-lg top-8 bg-background-paper'
               style={{
                 zIndex: 999,
               }}

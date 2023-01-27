@@ -14,7 +14,7 @@ body {
   bottom: 0;
   margin: auto;
   background: rgba(255, 255, 255, 0.782);
-  backdrop-filter: blur(3px);
+  backdrop-filter: blur(0.1875rem);
   min-height: 100vh;
   width: 100%;
   z-index: 99999999;
@@ -22,8 +22,8 @@ body {
 
 .cus-m-close {
   position: absolute;
-  right: 40px;
-  top: 40px;
+  right: 2.5rem;
+  top: 2.5rem;
   cursor: pointer;
 }
 
@@ -70,14 +70,14 @@ body {
 /* Scroll bar custom styles */
 
 ::-webkit-scrollbar {
-  width: 9px;
-  height: 4px;
+  width: 0.5625rem;
+  height: 0.25rem;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   ::-webkit-scrollbar {
     width: 0;
-    height: 4px;
+    height: 0.25rem;
   }
 }
 
@@ -88,7 +88,7 @@ body {
 
 ::-webkit-scrollbar-thumb {
   background: #e48b8b;
-  border-radius: 10px;
+  border-radius: 0.625rem;
 }
 
 /* ::-webkit-scrollbar-thumb:hover {
@@ -96,8 +96,8 @@ body {
 } */
 
 *:hover::-webkit-scrollbar {
-  /* width: 100px; */
-  height: 8px;
+  /* width: 6.25rem; */
+  height: 0.5rem;
 }
 
 /* hide scroll bar */
@@ -107,7 +107,7 @@ body {
   height: 0;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 30rem) {
   .hide-scrollbar::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -131,7 +131,7 @@ body {
 /* Handle collapsing of section... This is to reduce the amount useState being used */
 
 .collapsed-section {
-  height: 40px;
+  height: 2.5rem;
 }
 
 .collapsed-section > * {
@@ -159,7 +159,7 @@ body {
 }
 
 .datalist-input .default-datalist-items {
-  max-height: 190px;
+  max-height: 11.875rem;
   overflow-y: scroll;
 }
 

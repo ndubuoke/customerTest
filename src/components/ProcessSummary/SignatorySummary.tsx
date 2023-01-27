@@ -35,7 +35,7 @@ const SignatorySummary = (props: Props) => {
 
   return (
     <div className='mx-6'>
-      <h3 className='font-roboto font-bold text-[18px] leading-[16px] pt-6 pb-4  ml-12'>Account Signatory Details</h3>
+      <h3 className='font-roboto font-bold text-[1.125rem] leading-[1rem] pt-6 pb-4  ml-12'>Account Signatory Details</h3>
       <SignatoriesTable signatories={signatories} handleViewSignatory={handleViewSignatory} viewSignatory={true} collapsed={false} />
       {openSignatoryModalSummary ? <SignatoryModalSummary closeModalFunction={handleSignatoryModal} singleSignatory={currentSignatory} /> : null}
     </div>
