@@ -11,7 +11,7 @@ const FieldLabel = ({ fieldItem }: Props) => {
   return (
     <div
       style={{
-        maxWidth: ` ${Number(colspan) === 2 || Number(colspan) === 3 ? '100%' : '350px'} `,
+        maxWidth: ` ${Number(colspan) === 2 || Number(colspan) === 3 ? '100%' : '21.875rem'} `,
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',

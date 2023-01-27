@@ -634,7 +634,7 @@ const FormDropdown = ({
       className={`${collapsed ? 'hidden' : ''}`}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >
@@ -686,7 +686,7 @@ const FormDropdown = ({
         ) : null}
         {showLists && (
           <div
-            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-[200px] overflow-y-auto'
+            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-[12.5rem] overflow-y-auto'
             style={{
               zIndex: 999,
             }}

@@ -253,7 +253,7 @@ const FormActionToggle = ({
       className={`${collapsed ? 'hidden' : ''} flex items-center`}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >
@@ -268,7 +268,7 @@ const FormActionToggle = ({
               checked={checked === 'on'}
               onChange={(e) => handleChange(e, item)}
             />
-            <div className="w-11 h-6 border-primay-main border peer-focus:outline-none  peer-focus:ring-0 rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-primay-main after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primay-main"></div>
+            <div className="w-11 h-6 border-primay-main border peer-focus:outline-none  peer-focus:ring-0 rounded-full peer  peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[.125rem] after:left-[.125rem] after:bg-white after:border-primay-main after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-primay-main"></div>
           </label>
           <div className={`relative w-fit  ${labelPosition === 'left' ? 'order-2' : 'order-1'}`}>
             {required.toLowerCase() === 'on' ? <div className={`absolute text-red-500 -right-3 top-0 text-xl`}>*</div> : null}

@@ -82,12 +82,12 @@ const FormLayout = memo(
     // console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
 
     return (
-      <section className='max-w-[1060px] mx-4'>
+      <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
           <div
-            className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
+            className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
             style={{
-              boxShadow: '0px 0px 10px rgba(0, 0, 0, 0.25)',
+              boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
             }}
           >
             <div className='flex items-center'>
@@ -121,12 +121,12 @@ const FormLayout = memo(
         )}
 
         <div
-          className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626]'}  `}
+          className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',
-            gridGap: '20px',
-            padding: '10px',
+            gridGap: '1.25rem',
+            padding: '.625rem',
             paddingBottom: '3rem',
             paddingTop: '1rem',
           }}

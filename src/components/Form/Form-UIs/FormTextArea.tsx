@@ -259,7 +259,7 @@ const FormTextArea = ({
       className={`${collapsed ? 'hidden' : ''} `}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >
@@ -275,7 +275,7 @@ const FormTextArea = ({
           title={helpText}
           onChange={(e) => handleChange(e, item)}
           style={{
-            height: '150px',
+            height: '9.375rem',
           }}
           maxLength={Number(maximumNumbersOfCharacters)}
           value={text}

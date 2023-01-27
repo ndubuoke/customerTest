@@ -36,7 +36,7 @@ const FormButton = ({ item, collapsed }: Props) => {
       className={`${collapsed ? 'hidden' : ''} `}
       style={{
         gridColumn: ` span ${span}`,
-        // border: clickedFormControl?.control?.name === item.name ? `2px dotted green` : '',
+        // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >
@@ -50,11 +50,11 @@ const FormButton = ({ item, collapsed }: Props) => {
               : 'submit'
           }
           onClick={(e) => handleClick(e)}
-          className={`h-[34px] w-[227px] flex justify-center items-center rounded-[8px] capitalize leading-[24px] text-white ${
+          className={`h-[2.125rem] w-[14.1875rem] flex justify-center items-center rounded-[.5rem] capitalize leading-[1.5rem] text-white ${
             inactive ? 'bg-[#aaaaaa] border border-[#d8dae5]' : 'bg-primay-main border border-primary-dark'
           }`}
           style={{
-            letterSpacing: '-0.5px',
+            letterSpacing: '-0.0313rem',
           }}
         >
           {fieldLabel}

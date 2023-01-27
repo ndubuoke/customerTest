@@ -20,8 +20,8 @@ const FileUpload = (props: Props) => {
 
   return (
     <div>
-      <div className='text-[#333333] text-[16px] font-normal leading-[19px] mb-3'>Upload Supporting Documents</div>
-      <div className='flex gap-12 w-full max-w-[392px] h-[86px] border border-[#c4c4c4] rounded-[10px] items-center px-3'>
+      <div className='text-[#333333] text-[1rem] font-normal leading-[1.1875rem] mb-3'>Upload Supporting Documents</div>
+      <div className='flex gap-12 w-full max-w-[24.5rem] h-[5.375rem] border border-[#c4c4c4] rounded-[.625rem] items-center px-3'>
         <div>
           <img src={upload} className='w-12' />
         </div>
