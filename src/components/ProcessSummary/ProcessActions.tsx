@@ -120,29 +120,29 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   return (
     <div
-      className={`absolute   m-auto bottom-2 right-2  grid grid-cols-3 gap-0 rounded-lg  max-w-[500px] px-4 py-2 bg-white`}
+      className={`absolute   m-auto bottom-2 right-2  grid grid-cols-3 gap-0 rounded-lg  max-w-[31.25rem] px-4 py-2 bg-white`}
       style={{
-        boxShadow: '0px 0px 8px rgba(0, 0, 0, 0.25)',
+        boxShadow: '0rem 0rem .5rem rgba(0, 0, 0, 0.25)',
         zIndex: '1000',
       }}
     >
-      <div className={`text-center  flex flex-col items-center max-w-[80px] cursor-pointer `} onClick={handleBackToForm}>
-        <div className='w-[35px] h-[35px] mb-2  '>
+      <div className={`text-center  flex flex-col items-center max-w-[5rem] cursor-pointer `} onClick={handleBackToForm}>
+        <div className='w-[2.1875rem] h-[2.1875rem] mb-2  '>
           <img src={goBackToForm} alt='go back' width={30} height={24} />
         </div>
-        <div className='text-[12px]  '>Modify Form</div>
+        <div className='text-[.75rem]  '>Modify Form</div>
       </div>
-      <div className={`text-center  flex flex-col items-center max-w-[80px] cursor-pointer`} onClick={handleOpenCancelFormModal}>
-        <div className='w-[35px] h-[35px] mb-2 '>
+      <div className={`text-center  flex flex-col items-center max-w-[5rem] cursor-pointer`} onClick={handleOpenCancelFormModal}>
+        <div className='w-[2.1875rem] h-[2.1875rem] mb-2 '>
           <img src={cancelForm} alt='go back' width={30} height={24} />
         </div>
         <div className='text-[12px] '>Cancel</div>
       </div>
       <div
-        className={`text-center flex flex-col items-center max-w-[80px] cursor-pointer`}
+        className={`text-center flex flex-col items-center max-w-[5rem] cursor-pointer`}
         onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : mode === 'creation' ? handleSubmitForm : handleSubmitModifiedForm}
       >
-        <div className='w-[35px] h-[35px] mb-2 '>
+        <div className='w-[2.1875rem] h-[2.1875rem] mb-2 '>
           <img src={submitForm} alt='go back' width={30} height={24} />
         </div>
         <div className='text-[12px] '>{openWaiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}</div>

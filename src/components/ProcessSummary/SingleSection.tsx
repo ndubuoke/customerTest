@@ -10,15 +10,15 @@ type Props = {
 const SingleSection = ({ section, name }: Props) => {
   return (
     <div className='text-[#636363]'>
-      <h3 className='font-roboto font-bold text-[18px] leading-[16px] pt-6 pb-4  ml-12'>{reverseCamelCase(section.sectionName).split('-')[0]}</h3>
-      <div className='flex gap-4 flex-col mx-6 '>
+      <h3 className='font-roboto font-bold text-[1.125rem] leading-[1rem] pt-6 pb-4  ml-12'>{reverseCamelCase(section.sectionName).split('-')[0]}</h3>
+      <div className='flex flex-col gap-4 mx-6 '>
         {Object.entries(section?.data).map((x: any, i: number) => {
           // console.log(x[1])
           return (
             <div key={i} className='flex gap-10'>
-              <div className='w-[300px] text-right text-[base] leading-[16px] font-medium'>{reverseCamelCase(x[0])}</div>
+              <div className='w-[18.75rem] text-right text-[base] leading-[1rem] font-medium'>{reverseCamelCase(x[0])}</div>
               {/* <span>:</span> */}
-              <div className='text-[base] leading-[16px] font-normal'>
+              <div className='text-[base] leading-[1rem] font-normal'>
                 {name.toLowerCase().includes('documentation') ? (
                   <>{x[1] ? 'Uploaded' : 'Not Uploaded'}</>
                 ) : (
