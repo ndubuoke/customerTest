@@ -565,19 +565,19 @@ const CustomerManagementTable = ({
         />
       )}
 
-      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[400px] overflow-auto '>
-        <table  className='w-full text-sm text-left table-fixed '>
+      <div className=' relative mt-[3%]  mx-4 overflow-auto h-[25rem] overflow-auto '>
+        <table className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
                 ? customerTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
                       {tableHead === 'NAME/ID' ? (
-                        <span onClick={sortCustomersAlphabetically} className='border-l border-common-title px-2 cursor-pointer'>
+                        <span onClick={sortCustomersAlphabetically} className='border-l  px-2 cursor-pointer'>
                           {tableHead}
                         </span>
                       ) : (
-                        <span className='border-l border-common-title px-2'>{tableHead}</span>
+                        <span className='border-l  px-2'>{tableHead}</span>
                       )}
                       {tableHead === 'State' ? (
                         <img src={Filter} onClick={filterStateHandler} alt='' className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
@@ -585,14 +585,14 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className='   absolute z-40 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                          className='   absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {
                               return (
                                 <div
                                   key={index}
-                                  className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
                                   <span className='flex w-full normal-case  '>
@@ -613,7 +613,7 @@ const CustomerManagementTable = ({
                               return (
                                 <div
                                   key={index}
-                                  className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
                                   <span className='flex w-full normal-case  '>
@@ -634,7 +634,7 @@ const CustomerManagementTable = ({
                               return (
                                 <div
                                   key={index}
-                                  className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                  className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
                                   <span className='flex w-full  normal-case '>
@@ -672,7 +672,7 @@ const CustomerManagementTable = ({
               {tableType === 'Requests'
                 ? requestTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
-                      <span className='border-l border-common-title px-2'>{tableHead}</span>
+                      <span className='border-l  px-2'>{tableHead}</span>
                       {tableHead === 'TYPE' ? (
                         <img src={Filter} alt='' onClick={filterTypeHandler} className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
                       ) : null}
@@ -684,7 +684,7 @@ const CustomerManagementTable = ({
                           {filterRequestTypeList?.map((option: filterRequestType, index) => {
                             if (option === 'Select all') {
                               return (
-                                <div key={index} className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -701,7 +701,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Creation') {
                               return (
-                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -718,7 +718,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Modification') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -735,7 +735,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Deactivation') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -752,7 +752,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Reactivation') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -779,7 +779,7 @@ const CustomerManagementTable = ({
                           className='   absolute z-20 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
                         >
                           {selectedStatus === 'Initiated by me' && (
-                            <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                            <div className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                               <span className='flex w-full  '>
                                 {' '}
                                 <span className='mr-2'>{/* <Checkbox disabled={true} /> */}</span>
@@ -789,7 +789,7 @@ const CustomerManagementTable = ({
                           )}
 
                           {selectedStatus === 'Initiated by my team' && (
-                            <div className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                            <div className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                               <span className='flex w-full  '>
                                 {' '}
                                 <span className='mr-2'>{/* <Checkbox disabled={true} /> */}</span>
@@ -802,7 +802,7 @@ const CustomerManagementTable = ({
                             return (
                               <div
                                 key={index}
-                                className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                 // onClick={filterStateHandler.bind(null, option)}
                               >
                                 <span className='flex w-full  '>
@@ -819,7 +819,7 @@ const CustomerManagementTable = ({
                             return (
                               <div
                                 key={index}
-                                className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                 onClick={filterStateHandler.bind(null, option)}
                               >
                                 <span className='flex w-full  '>
@@ -836,7 +836,7 @@ const CustomerManagementTable = ({
                             return (
                               <div
                                 key={index}
-                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                 onClick={filterStateHandler.bind(null, option)}
                               >
                                 <span className='flex w-full  '>
@@ -853,7 +853,7 @@ const CustomerManagementTable = ({
                             return (
                               <div
                                 key={index}
-                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                 onClick={filterStateHandler.bind(null, option)}
                               >
                                 <span className='flex w-full  '>
@@ -870,7 +870,7 @@ const CustomerManagementTable = ({
                             return (
                               <div
                                 key={index}
-                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                                className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                                 onClick={filterStateHandler.bind(null, option)}
                               >
                                 <span className='flex w-full  '>
@@ -897,7 +897,7 @@ const CustomerManagementTable = ({
                           {filterRequestStatus?.map((option: requestStatusType, index) => {
                             if (option === 'Select all') {
                               return (
-                                <div key={index} className='  px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -914,7 +914,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Approved') {
                               return (
-                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -931,7 +931,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Interim Approval') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -948,7 +948,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'In-Review') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -965,7 +965,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'In Issue') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -982,7 +982,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Draft') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'>
+                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -1022,7 +1022,7 @@ const CustomerManagementTable = ({
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
-                  <div className='min-h-[300px]   flex items-center justify-center'>
+                  <div className='min-h-[18.75rem]   flex items-center justify-center'>
                     <Spinner size='large' />
                   </div>
                 </td>
@@ -1030,7 +1030,7 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              {AllCustomers && AllCustomers?.success  ? (
+              {AllCustomers && AllCustomers?.success ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
@@ -1057,7 +1057,7 @@ const CustomerManagementTable = ({
                       ))}
                 </tbody>
               ) : null}
-              {allCustomersByDate && allCustomersByDate?.success  ? (
+              {allCustomersByDate && allCustomersByDate?.success ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&
@@ -1083,7 +1083,7 @@ const CustomerManagementTable = ({
                         />
                       ))}
                 </tbody>
-              ):null}
+              ) : null}
             </>
           )}
 
@@ -1093,7 +1093,7 @@ const CustomerManagementTable = ({
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
-                  <div className='min-h-[300px]      flex items-center justify-center'>
+                  <div className='min-h-[18.75rem]      flex items-center justify-center'>
                     <Spinner size='large' />
                   </div>
                 </td>
@@ -1172,7 +1172,7 @@ const CustomerManagementTable = ({
             <tbody className=' '>
               <tr className=' '>
                 <td className='  relative' colSpan={5}>
-                  <div className='min-h-[300px]      flex items-center justify-center'>
+                  <div className='min-h-[18.75rem]      flex items-center justify-center'>
                     <Spinner size='large' />
                   </div>
                 </td>

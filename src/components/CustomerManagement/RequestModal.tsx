@@ -22,7 +22,7 @@ const RequestModal = ({ setShowRequestModal, message, externalFunctionToDoSometh
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` h-[250px] w-[400px] bg-white py-6 px-6 rounded-2xl `}>
+      <div className={` h-[15.625rem] w-[25rem] bg-white py-6 px-6 rounded-2xl `}>
         <div className=' w-full  flex flex-col  justify-between'>
           <div className='flex justify-between  pb-4'>
             <img className=' h-fit' src={Substract2} />

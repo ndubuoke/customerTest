@@ -83,7 +83,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -100,7 +100,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -115,7 +115,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -133,7 +133,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -148,7 +148,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -163,7 +163,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -181,7 +181,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -196,7 +196,7 @@ const RequestDetailsRow = ({
                       //   return (
                       //     <div
                       //       key={index}
-                      //       className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                      //       className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                       //       onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                       //     >
                       //       <span className='flex w-full  '>
@@ -213,7 +213,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
@@ -228,7 +228,7 @@ const RequestDetailsRow = ({
                         return (
                           <div
                             key={index}
-                            className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[250px] text-[#636363]'
+                            className='hover:bg-lists-background cursor-pointer px-2 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                             onClick={requestFunctionHandler.bind(null, { option, requestId: request.requestId })}
                           >
                             <span className='flex w-full  '>
