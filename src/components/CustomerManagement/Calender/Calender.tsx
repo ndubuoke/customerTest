@@ -59,7 +59,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
       <div className='grid grid-cols-3 '>
         <div className=' h-full  pt-2  grid grid-cols-1'>
           {dateActions.map((func) => (
-            <span onClick={dateFunctionHandler.bind(null, func)} key={func} className='pl-4 cursor-pointer flex items-center  hover:bg-[#F9E5E5]'>
+            <span onClick={dateFunctionHandler.bind(null, func)} key={func} className='pl-4 normal-case cursor-pointer flex items-center  hover:bg-[#F9E5E5]'>
               {func}
             </span>
           ))}

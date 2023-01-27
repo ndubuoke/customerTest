@@ -392,7 +392,7 @@ const Main = (props: Props) => {
 
       <div className='  flex flex-col  '>
         <div className=' flex w-[1000px] mt-10 pl-6 items-center'>
-          <h1 className='text-[#636363] text-[38px]'>Customer Management</h1>
+          <h1 className='text-[#636363] text-[38px] font-bold'>Customer Management</h1>
 
           {userRole === 'maker' && (
             <div className='ml-6 relative ' ref={createCustomerListRef}>
@@ -469,8 +469,8 @@ const Main = (props: Props) => {
         <div className='border h-screen   bg-background-default  px-4 '>
           <div className='mt-5 flex'>
             <div className='w-[90%] flex flex-col    mr-4 '>
-              <div className=' bg-white flex h-[130px] '>
-                <div className='flex flex-col  border w-[18%]'>
+              <div className=' bg-white flex h-[130px] rounded-md '>
+                <div className='flex flex-col  border w-[18%] rounded-l-md'>
                   <button
                     className={`${
                       nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
@@ -617,7 +617,7 @@ const Main = (props: Props) => {
                                   requestStatus === 'In Issue' ? 'bg-[#EFEFEF]' : ''
                                 } py-1 px-4 cursor-pointer flex flex-col justify-center items-center rounded-md hover:border hover:border-[#EFEFEF] `}
                               >
-                                <span className='text-[14px] text-[#CF2A2A]'>In-issue</span>
+                                <span className='text-[14px] text-[#CF2A2A]'>In-Issue</span>
                                 <h3 className='font-bold text-[24px]'>{allRequests?.serverResponse?.data?.InIssue}</h3>
                               </div>
                               <div className='border'></div>
@@ -747,7 +747,7 @@ const Main = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <div className=' mt-6 bg-white'>
+              <div className=' mt-6 bg-white rounded-md'>
                 <div className='flex justify-end gap-2 mt-2 mx-4'>
                   <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                   <div className='border'></div>

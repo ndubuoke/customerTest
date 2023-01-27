@@ -566,18 +566,18 @@ const CustomerManagementTable = ({
       )}
 
       <div className=' relative mt-[3%]  mx-4 overflow-auto h-[400px] overflow-auto '>
-        <table  className='w-full text-sm text-left table-fixed '>
+        <table className='w-full text-sm text-left table-fixed '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
                 ? customerTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
                       {tableHead === 'NAME/ID' ? (
-                        <span onClick={sortCustomersAlphabetically} className='border-l border-common-title px-2 cursor-pointer'>
+                        <span onClick={sortCustomersAlphabetically} className='border-l  px-2 cursor-pointer'>
                           {tableHead}
                         </span>
                       ) : (
-                        <span className='border-l border-common-title px-2'>{tableHead}</span>
+                        <span className='border-l  px-2'>{tableHead}</span>
                       )}
                       {tableHead === 'State' ? (
                         <img src={Filter} onClick={filterStateHandler} alt='' className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
@@ -585,7 +585,7 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className='   absolute z-40 top-8 right-4   bg-background-paper  flex flex-col  border rounded-md'
+                          className='   absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {
@@ -672,7 +672,7 @@ const CustomerManagementTable = ({
               {tableType === 'Requests'
                 ? requestTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
-                      <span className='border-l border-common-title px-2'>{tableHead}</span>
+                      <span className='border-l  px-2'>{tableHead}</span>
                       {tableHead === 'TYPE' ? (
                         <img src={Filter} alt='' onClick={filterTypeHandler} className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
                       ) : null}
@@ -1030,7 +1030,7 @@ const CustomerManagementTable = ({
             </tbody>
           ) : (
             <>
-              {AllCustomers && AllCustomers?.success  ? (
+              {AllCustomers && AllCustomers?.success ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customers &&
@@ -1057,7 +1057,7 @@ const CustomerManagementTable = ({
                       ))}
                 </tbody>
               ) : null}
-              {allCustomersByDate && allCustomersByDate?.success  ? (
+              {allCustomersByDate && allCustomersByDate?.success ? (
                 <tbody className=' '>
                   {tableType === 'All Customers' &&
                     customersByDate &&
@@ -1083,7 +1083,7 @@ const CustomerManagementTable = ({
                         />
                       ))}
                 </tbody>
-              ):null}
+              ) : null}
             </>
           )}
 

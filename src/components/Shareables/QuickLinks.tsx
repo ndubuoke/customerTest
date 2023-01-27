@@ -7,7 +7,7 @@ type quickLinksProps = {
 
 const QuickLinks = ({ links }: quickLinksProps) => {
   return (
-    <div className=' w-[250px] bg-white p-2'>
+    <div className=' w-[250px] bg-white p-2 rounded-md'>
       <div className='border-b border-b-line-faint-background p-2'>
         <h1 className='text-text-secondary text-[24px]'>Quick Links</h1>
       </div>
