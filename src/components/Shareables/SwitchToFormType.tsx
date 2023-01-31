@@ -70,19 +70,24 @@ const SwitchToFormType = ({
           handleOpenModal()
           // mode === 'accelerated' ? handleSetFormType('legacy') : handleSetFormType('accelerated')
         }}
-        className='absolute right-2 top-2 max-w-[11.1875rem]  rounded-lg border border-[#EBE9E9] flex items-center gap-2 p-[1.125rem] pr-2 cursor-pointer bg-white z-50'
+        className='absolute right-2 top-2 max-w-[11.1875rem]  rounded-lg border border-[#EBE9E9] flex items-center gap-2 p-[1.125rem] pr-2 cursor-pointer '
+        style={{
+          background: 'rgba(219, 53, 57, 0.02)',
+          color: '#636363',
+        }}
       >
         <div>
           <img src={formTypeSwitchImage} />
         </div>
-        <span className='text-[.875rem] min-w-[6.875rem] font-roboto text-center font-normal'>
+        <span className='text-[.875rem] min-w-[6.875rem] font-roboto text-center font-normal bg-background-[red]'>
           Switch to {mode === 'accelerated' ? 'legacy' : 'accelerated'} form
         </span>
       </div>
       {openModal ? (
         <SwitchFormModal
-          message={` Switch to ${mode === 'accelerated' ? 'legacy' : 'accelerated'
-            } form? The information captured so far will be transferred to the ${mode === 'accelerated' ? 'legacy' : 'accelerated'} form`}
+          message={` Switch to ${
+            mode === 'accelerated' ? 'legacy' : 'accelerated'
+          } form? The information captured so far will be transferred to the ${mode === 'accelerated' ? 'legacy' : 'accelerated'} form`}
           closeModalFunction={handleOpenModal}
           switchFunction={handleSetFormType}
         />

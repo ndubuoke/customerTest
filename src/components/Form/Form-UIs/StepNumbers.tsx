@@ -2,6 +2,7 @@ import { caret } from 'Assets/svgs'
 import React from 'react'
 import { getProperty } from 'Utilities/getProperty'
 import { PageInstance } from '../Types'
+import { secondsInDay } from 'date-fns'
 
 type Props = {
   page: PageInstance
@@ -14,11 +15,14 @@ type Props = {
 const StepNumbers = ({ page, index, last, onClick, isActive }: Props) => {
   return (
     <div
-      className={`cursor-pointer w-[9.375rem] flex flex-col items-center gap-4 text-center relative z-10 after:absolute after:w-[100%] after:left-[50%] after:bg-[#696767] after:h-[.4375rem] after:top-[18%] after:-z-[2]  ${
+      className={`cursor-pointer w-[10.375rem] flex flex-col items-center gap-4 text-center relative z-10 after:absolute after:w-[100%] after:left-[50%] after:bg-[#696767] after:h-[.4375rem] after:top-[18%] after:-z-[2]  ${
         index === 1 ? 'after:w-[100%]' : ''
       } ${last ? 'after:w-0' : '0'}  text-[#636363] text-[.75rem] font-[700]  `}
       onClick={() => onClick(index)}
     >
+      {/* <div className='rotate-180 opacity-[0.2]'>
+        <img src={caret} width={10} height={10} />
+      </div> */}
       <div
         className={` w-[1.875rem] h-[1.875rem] rounded-full  text-[#636363]  border-4 ${
           isActive ? ' border-[#636363]' : 'border-green-700'
@@ -26,13 +30,8 @@ const StepNumbers = ({ page, index, last, onClick, isActive }: Props) => {
       >
         {index + 1}
       </div>
-
-      <div className='flex flex-col items-center gap-2 uppercase'>
-        <div className='rotate-180 opacity-[0.2]'>
-          <img src={caret} width={10} height={10} />
-        </div>
-        {getProperty(page?.pageProperties, 'Page name', 'value').text}
-      </div>
+      <div></div>
+      <div className='flex flex-col items-center gap-2 uppercase'>{getProperty(page?.pageProperties, 'Page name', 'value').text}</div>
     </div>
   )
 }
