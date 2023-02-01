@@ -41,3 +41,15 @@ export const smeCustomerModificationData = [
     link: AppRoutes.individualCustomerCreationScreen,
   },
 ]
+
+export const customer360Data = [
+  {
+    text: 'CUSTOMER MANAGEMENT',
+    link: AppRoutes.mainScreen,
+  },
+  {
+    text: 'CUSTOMER 360',
+    link: '#',
+    // link: AppRoutes.individualCustomerCreationScreen,
+  },
+]

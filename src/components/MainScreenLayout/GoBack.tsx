@@ -29,7 +29,7 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
   const [breadCrumbsListLength, setBreadCrumbsListLength] = useState<number>(null)
 
   useEffect(() => {
-    setBreadCrumbsListLength(breadCrumbsList.length - 1)
+    setBreadCrumbsListLength(breadCrumbsList?.length - 1)
   }, [breadCrumbsList])
 
   return (
@@ -55,7 +55,7 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
               link={addQuery ? `${item.link}/?isForm=true` : item.link}
               text={item.text}
               isLastItem={breadCrumbsList ? index === breadCrumbsListLength : false}
-              key={item.link}
+              key={item.link + index}
             />
           )
         })}
