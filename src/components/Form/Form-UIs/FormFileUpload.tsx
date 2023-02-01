@@ -433,7 +433,7 @@ const FormFileUpload = ({
             : '.0625rem solid #AAAAAA',
         }}
       >
-        {fileUploadError.isError && <p className='py-0'>{fileUploadError.message}</p>}
+        {fileUploadError.isError && <p className='py-0'>{fileUploadError.message.substring(0, 10) + '...'}</p>}
 
         {fileUrl ? (
           <div className='relative flex items-center cursor-pointer '>
