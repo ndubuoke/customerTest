@@ -152,8 +152,9 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         </div>
         {console.log('status', status)}
         <div
-          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
-            }] text-text-disabled  max-w-[19.875rem]`}
+          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${
+            status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
+          }] text-text-disabled  max-w-[19.875rem]`}
         >
           <input
             type='text'
