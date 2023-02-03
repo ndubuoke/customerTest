@@ -251,7 +251,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
       </div>
       <div className='flex gap-3'>
-        <Button disabled={false} onClick={() => console.log('test saved to draft')} text='Save to draft' />
+        <Button disabled={true} onClick={() => console.log('test saved to draft')} text='Save to draft' />
         <Button
           disabled={false}
           onClick={handleNextAndOtherAddOns}
