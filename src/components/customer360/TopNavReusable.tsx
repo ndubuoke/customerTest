@@ -15,11 +15,11 @@ const TopNavReusable = ({ type, heading, Id, text, subHeader }: Props) => {
   return (
     <article>
       <header className='mb-[.8125rem] text-[#636363] text-[1rem] font-roboto tracking-[.0156rem]'>
-        <h3>{heading}</h3>
+        <p className='font-bold'>{heading}</p>
         <p>{Id}</p>
       </header>
       <footer>
-        <h4>{subHeader}</h4>
+        <p>{subHeader}</p>
 
         {type === 'bvn' ? (
           <p className='font-roboto text-[1rem] tracking-[.0156rem] text-[#3FA2F7] capitalize'>{text}(HNI)</p>

@@ -18,9 +18,9 @@ const TopNavProfile = (props: Props) => {
         <img src={profileImage} alt='profile image' />
       </div>
       <div>
-        <h2 className='text-[1.5rem] font-roboto text-[#636363]'>
+        <p className='text-[1.5rem] font-roboto text-[#636363] font-bold'>
           {firstName} {lastName} <br /> {otherName}
-        </h2>
+        </p>
         <span>ID :{id} </span>
 
         <section className='flex gap-[1.8125rem] mt-[.8975rem]'>
