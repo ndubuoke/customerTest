@@ -4,7 +4,7 @@
     "start": "webpack serve",
     "dev": "npm run start:standalone",
     "gen:tw": "npx tailwindcss build -i ./src/styles/start.css -o ./src/styles/final.css --watch",
-    "start:standalone": "webpack serve --env standalone",
+    "start:standalone": "webpack serve --env standalone --https && https-server-S-C cert.pem -K key.pem",
     "build": "concurrently yarn:build:*",
     "build:webpack": "webpack --mode=production",
     "analyze": "webpack --mode=production --env analyze",
