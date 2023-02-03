@@ -16,7 +16,7 @@ py-1'
     >
       <span className='flex items-center gap-[.5rem] capitalize'>
         <img src={plusIcon} className='w-[.625rem] h-[.625rem] fill-[#CF2A2A]' />
-        <span>{text}</span>
+        <span className='text-[1rem] font-medium'>{text}</span>
       </span>
 
       {/* {selectedList} */}

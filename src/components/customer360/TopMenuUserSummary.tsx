@@ -9,13 +9,13 @@ const TopMenuUserSummary = (props: Props) => {
   const [CustomerPhoneNumber, setCustomerPhoneNumber] = useState<string>('1234567890')
   const [CustomerEmail, setCustomerEmail] = useState<string>('samuelusuf@gmail.com')
   const [customerName, setCustomerName] = useState<string>('Iyke David')
-  const [customerKycStatus, setCustomerKycStatus] = useState<string>('')
+  const [customerKycStatus, setCustomerKycStatus] = useState<string>('complete')
   const [customerRiskStatus, setCustomerRiskStatus] = useState<string>('low')
-  const [customerType, setCustomerType] = useState<string>('')
+  const [customerType, setCustomerType] = useState<string>('individual')
   //   mt-[7.125rem] ml-[4.4375rem]
 
   return (
-    <div className=' bg-white py-4 flex justify-between'>
+    <div className=' bg-white py-[2.75rem] px-3 flex justify-between'>
       <TopNavProfile />
       <TopNavReusable type='bvn' heading='BVN' Id={CustomerBvn} subHeader='Customer Persona' text='high net-worth individual' />
       <TopNavReusable type='phone number' heading='Phone Number' Id={CustomerPhoneNumber} subHeader='Customer Type' text={customerType} />

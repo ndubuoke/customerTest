@@ -6,9 +6,9 @@ body {
   /* color: #db353905 */
 }
 
-html {
+/* html {
   font-size: 10px;
-}
+} */
 .modal-holder {
   position: fixed;
   left: 0;
@@ -63,12 +63,12 @@ html {
   }
 }
 
-* {
+/* * {
   transition: all 0.5s ease;
   padding: 0;
   margin: 0;
   outline: none;
-}
+} */
 
 /* Scroll bar custom styles */
 
