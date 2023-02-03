@@ -15,6 +15,7 @@ import ActionButtonsForForm from './Form-UIs/ActionButtonsForForm'
 import { formStruture } from './formStructure'
 import Signatories from './Signatory'
 import { PageInstance } from './Types'
+import RiskAssessment from './RiskAssesment'
 
 type Props = {
   kind: 'new' | 'modification'
@@ -167,9 +168,13 @@ const Form = memo(
                     )
                   })
                 : null}
+              {/* {customerType === 'sme' || ('individual' && activePage && activePage?.page?.id === '16691120330052585192') ? (
+                <RiskAssessment key='aditional' />
+              ) : null} */}
               {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives key='executives' /> : null}
 
               {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails key='aditional' /> : null}
+
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
                   isSection={false}

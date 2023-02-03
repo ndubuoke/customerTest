@@ -161,7 +161,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   }, [])
   return (
     <>
-      <nav>
+      <nav style={{ background: '#fff' }}>
         <GoBack
           headerText={headerText}
           breadCrumbsList={
