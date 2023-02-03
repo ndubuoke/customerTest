@@ -18,7 +18,7 @@ const TopNavMenu = (props: Props) => {
   // fixed w-[95%] bg-white py-2 m-auto
   return (
     <section className=' '>
-      <div className=' flex flex-col justify-between  '>
+      <div className=' bg-[#fff] flex flex-col justify-between  '>
         <div className='flex gap-[1.5rem] absolute w-[8.4375rem]  left-[4.4375rem] top-[1.9375rem]'>
           <img src={sterlinCombinedLogo} alt='customer360 logo' />
           <img src={customer360Text} alt='customer360 text' className=' absolute top-[2rem] left-[10.2rem] w-[7.3125rem]' />

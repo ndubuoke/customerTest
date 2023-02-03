@@ -15,7 +15,7 @@ const TopMenuUserSummary = (props: Props) => {
   //   mt-[7.125rem] ml-[4.4375rem]
 
   return (
-    <div className='  mt-[4.125rem] px-[4.4rem] flex justify-between'>
+    <div className=' bg-white py-4 flex justify-between'>
       <TopNavProfile />
       <TopNavReusable type='bvn' heading='BVN' Id={CustomerBvn} subHeader='Customer Persona' text='high net-worth individual' />
       <TopNavReusable type='phone number' heading='Phone Number' Id={CustomerPhoneNumber} subHeader='Customer Type' text={customerType} />

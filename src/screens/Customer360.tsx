@@ -30,12 +30,10 @@ const Customer360 = (props: Props) => {
       </nav>
 
       {/* bg-[#E5E5E5] */}
-      <main className='bg-white relative flex flex-col h-full mx-auto p-[.9375rem] min-h-50 pl-[2.4375rem] pr-[2.4375rem]'>
-        <div className=' py-4'>
-          <TopNavMenu />
-          <TopMenuUserSummary />
+      <main className='bg-[#EFEFEF] relative flex flex-col h-full mx-auto p-[.9375rem] min-h-50 pl-[1.5rem] pr-[1.5rem]'>
+        <div className='mt-[1.5rem] bg-[#fff] pt-4'>
+          <Customer360Body />
         </div>
-        <Customer360Body />
       </main>
     </>
   )
