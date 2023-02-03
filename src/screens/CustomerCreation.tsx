@@ -198,7 +198,12 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               {customerType === 'individual' && formMode === 'accelerated' ? (
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
               ) : null}
-              <section className='flex flex-col justify-between pb-20 h-3/4'>
+              <section
+                className='flex flex-col justify-between  h-[70%]'
+                style={{
+                  padding: '0 2rem 3rem',
+                }}
+              >
                 <CustomerCreationBox
                   creationMode={creationMode}
                   customerType={customerType}
