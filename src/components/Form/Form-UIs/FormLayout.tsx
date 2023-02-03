@@ -85,7 +85,7 @@ const FormLayout = memo(
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
           <div
-            className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
             {setRequiredFormFieldsRedux.}
             `}
             style={{
@@ -132,8 +132,8 @@ const FormLayout = memo(
             gridTemplateColumns: '1fr 1fr 1fr',
             gridGap: '1.25rem',
             padding: '.625rem',
-            paddingBottom: '3rem',
-            paddingTop: '1rem',
+            paddingBottom: '0',
+            paddingTop: '0.2rem',
           }}
         >
           {fields?.length > 0 &&
