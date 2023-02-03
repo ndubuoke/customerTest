@@ -37,6 +37,7 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
       className='px-8  flex flex-col justify-center gap-4  h-28 lg:h-32'
       style={{
         boxShadow: '0 2px 1px  #eeeeee',
+        background: '#fff',
       }}
     >
       <h1 className='text-xl font-bold leading-8 uppercase text-[#747373]'>{headerText}</h1>
