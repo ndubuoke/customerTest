@@ -9,8 +9,9 @@ type Props = {
 const Button = ({ text = 'Proceed', disabled, onClick }: Props) => {
   return (
     <button
-      className={`font-bold leading-5 text-white bg-button-background  cursor-pointer h-full w-fit px-10 py-1   rounded-lg ${disabled ? 'cursor-not-allowed' : 'bg-button-hover-background'
-        }`}
+      className={`font-bold leading-5 text-white bg-button-background  cursor-pointer h-full w-fit px-10 py-2   rounded-lg ${
+        disabled ? 'cursor-not-allowed' : 'bg-button-hover-background'
+      }`}
       style={{
         backgroundColor: disabled ? '' : '#CF2A2A',
         cursor: disabled ? 'cursor-not-allowed' : 'pointer',

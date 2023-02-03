@@ -13,13 +13,13 @@ const WizardChanger = ({ formMode, creationMode, customerType }: Props) => {
     <>
       {creationMode === 'single' ? (
         <div className='mt-10 max-w-[48.125rem]   m-auto  flex flex-col justify-center items-center font-roboto'>
-          <h2 className='font-bold text-lg text-[#636363]  h-[3.875rem] mt-5'>
+          <h2 className='font-bold text-lg text-[#636363]  h-[3rem] mt-5'>
             Welcome to the {formMode === 'accelerated' ? 'Accelerated' : 'Legacy'} Customer Creation Wizard
           </h2>
 
           <div className='flex items-center gap-3'>
             {customerType === 'individual' ? <img src={timer} /> : null}
-            <p className='text-18 font-normal text-center text-[#8F8F8F]'>
+            <p className='text-base font-normal text-center text-[#8F8F8F]'>
               {customerType === 'individual' ? (
                 formMode === 'accelerated' ? (
                   'The form involves three phases and will require 5 minutes to complete.'
