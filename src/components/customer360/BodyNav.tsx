@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 
 type Props = {
   activeTab: any
@@ -7,6 +7,7 @@ type Props = {
 
 const BodyNav = ({ activeTab, setActiveTab }: Props) => {
   // const [borderColor, setBorderColor] = useState<string>('')
+
   return (
     <div className='w-[88.375rem] flex text-[#636363] gap-[1rem] py-4 capitalize text-[.75rem] tracking-[]-0.006em'>
       <h5
