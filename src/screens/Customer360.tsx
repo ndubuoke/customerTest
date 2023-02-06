@@ -28,8 +28,6 @@ const Customer360 = (props: Props) => {
       <nav>
         <GoBack headerText={name} breadCrumbsList={linkData} />
       </nav>
-      {/*  <div className='bg-white m-[1.875rem] p-[4.438rem] border-2 border-[red] mt-6 '> */}
-      {/* bg-[#E5E5E5] */}
       <main className='bg-[#EFEFEF] w-full p-[.875rem]  pt-6'>
         <div className='bg-white  px-[4.438rem] '>
           <TopNavMenu />

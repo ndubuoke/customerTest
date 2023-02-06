@@ -7,8 +7,8 @@ const Customer360Chart = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>('ngn')
 
   return (
-    <div className='w-full max-w-[28.125rem] border-2 border-[#968f8f] p-4  mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative'>
-      <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f]'>
+    <div className='w-full max-w-[28.125rem] border-2 border-[#968f8f] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative'>
+      <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f] p-2'>
         <h6 className='capitalize'>overflow/outflow analysis</h6>
         <div className='flex items-center gap-4 capitalize hover:text-[#636363] cursor-pointer'>
           <img src={infoVector} alt='information vector' /> <span>view more</span>

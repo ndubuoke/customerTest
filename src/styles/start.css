@@ -127,9 +127,9 @@ body {
   border-radius: 0;
 }
 
-.hide-scrollbar:hover::-webkit-scrollbar {
+/* .hide-scrollbar:hover::-webkit-scrollbar {
   height: 0;
-}
+} */
 
 /* Handle collapsing of section... This is to reduce the amount useState being used */
 

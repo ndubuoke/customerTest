@@ -24,13 +24,13 @@ const TopNavProfile = (props: Props) => {
         <span className='text-[1rem]'>ID :{id} </span>
 
         <section className='flex gap-[1.8125rem] mt-[.8975rem]'>
-          <div className='flex items-center gap-[.75rem]'>
+          <div className='flex items-center gap-[.75rem] cursor-pointer'>
             <img src={modifyVector} alt='modify vector' className='w-[1.1869rem] h-[1.1869rem]' />{' '}
-            <span className='text-[1rem] tracking-wider capitalize'>modify</span>
+            <span className='text-[1rem] tracking-wider capitalize '>modify</span>
           </div>
-          <div className='flex items-center gap-[.75rem]'>
+          <div className='flex items-center gap-[.75rem] cursor-pointer'>
             <img src={disableVector} alt='disable vector' className='w-[1.1869rem] h-[1.1869rem]' />{' '}
-            <span className='text-[1rem]  capitalize'>disabled</span>
+            <span className='text-[1rem]  capitalize '>disabled</span>
           </div>
         </section>
       </div>
