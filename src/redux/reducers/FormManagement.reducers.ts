@@ -78,7 +78,19 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
                   },
                 },
               }
-            : action.payload,
+            : {
+                ...action.payload,
+                data: {
+                  ...action.payload.data,
+                  builtFormMetadata: {
+                    ...action.payload.data.builtFormMetadata,
+                    pages: [
+                      ...action.payload.data.builtFormMetadata.pages,
+                      defaultPublishedFormPages.find((page) => page.id === '1662112333552788291'),
+                    ],
+                  },
+                },
+              },
         serverError: {},
       }
     // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }

@@ -119,7 +119,7 @@ const AdditionalDetails = memo(() => {
   return (
     <>
       {/* affiliated company details section */}
-      <section className='max-w-[66.25rem] mx-4 bg-slate-50 m-8'>
+      <section className='max-w-[66.25rem] mx-4 bg-slate-50'>
         <div
           className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
           style={{
