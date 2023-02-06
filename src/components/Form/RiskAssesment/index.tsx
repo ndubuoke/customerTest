@@ -8,7 +8,7 @@ import { AdditionalDetailsType, AdditionalDetailField, AffiliatedCompanyDetailsT
 import { additionalDetailsInitial, affiliatedCompanyDetailsInitial } from '../AdditionalInfo/initialData'
 import AdditionalDetailsTable from '../AdditionalInfo/AdditionalTable'
 
-const AdditionalDetails = memo(() => {
+const RiskAssessment = memo(() => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
   const [collapsedAffiliatedCompany, setCollapsedAffiliatedCompany] = useState<boolean>(false)
   const [details, setDetails] = useState<Array<AdditionalDetailsType>>([])
@@ -113,48 +113,18 @@ const AdditionalDetails = memo(() => {
 
   return (
     <>
-      {/* affiliated company details section */}
-      <section className='max-w-[66.25rem] mx-4 bg-slate-50 m-8'>
+      {/* Customer Identity section */}
+      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
         <div
-          className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
+          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
             boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
           }}
         >
           <div className='flex items-center'>
-            <h6>Affiliated Company Details </h6>
+            <h6>Customer's Identity </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseAffiliatedCompanySection}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsedAffiliatedCompany ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
-
-        {/* <div className={`${collapsedAffiliatedCompany ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-3 border-[#C22626]'} py-6`}>
-          <AffiliatedSection affiliatedCompanyDetails={companyDetails} setAffiliatedCompanyDetails={setCompanyDetails} />
-        </div> */}
-      </section>
-
-      {/* accounts held with other banks section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50'>
-        <div
-          className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
-          style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className='flex items-center'>
-            <h6>Accounts Held with Other Banks </h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -169,16 +139,39 @@ const AdditionalDetails = memo(() => {
         </div>
 
         <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div className='flex justify-end'>
-            <button
-              className='flex gap-2 font-medium
-           leading-[20px] text-[#636363]'
-              onClick={closeModalFunction}
-              type='button'
-            >
-              <img src={add} />
-              risk assesment
-            </button>
+          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
+            <div>
+              <h5>Employment Status</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Date of Employment</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Nature of Business/Occupation</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Annual Salary/Expected Annual Income</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Name</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Address</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Mobile Number</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Email Number</h5>
+              <p>Employed</p>
+            </div>
           </div>
           <AdditionalDetailsTable
             collapsed={collapsed}
@@ -201,8 +194,224 @@ const AdditionalDetails = memo(() => {
           />
         ) : null} */}
       </section>
+
+      {/* Customer Address section */}
+      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+        <div
+          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          style={{
+            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+          }}
+        >
+          <div className='flex items-center'>
+            <h6>Customer's Address </h6>
+          </div>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
+            </svg>
+          </div>
+        </div>
+
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
+          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
+            <div>
+              <h5>Employment Status</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Date of Employment</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Nature of Business/Occupation</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Annual Salary/Expected Annual Income</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Name</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Address</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Mobile Number</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Email Number</h5>
+              <p>Employed</p>
+            </div>
+          </div>
+          <AdditionalDetailsTable
+            collapsed={collapsed}
+            handleRemoveDetail={handleRemoveDetail}
+            handleModify={handleModify}
+            details={details}
+            setDetails={setDetails}
+          />
+        </div>
+        {/* {openModal ? (
+          <AdditionalModal
+            detailToModifyId={detailToModifyId}
+            closeModalFunction={closeModalFunction}
+            setDetails={setDetails}
+            details={details}
+            additionalDetails={additionalDetails}
+            setAdditionalDetails={setAdditionalDetails}
+            modification={modification}
+            setModification={setModification}
+          />
+        ) : null} */}
+      </section>
+
+      {/* customer livelihood section here */}
+      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+        <div
+          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          style={{
+            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+          }}
+        >
+          <div className='flex items-center'>
+            <h6>Customer's Livelihood </h6>
+          </div>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
+            </svg>
+          </div>
+        </div>
+
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
+          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
+            <div>
+              <h5>Employment Status</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Date of Employment</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Nature of Business/Occupation</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Annual Salary/Expected Annual Income</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Name</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Address</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Mobile Number</h5>
+              <p>Employed</p>
+            </div>
+            <div>
+              <h5>Employer's Email Number</h5>
+              <p>Employed</p>
+            </div>
+          </div>
+          <AdditionalDetailsTable
+            collapsed={collapsed}
+            handleRemoveDetail={handleRemoveDetail}
+            handleModify={handleModify}
+            details={details}
+            setDetails={setDetails}
+          />
+        </div>
+        {/* {openModal ? (
+          <AdditionalModal
+            detailToModifyId={detailToModifyId}
+            closeModalFunction={closeModalFunction}
+            setDetails={setDetails}
+            details={details}
+            additionalDetails={additionalDetails}
+            setAdditionalDetails={setAdditionalDetails}
+            modification={modification}
+            setModification={setModification}
+          />
+        ) : null} */}
+      </section>
+
+      {/* watchlist section */}
+      <section className='max-w-[1060px] mx-4 bg-slate-50'>
+        <div
+          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          style={{
+            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+          }}
+        >
+          <div className='flex items-center'>
+            <h6>WatchList</h6>
+          </div>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+            <svg
+              xmlns='http://www.w3.org/2000/svg'
+              fill='none'
+              viewBox='0 0 24 24'
+              strokeWidth='1.5'
+              stroke='currentColor'
+              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+            >
+              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
+            </svg>
+          </div>
+        </div>
+
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
+          <AdditionalDetailsTable
+            collapsed={collapsed}
+            handleRemoveDetail={handleRemoveDetail}
+            handleModify={handleModify}
+            details={details}
+            setDetails={setDetails}
+          />
+        </div>
+        {/* {openModal ? (
+          <AdditionalModal
+            detailToModifyId={detailToModifyId}
+            closeModalFunction={closeModalFunction}
+            setDetails={setDetails}
+            details={details}
+            additionalDetails={additionalDetails}
+            setAdditionalDetails={setAdditionalDetails}
+            modification={modification}
+            setModification={setModification}
+          />
+        ) : null} */}
+      </section>
+      <div className='flex justify-center items-center gap-12 py-10'>
+        <button className='border text-[#667085] px-5 py-1 rounded-md'>Compute Risk Score</button>
+        <span>result here</span>
+      </div>
     </>
   )
 })
 
-export default AdditionalDetails
+export default RiskAssessment

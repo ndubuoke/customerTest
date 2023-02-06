@@ -2,6 +2,47 @@ import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 
 export const defaultPublishedFormPages = [
   {
+    id: '1662112333552788291',
+    name: 'Page',
+    formControlType: 'page',
+    pageProperties: [
+      {
+        id: '16691120330057237250',
+        name: 'Page name',
+        description: 'With character limit of 50. It defines the name of the page',
+        formControlType: 'text_input',
+        defaultState: 'Page [Number]',
+        value: 'Risk Assessment',
+        status: 'active',
+        statusDesc: 'The record is active',
+      },
+      {
+        id: '16691120330058297327',
+        name: 'Visibility',
+        description: 'Toggling on enables page visibility on the form',
+        formControlType: 'toggle',
+        defaultState: 'On',
+        value: 'On',
+        status: 'active',
+        statusDesc: 'The record is active',
+      },
+      {
+        id: '16691120330055448747',
+        name: 'Allow modification after submission',
+        description: 'Toggling on enables modification of form item after request submission',
+        formControlType: 'toggle',
+        defaultState: 'On',
+        value: 'On',
+        status: 'active',
+        statusDesc: 'The record is active',
+      },
+    ],
+    sections: [],
+
+    status: 'active',
+    statusDesc: 'The record is active',
+  },
+  {
     id: '16686080340726503201',
     name: 'Page',
     formControlType: 'page',

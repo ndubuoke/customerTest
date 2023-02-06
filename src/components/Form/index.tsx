@@ -16,6 +16,7 @@ import { formStruture } from './formStructure'
 import Signatories from './Signatory'
 import { PageInstance } from './Types'
 import RiskAssessment from './RiskAssesment'
+import { info } from 'Assets/svgs'
 
 type Props = {
   kind: 'new' | 'modification'
@@ -57,6 +58,11 @@ const Form = memo(
     const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
 
     // console.log('activePage', activePage)
+    // console.log('activePageState', getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase())
+    // console.log(
+    //   'activePageState-bool',
+    //   getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase().trim() === 'documentation'
+    // )
     useEffect(() => {
       if (publishedForm?.success) {
         // publishedForm?.serverResponse?.data[0]
@@ -145,6 +151,20 @@ const Form = memo(
               pageIndex={pageIndex}
               setPageIndex={setPageIndex}
             />
+            {getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase().trim() === 'documentation' && (
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'center',
+                  gap: '0.625rem',
+                  margin: '0.5rem 0',
+                  color: '#636363',
+                }}
+              >
+                <img src={info} />
+                <span> Drag and Drop documents across the placeholders to rearrange documents</span>{' '}
+              </div>
+            )}
             <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
               {activePageState?.sections?.length > 0
                 ? activePageState?.sections?.map((sects, index) => {
@@ -168,12 +188,13 @@ const Form = memo(
                     )
                   })
                 : null}
-              {/* {customerType === 'sme' || ('individual' && activePage && activePage?.page?.id === '16691120330052585192') ? (
-                <RiskAssessment key='aditional' />
-              ) : null} */}
+              {(customerType === 'sme' || customerType === 'individual') && activePage && activePage?.page?.id === '1662112333552788291' ? (
+                <RiskAssessment key='risk' />
+              ) : null}
               {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives key='executives' /> : null}
 
               {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails key='aditional' /> : null}
+              {/* {getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase().trim() === 'documentation' && <h1>HELLO DOCS</h1>} */}
 
               {activePageState?.fields?.length > 0 && (
                 <FormLayout
