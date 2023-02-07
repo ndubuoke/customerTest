@@ -1,4 +1,4 @@
-import { useState, memo, useEffect } from 'react'
+import { useState, memo, useEffect, useMemo } from 'react'
 import { dots, ExclaimateIcon } from 'Assets/svgs'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -74,7 +74,7 @@ const FormLayout = memo(
     const [detailsOfSpouseIsDisabled, setDetailsOfSpouseIsDisabled] = useState<boolean>(true)
 
     const handleCollapseSection = () => {
-      if (getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse') {
+      if (isSpouseDetailsSection) {
         if (!detailsOfSpouseIsDisabled) {
           setCollapsed((prev) => !prev)
         }
@@ -88,7 +88,7 @@ const FormLayout = memo(
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
     // console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
     useEffect(() => {
-      if (getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse') {
+      if (isSpouseDetailsSection) {
         const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
         console.log('customerDataBioDataSection', customerDataBioDataSection)
         if (customerDataBioDataSection) {
@@ -107,6 +107,9 @@ const FormLayout = memo(
     }, [fillingFormState])
     console.log('collapsed', collapsed)
     console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
+    const isSpouseDetailsSection = useMemo(() => {
+      return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
+    }, [item])
     return (
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
@@ -118,7 +121,8 @@ const FormLayout = memo(
               boxShadow: setRequiredFormFieldsRedux?.list?.some((requiredField) => requiredField.sectionId === item.id)
                 ? '0px 0px 10px rgba(207, 42, 42, 0.7)'
                 : '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-              background: 'rgba(170, 170, 170, 0.07)',
+              // background: 'rgba(170, 170, 170, 0.07)',
+              opacity: isSpouseDetailsSection && detailsOfSpouseIsDisabled && '0.5',
             }}
           >
             <div className='flex items-center'>

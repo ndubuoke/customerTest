@@ -114,10 +114,10 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
 
   return (
     <div className='flex flex-col w-full gap-8 px-8 whitespace-nowrap xl:ml-5 ' style={{ maxWidth: '38.875rem' }}>
-      <div className='flex justify-end text-sm gap-3 pb-14'>
+      {/* <div className='flex justify-end text-sm gap-3 pb-14'>
         <img src={info} />
-        Provide some customer’s basic information and upload relevant <br /> documents to help you fast-track the customer creation process.
-      </div>
+        Provide some customer's basic information and upload relevant <br /> documents to help you fast-track the customer creation process.
+      </div> */}
       <div className='flex gap-10 '>
         <div className='flex justify-end gap-3 min-w-[12.5rem] items-center '>
           {customerType === 'sme' ? <span>Identification Type</span> : null}

@@ -4,117 +4,81 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { SignatoryDetailsInitial } from '../Signatory/InitialData'
 import SignatoriesTable from '../Signatory/SignatoriesTable'
 import SignatoryModal from '../Signatory/SignatoryModal'
-import { AdditionalDetailsType, AdditionalDetailField, AffiliatedCompanyDetailsType, AffiliatedCompanyDetailField } from '../Types/AdditionalTypes'
+
 import { additionalDetailsInitial, affiliatedCompanyDetailsInitial } from '../AdditionalInfo/initialData'
 import AdditionalDetailsTable from '../AdditionalInfo/AdditionalTable'
+import RiskAssessmentLayout from './RiskAssessmentLayout'
+import { FormStructureType } from 'Components/types/FormStructure.types'
 
-const RiskAssessment = memo(() => {
+type Props = {
+  fillingFormState: FormStructureType
+}
+
+const RiskAssessment = memo(({ fillingFormState }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [collapsedAffiliatedCompany, setCollapsedAffiliatedCompany] = useState<boolean>(false)
-  const [details, setDetails] = useState<Array<AdditionalDetailsType>>([])
-  const [affiliatedCompanyDetails, setAffiliatedCompanyDetails] = useState<Array<AffiliatedCompanyDetailsType>>([])
-  const [openModal, setOpenModal] = useState<boolean>(false)
-  const [openAffiliatedCompanyModal, setOpenAffiliatedCompanyModal] = useState<boolean>(false)
-  const [additionalDetails, setAdditionalDetails] = useState<AdditionalDetailField[]>(additionalDetailsInitial())
-  const [companyDetails, setCompanyDetails] = useState<AffiliatedCompanyDetailField[]>(affiliatedCompanyDetailsInitial())
-  const [detailToModifyId, setDetailToModifyId] = useState('')
-  const [affiliatedCompanyDetailToModifyId, setAffiliatedCompanyDetailToModifyId] = useState('')
-  const [modification, setModification] = useState<boolean>(false)
+  console.log('fillingFormState-RiskAssessment', fillingFormState.data)
 
-  const handleCollapseSection = () => {
-    setCollapsed((prev) => !prev)
+  const controller = {
+    'bio-Data': {
+      title: "Customer's Identity",
+      fields: [
+        {
+          title: "Customer's Name",
+          key: 'surname',
+        },
+        {
+          title: 'Gender',
+          key: 'gender',
+        },
+        {
+          title: 'Date of Birth',
+          key: 'dateOfBirth',
+        },
+        {
+          title: 'Marital Status',
+          key: 'maritalStatus',
+        },
+        {
+          title: 'Origin',
+          key: 'stateOfOrigin',
+        },
+        {
+          title: 'ID Document [ID Number]',
+          key: 'id',
+        },
+      ],
+    },
+    contactInformation: {
+      title: "Customer's Address",
+      fields: [
+        {
+          title: 'Residential Address',
+          key: 'residentialAddress',
+        },
+        {
+          title: 'Mobile Number',
+          key: 'mobileNumber',
+        },
+      ],
+    },
   }
-  const handleCollapseAffiliatedCompanySection = () => {
-    setCollapsedAffiliatedCompany((prev) => !prev)
-  }
-
-  const closeModalFunction = () => {
-    setAdditionalDetails([...additionalDetailsInitial()])
-    setModification(false)
-    setOpenModal((prev) => !prev)
-  }
-  const closeAffiliatedCompanyModalFunction = () => {
-    setCompanyDetails([...affiliatedCompanyDetailsInitial()])
-    setModification(false)
-    setOpenAffiliatedCompanyModal((prev) => !prev)
-  }
-
-  const handleRemoveDetail = (id: string | number) => {
-    const filtered = details.filter((x) => x?.id !== id)
-    setDetails(filtered)
-  }
-  const handleRemoveAffiliatedCompanyDetail = (id: string | number) => {
-    const filtered = affiliatedCompanyDetails.filter((x) => x?.id !== id)
-    setAffiliatedCompanyDetails(filtered)
-  }
-
-  const handleModify = (id: string) => {
-    const item = details.find((x) => x?.id === id)
-    setAdditionalDetails(
-      additionalDetailsInitial().map((field) => {
-        if (item[field.fieldLabel]) {
-          field.value = item[field.fieldLabel]
-        }
-        return field
-      })
-    )
-    setDetailToModifyId(id)
-    setModification(true)
-    setOpenModal((prev) => !prev)
-  }
-  const handleModifyAffiliatedCompany = (id: string) => {
-    const item = affiliatedCompanyDetails.find((x) => x?.id === id)
-    setCompanyDetails(
-      affiliatedCompanyDetailsInitial().map((field) => {
-        if (item[field.fieldLabel]) {
-          field.value = item[field.fieldLabel]
-        }
-        return field
-      })
-    )
-    setAffiliatedCompanyDetailToModifyId(id)
-    setModification(true)
-    setOpenAffiliatedCompanyModal((prev) => !prev)
-  }
-
-  useEffect(() => {
-    if (details.length === 0) {
-      const executiveInStorage = sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
-        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE))
-        : null
-
-      if (executiveInStorage) {
-        setDetails(executiveInStorage)
-      }
-    }
-    if (affiliatedCompanyDetails.length === 0) {
-      const affiliatedCompanyDetailsInStorage = sessionStorage.getItem(STORAGE_NAMES.AFFILIATED_COMPANY_DETAILS_IN_STORAGE)
-        ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.AFFILIATED_COMPANY_DETAILS_IN_STORAGE))
-        : null
-
-      if (affiliatedCompanyDetailsInStorage) {
-        setAffiliatedCompanyDetails(affiliatedCompanyDetailsInStorage)
-      }
-    }
-  }, [])
-
-  useEffect(() => {
-    if (details.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE, JSON.stringify(details))
-    } else {
-      sessionStorage.removeItem(STORAGE_NAMES.ADDITIONAL_DETAILS_IN_STORAGE)
-    }
-    if (affiliatedCompanyDetails.length > 0) {
-      sessionStorage.setItem(STORAGE_NAMES.AFFILIATED_COMPANY_DETAILS_IN_STORAGE, JSON.stringify(affiliatedCompanyDetails))
-    } else {
-      sessionStorage.removeItem(STORAGE_NAMES.AFFILIATED_COMPANY_DETAILS_IN_STORAGE)
-    }
-  }, [details, affiliatedCompanyDetails])
 
   return (
     <>
+      {fillingFormState.data.customerData.map((data) => {
+        if (controller[data.sectionName]) {
+          return (
+            <RiskAssessmentLayout
+              key={controller[data.sectionName].title}
+              title={controller[data.sectionName].title}
+              fields={controller[data.sectionName].fields}
+              assessmentData={data.data}
+            />
+          )
+        }
+      })}
       {/* Customer Identity section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
         <div
           className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
@@ -124,7 +88,7 @@ const RiskAssessment = memo(() => {
           <div className='flex items-center'>
             <h6>Customer's Identity </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -139,49 +103,45 @@ const RiskAssessment = memo(() => {
         </div>
 
         <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
+          <div
+            className=' gap-y-10 gap-x-16   text-[#636363] pl-12'
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              // gridGap: '1.25rem',
+              // padding: '.625rem',
+              // paddingBottom: '0',
+              // paddingTop: '0.2rem',
+            }}
+          >
             <div>
-              <h5>Employment Status</h5>
+              <h5>Customer's Name</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Date of Employment</h5>
+              <h5>Gender</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Nature of Business/Occupation</h5>
+              <h5>Date of Birth</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Annual Salary/Expected Annual Income</h5>
+              <h5>Marital Status</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Employer's Name</h5>
+              <h5>Origin</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Employer's Address</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Mobile Number</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Email Number</h5>
+              <h5>ID Document [ID Number]</h5>
               <p>Employed</p>
             </div>
           </div>
-          <AdditionalDetailsTable
-            collapsed={collapsed}
-            handleRemoveDetail={handleRemoveDetail}
-            handleModify={handleModify}
-            details={details}
-            setDetails={setDetails}
-          />
+          table here
         </div>
-        {/* {openModal ? (
+       {openModal ? (
           <AdditionalModal
             detailToModifyId={detailToModifyId}
             closeModalFunction={closeModalFunction}
@@ -192,11 +152,11 @@ const RiskAssessment = memo(() => {
             modification={modification}
             setModification={setModification}
           />
-        ) : null} */}
-      </section>
+        ) : null} 
+      </section> */}
 
       {/* Customer Address section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
         <div
           className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
@@ -206,7 +166,7 @@ const RiskAssessment = memo(() => {
           <div className='flex items-center'>
             <h6>Customer's Address </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -221,13 +181,23 @@ const RiskAssessment = memo(() => {
         </div>
 
         <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
+          <div
+            className=' gap-y-10 gap-x-16   text-[#636363] pl-12'
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              // gridGap: '1.25rem',
+              // padding: '.625rem',
+              // paddingBottom: '0',
+              // paddingTop: '0.2rem',
+            }}
+          >
             <div>
-              <h5>Employment Status</h5>
+              <h5>Residential Address</h5>
               <p>Employed</p>
             </div>
             <div>
-              <h5>Date of Employment</h5>
+              <h5>Mobile Number</h5>
               <p>Employed</p>
             </div>
             <div>
@@ -235,35 +205,12 @@ const RiskAssessment = memo(() => {
               <p>Employed</p>
             </div>
             <div>
-              <h5>Annual Salary/Expected Annual Income</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Name</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Address</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Mobile Number</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Email Number</h5>
+              <h5>Email Address</h5>
               <p>Employed</p>
             </div>
           </div>
-          <AdditionalDetailsTable
-            collapsed={collapsed}
-            handleRemoveDetail={handleRemoveDetail}
-            handleModify={handleModify}
-            details={details}
-            setDetails={setDetails}
-          />
         </div>
-        {/* {openModal ? (
+         {openModal ? (
           <AdditionalModal
             detailToModifyId={detailToModifyId}
             closeModalFunction={closeModalFunction}
@@ -274,11 +221,11 @@ const RiskAssessment = memo(() => {
             modification={modification}
             setModification={setModification}
           />
-        ) : null} */}
-      </section>
+        ) : null} 
+      </section> */}
 
       {/* customer livelihood section here */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
         <div
           className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
@@ -288,7 +235,7 @@ const RiskAssessment = memo(() => {
           <div className='flex items-center'>
             <h6>Customer's Livelihood </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -337,15 +284,8 @@ const RiskAssessment = memo(() => {
               <p>Employed</p>
             </div>
           </div>
-          <AdditionalDetailsTable
-            collapsed={collapsed}
-            handleRemoveDetail={handleRemoveDetail}
-            handleModify={handleModify}
-            details={details}
-            setDetails={setDetails}
-          />
         </div>
-        {/* {openModal ? (
+        {openModal ? (
           <AdditionalModal
             detailToModifyId={detailToModifyId}
             closeModalFunction={closeModalFunction}
@@ -356,11 +296,11 @@ const RiskAssessment = memo(() => {
             modification={modification}
             setModification={setModification}
           />
-        ) : null} */}
-      </section>
+        ) : null} 
+      </section> */}
 
       {/* watchlist section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50'>
+      {/* <section className='max-w-[1060px] mx-4 bg-slate-50'>
         <div
           className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
@@ -370,7 +310,7 @@ const RiskAssessment = memo(() => {
           <div className='flex items-center'>
             <h6>WatchList</h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -384,16 +324,8 @@ const RiskAssessment = memo(() => {
           </div>
         </div>
 
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <AdditionalDetailsTable
-            collapsed={collapsed}
-            handleRemoveDetail={handleRemoveDetail}
-            handleModify={handleModify}
-            details={details}
-            setDetails={setDetails}
-          />
-        </div>
-        {/* {openModal ? (
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}></div>
+         {openModal ? (
           <AdditionalModal
             detailToModifyId={detailToModifyId}
             closeModalFunction={closeModalFunction}
@@ -404,8 +336,8 @@ const RiskAssessment = memo(() => {
             modification={modification}
             setModification={setModification}
           />
-        ) : null} */}
-      </section>
+        ) : null} 
+      </section> */}
       <div className='flex justify-center items-center gap-12 py-10'>
         <button className='border text-[#667085] px-5 py-1 rounded-md'>Compute Risk Score</button>
         <span>result here</span>

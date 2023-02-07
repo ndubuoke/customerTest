@@ -189,7 +189,7 @@ const Form = memo(
                   })
                 : null}
               {(customerType === 'sme' || customerType === 'individual') && activePage && activePage?.page?.id === '1662112333552788291' ? (
-                <RiskAssessment key='risk' />
+                <RiskAssessment key='risk' fillingFormState={fillingFormState} />
               ) : null}
               {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives key='executives' /> : null}
 
