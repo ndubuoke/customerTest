@@ -6,7 +6,7 @@ type Props = {}
 const RewardPoints = (props: Props) => {
   const [point, setPoint] = useState(100)
   return (
-    <div className='w-full max-w-[27.125rem] border-2 border-[#f1ebeb] px-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] z-30 relative'>
+    <div className='min-w-[27.125rem] border-2 border-[#f1ebeb] px-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] z-30 relative'>
       <header className=' text-[#636363]  border-b-2 border-[#968f8f] p-2'>
         <h6 className='capitalize'>concession groups</h6>
       </header>

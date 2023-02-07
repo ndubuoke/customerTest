@@ -25,7 +25,7 @@ const Customer360AlertsAndNotification = (props: Props) => {
     setAccountInfo(customerInfo)
   }, [])
   return (
-    <div className='w-full max-w-[27.125rem] border-2 border-[#f1ebeb] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] '>
+    <div className='min-w-[27.125rem] border-2 border-[#f1ebeb] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] '>
       <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f] p-2'>
         <h6 className='capitalize '> Alerts & Notifications</h6>
         <div className='flex items-center gap-4 capitalize hover:text-[#636363] cursor-pointer'>
