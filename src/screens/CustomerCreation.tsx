@@ -29,6 +29,7 @@ import { formStruture } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { info } from 'Assets/svgs'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -177,7 +178,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
       </nav>
 
       <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
-        <div className={`${formCreationStarted ? '' : 'h-[845px]'} min-h-[845px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
+        <div className={`${formCreationStarted ? '' : 'h-[825px]'} min-h-[800px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
           {formModeStatusInStorage === 'creation' ? (
             <SwitchToFormType
               customerType={customerType}
@@ -199,9 +200,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                 <CreationMode mode={creationMode} setCreationMode={setCreationMode} />
               ) : null}
               <section
-                className='flex flex-col justify-between  h-[70%]'
+                className='flex flex-col   h-[70%]'
                 style={{
-                  padding: '0 2rem 3rem',
+                  padding: '0 2rem 0',
                 }}
               >
                 <CustomerCreationBox
@@ -213,8 +214,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                 />
 
                 {creationMode === CreationModeEnum.Single ? (
-                  <div className='flex  justify-center relative  gap-1'>
-                    <div className=' absolute right-3 -top-16'>
+                  <div className='flex  justify-center relative  gap-1 mt-24'>
+                    <div className=' absolute right-3 top-1'>
                       <SkipToForm
                         onClick={() => {
                           setFormCreationStarted(true)
@@ -223,11 +224,13 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                         }}
                       />
                     </div>
-                    <Button
-                      text='Proceed'
-                      disabled={!identificationDetails.identificationNumber || !identificationDetails.identificationType}
-                      onClick={() => handleProceed()}
-                    />
+                    <div style={{ marginTop: '2rem' }}>
+                      <Button
+                        text='Proceed'
+                        disabled={!identificationDetails.identificationNumber || !identificationDetails.identificationType}
+                        onClick={() => handleProceed()}
+                      />
+                    </div>
                   </div>
                 ) : null}
               </section>
