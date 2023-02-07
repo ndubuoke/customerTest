@@ -24,18 +24,18 @@ const Customer360 = (props: Props) => {
   }, [name])
 
   return (
-    <>
+    <section className='h-screen min-h-screen max-h-screen'>
       <nav>
         <GoBack headerText={name} breadCrumbsList={linkData} />
       </nav>
-      <main className='bg-[#EFEFEF] w-full p-[.875rem]  pt-6'>
+      <main className='bg-[#EFEFEF] w-full p-[.875rem]   pt-6'>
         <div className='bg-white  px-[4.438rem] '>
           <TopNavMenu />
 
           <Customer360Body />
         </div>
       </main>
-    </>
+    </section>
   )
 }
 

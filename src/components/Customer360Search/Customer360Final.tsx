@@ -15,7 +15,7 @@ const Customer360Final = (props: Props) => {
   const [curDeposit, setCurDeposit] = useState<string>('1315671890')
   const [searchResult, setSearchResult] = useState<Number>(1)
   return (
-    <div className='bg-white h-[44.0625rem]  flex justify-center flex-col items-center'>
+    <div className='bg-white h-[80vh]  flex justify-center flex-col items-center'>
       {/* logo */}
 
       <div className='flex items-center gap-[1.3125rem] mb-[2.125rem] '>
@@ -29,21 +29,21 @@ const Customer360Final = (props: Props) => {
         type='text'
         value={search}
         onChange={(e) => setSearch(e.target.value)}
-        className='w-[30.875rem] border-[.125rem] border-[rgba(207,42,42,0.22)] rounded-[.5rem] pl-3 cursor-pointer py-1'
+        className='w-[30.875rem] border-[.125rem] border-[rgba(207,42,42,0.22)] rounded-[.5rem] pl-3 cursor-pointer py-1 mb-[3rem]'
       />
 
       {/* search result */}
 
-      <section className='w-[77.625rem]  '>
+      <section className='w-[77.625rem]   '>
         <p className='text-[#636363] text-[1rem] mb-[1.8125rem]'>Search result(s)</p>
         <div className='pl-[1rem] border-l border-b border-[rgba(170,170,170,0.79)] flex items-center gap-[2rem]  '>
           {/* image section */}
-          <div className='w-[3rem] h-[3rem] rounded-[50%] border-[.1875rem] border-[#AAAAAA] flex items-center justify-center mb-1 '>
+          <div className='w-[3.375rem] h-[3.375rem] rounded-[50%] border-[.1875rem] border-[#AAAAAA] flex items-center justify-center mb-1 '>
             <img src={profileAvatarSingle} alt='profile image' />
           </div>
           {/* end of image section */}
           <div className='truncate'>
-            <p className='font-medium text-[#636363]'>{name}</p>{' '}
+            <p className='font-medium text-[#636363] mb-4'>{name}</p>{' '}
             <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
               <span className='font-bold'>ID</span>: {id}
             </span>{' '}

@@ -1,3 +1,4 @@
+import { rewardVctor } from 'Assets/svgs'
 import React, { useState } from 'react'
 import { BiCertification } from 'react-icons/bi'
 
@@ -12,7 +13,7 @@ const RewardPoints = (props: Props) => {
       </header>
       <div className='absolute bottom-0 right-0 left-0 top-[4rem] border-2  flex items-center pl-[2rem] gap-6'>
         <span>
-          <BiCertification className='w-[6rem] h-[6rem] fill-[gray]' />
+          <img src={rewardVctor} alt='reward' />{' '}
         </span>{' '}
         <span className='text-[#636363] font-bold'>{point} Points</span>
       </div>

@@ -1,5 +1,5 @@
 import { profileImage } from 'Assets/images'
-import { caret, redCaret } from 'Assets/svgs'
+import { caret, redCaret, salaryEarners } from 'Assets/svgs'
 import React, { useState, useEffect, useRef } from 'react'
 
 type Props = {}
@@ -10,18 +10,7 @@ const groups = [
   {
     type: 'SME Savings',
   },
-  {
-    type: 'SME Savings',
-  },
-  {
-    type: 'SME Savings',
-  },
-  {
-    type: 'SME Savings',
-  },
-  {
-    type: 'SME Savings',
-  },
+
   {
     type: 'Government Agencies',
   },
@@ -54,13 +43,13 @@ const ConsessionGroups = (props: Props) => {
         <img src={caret} alt='caret' className='rotate-90 absolute left-0 top-[10rem] z-30 px-1' onClick={handleBackClick} />
         <img src={redCaret} alt='caret' className='absolute right-0 top-[10rem] z-30 px-1' onClick={handleNext} />
       </div>
-      <div className=' flex justify-between gap-4 overflow-x-auto w-full py-2 mt-4  absolute bottom-0' ref={scrollBarRef}>
+      <div className=' flex justify-around gap-4 overflow-x-auto w-full py-2 mt-4  absolute bottom-0' ref={scrollBarRef}>
         {groupData?.length > 0 &&
           groupData?.map((group: any, index: any) => {
             return (
-              <div key={index} className='  flex items-center flex-col justify-center gap-2 px-2 pt-6 '>
+              <div key={index} className='  flex items-center flex-col justify-center gap-2 px-2 pt-6 w-[5.625rem]'>
                 <div>
-                  <img src={profileImage} alt={group?.type} className='w-[3rem] h-[3rem]' />
+                  <img src={salaryEarners} alt={group?.type} className='w-[3rem] h-[3rem]' />
                 </div>
                 <p className='text-center'>{group?.type}</p>
               </div>

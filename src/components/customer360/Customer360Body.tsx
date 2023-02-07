@@ -17,10 +17,10 @@ type Props = {}
 const Customer360Body = (props: Props) => {
   const [activeTab, setActiveTab] = useState<string>('overview') as any
   return (
-    <div className=' bg-[rgba(239,239,239,0.5)] h-[45.6875rem] overflow-y-auto '>
+    <div className=' bg-[rgba(239,239,239,0.5)] h-[80vh] pb-4 overflow-y-auto '>
       <TopMenuUserSummary />
       <BodyNav activeTab={activeTab} setActiveTab={setActiveTab} />
-      <div className=' grid grid-cols-3 justify-between px-2 gap-[1rem] w-full'>
+      <div className=' grid grid-cols-3 justify-between px-2 gap-[1rem] '>
         <CustomerPortfolio />
         <Customer360Chart />
         <Customer360RecentTransaction />

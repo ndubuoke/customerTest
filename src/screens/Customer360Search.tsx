@@ -13,12 +13,12 @@ const Customer360Search = (props: Props) => {
   }, [])
 
   return (
-    <>
+    <section className='h-screen min-h-screen max-h-screen'>
       <GoBack headerText='' breadCrumbsList={linkData} />
       <section className='bg-[#E5E5E5] p-[1.875rem]'>
         <Customer360Final />
       </section>
-    </>
+    </section>
   )
 }
 

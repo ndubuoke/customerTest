@@ -1,4 +1,4 @@
-import { caret, infoVector, redCaret } from 'Assets/svgs'
+import { caret, infoVector, redCaret, savingsTier1 } from 'Assets/svgs'
 import React, { useEffect, useState, useRef } from 'react'
 
 type Props = {}
@@ -10,15 +10,15 @@ const accountType = [
   {
     account: 'current tier 1',
   },
-  {
-    account: '  savings for salary earners',
-  },
-  {
-    account: 'savings tier1',
-  },
-  {
-    account: 'current tier 1',
-  },
+  // {
+  //   account: '  savings for salary earners',
+  // },
+  // {
+  //   account: 'savings tier1',
+  // },
+  // {
+  //   account: 'current tier 1',
+  // },
   {
     account: 'savings for salary earners',
   },
@@ -72,12 +72,15 @@ const RecommendedProducts = (props: Props) => {
         <img src={caret} alt='caret' className='rotate-90' onClick={handleBackClick} />
         <img src={redCaret} alt='caret' onClick={handleNext} />
       </div>
-      <div className='flex justify-between gap-2 overflow-x-auto w-full py-2' ref={scrollBarRef}>
+      <div className='flex justify-around gap-2 overflow-x-auto w-full py-2' ref={scrollBarRef}>
         {accountTypeState?.length > 0 &&
           accountTypeState?.map((account: any, index: any) => {
             return (
-              <div key={index} className=' text-[#636363] min-w-[6rem]'>
-                <span className='capitalize text-[.85rem] flex   justify-around gap-2'>{account?.account}</span>
+              <div key={index} className=' text-[#636363] min-w-[6rem]  flex items-center flex-col'>
+                <div>
+                  <img src={savingsTier1} alt='savings icon' className='mb-3' />
+                </div>
+                <span className='capitalize text-[.85rem]  text-center'>{account?.account}</span>
               </div>
             )
           })}

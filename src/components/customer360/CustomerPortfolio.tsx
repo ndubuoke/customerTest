@@ -10,9 +10,9 @@ const CustomerPortfolio = (Props: Props) => {
   const [activeTab, setActiveTab] = useState<string>('all')
 
   return (
-    <div className='min-w-[27.125rem] border-2 border-[#968f8f] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative mx-3'>
+    <div className='min-w-[27.125rem] h-[26.875rem] border-2 border-[#968f8f] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative mx-3'>
       <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f] p-2'>
-        <h6> customer portfolio</h6>
+        <h6 className='capitalize'> customer portfolio</h6>
         <div className='flex items-center gap-4 capitalize hover:text-[#636363] cursor-pointer'>
           <img src={infoVector} alt='information vector' /> <span>view more</span>
         </div>
@@ -45,7 +45,7 @@ const CustomerPortfolio = (Props: Props) => {
 
       {/* Circle that displays deposit loan and investment percentage */}
 
-      <div className='h-[135px] w-[135px] rounded-[50%] my-6 border-2 border-[red] m-auto'></div>
+      <div className='h-[120px] w-[120px] border-2 border-[red] m-auto rounded-[50%]'></div>
 
       <footer className='flex justify-center gap-4 capitalize mt-3 absolute bottom-3 w-full'>
         <div className='flex items-center gap-3'>

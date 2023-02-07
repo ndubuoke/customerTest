@@ -1,4 +1,4 @@
-import { ExclaimateIcon, exclamationYellow, infoVector } from 'Assets/svgs'
+import { ExclaimateIcon, exclamationYellow, infoVector, redinfo } from 'Assets/svgs'
 import React, { useEffect, useState } from 'react'
 
 type Props = {}
@@ -36,8 +36,8 @@ const Customer360AlertsAndNotification = (props: Props) => {
         {accountInfo?.length > 0 &&
           accountInfo?.map((details: any, index: any) => {
             return (
-              <div key={index} className='flex items-center gap-8  my-3'>
-                <img src={exclamationYellow} alt='exclamation' className='w-[.9rem] h-[.9rem]' />
+              <div key={index} className='flex items-center gap-8    pt-[2.375rem]'>
+                <img src={redinfo} alt='exclamation' className='w-[.9375rem] h-[.9375rem]' />
 
                 {/* <span>{ExclaimateIcon}</span> */}
                 <p className='text-[#636363] text-[1rem]'>{details?.text}</p>
