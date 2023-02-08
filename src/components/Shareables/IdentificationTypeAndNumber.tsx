@@ -156,7 +156,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         >
           <input
             type='text'
-            placeholder='Enter text'
+            placeholder='Enter Number'
             onChange={handleVerification}
             maxLength={MAX_FIELD_LENGTH}
             readOnly={!selectedIdentificationType}

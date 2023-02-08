@@ -70,7 +70,7 @@ const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => 
               {title}
             </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -92,36 +92,35 @@ const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => 
             gridGap: '1.25rem',
             color: '#636363',
             padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
+            background: 'rgb(250, 250, 250)',
           }}
         >
           {fields.map((field) => {
-            if (assessmentData.hasOwnProperty(field.key)) {
-              return (
-                <div key={field.title}>
-                  <h5
-                    style={{
-                      fontWeight: '500',
-                      fontSize: '16px',
-                      lineHeight: '16px',
-                      fontFamily: 'Inter',
-                    }}
-                  >
-                    {field.title}
-                  </h5>
+            return (
+              <div key={field.title}>
+                <h5
+                  style={{
+                    fontWeight: '500',
+                    fontSize: '16px',
+                    lineHeight: '16px',
+                    fontFamily: 'Inter',
+                  }}
+                >
+                  {field.title}
+                </h5>
 
-                  <p
-                    style={{
-                      fontWeight: '400',
-                      fontSize: '16px',
-                      lineHeight: '18px',
-                      marginTop: '0.3rem',
-                    }}
-                  >
-                    {assessmentData[field.key] || '-'}
-                  </p>
-                </div>
-              )
-            }
+                <p
+                  style={{
+                    fontWeight: '400',
+                    fontSize: '16px',
+                    lineHeight: '18px',
+                    marginTop: '0.3rem',
+                  }}
+                >
+                  {assessmentData[field.key] || '-'}
+                </p>
+              </div>
+            )
           })}
         </div>
       </section>

@@ -24,7 +24,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
       fields: [
         {
           title: "Customer's Name",
-          key: 'surname',
+          key: 'surname ',
         },
         {
           title: 'Gender',
@@ -58,6 +58,10 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         {
           title: 'Mobile Number',
           key: 'mobileNumber',
+        },
+        {
+          title: 'Email Address',
+          key: 'emailAddress',
         },
       ],
     },
@@ -98,21 +102,11 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         },
       ],
     },
-    watchList: {
-      title: 'Watchlist',
-      fields: [
-        {
-          title: 'Employment Status',
-          key: 'residentialAddress',
-        },
-        {
-          title: 'Mobile Number',
-          key: 'mobileNumber',
-        },
-      ],
-    },
   }
-
+  const [collapsedWatchlist, setcollapsedWatchlist] = useState<boolean>(false)
+  const handleCollapseSection = () => {
+    setcollapsedWatchlist((prev) => !prev)
+  }
   return (
     <>
       {fillingFormState.data.customerData.map((data) => {
@@ -127,228 +121,48 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           )
         }
       })}
-      {/* Customer Identity section */}
-      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
+      {/* watchlist section */}
+      <section className='max-w-[66.25rem] mx-4 '>
         <div
-          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+          {setRequiredFormFieldsRedux.} $
+          `}
           style={{
             boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+            background: 'rgba(170, 170, 170, 0.07)',
           }}
         >
           <div className='flex items-center'>
-            <h6>Customer's Identity </h6>
+            <h6
+              style={{
+                fontWeight: '500',
+                fontSize: '16px',
+              }}
+            >
+              WatchList
+            </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
               viewBox='0 0 24 24'
               strokeWidth='1.5'
               stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+              className={`w-4 h-4  ${collapsedWatchlist ? 'rotate-180' : ''}`}
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </div>
         </div>
 
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div
-            className=' gap-y-10 gap-x-16   text-[#636363] pl-12'
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              // gridGap: '1.25rem',
-              // padding: '.625rem',
-              // paddingBottom: '0',
-              // paddingTop: '0.2rem',
-            }}
-          >
-            <div>
-              <h5>Customer's Name</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Gender</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Date of Birth</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Marital Status</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Origin</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>ID Document [ID Number]</h5>
-              <p>Employed</p>
-            </div>
-          </div>
-          table here
-        </div>
-       {openModal ? (
-          <AdditionalModal
-            detailToModifyId={detailToModifyId}
-            closeModalFunction={closeModalFunction}
-            setDetails={setDetails}
-            details={details}
-            additionalDetails={additionalDetails}
-            setAdditionalDetails={setAdditionalDetails}
-            modification={modification}
-            setModification={setModification}
-          />
-        ) : null} 
-      </section> */}
-
-      {/* Customer Address section */}
-      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
         <div
-          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          className={` ${collapsedWatchlist ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
           style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+            background: 'rgb(250, 250, 250)',
           }}
-        >
-          <div className='flex items-center'>
-            <h6>Customer's Address </h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
-
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div
-            className=' gap-y-10 gap-x-16   text-[#636363] pl-12'
-            style={{
-              display: 'grid',
-              gridTemplateColumns: '1fr 1fr 1fr',
-              // gridGap: '1.25rem',
-              // padding: '.625rem',
-              // paddingBottom: '0',
-              // paddingTop: '0.2rem',
-            }}
-          >
-            <div>
-              <h5>Residential Address</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Mobile Number</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Nature of Business/Occupation</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Email Address</h5>
-              <p>Employed</p>
-            </div>
-          </div>
-        </div>
-         {openModal ? (
-          <AdditionalModal
-            detailToModifyId={detailToModifyId}
-            closeModalFunction={closeModalFunction}
-            setDetails={setDetails}
-            details={details}
-            additionalDetails={additionalDetails}
-            setAdditionalDetails={setAdditionalDetails}
-            modification={modification}
-            setModification={setModification}
-          />
-        ) : null} 
-      </section> */}
-
-      {/* customer livelihood section here */}
-      {/* <section className='max-w-[1060px] mx-4 bg-slate-50 '>
-        <div
-          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
-          style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className='flex items-center'>
-            <h6>Customer's Livelihood </h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1 `}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
-
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div className='flex gap-y-10 gap-x-16  flex-wrap text-[#636363] pl-12'>
-            <div>
-              <h5>Employment Status</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Date of Employment</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Nature of Business/Occupation</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Annual Salary/Expected Annual Income</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Name</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Address</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Mobile Number</h5>
-              <p>Employed</p>
-            </div>
-            <div>
-              <h5>Employer's Email Number</h5>
-              <p>Employed</p>
-            </div>
-          </div>
-        </div>
-        {openModal ? (
-          <AdditionalModal
-            detailToModifyId={detailToModifyId}
-            closeModalFunction={closeModalFunction}
-            setDetails={setDetails}
-            details={details}
-            additionalDetails={additionalDetails}
-            setAdditionalDetails={setAdditionalDetails}
-            modification={modification}
-            setModification={setModification}
-          />
-        ) : null} 
-      </section> */}
-
+        ></div>
+      </section>
       <div className='flex justify-center items-center gap-12 py-10'>
         <button className='border text-[#667085] px-5 py-1 rounded-md'>Compute Risk Score</button>
         <span>result here</span>
