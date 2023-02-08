@@ -66,7 +66,7 @@ const Customer360PreferredChannels = (props: Props) => {
         <img src={caret} alt='caret' className='rotate-90 absolute left-0 top-[10rem] z-30 px-2' onClick={handleNext} />
         <img src={redCaret} alt='caret' className='absolute right-0 top-[10rem] z-30 px-2' onClick={handleBackClick} />
       </div> */}
-      <div className='flex gap-x-[6.2862rem] gap-y-[2.3125rem] justify-around flex-wrap pt-[3.625rem] pb-[6.625rem]'>
+      <div className='flex gap-x-[6.2862rem] gap-y-[2.3125rem] justify-around flex-wrap pt-[3.625rem] pb-[6.625rem] overflow-y-auto'>
         {preferredChannelList.length > 0 &&
           preferredChannelList?.map((channelList: any, index: any) => {
             return (
