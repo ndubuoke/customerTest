@@ -114,14 +114,15 @@ const FormLayout = memo(
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
           <div
-            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+            className={`ControlUILayout  w-full   pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
             {setRequiredFormFieldsRedux.} $
             `}
             style={{
               boxShadow: setRequiredFormFieldsRedux?.list?.some((requiredField) => requiredField.sectionId === item.id)
                 ? '0px 0px 10px rgba(207, 42, 42, 0.7)'
                 : '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-              // background: 'rgba(170, 170, 170, 0.07)',
+              background: '#FAFAFA',
+              fontFamily: 'Inter',
               opacity: isSpouseDetailsSection && detailsOfSpouseIsDisabled && '0.5',
             }}
           >
@@ -164,6 +165,8 @@ const FormLayout = memo(
             padding: '.625rem',
             paddingBottom: '0',
             paddingTop: '0.2rem',
+            background: '#FAFAFA',
+            fontFamily: 'Inter',
           }}
         >
           {fields?.length > 0 &&
