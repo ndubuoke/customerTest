@@ -246,14 +246,19 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   // Handle RequiredFields
 
   return (
-    <div className='flex justify-center gap-6 py-4'>
-      <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
-      <Button disabled={false} onClick={() => console.log('test saved to draft')} text='Save to draft' />
-      <Button
-        disabled={false}
-        onClick={handleNextAndOtherAddOns}
-        text={findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? 'Proceed' : 'Next'}
-      />
+    <div className='flex justify-between gap-6 p-4'>
+      <div>
+        <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
+      </div>
+      <div className='flex gap-3'>
+        <Button disabled={true} onClick={() => console.log('test saved to draft')} text='Save to draft' />
+        <Button
+          disabled={false}
+          onClick={handleNextAndOtherAddOns}
+          text={findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1 ? 'Proceed' : 'Next'}
+        />
+      </div>
+
       {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
       {showEDDAlert ? <EDDAlert closeModalFunction={handleDiscardEDDWaiver} proceedToProcessSummary={handleProceedEDD} /> : null}
     </div>

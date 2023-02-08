@@ -166,4 +166,9 @@ html {
   overflow-y: scroll;
 }
 
+.stub {
+  max-height: 300px !important;
+  min-height: 250px !important;
+}
+
 /* End Style datalist */

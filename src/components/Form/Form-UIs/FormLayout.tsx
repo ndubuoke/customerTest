@@ -1,4 +1,4 @@
-import { useState, memo } from 'react'
+import { useState, memo, useEffect, useMemo } from 'react'
 import { dots, ExclaimateIcon } from 'Assets/svgs'
 import React from 'react'
 import { useSelector } from 'react-redux'
@@ -71,28 +71,58 @@ const FormLayout = memo(
     backupForSwitchFormState,
   }: Props) => {
     const [collapsed, setCollapsed] = useState<boolean>(false)
+    const [detailsOfSpouseIsDisabled, setDetailsOfSpouseIsDisabled] = useState<boolean>(true)
 
     const handleCollapseSection = () => {
-      setCollapsed((prev) => !prev)
+      if (isSpouseDetailsSection) {
+        if (!detailsOfSpouseIsDisabled) {
+          setCollapsed((prev) => !prev)
+        }
+      } else {
+        setCollapsed((prev) => !prev)
+      }
     }
 
-    // console.log({ fields })
+    console.log({ item })
 
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
     // console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
+    useEffect(() => {
+      if (isSpouseDetailsSection) {
+        const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
+        console.log('customerDataBioDataSection', customerDataBioDataSection)
+        if (customerDataBioDataSection) {
+          console.log(
+            '!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() ==',
+            !(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married')
+          )
+          setDetailsOfSpouseIsDisabled(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
 
+          setCollapsed(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
+        } else {
+          setDetailsOfSpouseIsDisabled(true)
+          setCollapsed(true)
+        }
+      }
+    }, [fillingFormState])
+    console.log('collapsed', collapsed)
+    console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
+    const isSpouseDetailsSection = useMemo(() => {
+      return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
+    }, [item])
     return (
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
           <div
-            className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
-            {setRequiredFormFieldsRedux.}
+            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+            {setRequiredFormFieldsRedux.} $
             `}
             style={{
               boxShadow: setRequiredFormFieldsRedux?.list?.some((requiredField) => requiredField.sectionId === item.id)
                 ? '0px 0px 10px rgba(207, 42, 42, 0.7)'
                 : '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-              background: 'rgba(170, 170, 170, 0.07)',
+              // background: 'rgba(170, 170, 170, 0.07)',
+              opacity: isSpouseDetailsSection && detailsOfSpouseIsDisabled && '0.5',
             }}
           >
             <div className='flex items-center'>
@@ -132,8 +162,8 @@ const FormLayout = memo(
             gridTemplateColumns: '1fr 1fr 1fr',
             gridGap: '1.25rem',
             padding: '.625rem',
-            paddingBottom: '3rem',
-            paddingTop: '1rem',
+            paddingBottom: '0',
+            paddingTop: '0.2rem',
           }}
         >
           {fields?.length > 0 &&
