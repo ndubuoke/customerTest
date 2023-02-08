@@ -2,7 +2,9 @@ import { SignatoryDetailsType } from 'Components/Form/Types/SignatoryTypes'
 
 export type FormSectionType = {
   sectionName: string
-  data: {} // firstName: "Bonaventure"
+  data: {
+    maritalStatus?: string
+  } // firstName: "Bonaventure"
   sectionId: string | number
   pageId: string | number
 }
