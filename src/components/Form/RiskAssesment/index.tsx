@@ -61,6 +61,56 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         },
       ],
     },
+    employmentDetails: {
+      title: "Customer's Livelihood",
+      fields: [
+        {
+          title: 'Employment Status',
+          key: 'employmentStatus',
+        },
+        {
+          title: 'Date of Employment',
+          key: 'mobileNumber',
+        },
+        {
+          title: 'Nature of Business/Occupation',
+          key: 'mobileNumber',
+        },
+        {
+          title: 'Annual Salary/Expected Annual Income',
+          key: 'annualSalaryExpectedAnnualIncome',
+        },
+        {
+          title: 'Employer’s Name',
+          key: 'employersName',
+        },
+        {
+          title: 'Employer’s Address',
+          key: 'employersAddress',
+        },
+        {
+          title: 'Employer’s Mobile Number',
+          key: 'employersMobileNumber',
+        },
+        {
+          title: 'Employer’s Email Address',
+          key: 'employersEmailAddress',
+        },
+      ],
+    },
+    watchList: {
+      title: 'Watchlist',
+      fields: [
+        {
+          title: 'Employment Status',
+          key: 'residentialAddress',
+        },
+        {
+          title: 'Mobile Number',
+          key: 'mobileNumber',
+        },
+      ],
+    },
   }
 
   return (
@@ -299,45 +349,6 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         ) : null} 
       </section> */}
 
-      {/* watchlist section */}
-      {/* <section className='max-w-[1060px] mx-4 bg-slate-50'>
-        <div
-          className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
-          style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-          }}
-        >
-          <div className='flex items-center'>
-            <h6>WatchList</h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
-
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}></div>
-         {openModal ? (
-          <AdditionalModal
-            detailToModifyId={detailToModifyId}
-            closeModalFunction={closeModalFunction}
-            setDetails={setDetails}
-            details={details}
-            additionalDetails={additionalDetails}
-            setAdditionalDetails={setAdditionalDetails}
-            modification={modification}
-            setModification={setModification}
-          />
-        ) : null} 
-      </section> */}
       <div className='flex justify-center items-center gap-12 py-10'>
         <button className='border text-[#667085] px-5 py-1 rounded-md'>Compute Risk Score</button>
         <span>result here</span>
