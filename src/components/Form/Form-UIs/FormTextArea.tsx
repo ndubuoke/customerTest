@@ -267,9 +267,9 @@ const FormTextArea = ({
         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-      <div className='relative w-full border border-[#AAAAAA] h-fit pr-1'>
+      <div className='relative w-full border border-[#AAAAAA] h-fit pr-1 rounded-md'>
         <textarea
-          className={`flex w-full  p-1 leading-6 `}
+          className={`flex w-full  p-1 leading-6 bg-transparent `}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
           title={helpText}
@@ -282,7 +282,7 @@ const FormTextArea = ({
         />
 
         {maximumNumbersOfCharacters ? (
-          <div className='absolute bottom-0 right-0 pr-4 text-sm text-[#9ca3af] z-10 bg-white'>
+          <div className='absolute bottom-0 right-0 pr-4 text-sm text-[#9ca3af] z-10 bg-transparent'>
             {text.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}

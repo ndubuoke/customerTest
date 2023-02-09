@@ -274,20 +274,23 @@ const FormDate = ({
 
   return (
     <div
-      className={`${collapsed ? 'hidden' : ''} `}
+      className={`${collapsed ? 'hidden' : ''} bg-transparent`}
       style={{
         gridColumn: ` span ${span}`,
         // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
       }}
       title={helpText}
     >
-      <div className='relative w-fit'>
+      <div className='relative w-fit bg-transparent'>
         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-      <div>
+      <div className='bg-transparent'>
         <input
           className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]`}
+          style={{
+            background: 'transparent',
+          }}
           type={
             item.name === fieldsNames.DATE
               ? 'date'

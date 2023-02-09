@@ -114,10 +114,6 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
 
   return (
     <div className='flex flex-col w-full gap-8 px-8 whitespace-nowrap xl:ml-5 ' style={{ maxWidth: '38.875rem' }}>
-      {/* <div className='flex justify-end text-sm gap-3 pb-14'>
-        <img src={info} />
-        Provide some customer's basic information and upload relevant <br /> documents to help you fast-track the customer creation process.
-      </div> */}
       <div className='flex gap-10 '>
         <div className='flex justify-end gap-3 min-w-[12.5rem] items-center '>
           {customerType === 'sme' ? <span>Identification Type</span> : null}
@@ -152,13 +148,15 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         </div>
         {console.log('status', status)}
         <div
-          className={`w-full flex justify-between py-2 leading-6 border-b border-b-[${
-            status === 'success' ? '#00FF00' : status === 'error' ? '#FF0000' : '#8F8F8F'
-          }] text-text-disabled  max-w-[19.875rem]`}
+          className={`w-full flex justify-between py-2 leading-6 border-b  text-text-disabled  max-w-[19.875rem]`}
+          style={{
+            borderColor: `${status === 'error' ? '#FF0000' : status === 'success' ? '#00FF00' : '#8f8f8f'}
+                `,
+          }}
         >
           <input
             type='text'
-            placeholder='Enter text'
+            placeholder='Enter Number'
             onChange={handleVerification}
             maxLength={MAX_FIELD_LENGTH}
             readOnly={!selectedIdentificationType}
@@ -166,7 +164,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             pattern='[0-9]+'
           />
 
-          {status === 'loading' && <Spinner size='medium' />}
+          {status === 'loading' && <Spinner size='small' />}
           {status === 'success' && <GreenCheck />}
           {status === 'error' && <img src={closeRed} alt='error' width={17} height={17} className='w-[1.0625rem] h-[1.0625rem]' />}
         </div>
