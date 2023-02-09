@@ -1,12 +1,14 @@
 import { customer360Text, profileAvatarSingle, sterlinCombinedLogo } from 'Assets/svgs'
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import { customer360SearchAction } from 'Redux/actions/Customer360.actions'
 
 type Props = {}
 
 const Customer360Final = (props: Props) => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
   const [search, setSearch] = useState<string>('')
   // const [name, setName] = useState<string>('Temotope Yusuf Chukwuma')
@@ -38,10 +40,13 @@ const Customer360Final = (props: Props) => {
       setCustomer360Data(customerData?.data)
       const dataLength = customerData?.data?.length
       setSearchResult(dataLength)
+      console.log(customer360Data)
     }
   }, [customer360Success])
 
-  console.log(searchResult)
+  const NavigateToSingleUserScreen = (id) => {
+    navigate(`/customer-management/customer-360/${id}`)
+  }
 
   return (
     <div className='bg-white h-[80vh]  flex justify-center flex-col items-center'>
@@ -79,29 +84,31 @@ const Customer360Final = (props: Props) => {
               ? customer360Data.map((data: any, index: any) => {
                   return data?.customer_profiles?.map((customerInfo: any, customerIndex: any) => {
                     return (
-                      <div key={customerIndex} className='flex  flex-col mb-2'>
-                        {customerInfo?.idNumber > 0 ? (
-                          <div>
-                            <p className='font-medium text-[#636363] mb-2'>{customerInfo?.firstName}</p>
+                      <div
+                        key={customerIndex}
+                        className='flex  flex-col mb-2 cursor-pointer'
+                        onClick={() => NavigateToSingleUserScreen(data?.customerId)}
+                      >
+                        <div>
+                          <p className='font-medium text-[#636363] mb-2'>{customerInfo?.firstName}</p>
 
-                            <div className='flex gap-4'>
-                              <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
-                                {' '}
-                                <span className='font-bold'>ID :</span>
-                                {customerInfo?.idNumber}
-                              </span>
-                              <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
-                                <span className='font-bold'>NIN :</span> {customerInfo?.nin}
-                              </span>
+                          <div className='flex gap-4'>
+                            <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
+                              {' '}
+                              <span className='font-bold'>ID :</span>
+                              {customerInfo?.idNumber}
+                            </span>
+                            <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
+                              <span className='font-bold'>NIN :</span> {customerInfo?.nin}
+                            </span>
 
-                              <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
-                                {' '}
-                                <span className='font-bold'>PHONE :</span>
-                                {customerInfo?.mobileNumber}
-                              </span>
-                            </div>
+                            <span className='border-r border-[rgba(170,170,170,0.79)] px-1 text-[.875rem] text-[#636363]'>
+                              {' '}
+                              <span className='font-bold'>PHONE :</span>
+                              {customerInfo?.mobileNumber}
+                            </span>
                           </div>
-                        ) : null}
+                        </div>
                       </div>
                     )
                   })
