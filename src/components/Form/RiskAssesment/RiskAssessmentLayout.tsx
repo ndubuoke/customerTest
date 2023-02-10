@@ -35,11 +35,12 @@ export const fieldsNames = {
 
 type Props = {
   title: string
-  fields: { title: string; key: string }[]
-  assessmentData: Record<string, string>
+  fields?: { title: string; key: string }[]
+  assessmentData?: Record<string, string>
+  standardRiskAssessmentData: any[]
 }
 
-const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => {
+const RiskAssessmentLayout = memo(({ title, fields = [], standardRiskAssessmentData = [], assessmentData = {} }: Props) => {
   const [collapsed, setCollapsed] = useState<boolean>(false)
 
   const handleCollapseSection = () => {
@@ -83,45 +84,91 @@ const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => 
             </svg>
           </div>
         </div>
-
         <div
           className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
           style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gridGap: '1.25rem',
             color: '#636363',
             padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
             background: 'rgb(250, 250, 250)',
           }}
         >
-          {fields.map((field) => {
-            return (
-              <div key={field.title}>
-                <h5
-                  style={{
-                    fontWeight: '500',
-                    fontSize: '16px',
-                    lineHeight: '16px',
-                    fontFamily: 'Inter',
-                  }}
-                >
-                  {field.title}
-                </h5>
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr 1fr',
+              gridGap: '1.25rem',
+              // color: '#636363',
+              // padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
+              // background: 'rgb(250, 250, 250)',
+            }}
+          >
+            {fields.map((field) => {
+              return (
+                <div key={field.title}>
+                  <h5
+                    style={{
+                      fontWeight: '500',
+                      fontSize: '16px',
+                      lineHeight: '16px',
+                      fontFamily: 'Inter',
+                    }}
+                  >
+                    {field.title}
+                  </h5>
 
-                <p
-                  style={{
-                    fontWeight: '400',
-                    fontSize: '16px',
-                    lineHeight: '18px',
-                    marginTop: '0.3rem',
-                  }}
-                >
-                  {assessmentData[field.key] || '-'}
-                </p>
-              </div>
-            )
-          })}
+                  <p
+                    style={{
+                      fontWeight: '400',
+                      fontSize: '16px',
+                      lineHeight: '18px',
+                      marginTop: '0.3rem',
+                    }}
+                  >
+                    {assessmentData[field.key] || '-'}
+                  </p>
+                </div>
+              )
+            })}
+          </div>
+          {/* TABLE */}
+          <div>
+            <table className='w-full '>
+              <thead>
+                <tr className='bg-white h-[60px]'>
+                  <th className=' align-middle font-bold text-[14px] text-left text-[#aaaaaa]  w-[40%] '>
+                    <span className='px-3 border-l-2'>PARAMETER</span>
+                  </th>
+                  <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[20%] min-w-[155px]'>
+                    <span className='px-3 border-l-2'>IMPLIED WEIGHT</span>
+                  </th>
+                  <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[20%] min-w-[155px]'>
+                    <span className='px-3 border-l-2'>STATUS</span>
+                  </th>
+                  <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[20%] min-w-[155px]'>
+                    <span className='px-3 border-l-2'>SCORE</span>
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                {standardRiskAssessmentData.map((data) => (
+                  <tr key={data.parameter} className=' align-middle font-bold text-[16px] text-[#636363] border-b h-[60px] '>
+                    <td>{data.parameter}</td>
+                    <td>{data.impliedWeight}</td>
+                    <td>
+                      <select name='status' defaultValue={data.selectedParameterOption.status}>
+                        {data.parameterOptions.map((param) => (
+                          <option key={param.status} value={param.status}>
+                            {param.status}
+                          </option>
+                        ))}
+                      </select>
+                    </td>
+                    <td>{data.selectedParameterOption.weight}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </section>
       {/* watchlist section */}

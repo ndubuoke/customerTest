@@ -1,6 +1,4 @@
 import axios from 'axios'
-import { publishedForm } from 'Components/Form/Form-UIs/sampleForm'
-import { SignatoryDetailsRequiredDataStatusType } from 'Components/Form/Signatory/InitialData'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { Dispatch } from 'redux'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
