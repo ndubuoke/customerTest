@@ -1,2 +1,8 @@
-export { default as ProcessDoneStateIcon } from "./process_done_state.png"
-export { default as ProcessPendingStateIcon } from "./process_pending_state.png"
+export { default as ProcessDoneStateIcon } from './process_done_state.png'
+export { default as ProcessPendingStateIcon } from './process_pending_state.png'
+export { default as chartbot } from './chartbot.png'
+export { default as internetBanking } from './internetBanking.png'
+export { default as phone } from './phone-png.jpg'
+export { default as pos } from './pos.jpg'
+export { default as atm } from './atm.jpg'
+export { default as profileImage } from './profile-icon.png'

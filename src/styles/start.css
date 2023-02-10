@@ -6,6 +6,9 @@ body {
   /* color: #db353905 */
 }
 
+html {
+  font-size: 10px;
+}
 .modal-holder {
   position: fixed;
   left: 0;
@@ -60,12 +63,12 @@ body {
   }
 }
 
-* {
+/* * {
   transition: all 0.5s ease;
   padding: 0;
   margin: 0;
   outline: none;
-}
+} */
 
 /* Scroll bar custom styles */
 
@@ -124,9 +127,9 @@ body {
   border-radius: 0;
 }
 
-.hide-scrollbar:hover::-webkit-scrollbar {
+/* .hide-scrollbar:hover::-webkit-scrollbar {
   height: 0;
-}
+} */
 
 /* Handle collapsing of section... This is to reduce the amount useState being used */
 

@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react'
 import GoBack, { BreadCrumbsListItemType } from 'Components/MainScreenLayout/GoBack'
 import { customer360Data } from '../data/customerCreationBreadcrumbs'
 import TopNavMenu from 'Components/customer360/TopNavMenu'
+import Customer360Body from 'Components/customer360/Customer360Body'
+import TopMenuUserSummary from 'Components/customer360/TopMenuUserSummary'
 
 type Props = {}
 
@@ -22,15 +24,18 @@ const Customer360 = (props: Props) => {
   }, [name])
 
   return (
-    <>
+    <section className='h-screen min-h-screen max-h-screen'>
       <nav>
         <GoBack headerText={name} breadCrumbsList={linkData} />
       </nav>
+      <main className='bg-[#EFEFEF] w-full p-[.875rem]   pt-6'>
+        <div className='bg-white  px-[4.438rem] '>
+          <TopNavMenu />
 
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
-        <TopNavMenu />
+          <Customer360Body />
+        </div>
       </main>
-    </>
+    </section>
   )
 }
 
