@@ -45,6 +45,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
+import { riskAssessmentType, riskAssessmentReducer } from 'Redux/reducers/RiskAssessment.reducer'
 import {
   getRequestsForCheckerReducer,
   getSingleRequestReducer,
@@ -84,6 +85,7 @@ export type ReducersType = {
   getCities: ResponseType
   getColumnMap: ResponseType
   createColumnMap: ResponseType
+  riskAssessment: riskAssessmentType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -117,6 +119,7 @@ const reducer = combineReducers<ReducersType>({
   getCities: getCitiesReducer,
   getColumnMap: getColumnMapReducer,
   createColumnMap: createColumnMapReducer,
+  riskAssessment: riskAssessmentReducer,
 })
 
 const middleware = [thunk]

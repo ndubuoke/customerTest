@@ -1,24 +1,22 @@
-import { add, Plus } from 'Assets/svgs'
+import { add, ExclaimateIcon, Plus } from 'Assets/svgs'
 import React, { memo, useState, useEffect } from 'react'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import { SignatoryDetailsInitial } from '../Signatory/InitialData'
-import SignatoriesTable from '../Signatory/SignatoriesTable'
-import SignatoryModal from '../Signatory/SignatoryModal'
 
-import { additionalDetailsInitial, affiliatedCompanyDetailsInitial } from '../AdditionalInfo/initialData'
-import AdditionalDetailsTable from '../AdditionalInfo/AdditionalTable'
 import RiskAssessmentLayout from './RiskAssessmentLayout'
 import { FormStructureType } from 'Components/types/FormStructure.types'
+import { riskAssessmentResultAction } from 'Redux/actions/RiskAssessment.actions'
+import { useDispatch } from 'react-redux'
+import { calcScore } from './calculate'
 
 type Props = {
   fillingFormState: FormStructureType
 }
 
 const RiskAssessment = memo(({ fillingFormState }: Props) => {
+  const dispatch = useDispatch()
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  console.log('fillingFormState-RiskAssessment', fillingFormState.data)
-
-  const controller = {
+  const [riskScoreGuide, setRiskScoreGuide] = useState<{ score: number; rating: string; resolution: string }>(null)
+  const [riskAssessmentData, setRiskAssessmentData] = useState({
     'bio-Data': {
       title: "Customer's Identity",
       standardRiskAssessmentData: [
@@ -252,28 +250,83 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
       ],
       fields: [],
     },
-  }
+  })
+  console.log('fillingFormState-RiskAssessment', fillingFormState.data)
+
   const [collapsedWatchlist, setcollapsedWatchlist] = useState<boolean>(false)
   const handleCollapseSection = () => {
     setcollapsedWatchlist((prev) => !prev)
   }
+
+  const handleSelectedParameterOption = (parentKey: string, parameter: string, parameterOptionStatus: string) => {
+    console.log(parentKey, parameter, parameterOptionStatus)
+    const standardRiskAssessmentData = riskAssessmentData[parentKey]?.standardRiskAssessmentData
+    if (standardRiskAssessmentData) {
+      const mappedStandardRiskAssessmentData = standardRiskAssessmentData.map((assessment) => {
+        if (assessment.parameter === parameter) {
+          const parameterOption = assessment.parameterOptions.find((option) => option.status === parameterOptionStatus)
+          if (parameterOption) {
+            assessment = { ...assessment, selectedParameterOption: { ...parameterOption } }
+          }
+        }
+        return assessment
+      })
+      setRiskAssessmentData((prev) => {
+        return {
+          ...prev,
+          [parentKey]: {
+            ...prev[parentKey],
+            standardRiskAssessmentData: [...mappedStandardRiskAssessmentData],
+          },
+        }
+      })
+    }
+  }
+
+  const computeScore = () => {
+    //   {
+    //   parameter: 'Is customer a Non-Resident?',
+    //   parameterOption: 'Yes',
+    // },
+    const userAssessment = []
+    Object.keys(riskAssessmentData).forEach((assessment) => {
+      riskAssessmentData[assessment].standardRiskAssessmentData.forEach((data) =>
+        userAssessment.push({
+          parameter: data.parameter,
+          parameterOption: data.selectedParameterOption.status,
+        })
+      )
+    })
+    const score = calcScore(userAssessment)
+    console.log('score', score)
+    dispatch(riskAssessmentResultAction(score.scoreGuide) as any)
+    setRiskScoreGuide(score.scoreGuide)
+  }
+
   return (
     <>
       {fillingFormState.data.customerData.map((data) => {
-        if (controller[data.sectionName]) {
+        if (riskAssessmentData[data.sectionName]) {
           return (
             <RiskAssessmentLayout
-              key={controller[data.sectionName].title}
-              title={controller[data.sectionName].title}
-              fields={controller[data.sectionName].fields}
-              standardRiskAssessmentData={controller[data.sectionName].standardRiskAssessmentData}
+              key={riskAssessmentData[data.sectionName].title}
+              parentKey={data.sectionName}
+              title={riskAssessmentData[data.sectionName].title}
+              fields={riskAssessmentData[data.sectionName].fields}
+              standardRiskAssessmentData={riskAssessmentData[data.sectionName].standardRiskAssessmentData}
               assessmentData={data.data}
+              handleSelectedParameterOption={handleSelectedParameterOption}
             />
           )
         }
       })}
       {/* watchlist section */}
-      <RiskAssessmentLayout title={controller['watchlist'].title} standardRiskAssessmentData={controller['watchlist'].standardRiskAssessmentData} />
+      <RiskAssessmentLayout
+        parentKey='watchlist'
+        title={riskAssessmentData['watchlist'].title}
+        standardRiskAssessmentData={riskAssessmentData['watchlist'].standardRiskAssessmentData}
+        handleSelectedParameterOption={handleSelectedParameterOption}
+      />
       {/* <section className='max-w-[66.25rem] mx-4 '>
         <div
           className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
@@ -316,8 +369,43 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         ></div>
       </section> */}
       <div className='flex justify-center items-center gap-12 py-10'>
-        <button className='border text-[#667085] px-5 py-1 rounded-md'>Compute Risk Score</button>
-        <span>result here</span>
+        <button className='border text-[#667085] px-5 py-1 rounded-md' onClick={computeScore}>
+          Compute Risk Score
+        </button>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            maxWidth: '300px',
+            marginTop: '3rem',
+          }}
+        >
+          {riskScoreGuide ? (
+            <span
+              style={{
+                backgroundColor: '#EEEEEE',
+                fontSize: '20px',
+                padding: '7px 96px 7px 16px',
+                maxWidth: '140px',
+              }}
+            >
+              {/* <ExclaimateIcon /> */}
+              {/* <exclamationYellow /> */}
+              {riskScoreGuide.rating}
+            </span>
+          ) : (
+            ''
+          )}
+          {riskScoreGuide ? (
+            <span>
+              {/* <ExclaimateIcon /> */}
+              {/* <exclamationYellow /> */}
+              {riskScoreGuide.resolution}
+            </span>
+          ) : (
+            ''
+          )}
+        </div>
       </div>
     </>
   )

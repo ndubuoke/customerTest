@@ -92,7 +92,7 @@ const riskAssessmentScore = (assessmentArray) => {
     }
   })
 }
-const calcScore = (arr) => {
+export const calcScore = (arr) => {
   let scoreGuide = null
   const assessmentscoreGuide = riskAssessmentScore(standardRiskAssessmentData)
   const output = assessmentscoreGuide
@@ -117,10 +117,12 @@ const calcScore = (arr) => {
     return (acc += res.score)
   }, 0)
   if (score < 20) scoreGuide = { score, rating: 'LOW', resolution: 'Do nothing' }
-  else if (score >= 20 && score <= 60) scoreGuide = { score, rating: 'MEDIUM', resolution: 'Trigger EDD' }
-  else if (score > 60) scoreGuide = { score, rating: 'HIGH', resolution: 'Prevent Customer Creation' }
+  else if (score >= 20 && score <= 60)
+    scoreGuide = { score, rating: 'MEDIUM', resolution: 'Enhanced Due Diligence will be initiated to complete profile creation.' }
+  else if (score > 60) scoreGuide = { score, rating: 'HIGH', resolution: 'Enhanced Due Diligence will be initiated to complete profile creation.' }
   output.map((res) => {
-    if (res.assessmentType === 'Deal breaker') scoreGuide = { score, rating: 'HIGH', resolution: 'Prevent Customer Creation' }
+    if (res.assessmentType === 'Deal breaker')
+      scoreGuide = { score, rating: 'HIGH', resolution: 'Enhanced Due Diligence will be initiated to complete profile creation.' }
     else if (res.assessmentType === 'EDD required' && res.assessmentType !== 'Deal breaker')
       scoreGuide = { score, rating: 'MEDIUM', resolution: 'Trigger EDD' }
   })
