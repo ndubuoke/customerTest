@@ -56,7 +56,6 @@ export const initialStateRequest = {
 }
 
 export const getFormReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
-  console.log('action.payload', action.payload)
   switch (action.type) {
     case GET_FORM_REQUEST:
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
@@ -75,6 +74,20 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
                   builtFormMetadata: {
                     ...action.payload.data.builtFormMetadata,
                     pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+                  },
+                },
+              }
+            : action.payload.data.formType === 'individualLegacy'
+            ? {
+                ...action.payload,
+                data: {
+                  ...action.payload.data,
+                  builtFormMetadata: {
+                    ...action.payload.data.builtFormMetadata,
+                    pages: [
+                      ...action.payload.data.builtFormMetadata.pages,
+                      defaultPublishedFormPages.find((page) => page.id === '1662112333552788291'),
+                    ],
                   },
                 },
               }

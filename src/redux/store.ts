@@ -52,6 +52,7 @@ import {
   updateRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { UnfilledRequiredSignatoryListType } from './actions/FormManagement.actions'
+import { customerSearchReducer, getSingleCustomer360Reducer } from './reducers/Customer360.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -84,6 +85,8 @@ export type ReducersType = {
   getCities: ResponseType
   getColumnMap: ResponseType
   createColumnMap: ResponseType
+  customer360Search: ResponseType
+  getSingleCustomer: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -117,6 +120,8 @@ const reducer = combineReducers<ReducersType>({
   getCities: getCitiesReducer,
   getColumnMap: getColumnMapReducer,
   createColumnMap: createColumnMapReducer,
+  customer360Search: customerSearchReducer,
+  getSingleCustomer: getSingleCustomer360Reducer,
 })
 
 const middleware = [thunk]

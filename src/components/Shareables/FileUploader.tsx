@@ -26,6 +26,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
         const response = await API.post('/file/upload', formdata)
         try {
           const signedUrlResponse = await API.get('/file/signedurl/' + response.data.data.fileKey)
+
           try {
             const ocrVerificationResponse = await API.post('/verification/ocr/extraction', {
               imageUrl: signedUrlResponse.data.data,
@@ -33,6 +34,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
             // console.log('ocrVerificationResponse', ocrVerificationResponse.data)
             return {
               file,
+              signedUrl: signedUrlResponse.data.data,
               verificationData: {
                 docType: ocrVerificationResponse.data.data.docType || '',
                 extractedData: ocrVerificationResponse.data.data.extractedData || [],
@@ -95,10 +97,10 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
 
   return (
     <div className={`border rounded-md max-w-[37.4375rem] h-full `}>
-      <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative min-h-[19.5rem]'>
+      <div className='flex flex-col w-full h-full rounded-lg overflow-hidden bg-white shadow relative '>
         {/* loading overlay  */}
         {isProcessing && (
-          <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center min-h-[19.5rem]'>
+          <div className='absolute bg-white bg-opacity-60 z-10 h-full w-full flex items-center justify-center '>
             <div className='flex items-center'>
               <span className='text-3xl mr-4'>Loading</span>
               {/* loading icon */}
@@ -107,12 +109,12 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
           </div>
         )}
 
-        <div {...getRootProps()} className='cursor-pointer'>
+        <div {...getRootProps()} className='cursor-pointer '>
           {identificationDetails?.identificationNumber && identificationDetails?.identificationType ? (
             <input type={`file`} hidden {...getInputProps()} />
           ) : null}
           {uploadedFiles.length === 0 ? (
-            <div className='flex flex-col items-center justify-center h-full pt-3 pb-3 min-h-[19.5rem]'>
+            <div className='flex flex-col items-center justify-center  pt-3 pb-3 stub'>
               <div>
                 <img src={upload} />
               </div>
@@ -125,7 +127,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
               </p>
             </div>
           ) : (
-            <div className='flex flex-col justify-between h-full p-2 overflow-y-auto min-h-[19.5rem]'>
+            <div className='flex flex-col justify-between h-full p-2 overflow-y-auto stub'>
               <div className='flex gap-3 w-[95%] mx-auto ' style={{ flexWrap: 'wrap' }}>
                 {uploadedFiles.map((file: UploadFile, index) => {
                   return <IndividualFile file={file} key={index} removeFile={(e) => handleRemoveFile(e, index)} />

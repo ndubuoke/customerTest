@@ -15,6 +15,7 @@ const FieldLabel = ({ fieldItem }: Props) => {
         whiteSpace: 'nowrap',
         overflow: 'hidden',
         textOverflow: 'ellipsis',
+        color: '#636363',
       }}
     >
       <label>
