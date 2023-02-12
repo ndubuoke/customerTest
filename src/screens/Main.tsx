@@ -390,7 +390,7 @@ const Main = (props: Props) => {
         </>
       ) : null}
 
-      <div className='  flex flex-col bg-[#FFFFFF] '>
+      <div className='  flex flex-col /bg-[#FFFFFF] '>
         <div className=' flex w-[62.5rem] mt-10 pl-6 items-center'>
           <h1 className='text-[#636363] text-[2.375rem] font-bold'>Customer Management</h1>
 
