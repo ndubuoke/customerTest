@@ -444,6 +444,7 @@ const FormInput = ({
       style={{
         gridColumn: ` span ${span}`,
         // border: clickedFormControl?.control?.name === item.name ? `.125rem dotted green` : '',
+        background: 'transparent',
       }}
       title={helpText}
     >
@@ -454,7 +455,7 @@ const FormInput = ({
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
         {item.name === fieldsNames.NUMBERCOUNTER ? (
           <input
-            className={`flex w-full  py-1 leading-6 `}
+            className={`flex w-full  py-1 leading-6 bg-transparent`}
             type='number'
             required={required.toLowerCase() === 'on'}
             placeholder={placeholder}
@@ -467,7 +468,7 @@ const FormInput = ({
         ) : null}
         {item.name !== fieldsNames.NUMBERCOUNTER ? (
           <input
-            className={`flex w-full  py-1 leading-6 `}
+            className={`flex w-full  py-1 leading-6 bg-transparent`}
             type={
               item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
                 ? 'text'
@@ -491,7 +492,7 @@ const FormInput = ({
         ) : null}
 
         {item.name !== fieldsNames.NUMBERCOUNTER && maximumNumbersOfCharacters ? (
-          <div className='absolute bottom-0 right-0 text-sm text-[#9ca3af] z-10 bg-white'>
+          <div className='absolute bottom-0 right-0 text-sm text-[#9ca3af] z-10 bg-transparent'>
             {text.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}

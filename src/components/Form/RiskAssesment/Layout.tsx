@@ -80,10 +80,8 @@ const RiskAssessmentLayout = memo(({ title, fields }: Props) => {
         style={{
           display: 'grid',
           gridTemplateColumns: '1fr 1fr 1fr',
-          gridGap: '1.25rem',
-          padding: '.625rem',
-          paddingBottom: '0',
-          paddingTop: '0.2rem',
+          gridGap: '2.25rem',
+          padding: '2rem 10rem 2rem 3rem',
         }}
       >
         {fields.map((field) => (
