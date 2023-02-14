@@ -15,9 +15,9 @@ type Props = {
 const StepNumbers = ({ page, index, last, onClick, isActive }: Props) => {
   return (
     <div
-      className={`cursor-pointer w-[10.375rem] flex flex-col items-center  text-center relative z-10 after:absolute after:w-[100%] after:left-[50%] after:bg-[#CCCCCC] after:h-[.1rem] after:top-[33%] after:-z-[2]  ${
+      className={`cursor-pointer w-[10.375rem] flex flex-col items-center  text-center relative z-10 after:absolute  after:left-[50%] after:bg-[#CCCCCC] after:h-[.1rem] after:top-[33%] after:-z-[2]  ${
         index === 1 ? 'after:w-[100%]' : ''
-      } ${last ? 'after:w-0' : '0'}  text-[#636363] text-[.75rem] font-[300]  `}
+      } ${last ? '' : 'after:w-[100%]'}  text-[#636363] text-[.75rem] font-[300]  `}
       onClick={() => onClick(index)}
     >
       {/* {isActive ? (
