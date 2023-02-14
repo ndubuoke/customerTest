@@ -70,7 +70,7 @@ const Customer360PreferredChannels = (props: Props) => {
         {preferredChannelList.length > 0 &&
           preferredChannelList?.map((channelList: any, index: any) => {
             return (
-              <div key={index} className='w-[9rem] flex items-center flex-col '>
+              <div key={index} className='w-[8rem] flex items-center flex-col '>
                 <h6 className='text-[1rem] text-[red]'>{channelList?.percentage}</h6>
                 <div>
                   <img src={channelList?.icon} alt={channelList?.title} className='w-[2.5rem] h-[2.5rem]' />
