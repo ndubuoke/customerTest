@@ -1,4 +1,4 @@
-import { Plus } from 'Assets/svgs'
+import { plusIcon } from 'Assets/svgs'
 import React from 'react'
 
 type Props = {
@@ -10,17 +10,17 @@ const MiniButton = ({ onClick, text }: Props) => {
   console.log({ text })
   return (
     <button
-      className='flex cursor-pointer  rounded-md justify-between px-2 items-center
+      className='flex  cursor-pointer  px-2 items-center
 py-1'
       onClick={onClick}
     >
-      <span>
-        <img src={Plus} className='w-6 h-6' />
+      <span className='flex items-center gap-[.5rem] capitalize'>
+        <img src={plusIcon} className='w-[.625rem] h-[.625rem] fill-[#CF2A2A]' />
+        <span className='text-[1rem] font-medium'>{text}</span>
       </span>
-      <div>
-        {/* {selectedList} */}
-        {/* <span className={`text-white`}>{text}</span> */}
-      </div>
+
+      {/* {selectedList} */}
+      {/* <span className={` capitalize text-[#636363]`}>{text}</span> */}
     </button>
   )
 }

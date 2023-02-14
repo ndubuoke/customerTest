@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { BubbleLoader, bulkTemplate, ExclaimateIcon, GreenCheck } from 'Assets/svgs'
 import { Dropzone } from '../Dropzone'
 import readXlsxFile from 'read-excel-file'
-import uploadTemplate from '../../../assets/files/bulk_customer_upload_template.xlsx'
+// import uploadTemplate from '../../../assets/files/bulk_customer_upload_template.xlsx'
 import Button from 'Components/Shareables/Button'
 import { BulkTable } from '../BulkTable'
 import { AppRoutes } from 'Routes/AppRoutes'
@@ -108,7 +108,7 @@ export const BulkCreation = () => {
     const ext = 'xlsx'
 
     // const link = document.createElement("a");
-    // link.href = '';
+    // link.href = 'https://customer-management-api-dev.reventtechnologies.com/v1/bulk-customer/download';
     bulkUploadTemplateRef.current.download = `bulk_customer_upload_template.${ext}`
     bulkUploadTemplateRef.current.click()
   }, [])
@@ -181,7 +181,7 @@ export const BulkCreation = () => {
 
           {/* <div className='border-r border-[#8F8F8F]'></div> */}
           <div className={`w-1/2`}>
-            <div className='flex flex-col py-20 px-0 gap-y-5 w-fit'>
+            <div className='flex flex-col py-20 px-0 gap-y-1 w-fit'>
               <Dropzone
                 accept={accept}
                 onDrop={onDrop}
@@ -193,7 +193,7 @@ export const BulkCreation = () => {
               {fileUploaded ? null : (
                 <button onClick={onDownloadTemplate} className={`self-end border-2 px-2 py-1 rounded`}>
                   <img src={bulkTemplate} alt={''} />
-                  <a ref={bulkUploadTemplateRef} href={uploadTemplate} hidden></a>
+                  <a ref={bulkUploadTemplateRef} href={`https://customer-management-api-dev.reventtechnologies.com/v1/bulk-customer/download`} hidden></a>
                 </button>
               )}
             </div>
