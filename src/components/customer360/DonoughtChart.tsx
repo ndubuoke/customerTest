@@ -1,34 +1,50 @@
 import React from 'react'
-import { PieChart, Pie } from 'recharts'
+import Chart from 'react-apexcharts'
 
-const DonoughtChart = () => {
-  // Sample data
-  const data = [
-    { name: 'Geeksforgeeks', students: 400 },
-    { name: 'Technical scripter', students: 700 },
-    { name: 'Geek-i-knack', students: 200 },
-    { name: 'Geek-o-mania', students: 1000 },
-  ]
+type Props = {}
 
+const DonoughtChart = (props: Props) => {
+  const options = {
+    series: [2, 5, 4],
+    labels: ['apple', 'beans', 'banana'],
+    title: {
+      // text: 'fruits',
+    },
+
+    plotOptions: {
+      pie: {
+        donut: {
+          labels: {
+            show: true,
+            // showAlways: false,
+            total: {
+              show: true,
+              // fontSize: 20,
+              // color: '#f68b1e',
+              colors: ['#2E93fA', '#66DA26', '#546E7A'],
+            },
+          },
+          // stroke: {
+          //   show: true,
+          //   curve: 'smooth',
+          //   lineCap: 'butt',
+          //   colors: undefined,
+          //   width: 6,
+          //   dashArray: 0,
+          // },
+        },
+      },
+    },
+    dataLabels: {
+      // enabled: true,
+    },
+  }
+
+  const series = [2, 5, 4]
   return (
-    <PieChart
-      width={500}
-      height={500}
-      style={{
-        zIndex: 50,
-      }}
-    >
-      <Pie
-        data={data}
-        dataKey='students'
-        outerRadius={100}
-        innerRadius={100}
-        fill='green'
-        style={{
-          zIndex: 50,
-        }}
-      />
-    </PieChart>
+    <div className='absolute bottom-6 m-auto '>
+      <Chart type='donut' options={options} series={series} width='100%' height={350} />
+    </div>
   )
 }
 

@@ -43,7 +43,7 @@ const TopMenuUserSummary = (props: Props) => {
     }
   }, [singleCustomerSuccess])
 
-  console.log({ det: customerDetails })
+  // console.log({ det: customerDetails })
   return (
     <div>
       {customerDetails?.length
