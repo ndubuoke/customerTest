@@ -45,6 +45,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
+import { riskAssessmentType, riskAssessmentReducer } from 'Redux/reducers/RiskAssessment.reducer'
 import {
   getRequestsForCheckerReducer,
   getSingleRequestReducer,
@@ -53,6 +54,14 @@ import {
 } from './reducers/CustomerManagement.reducer'
 import { UnfilledRequiredSignatoryListType } from './actions/FormManagement.actions'
 import { customerSearchReducer, getSingleCustomer360Reducer } from './reducers/Customer360.reducer'
+import { getCustomer360SingleProductReducer } from './reducers/Customer360ProductReducer'
+import { getCustomer369RecentTransactionsReducer } from './reducers/Customer360RecentTransactions.Reducer'
+import { getCustomer360PreferredChannelsReducer } from './reducers/Customer360PreferredChannels.reducer'
+import { getCustomer360AlertsAndNotificationReducer } from './reducers/Customer360AlertsAndNotification.reducer'
+import { getCustomer360ConcessionGroupsReducer } from './reducers/Customer360ConcessionGroups.reducer'
+import { getCustomer360RewardReducer } from './reducers/Customer360Rewards.reducer'
+import { getCustomer360RecommendedProductsReducer } from './reducers/Customer360RecommendedProducts.reducer'
+import { getCustomer360ProductTypeReducer } from './reducers/Customer360GetProductByType.reducer'
 
 export type ReducersType = {
   publishedForm: ResponseType
@@ -85,8 +94,17 @@ export type ReducersType = {
   getCities: ResponseType
   getColumnMap: ResponseType
   createColumnMap: ResponseType
+  riskAssessment: riskAssessmentType
   customer360Search: ResponseType
   getSingleCustomer: ResponseType
+  customer360SingleProduct: ResponseType
+  customer360RecentTransaction: ResponseType
+  customer360PreferredChannels: ResponseType
+  customer360AlertsAndNotification: ResponseType
+  customer360ConcessionGroups: ResponseType
+  customer360RecommendedProducts: ResponseType
+  customer360Rewards: ResponseType
+  customer360ProductType: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -120,8 +138,17 @@ const reducer = combineReducers<ReducersType>({
   getCities: getCitiesReducer,
   getColumnMap: getColumnMapReducer,
   createColumnMap: createColumnMapReducer,
+  riskAssessment: riskAssessmentReducer,
   customer360Search: customerSearchReducer,
   getSingleCustomer: getSingleCustomer360Reducer,
+  customer360SingleProduct: getCustomer360SingleProductReducer,
+  customer360RecentTransaction: getCustomer369RecentTransactionsReducer,
+  customer360PreferredChannels: getCustomer360PreferredChannelsReducer,
+  customer360AlertsAndNotification: getCustomer360AlertsAndNotificationReducer,
+  customer360ConcessionGroups: getCustomer360ConcessionGroupsReducer,
+  customer360RecommendedProducts: getCustomer360RecommendedProductsReducer,
+  customer360Rewards: getCustomer360RewardReducer,
+  customer360ProductType: getCustomer360ProductTypeReducer,
 })
 
 const middleware = [thunk]

@@ -44,8 +44,11 @@ const CustomerPortfolio = (Props: Props) => {
       </div>
 
       {/* Circle that displays deposit loan and investment percentage */}
-
-      <div className='h-[120px] w-[120px] border-2 border-[red] m-auto rounded-[50%]'></div>
+      <div className='flex justify-center'>
+        <DonoughtChart />
+      </div>
+      {/* <div className='h-[7.5rem] w-[120px] border-2 border-[red] m-auto rounded-[50%]'>
+      </div> */}
 
       <footer className='flex justify-center gap-4 capitalize mt-3 absolute bottom-3 w-full'>
         <div className='flex items-center gap-3'>

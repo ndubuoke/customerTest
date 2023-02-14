@@ -1,5 +1,6 @@
 import { infoVector } from 'Assets/svgs'
 import React, { useState } from 'react'
+import WaveChart from './WaveChart'
 
 type Props = {}
 
@@ -31,7 +32,9 @@ const Customer360Chart = (props: Props) => {
           </li>
         </ul>
       </nav>
-      <div className='text-center mt-8 border-2 h-[14.4256rem]'>Wave Chart here</div>
+      <div className='text-center mt-8 border-2 h-[14.4256rem]'>
+        <WaveChart />
+      </div>
 
       <footer className='flex justify-start gap-4 capitalize mt-3 absolute bottom-3'>
         <div className='flex items-center gap-3'>

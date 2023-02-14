@@ -6,9 +6,11 @@ body {
   /* color: #db353905 */
 }
 
+/* 
 html {
   font-size: 10px;
-}
+} */
+
 .modal-holder {
   position: fixed;
   left: 0;
@@ -172,3 +174,14 @@ html {
 }
 
 /* End Style datalist */
+
+/* apex chart */
+
+/* .apexcharts-pie-area apexcharts-donut-slice-0 {
+  background-color: red !important;
+  stroke-width: 24px !important;
+}
+
+.apexcharts-series apexcharts-pie-series {
+  stroke-width: 24px !important;
+} */
