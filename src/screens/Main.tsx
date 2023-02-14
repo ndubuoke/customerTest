@@ -468,7 +468,7 @@ const Main = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className='    bg-background-default  px-4 py-4 '>
+        <div className='    bg-background-default h-fit  px-4 py-4 '>
           <div className=' flex'>
             <div className='w-[90%] flex flex-col    mr-4 '>
               <div className=' bg-white flex h-[8.125rem] rounded-md '>
