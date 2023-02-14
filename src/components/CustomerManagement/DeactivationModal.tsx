@@ -1,7 +1,7 @@
 import { Close } from 'Assets/svgs'
 
 import Button from 'Components/Shareables/Button'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useCharacterCount } from '../../hooks/use-character-count'
 import FileUploadComponent from './FileUploadComponent'
 import Textarea from './Textarea'
@@ -12,12 +12,22 @@ type props = {
 
 const DeactivationModal = ({ setShowDeactivationModal }: props) => {
   const [localUpload, setLocalUpload] = useState<Array<any>>([])
-   const [uploadKey, setUploadKey] = useState<Array<string>>([])
+  const [buttonDisabledStatus, setButtonDisabledStatus] = useState(true)
+  const [uploadKey, setUploadKey] = useState<Array<string>>([])
   const { characterCount, characterLengthChangeHandler, character } = useCharacterCount()
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
-   console.log(uploadKey)
+  // console.log(uploadKey)
+  // console.log(localUpload)
+  useEffect(() => {
+    if (uploadKey.length > 0) {
+      setButtonDisabledStatus(false)
+    }
+    if (localUpload.length < 1) {
+      setButtonDisabledStatus(true)
+    }
+  }, [uploadKey, localUpload, buttonDisabledStatus])
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -47,7 +57,13 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
           </div>
 
           <div className='w-full mt-12 text-center'>
-            <Button disabled={false} text={'Submit'} onClick={() => {}} />
+            <Button
+              disabled={buttonDisabledStatus}
+              text={'Submit'}
+              onClick={() => {
+                console.log('yes')
+              }}
+            />
           </div>
         </div>
       </div>

@@ -390,7 +390,7 @@ const Main = (props: Props) => {
         </>
       ) : null}
 
-      <div className='  flex flex-col /bg-[#FFFFFF] '>
+      <div className='  flex flex-col bg-[#FFFFFF] '>
         <div className=' flex w-[62.5rem] mt-10 pl-6 items-center'>
           <h1 className='text-[#636363] text-[2.375rem] font-bold'>Customer Management</h1>
 
@@ -468,7 +468,7 @@ const Main = (props: Props) => {
             </div>
           </div>
         </div>
-        <div className='    bg-background-default  px-4 py-4 '>
+        <div className='    bg-background-default h-fit  px-4 py-4 '>
           <div className=' flex'>
             <div className='w-[90%] flex flex-col    mr-4 '>
               <div className=' bg-white flex h-[8.125rem] rounded-md '>
