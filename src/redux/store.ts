@@ -45,6 +45,7 @@ import {
   deleteRequestReducer,
 } from './reducers/CustomerManagement.reducer'
 import { validateCustomerResponseType, validateCustomerReducer } from 'Redux/reducers/ValidateCustomer.reducer'
+import { riskAssessmentType, riskAssessmentReducer } from 'Redux/reducers/RiskAssessment.reducer'
 import {
   getRequestsForCheckerReducer,
   getSingleRequestReducer,
@@ -93,6 +94,7 @@ export type ReducersType = {
   getCities: ResponseType
   getColumnMap: ResponseType
   createColumnMap: ResponseType
+  riskAssessment: riskAssessmentType
   customer360Search: ResponseType
   getSingleCustomer: ResponseType
   customer360SingleProduct: ResponseType
@@ -136,6 +138,7 @@ const reducer = combineReducers<ReducersType>({
   getCities: getCitiesReducer,
   getColumnMap: getColumnMapReducer,
   createColumnMap: createColumnMapReducer,
+  riskAssessment: riskAssessmentReducer,
   customer360Search: customerSearchReducer,
   getSingleCustomer: getSingleCustomer360Reducer,
   customer360SingleProduct: getCustomer360SingleProductReducer,

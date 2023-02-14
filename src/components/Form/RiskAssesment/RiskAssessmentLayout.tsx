@@ -35,97 +35,157 @@ export const fieldsNames = {
 
 type Props = {
   title: string
-  fields: { title: string; key: string }[]
-  assessmentData: Record<string, string>
+  fields?: { title: string; key: string }[]
+  parentKey: string
+  assessmentData?: Record<string, string>
+  standardRiskAssessmentData: any[]
+  handleSelectedParameterOption: (parentKey: string, parameter: string, parameterOptionStatus: string) => void
 }
 
-const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => {
-  const [collapsed, setCollapsed] = useState<boolean>(false)
+const RiskAssessmentLayout = memo(
+  ({ parentKey, title, fields = [], standardRiskAssessmentData = [], assessmentData = {}, handleSelectedParameterOption }: Props) => {
+    const [collapsed, setCollapsed] = useState<boolean>(false)
 
-  const handleCollapseSection = () => {
-    setCollapsed((prev) => !prev)
-  }
+    const handleCollapseSection = () => {
+      setCollapsed((prev) => !prev)
+    }
 
-  console.log('collapsed', collapsed)
+    console.log('collapsed', collapsed)
 
-  return (
-    <>
-      <section className='max-w-[66.25rem] mx-4'>
-        <div
-          className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+    return (
+      <>
+        <section className='max-w-[66.25rem] mx-4'>
+          <div
+            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
             {setRequiredFormFieldsRedux.} $
             `}
-          style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-            background: 'rgba(170, 170, 170, 0.07)',
-          }}
-        >
-          <div className='flex items-center'>
-            <h6
+            style={{
+              boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+              background: 'rgba(170, 170, 170, 0.07)',
+            }}
+          >
+            <div className='flex items-center'>
+              <h6
+                style={{
+                  fontWeight: '500',
+                  fontSize: '16px',
+                }}
+              >
+                {title}
+              </h6>
+            </div>
+            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+              <svg
+                xmlns='http://www.w3.org/2000/svg'
+                fill='none'
+                viewBox='0 0 24 24'
+                strokeWidth='1.5'
+                stroke='currentColor'
+                className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+              >
+                <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
+              </svg>
+            </div>
+          </div>
+          <div
+            className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
+            style={{
+              color: '#636363',
+              padding: `${collapsed ? '0' : '1.3rem 7rem 1rem 2.5rem'}`,
+              background: 'rgb(250, 250, 250)',
+            }}
+          >
+            <div
               style={{
-                fontWeight: '500',
-                fontSize: '16px',
+                display: 'grid',
+                gridTemplateColumns: '1fr 1fr 1fr',
+                gridGap: '1.25rem',
+                // color: '#636363',
+                // padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
+                // background: 'rgb(250, 250, 250)',
               }}
             >
-              {title}
-            </h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
+              {fields.map((field) => {
+                return (
+                  <div key={field.title}>
+                    <h5
+                      style={{
+                        fontWeight: '500',
+                        fontSize: '16px',
+                        lineHeight: '16px',
+                        fontFamily: 'Inter',
+                      }}
+                    >
+                      {field.title}
+                    </h5>
 
-        <div
-          className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
-          style={{
-            display: 'grid',
-            gridTemplateColumns: '1fr 1fr 1fr',
-            gridGap: '1.25rem',
-            color: '#636363',
-            padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
-            background: 'rgb(250, 250, 250)',
-          }}
-        >
-          {fields.map((field) => {
-            return (
-              <div key={field.title}>
-                <h5
-                  style={{
-                    fontWeight: '500',
-                    fontSize: '16px',
-                    lineHeight: '16px',
-                    fontFamily: 'Inter',
-                  }}
-                >
-                  {field.title}
-                </h5>
-
-                <p
-                  style={{
-                    fontWeight: '400',
-                    fontSize: '16px',
-                    lineHeight: '18px',
-                    marginTop: '0.3rem',
-                  }}
-                >
-                  {assessmentData[field.key] || '-'}
-                </p>
-              </div>
-            )
-          })}
-        </div>
-      </section>
-      {/* watchlist section */}
-      {/* <section className='max-w-[1060px] mx-4 bg-slate-50'>
+                    <p
+                      style={{
+                        fontWeight: '400',
+                        fontSize: '16px',
+                        lineHeight: '18px',
+                        marginTop: '0.3rem',
+                      }}
+                    >
+                      {assessmentData[field.key] || '-'}
+                    </p>
+                  </div>
+                )
+              })}
+            </div>
+            {/* TABLE */}
+            <div>
+              <table className='w-full ' style={{ fontFamily: 'Inter' }}>
+                <thead>
+                  <tr className='bg-white h-[60px]'>
+                    <th className=' align-middle font-bold text-[14px] text-left text-[#aaaaaa]  w-[40%] '>
+                      <span className='px-3 border-l-2'>PARAMETER</span>
+                    </th>
+                    <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa] min-w-[155px  max-w-[155px]   w-[20%] '>
+                      <span className='border-l-2  px-3 '>IMPLIED WEIGHT</span>
+                    </th>
+                    <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[25%] min-w-[155px]'>
+                      <span className='px-3 border-l-2'>STATUS</span>
+                    </th>
+                    <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[15%] min-w-[155px]'>
+                      <span className='px-3 border-l-2'>SCORE</span>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {standardRiskAssessmentData.map((data) => (
+                    <tr key={data.parameter} className=' align-middle font-medium text-[16px] text-[#636363] border-b h-[60px]  pl-3'>
+                      <td className='pl-3'>{data.parameter}</td>
+                      <td className='pl-3'>{data.impliedWeight}</td>
+                      <td className='pl-3'>
+                        <select
+                          name='status'
+                          value={data.selectedParameterOption.status}
+                          onChange={(ev) => handleSelectedParameterOption(parentKey, data.parameter, ev.target.value)}
+                          style={{
+                            padding: '8px 0',
+                            borderBottom: '1px solid #636363',
+                            width: '100%',
+                            background: 'transparent',
+                          }}
+                        >
+                          {data.parameterOptions.map((param) => (
+                            <option key={param.status} value={param.status}>
+                              {param.status}
+                            </option>
+                          ))}
+                        </select>
+                      </td>
+                      <td className='pl-3'>{data.selectedParameterOption.weight}%</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </section>
+        {/* watchlist section */}
+        {/* <section className='max-w-[1060px] mx-4 bg-slate-50'>
         <div
           className={`ControlUILayout  w-full   px-3 py-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
@@ -151,8 +211,9 @@ const RiskAssessmentLayout = memo(({ title, fields, assessmentData }: Props) => 
 
         <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}></div>
       </section> */}
-    </>
-  )
-})
+      </>
+    )
+  }
+)
 
 export default RiskAssessmentLayout

@@ -19,6 +19,13 @@ enum VerificationModeEnum {
   TIN = 'tin',
 }
 
+const MaxLengthForType = {
+  bvn: 11,
+  cac: 14,
+  nin: 11,
+  tin: 14,
+}
+
 export type IdentificationTypeType = 'bvn' | 'nin' | 'cac' | 'tin' | null
 export type IdentificationNumberType = string | null
 type FieldStatus = 'loading' | 'success' | 'error'
@@ -31,7 +38,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   const [customer, setCustomer] = useState(null)
   const [showCustomerModal, setShowCustomerModal] = useState(false)
 
-  const MAX_FIELD_LENGTH = 11
+  // const MAX_FIELD_LENGTH = 12
 
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
     const { value, validity } = ev.target
@@ -44,7 +51,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
       }
     })
     setStatus(null)
-    if (value.length === MAX_FIELD_LENGTH) {
+    if (value.length === MaxLengthForType[selectedIdentificationType]) {
       try {
         setStatus('loading')
         const response = await API.get(`/verification/${selectedIdentificationType}/${value.trim()}`)
@@ -146,7 +153,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             </div>
           ) : null}
         </div>
-        {console.log('status', status)}
+        {/* {console.log('status', status)} */}
         <div
           className={`w-full flex justify-between py-2 leading-6 border-b  text-text-disabled  max-w-[19.875rem]`}
           style={{
@@ -158,7 +165,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
             type='text'
             placeholder='Enter Number'
             onChange={handleVerification}
-            maxLength={MAX_FIELD_LENGTH}
+            maxLength={MaxLengthForType[selectedIdentificationType]}
             readOnly={!selectedIdentificationType}
             value={identificationNumber}
             pattern='[0-9]+'

@@ -3,6 +3,7 @@ import React, { Dispatch, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import { riskAssessmentType } from 'Redux/reducers/RiskAssessment.reducer'
 import { Form, PageInstance } from '../Types'
 import { findIndexOfObject } from 'Utilities/findIndexOfObject'
 import { getProperty } from 'Utilities/getProperty'
@@ -51,12 +52,16 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
   const [showEDDAlert, setShowEDDAlert] = useState<boolean>(false)
-  const [riskScore, setRiskScore] = useState<number>(90)
+  // const [riskScore, setRiskScore] = useState<number>(90)
   const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
   const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
+  const riskAssessment = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as riskAssessmentType
+
+  console.log('riskAssessment', riskAssessment)
 
   const handleActivePage = (action: 'next' | 'prev') => {
     if (action === 'prev') {
@@ -217,7 +222,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
           getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
           'account services'
         ) {
-          if (riskScore >= highRiskScore) {
+          if (riskAssessment.score >= highRiskScore) {
             handleShowEDDModal()
           }
         } else {
