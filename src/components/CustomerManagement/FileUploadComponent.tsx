@@ -87,7 +87,7 @@ const FileUploadComponent = ({ setLocalUpload, hideAddMoreFiles, setUploadKey, l
         <label className='capitalize text-[#333333] text-[1rem] leading-[1.1875rem] '>{label}</label>
       </div>
       <div
-        className={`flex gap-12 w-full max-w-[24.5rem] min-h-[6.875rem] max-h-[7.5rem] border border-[#c4c4c4] rounded-[.625rem] items-center px-3  relative `}
+        className={`flex gap-12 w-full max-w-[24.5rem] min-h-[6.875rem] max-h-[14.5rem] border border-[#c4c4c4] rounded-[.625rem] items-center px-3  relative `}
       >
         {loading ? (
           <div className='flex items-center  h-[9.375rem]'>
