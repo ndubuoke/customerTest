@@ -385,14 +385,13 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               style={{
                 backgroundColor: '#EEEEEE',
                 fontSize: '20px',
-                padding: '7px 96px 7px 16px',
-                maxWidth: '140px',
+                padding: '7px 0 7px 8px',
+                maxWidth: '200px',
               }}
             >
               {/* <ExclaimateIcon /> */}
               {/* <exclamationYellow /> */}
-              {riskScoreGuide.rating}
-              {riskScoreGuide.score}
+              {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}
             </span>
           ) : (
             ''
