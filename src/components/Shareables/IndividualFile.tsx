@@ -21,9 +21,9 @@ type Props = {
 const IndividualFile = memo(({ file, removeFile, height = 110, waiverRequest = false }: Props) => {
   const [showRemove, setShowRemove] = useState<boolean>(true)
 
-  console.log('file', file.file)
-  console.log('signUrl', file.signedUrl)
-  console.log('only file', file)
+  // console.log('file', file.file)
+  // console.log('signUrl', file.signedUrl)
+  // console.log('only file', file)
   if (waiverRequest) {
     return (
       <div className={`relative border rounded-sm`}>

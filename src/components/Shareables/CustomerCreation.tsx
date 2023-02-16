@@ -22,8 +22,8 @@ const CustomerCreationBox = memo(({ creationMode, customerType, setIdentificatio
           <div
             className='flex justify-end text-sm gap-3 '
             style={{
-              maxWidth: '50%',
-              width: '50%',
+              maxWidth: '48%',
+              width: '48%',
               marginTop: '4rem',
               marginBottom: '2rem',
               color: '#8F8F8F',
