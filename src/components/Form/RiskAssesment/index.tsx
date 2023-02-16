@@ -392,6 +392,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               {/* <ExclaimateIcon /> */}
               {/* <exclamationYellow /> */}
               {riskScoreGuide.rating}
+              {riskScoreGuide.score}
             </span>
           ) : (
             ''
