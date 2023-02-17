@@ -105,7 +105,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
       dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
     }
   }
-
+  console.log('submitFormRedux', submitFormRedux)
   useEffect(() => {
     if (submitFormRedux?.success) {
       console.log(submitFormRedux)
@@ -168,7 +168,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
       {openWaiver === 'hide' && openModal ? (
         <>
           {' '}
-          {submitFormRedux?.serverError?.status || submitFormRedux?.serverError ? (
+          {submitFormRedux?.serverError && Object.keys(submitFormRedux.serverError).length ? (
             <FormSubmissionError
               error={submitFormRedux?.serverError?.error?.message || 'An error occured. Could not save the form'}
               closeModalFunction={() => setOpenModal(false)}
