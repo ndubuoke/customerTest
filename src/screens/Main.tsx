@@ -528,7 +528,7 @@ const Main = (props: Props) => {
                               customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
-                            <span className='text-[.875rem] text-[#AAAAAA]'>InActive</span>
+                            <span className='text-[.875rem] text-[#AAAAAA]'>Inactive</span>
                             <h3 className='font-bold text-[1.5rem]'>{customerStatusResponsedata?.inactive}</h3>
                           </div>
                         </div>

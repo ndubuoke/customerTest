@@ -18,7 +18,7 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
-  // console.log(uploadKey)
+  //  console.log(uploadKey)
   // console.log(localUpload)
   useEffect(() => {
     if (uploadKey.length > 0) {
