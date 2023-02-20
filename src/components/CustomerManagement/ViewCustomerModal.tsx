@@ -14,9 +14,15 @@ type props = {
 
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const navigate = useNavigate()
+
+  const viewInCustomer360Handler = () => {
+    const customerId = customer?.customerId
+    navigate(`/customer-management/customer-360/${customerId}`)
+  }
   const closeModal = () => {
     setShowCustomerModal(false)
   }
+
   const viewActivityLogHandler = (customer) => {
     let request = new Promise(function (myResolve, myReject) {
       let request = customer?.requests.filter((request) => {
@@ -52,7 +58,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[50rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
+      <div className={` min-h-[40rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
         <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
           <div className='flex   justify-between  pb-4'>
             <h6 className='text-text-secondary text-3xl'>
@@ -112,22 +118,22 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                     <img src={Edit} />
                     <span>Modify</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer  '>
                     <img src={Disable} />
                     <span>Deactivate</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer   ' onClick={viewInCustomer360Handler}>
                     <img src={customer360} />
                     <span>View in Customer 360</span>
                   </div>
                 </div>
                 <div className='w-full flex justify-between text-[#636363]'>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer '>
                     {' '}
                     <img src={add} />
                     <span>Add Cusomer to Group</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer '>
                     <img src={add} />
                     <span>Add Product</span>
                   </div>
