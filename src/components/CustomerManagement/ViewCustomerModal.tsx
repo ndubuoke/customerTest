@@ -16,7 +16,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const navigate = useNavigate()
 
   const viewInCustomer360Handler = () => {
-    const customerId  = customer?.customerId
+    const customerId = customer?.customerId
     navigate(`/customer-management/customer-360/${customerId}`)
   }
   const closeModal = () => {
@@ -58,7 +58,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[50rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
+      <div className={` min-h-[40rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
         <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
           <div className='flex   justify-between  pb-4'>
             <h6 className='text-text-secondary text-3xl'>
