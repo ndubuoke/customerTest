@@ -14,9 +14,15 @@ type props = {
 
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const navigate = useNavigate()
+
+  const viewInCustomer360Handler = () => {
+    const customerId  = customer?.customerId
+    navigate(`/customer-management/customer-360/${customerId}`)
+  }
   const closeModal = () => {
     setShowCustomerModal(false)
   }
+
   const viewActivityLogHandler = (customer) => {
     let request = new Promise(function (myResolve, myReject) {
       let request = customer?.requests.filter((request) => {
@@ -112,22 +118,22 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                     <img src={Edit} />
                     <span>Modify</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer  '>
                     <img src={Disable} />
                     <span>Deactivate</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer   ' onClick={viewInCustomer360Handler}>
                     <img src={customer360} />
                     <span>View in Customer 360</span>
                   </div>
                 </div>
                 <div className='w-full flex justify-between text-[#636363]'>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer '>
                     {' '}
                     <img src={add} />
                     <span>Add Cusomer to Group</span>
                   </div>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-2 cursor-pointer '>
                     <img src={add} />
                     <span>Add Product</span>
                   </div>
