@@ -19,6 +19,10 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
     const customerId = customer?.customerId
     navigate(`/customer-management/customer-360/${customerId}`)
   }
+  const addProductHandler = ()=>{
+    const customerType = customer?.customerType
+     navigate(`/customer-management/product-assignment/${customerType}`)
+  }
   const closeModal = () => {
     setShowCustomerModal(false)
   }
@@ -133,7 +137,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                     <img src={add} />
                     <span>Add Cusomer to Group</span>
                   </div>
-                  <div className='flex gap-2 cursor-pointer '>
+                  <div className='flex gap-2 cursor-pointer ' onClick={addProductHandler}>
                     <img src={add} />
                     <span>Add Product</span>
                   </div>
