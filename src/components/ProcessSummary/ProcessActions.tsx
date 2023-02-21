@@ -170,7 +170,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
           {' '}
           {submitFormRedux?.serverError && Object.keys(submitFormRedux.serverError).length ? (
             <FormSubmissionError
-              error={submitFormRedux?.serverError?.error?.message || 'An error occured. Could not save the form'}
+              error={submitFormRedux?.serverError?.error?.message || 'An error occurred. Could not save the form'}
               closeModalFunction={() => setOpenModal(false)}
             />
           ) : null}

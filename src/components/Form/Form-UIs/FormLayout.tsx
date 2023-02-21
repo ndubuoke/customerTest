@@ -114,7 +114,7 @@ const FormLayout = memo(
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
           <div
-            className={`ControlUILayout  w-full   pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+            className={`ControlUILayout  w-full   pr-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
             {setRequiredFormFieldsRedux.} $
             `}
             style={{
@@ -127,7 +127,12 @@ const FormLayout = memo(
             }}
           >
             <div className='flex items-center'>
-              <h6>
+              <h6
+                style={{
+                  fontWeight: '500',
+                  fontSize: '16px',
+                }}
+              >
                 {getProperty(item?.formControlProperties, 'Section name', 'value').text
                   ? getProperty(item?.formControlProperties, 'Section name', 'value').text
                   : getProperty(item?.formControlProperties, 'Section name', 'defaultState').text
@@ -141,7 +146,7 @@ const FormLayout = memo(
                 </span>
               )}
             </div>
-            <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'

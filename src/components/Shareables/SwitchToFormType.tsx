@@ -31,7 +31,7 @@ const SwitchToFormType = ({
   const dispatch = useDispatch()
 
   const [openModal, setOpenModal] = useState<boolean>(false)
-
+  // console.log('formCreationStarted', formCreationStarted)
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev)
   }
@@ -42,7 +42,7 @@ const SwitchToFormType = ({
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
     setPublishedFormState(null)
-    handleOpenModal()
+    setOpenModal(false)
 
     if (formMode === 'legacy') {
       onSetFormMode(formMode)
@@ -68,7 +68,11 @@ const SwitchToFormType = ({
         onClick={(e) => {
           e.stopPropagation()
           // handleOpenModal()
-          mode === 'accelerated' ? handleSetFormType() : handleSetFormType()
+          if (formCreationStarted) {
+            handleOpenModal()
+          } else {
+            handleSetFormType()
+          }
         }}
         className='absolute right-2 top-2 max-w-[11.1875rem]  rounded-lg border border-[#EBE9E9] flex items-center gap-2 p-[1.125rem] pr-2 cursor-pointer '
         style={{
@@ -83,7 +87,7 @@ const SwitchToFormType = ({
           Switch to {mode === 'accelerated' ? 'legacy' : 'accelerated'} form
         </span>
       </div>
-      {/* {openModal ? (
+      {openModal ? (
         <SwitchFormModal
           message={` Switch to ${
             mode === 'accelerated' ? 'legacy' : 'accelerated'
@@ -91,7 +95,7 @@ const SwitchToFormType = ({
           closeModalFunction={handleOpenModal}
           switchFunction={handleSetFormType}
         />
-      ) : null} */}
+      ) : null}
     </>
   )
 }

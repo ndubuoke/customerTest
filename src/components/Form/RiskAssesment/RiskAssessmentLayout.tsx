@@ -7,6 +7,7 @@ import { getProperty } from 'Utilities/getProperty'
 
 import { FormStructureType as FormStructureType } from 'Components/types/FormStructure.types'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
+import DropDown from './Dropdown'
 
 export const fieldsNames = {
   DROPDOWN: 'Dropdown', //done-
@@ -118,17 +119,41 @@ const RiskAssessmentLayout = memo(
                     >
                       {field.title}
                     </h5>
-
-                    <p
-                      style={{
-                        fontWeight: '400',
-                        fontSize: '16px',
-                        lineHeight: '18px',
-                        marginTop: '0.3rem',
-                      }}
-                    >
-                      {assessmentData[field.key] || '-'}
-                    </p>
+                    {field.key === 'surname' ? (
+                      <p
+                        style={{
+                          fontWeight: '400',
+                          fontSize: '16px',
+                          lineHeight: '18px',
+                          marginTop: '0.3rem',
+                        }}
+                      >
+                        {assessmentData[field.key] + ' ' + assessmentData['firstName'] || '-'}
+                      </p>
+                    ) : (
+                      <p
+                        style={{
+                          fontWeight: '400',
+                          fontSize: '16px',
+                          lineHeight: '18px',
+                          marginTop: '0.3rem',
+                        }}
+                      >
+                        {assessmentData[field.key] || '-'}
+                      </p>
+                    )}
+                    {field.key === 'stateOfOrigin' ? (
+                      <p
+                        style={{
+                          fontWeight: '400',
+                          fontSize: '16px',
+                          lineHeight: '18px',
+                          marginTop: '0.3rem',
+                        }}
+                      >
+                        {assessmentData[field.key] + ' ' + assessmentData['lGA'] || '-'}
+                      </p>
+                    ) : null}
                   </div>
                 )
               })}
@@ -157,8 +182,16 @@ const RiskAssessmentLayout = memo(
                     <tr key={data.parameter} className=' align-middle font-medium text-[16px] text-[#636363] border-b h-[60px]  pl-3'>
                       <td className='pl-3'>{data.parameter}</td>
                       <td className='pl-3'>{data.impliedWeight}</td>
+
                       <td className='pl-3'>
-                        <select
+                        <DropDown
+                          defaultOption={data.selectedParameterOption.status}
+                          options={data.parameterOptions.map((param) => {
+                            return param.status
+                          })}
+                          getValue={(value) => handleSelectedParameterOption(parentKey, data.parameter, value)}
+                        />
+                        {/* <select
                           name='status'
                           value={data.selectedParameterOption.status}
                           onChange={(ev) => handleSelectedParameterOption(parentKey, data.parameter, ev.target.value)}
@@ -174,7 +207,7 @@ const RiskAssessmentLayout = memo(
                               {param.status}
                             </option>
                           ))}
-                        </select>
+                        </select> */}
                       </td>
                       <td className='pl-3'>{data.selectedParameterOption.weight}%</td>
                     </tr>
