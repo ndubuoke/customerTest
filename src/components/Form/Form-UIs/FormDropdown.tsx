@@ -1,7 +1,7 @@
 import { caret } from 'Assets/svgs'
 import Spinner from 'Components/Shareables/Spinner'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getCitiesAction, getCountriesAction, getStatesAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
@@ -18,6 +18,7 @@ import FieldLabel from './FieldLabel'
 import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
 import MultipleSelectionItem from './MultipleSelectionItem'
+import useOnClickOutside from '../../../hooks/useClickOutside'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -41,6 +42,7 @@ const FormDropdown = ({
   setBackupForSwitchFormState,
   backupForSwitchFormState,
 }: Props) => {
+  const ref = useRef(null)
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
@@ -118,7 +120,7 @@ const FormDropdown = ({
 
   const [optionsField, setOptionsField] = useState<any>([])
   const [columnName, setColumnName] = useState<string>('')
-
+  console.log('optionsField', optionsField)
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
@@ -629,8 +631,11 @@ const FormDropdown = ({
     }
   }, [publishedFormState, columnName])
 
+  useOnClickOutside(ref, () => setShowLists(false))
+
   return (
     <div
+      ref={ref}
       className={`${collapsed ? 'hidden' : ''}`}
       style={{
         gridColumn: ` span ${span}`,
@@ -711,26 +716,28 @@ const FormDropdown = ({
               ? optionsField?.length > 0 &&
                 optionsField?.map((selected, index) => {
                   return (
-                    <div
-                      key={index}
-                      className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200 ' : ''} `}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleSelectedDropdownItem(selected, item)
+                    selected && (
+                      <div
+                        key={index}
+                        className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200 ' : ''} `}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleSelectedDropdownItem(selected, item)
 
-                        const country = countries.find((x) => x.countryName === selected)
-                        if (country) {
-                          sessionStorage.setItem(
-                            `${item?.sectionId || item?.pageId}`,
-                            JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
-                          )
-                        }
+                          const country = countries.find((x) => x.countryName === selected)
+                          if (country) {
+                            sessionStorage.setItem(
+                              `${item?.sectionId || item?.pageId}`,
+                              JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+                            )
+                          }
 
-                        setShowLists(false)
-                      }}
-                    >
-                      {selected.trim()}
-                    </div>
+                          setShowLists(false)
+                        }}
+                      >
+                        {selected.trim()}
+                      </div>
+                    )
                   )
                 })
               : null}
