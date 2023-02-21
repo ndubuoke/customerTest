@@ -11,6 +11,7 @@ import {
 } from 'Screens/index'
 import { AppRoutes } from './AppRoutes'
 import CustomerManagementProcessSummary from '../../screens/CustomerManagementProcessSummary'
+import ProductAssignment from '../../components/CustomerManagement/ProductAssignment';
 
 export const RouteSwitches = () => (
   <BrowserRouter>
@@ -23,6 +24,7 @@ export const RouteSwitches = () => (
         element={<BulkCustomerProcessSummary customerType='individual' headerText='Process Summary' />}
       />
       <Route path={AppRoutes.customerManagementProcessSummary} element={<CustomerManagementProcessSummary />} />
+      <Route path={AppRoutes.productAssignment} element={<ProductAssignment />} />
       <Route path={AppRoutes.SMECustomerCreationScreen} element={<CustomerCreationScreen customerType='sme' />} />
       <Route path={AppRoutes.customerAccountModificationScreen} element={<CustomerAccountModificationScreen />} />
       <Route path={AppRoutes.customer360Screen} element={<Customer360 />} />
