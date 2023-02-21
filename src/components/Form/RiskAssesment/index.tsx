@@ -307,6 +307,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
     <>
       {fillingFormState.data.customerData.map((data) => {
         if (riskAssessmentData[data.sectionName]) {
+          console.log('data', data)
           return (
             <RiskAssessmentLayout
               key={riskAssessmentData[data.sectionName].title}
@@ -327,47 +328,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         standardRiskAssessmentData={riskAssessmentData['watchlist'].standardRiskAssessmentData}
         handleSelectedParameterOption={handleSelectedParameterOption}
       />
-      {/* <section className='max-w-[66.25rem] mx-4 '>
-        <div
-          className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
-          {setRequiredFormFieldsRedux.} $
-          `}
-          style={{
-            boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
-            background: 'rgba(170, 170, 170, 0.07)',
-          }}
-        >
-          <div className='flex items-center'>
-            <h6
-              style={{
-                fontWeight: '500',
-                fontSize: '16px',
-              }}
-            >
-              WatchList
-            </h6>
-          </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
-            <svg
-              xmlns='http://www.w3.org/2000/svg'
-              fill='none'
-              viewBox='0 0 24 24'
-              strokeWidth='1.5'
-              stroke='currentColor'
-              className={`w-4 h-4  ${collapsedWatchlist ? 'rotate-180' : ''}`}
-            >
-              <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
-            </svg>
-          </div>
-        </div>
 
-        <div
-          className={` ${collapsedWatchlist ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
-          style={{
-            background: 'rgb(250, 250, 250)',
-          }}
-        ></div>
-      </section> */}
       <div className='flex justify-center items-center gap-12 py-10'>
         <button className='border text-[#667085] px-5 py-1 rounded-md' onClick={computeScore}>
           Compute Risk Score
@@ -387,20 +348,34 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 fontSize: '20px',
                 padding: '7px 0 7px 8px',
                 maxWidth: '200px',
+                fontWeight: '700',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '',
               }}
             >
-              {/* <ExclaimateIcon /> */}
-              {/* <exclamationYellow /> */}
               {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}
             </span>
           ) : (
             ''
           )}
           {riskScoreGuide ? (
-            <span>
-              {/* <ExclaimateIcon /> */}
-              {/* <exclamationYellow /> */}
-              {riskScoreGuide.resolution}
+            <span
+              style={{
+                display: 'flex',
+                gap: '0.5rem',
+                alignItems: 'center',
+                marginTop: '0.5rem',
+                fontWeight: '500',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '',
+              }}
+            >
+              {riskScoreGuide.rating === 'HIGH' ? (
+                <span>
+                  <ExclaimateIcon />
+                </span>
+              ) : riskScoreGuide.rating === 'MEDIUM' ? (
+                'mid'
+              ) : null}
+              <p className='m-0 text-sm '> {riskScoreGuide.resolution}</p>
             </span>
           ) : (
             ''

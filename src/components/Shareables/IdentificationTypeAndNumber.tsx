@@ -55,7 +55,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
       try {
         setStatus('loading')
         const response = await API.get(`/verification/${selectedIdentificationType}/${value.trim()}`)
-        console.log('response.data', response.data)
+        // console.log('response.data', response.data)
         if (response.data && response.status == 200) {
           setIsVerified(true)
           setStatus('success')
