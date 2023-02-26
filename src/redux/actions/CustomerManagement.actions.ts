@@ -37,6 +37,9 @@ import {
   GET_CUSTOMERS_BY_DATE_REQUEST,
   GET_CUSTOMERS_BY_DATE_SUCCESS,
   GET_CUSTOMERS_BY_DATE_FAIL,
+  GET_CATEGORIZED_PRODUCTS_SUCCESS,
+  GET_CATEGORIZED_PRODUCTS_REQUEST,
+  GET_CATEGORIZED_PRODUCTS_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -44,6 +47,7 @@ type order = '' | 'asc' | 'desc'
 type dateFilterType = 'day' | 'month' | ''
 // const SERVER_URL = 'https://9e99-18-133-131-7.eu.ngrok.io/v1'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
+const PRODUCT_URL = 'https://product-management-api-dev.reventtechnologies.com/v1'
 
 export const getCustomersAction =
   (customerType: string, customerStatus: string = '', order: order = '', initiatorId: string = '', approverId: string = '') =>
@@ -316,3 +320,20 @@ export const updateRequestAction =
       })
     }
   }
+
+//  {*  PRODUCT ACTIONS *}
+
+export const getCategorizedProductsAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_CATEGORIZED_PRODUCTS_REQUEST })
+
+    const { data } = await axios.get(`${PRODUCT_URL}/product-category`)
+
+    dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_CATEGORIZED_PRODUCTS_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}

@@ -1,4 +1,7 @@
 import {
+  GET_CATEGORIZED_PRODUCTS_SUCCESS,
+  GET_CATEGORIZED_PRODUCTS_REQUEST,
+  GET_CATEGORIZED_PRODUCTS_FAIL,
   DELETE_REQUEST_REQUEST,
   DELETE_REQUEST_SUCCESS,
   DELETE_REQUEST_FAIL,
@@ -88,7 +91,10 @@ export const getCustomersRequestReducer = (state: customersManagementResponseTyp
   }
 }
 
-export const getRequestsForCheckerReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+export const getRequestsForCheckerReducer = (
+  state: customersManagementResponseType = initialStateRequest,
+  action: { type: string; payload: any }
+) => {
   switch (action.type) {
     case GET_REQUESTS_FOR_CHECKER_REQUEST:
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
@@ -121,19 +127,19 @@ export const deleteRequestReducer = (state: customersManagementResponseType = in
 }
 
 export const activateCustomerReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
-    switch (action.type) {
-      case ACTIVATE_CUSTOMER_REQUEST:
-        return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+  switch (action.type) {
+    case ACTIVATE_CUSTOMER_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
-      case ACTIVATE_CUSTOMER_SUCCESS:
-        return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    case ACTIVATE_CUSTOMER_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
-      case ACTIVATE_CUSTOMER_FAIL:
-        return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+    case ACTIVATE_CUSTOMER_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
-      default:
-        return state
-    }
+    default:
+      return state
+  }
 }
 
 export const getCustomersByDateReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
@@ -168,9 +174,10 @@ export const getRequestsByDateReducer = (state: customersManagementResponseType 
   }
 }
 
-
-
-export const getTotalRequestStatusReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+export const getTotalRequestStatusReducer = (
+  state: customersManagementResponseType = initialStateRequest,
+  action: { type: string; payload: any }
+) => {
   switch (action.type) {
     case GET_TOTAL_REQUEST_STATUS_REQUEST:
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
@@ -185,8 +192,6 @@ export const getTotalRequestStatusReducer = (state: customersManagementResponseT
       return state
   }
 }
-
-
 
 export const getSingleRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
@@ -204,7 +209,6 @@ export const getSingleRequestReducer = (state: customersManagementResponseType =
   }
 }
 
-
 export const getActivityLogReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
     case GET_CUSTOMERS_ACTIVITY_LOG_REQUEST:
@@ -221,7 +225,6 @@ export const getActivityLogReducer = (state: customersManagementResponseType = i
   }
 }
 
-
 export const updateRequestReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
     case UPDATE_REQUEST_REQUEST:
@@ -231,6 +234,22 @@ export const updateRequestReducer = (state: customersManagementResponseType = in
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case UPDATE_REQUEST_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const getProductsCategoriesReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CATEGORIZED_PRODUCTS_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CATEGORIZED_PRODUCTS_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_CATEGORIZED_PRODUCTS_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:
