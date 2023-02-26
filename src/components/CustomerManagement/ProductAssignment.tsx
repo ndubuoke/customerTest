@@ -10,6 +10,7 @@ import { getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.a
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import ProductType from './ProductType'
+import ProductTypesTable from './ProductTypesTable'
 
 const ProductAssignment = () => {
   const initialRef: any = null
@@ -75,9 +76,12 @@ const ProductAssignment = () => {
               />
             </div>
           </div>
-          <div className='border w-full mt-6'>
+          <div className=' w-full mt-6'>
             <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
             <ProductType data={allProductCategories} selectedItem={selectedItem} />
+          </div>
+          <div className='border w-full mt-6'>
+            <ProductTypesTable />
           </div>
         </div>
       </div>
