@@ -19,6 +19,7 @@ type Props = {
 }
 
 const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation', initiator, initiatorId }: Props) => {
+  console.log('waiverType', waiverType)
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
