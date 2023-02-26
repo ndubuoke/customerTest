@@ -29,6 +29,8 @@ type Props = {
 }
 
 const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', formType, initiator, initiatorId }: Props) => {
+  console.log('openWaiver', openWaiver)
+  console.log('waiverType', waiverType)
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
     : null
