@@ -77,7 +77,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
 
   const userProfileRedux = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as any
-
+  const riskAssessmentRedux = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as any
+  console.log('profile-summary-riskAssessmentRedux', riskAssessmentRedux)
   // handle initiator
   useEffect(() => {
     if (userProfileRedux?.user?.id) {
@@ -93,7 +94,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       if (showEddModalInFormStorage && showEddModalInFormStorage === 'show') {
         setProcessActionsMode('both')
       } else {
-        setProcessActionsMode('edd')
+        setProcessActionsMode('documentation')
       }
     } else {
       // console.log('Not in the storage')
@@ -124,7 +125,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     } else {
       setOpenWaiver('hide')
     }
-  })
+  }, [])
 
   useEffect(() => {
     const form = publishedFormInStorage?.serverResponse?.data as Form
@@ -139,6 +140,18 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       setFirstLength(theFirstPageLength)
     }
   }, [])
+
+  useEffect(() => {
+    if (
+      customerType === 'individual' &&
+      formType === 'legacy' &&
+      (riskAssessmentRedux.rating === 'HIGH' || riskAssessmentRedux.rating === 'MEDIUM')
+    ) {
+      setOpenWaiver('show')
+      setProcessActionsMode('edd')
+      setEddRequest('show')
+    }
+  }, [riskAssessmentRedux])
 
   // TODO: Handle submitted state when form is submitted successfully
 

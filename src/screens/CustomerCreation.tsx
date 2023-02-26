@@ -30,6 +30,7 @@ import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { info } from 'Assets/svgs'
+import GraceFormModal from 'Components/Shareables/gracemodal'
 
 type Props = {
   customerType: 'sme' | 'individual'
@@ -84,6 +85,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
+  const [showGraceModal, setShowGraceModal] = useState(true)
   const { serverResponse } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
 
@@ -190,7 +192,12 @@ const CustomerCreation = memo(({ customerType }: Props) => {
               setPublishedFormState={setPublishedFormState}
             />
           ) : null}
-
+          {showGraceModal && (
+            <GraceFormModal
+              closeModalFunction={() => setShowGraceModal(false)}
+              // message='Customers created via the accelerated route will remain inactive until document regularization is completed. Click here to enable Grace period'
+            />
+          )}
           {!formCreationStarted ? (
             <>
               {loading && <ExtractInfoModal />}
