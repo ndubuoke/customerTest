@@ -1,6 +1,6 @@
 import { Close, upload } from 'Assets/svgs'
 import Button from 'Components/Shareables/Button'
-import React, { useState, useCallback, useEffect } from 'react'
+import React, { useState, useCallback, useEffect, Dispatch, SetStateAction } from 'react'
 import { UploadFile } from 'Components/Shareables'
 import { API } from 'Utilities/api'
 import { FileRejection, useDropzone } from 'react-dropzone'
@@ -8,6 +8,9 @@ import FileUpload from 'Components/Form/Form-UIs/FileUpload'
 import FileUploadComponent from 'Components/CustomerManagement/FileUploadComponent'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { FormTypeType } from 'Screens/ProcessSummary'
+import { useDispatch } from 'react-redux'
+import { submitFormAction } from 'Redux/actions/FormManagement.actions'
 
 export type WaiverTypeType = 'documentation' | 'edd' | 'both'
 
@@ -16,9 +19,21 @@ type Props = {
   waiverType: WaiverTypeType
   initiator: string
   initiatorId: string
+  customerType: 'individual' | 'sme'
+  formType: FormTypeType
+  setOpenModal: Dispatch<SetStateAction<boolean>>
 }
 
-const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation', initiator, initiatorId }: Props) => {
+const WaiverRequestForm = ({
+  closeModalFunction,
+  waiverType = 'documentation',
+  initiator,
+  initiatorId,
+  customerType,
+  formType,
+  setOpenModal,
+}: Props) => {
+  const dispatch = useDispatch()
   console.log('waiverType', waiverType)
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     ? JSON.parse(sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE))
@@ -28,20 +43,23 @@ const WaiverRequestForm = ({ closeModalFunction, waiverType = 'documentation', i
   const [uploadKey, setUploadKey] = useState<Array<string>>([])
 
   const handleSubmitWaiver = () => {
-    if (localUpload && localUpload.length > 0) {
+    if (localUpload && localUpload.length > 0 && customerType === 'individual') {
       if (fillingFormInStorage.data.customerData.length > 0) {
         const updatedData = fillingFormInStorage.data.waiverData
-        fillingFormInStorage.data.waiverData.push({
-          // ...updatedData,
-          documents: [...uploadKey],
-          initiator,
-          initiatorId,
-          type: waiverType,
-          justification,
-        })
+        fillingFormInStorage.data.waiverData = [
+          {
+            // ...updatedData,
+            documents: [...uploadKey],
+            initiator,
+            initiatorId,
+            type: waiverType,
+            justification,
+          },
+        ]
 
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormInStorage))
-
+        setOpenModal(true)
+        dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
         closeModalFunction()
       }
     }

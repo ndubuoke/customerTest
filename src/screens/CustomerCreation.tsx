@@ -85,7 +85,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
-  const [showGraceModal, setShowGraceModal] = useState(true)
+  const [showGraceModal, setShowGraceModal] = useState(false)
   const { serverResponse } = useSelector<ReducersType>((state) => state.validateCustomer) as validateCustomerResponseType
   const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
 
@@ -162,6 +162,16 @@ const CustomerCreation = memo(({ customerType }: Props) => {
       setFormCreationStarted(true)
     }
   }, [])
+
+  useEffect(() => {
+    API.get('/interim-approval-config').then((data) => {
+      console.log('data-/interim-approval-config', data)
+      if (!data.data?.data[0]?.gracePeriod) {
+        setShowGraceModal(true)
+      }
+    })
+  }, [])
+
   return (
     <>
       <nav style={{ background: '#fff' }}>
@@ -194,8 +204,14 @@ const CustomerCreation = memo(({ customerType }: Props) => {
           ) : null}
           {showGraceModal && (
             <GraceFormModal
+              customerType={customerType}
+              formCreationStarted={formCreationStarted}
+              mode={formMode}
+              onSetFormMode={onSetFormMode}
+              fillingFormState={fillingFormState}
+              setFillingFormState={setFillingFormState}
+              setPublishedFormState={setPublishedFormState}
               closeModalFunction={() => setShowGraceModal(false)}
-              // message='Customers created via the accelerated route will remain inactive until document regularization is completed. Click here to enable Grace period'
             />
           )}
           {!formCreationStarted ? (

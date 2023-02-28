@@ -1,12 +1,15 @@
 import { greaterThanRed, returnIcon, Success } from 'Assets/svgs'
 import Spinner from 'Components/Shareables/Spinner'
+import { AppRoutes } from 'Routes/AppRoutes'
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 type Props = {
   closeModalFunction: () => void
 }
 
 const FormSubmissionAlert = ({ closeModalFunction }: Props) => {
+  const navigate = useNavigate()
   return (
     <aside
       className='fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center '
@@ -26,9 +29,14 @@ const FormSubmissionAlert = ({ closeModalFunction }: Props) => {
           </p>
         </div>
         <div className='flex justify-between font-medium text-[base] leading-[1.5rem]'>
-          <button className='  flex items-center justify-center text-[#667085]' onClick={closeModalFunction}>
+          <button
+            className='  flex items-center justify-center text-[#667085]'
+            onClick={() => {
+              navigate(AppRoutes.mainScreen, { replace: true })
+            }}
+          >
             <img src={returnIcon} width={30} height={26} alt='return to modify' />
-            <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Return to modify</span>
+            <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Return to Dashboard</span>
           </button>
           <button className='flex items-center justify-center text-white ' onClick={() => console.log('')}>
             <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Assign Product</span>
