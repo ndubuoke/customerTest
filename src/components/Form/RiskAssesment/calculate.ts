@@ -1,13 +1,13 @@
 const userAssessment = [
   {
-    parameter: 'Is customer a Non-Resident?',
+    parameter: 'Is Customer a Non-Resident?',
     parameterOption: 'Yes',
   },
   // {    //     parameter: "Status of customer identity verification",    //     parameterOption: "Failed"    // },    // {    //     parameter: "Status of customer address verification",    //     parameterOption: "Not verified"    // },
 ]
 const standardRiskAssessmentData = [
   {
-    parameter: 'Is customer a Non-Resident?',
+    parameter: 'Is Customer a Non-Resident?',
     impliedWeight: 7,
     parameterOptions: ['Yes', 'No'],
     assessmentType: ['EDD Required', 'CDD'],
@@ -16,7 +16,7 @@ const standardRiskAssessmentData = [
     score: [11.2, 1.4],
   },
   {
-    parameter: 'Status of customer identity verification',
+    parameter: 'Status of Customer identity verification',
     impliedWeight: 10,
     parameterOptions: ['Passed', 'Failed', 'Not verified'],
     assessmentType: ['', 'EDD Required', 'Deal breaker'],
@@ -25,7 +25,7 @@ const standardRiskAssessmentData = [
     score: [0, 16, 30],
   },
   {
-    parameter: 'Status of customer address verification',
+    parameter: 'Status of Customer address verification',
     impliedWeight: 10,
     parameterOptions: ['Passed', 'Failed', 'Not verified'],
     assessmentType: ['', 'EDD Required', 'Deal breaker'],
@@ -34,7 +34,16 @@ const standardRiskAssessmentData = [
     score: [0, 16, 30],
   },
   {
-    parameter: 'Status of customer livelihood verification',
+    parameter: 'Status of Border Banking relationship',
+    impliedWeight: 6,
+    parameterOptions: ['Yes', 'No', 'Not verified'],
+    assessmentType: ['EDD Required', 'CDD', 'Deal Breaker'],
+    escalationFactor: [2, 1, 1],
+    percentageOptionsWeightAllocation: [80, 20, 100],
+    score: [9.6, 1.2, 6],
+  },
+  {
+    parameter: 'Status of Customer livelihood verification',
     impliedWeight: 10,
     parameterOptions: ['Passed', 'Failed', 'Not verified'],
     assessmentType: ['', 'EDD Required', 'Deal Breaker'],
@@ -43,7 +52,7 @@ const standardRiskAssessmentData = [
     score: [0, 16, 30],
   },
   {
-    parameter: 'Is originating Country a FATF listed country?',
+    parameter: 'Is Originating Country a FATF listed country?',
     impliedWeight: 7,
     parameterOptions: ['Yes', 'No'],
     assessmentType: ['EDD Required', 'CDD'],
@@ -52,7 +61,7 @@ const standardRiskAssessmentData = [
     score: [14, 1.4],
   },
   {
-    parameter: 'Is customer a Politically Exposed Person?',
+    parameter: 'Is Customer a Politically Exposed Person?',
     impliedWeight: 8,
     parameterOptions: ['Yes', 'No'],
     assessmentType: ['EDD Required', 'CDD'],
@@ -70,7 +79,7 @@ const standardRiskAssessmentData = [
     score: [9.6, 1.2],
   },
   {
-    parameter: 'Is customer on any AML related sanction list?',
+    parameter: 'Is Customer on any AML related sanction list?',
     impliedWeight: 10,
     parameterOptions: ['Yes', 'No'],
     assessmentType: ['Deal Breaker', ''],
@@ -116,7 +125,7 @@ export const calcScore = (arr) => {
   const score = output.reduce((acc, res) => {
     return (acc += res.score)
   }, 0)
-  if (score < 20) scoreGuide = { score, rating: 'LOW', resolution: 'Do nothing' }
+  if (score < 20) scoreGuide = { score, rating: 'LOW', resolution: '' }
   else if (score >= 20 && score <= 60)
     scoreGuide = { score, rating: 'MEDIUM', resolution: 'Enhanced Due Diligence will be initiated to complete profile creation.' }
   else if (score > 60) scoreGuide = { score, rating: 'HIGH', resolution: 'Enhanced Due Diligence will be initiated to complete profile creation.' }

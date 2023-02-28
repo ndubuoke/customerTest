@@ -1,4 +1,4 @@
-import { add, ExclaimateIcon, Plus } from 'Assets/svgs'
+import { add, ExclaimateIcon, exclamationYellow, Plus } from 'Assets/svgs'
 import React, { memo, useState, useEffect } from 'react'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
@@ -43,7 +43,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           },
         },
         {
-          parameter: 'Is customer a Politically Exposed Person?',
+          parameter: 'Is Customer a Politically Exposed Person?',
           impliedWeight: 8,
           parameterOptions: [
             {
@@ -92,7 +92,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
       title: "Customer's Address",
       standardRiskAssessmentData: [
         {
-          parameter: 'Is customer a Non-Resident?',
+          parameter: 'Is Customer a Non-Resident?',
           impliedWeight: 7,
           parameterOptions: [
             {
@@ -151,7 +151,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
       title: "Customer's Livelihood",
       standardRiskAssessmentData: [
         {
-          parameter: 'Status of customer livelihood verification',
+          parameter: 'Status of Customer livelihood verification',
           impliedWeight: 10,
           parameterOptions: [
             {
@@ -165,6 +165,28 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
             {
               status: 'Passed',
               weight: 0,
+            },
+          ],
+          selectedParameterOption: {
+            status: 'Not verified',
+            weight: 100,
+          },
+        },
+        {
+          parameter: 'Status of Cross border banking relationship',
+          impliedWeight: 6,
+          parameterOptions: [
+            {
+              status: 'Yes',
+              weight: 80,
+            },
+            {
+              status: 'No',
+              weight: 20,
+            },
+            {
+              status: 'Not verified',
+              weight: 100,
             },
           ],
           selectedParameterOption: {
@@ -230,7 +252,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           },
         },
         {
-          parameter: 'Is customer on any AML related sanction list?',
+          parameter: 'Is Customer on any AML related sanction list?',
           impliedWeight: 10,
           parameterOptions: [
             {
@@ -307,7 +329,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
     <>
       {fillingFormState.data.customerData.map((data) => {
         if (riskAssessmentData[data.sectionName]) {
-          console.log('data', data)
+          // console.log('data', data)
           return (
             <RiskAssessmentLayout
               key={riskAssessmentData[data.sectionName].title}
@@ -349,7 +371,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 padding: '7px 0 7px 8px',
                 maxWidth: '200px',
                 fontWeight: '700',
-                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '#D5A62F',
               }}
             >
               {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}
@@ -365,7 +387,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 alignItems: 'center',
                 marginTop: '0.5rem',
                 fontWeight: '500',
-                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '#D5A62F',
               }}
             >
               {riskScoreGuide.rating === 'HIGH' ? (
@@ -373,7 +395,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                   <ExclaimateIcon />
                 </span>
               ) : riskScoreGuide.rating === 'MEDIUM' ? (
-                'mid'
+                <img src={exclamationYellow} width={30} height={30} alt='danger' />
               ) : null}
               <p className='m-0 text-sm '> {riskScoreGuide.resolution}</p>
             </span>
