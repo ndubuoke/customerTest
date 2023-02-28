@@ -160,11 +160,14 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
             waiverType={waiverType}
             initiator={initiator}
             initiatorId={initiatorId}
+            customerType={customerType}
+            formType={formType}
+            setOpenModal={setOpenModal}
           />
         )
       ) : null}
-      {openWaiver === 'hide' && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
-      {openWaiver === 'hide' && openModal ? (
+      {/* {openWaiver === 'hide' && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
+       {openWaiver === 'hide' && openModal ? (
         <> {submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenModal(false)} /> : null}</>
       ) : null}
       {openWaiver === 'hide' && openModal ? (
@@ -177,6 +180,14 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
             />
           ) : null}
         </>
+      ) : null}  */}
+      {openModal && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
+      {openModal && submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenModal(false)} /> : null}
+      {openModal && submitFormRedux?.serverError && Object.keys(submitFormRedux.serverError).length ? (
+        <FormSubmissionError
+          error={submitFormRedux?.serverError?.error?.message || 'An error occurred. Could not save the form'}
+          closeModalFunction={() => setOpenModal(false)}
+        />
       ) : null}
     </div>
   )

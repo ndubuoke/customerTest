@@ -71,7 +71,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const [openWaiver, setOpenWaiver] = useState<TimelineType>('hide')
   const [formType, setFormType] = useState<FormTypeType>(null)
 
-  const [initiator, setInitiator] = useState('John Olawale')
+  const [initiator, setInitiator] = useState('Ade Adeshina')
   const [initiatorId, setInitiatorId] = useState('abf93efb-18c5-4c5e-a8d3-2692675ee3e6')
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
@@ -131,8 +131,6 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     const form = publishedFormInStorage?.serverResponse?.data as Form
     const formType = convertCamelCaseToTitleCaseText(form?.formType)?.split(' ')[1]?.toLowerCase() as FormTypeType
     setFormType(formType)
-
-    // setCustomerType(formType)
 
     if (form?.builtFormMetadata?.pages.length > 0) {
       const theFirstPageLength = form?.builtFormMetadata?.pages[0].sections.length

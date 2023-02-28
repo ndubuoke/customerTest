@@ -1,13 +1,67 @@
-import { danger, Close, ExclaimateIcon, exclamationYellow } from 'Assets/svgs'
+import { danger, Close, ExclaimateIcon, exclamationYellow, greaterThanRed, returnIcon } from 'Assets/svgs'
 import React from 'react'
+import { FormStructureType } from 'Components/types/FormStructure.types'
+import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
+import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { formStruture } from 'Components/Form/formStructure'
+import { useDispatch } from 'react-redux'
 
 type Props = {
   closeModalFunction: () => void
   switchFunction?: any
   message?: string
+  mode: FormModeType
+  onSetFormMode: (mode: FormModeType) => void
+  customerType: CustomerType
+  formCreationStarted: boolean
+  fillingFormState: FormStructureType
+  setFillingFormState: any
+  setPublishedFormState: any
 }
 
-const GraceFormModal = ({ closeModalFunction, switchFunction, message }: Props) => {
+const GraceFormModal = ({
+  closeModalFunction,
+  switchFunction,
+  message,
+  mode,
+  onSetFormMode,
+  customerType,
+  formCreationStarted,
+  fillingFormState,
+  setFillingFormState,
+  setPublishedFormState,
+}: Props) => {
+  const dispatch = useDispatch()
+
+  const handleSetFormType = () => {
+    console.log('hello')
+    const formMode = mode === 'accelerated' ? 'legacy' : 'accelerated'
+    setFillingFormState(formStruture)
+    sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
+    sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
+    setPublishedFormState(null)
+
+    if (formMode === 'legacy') {
+      onSetFormMode(formMode)
+
+      if (formCreationStarted) {
+        dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+      }
+      closeModalFunction()
+      return
+    }
+
+    // if (formMode === 'accelerated') {
+    //   onSetFormMode(formMode)
+    //   if (formCreationStarted) {
+    //     dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+    //   }
+    //   return
+    // }
+  }
+
   return (
     <aside
       className='fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center '
@@ -56,18 +110,27 @@ const GraceFormModal = ({ closeModalFunction, switchFunction, message }: Props) 
               here
             </span>{' '}
             to enable Grace period
-            {message}
           </div>
         </div>
-
         <div className='flex justify-between font-medium text-[base] leading-[1.5rem]'>
+          <button className='  flex items-center justify-center text-[#667085]' onClick={handleSetFormType}>
+            <img src={returnIcon} width={30} height={26} alt='return to modify' />
+            <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Switch to legacy form</span>
+          </button>
+          <button className='flex items-center justify-center text-white ' onClick={closeModalFunction}>
+            <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Continue</span>
+            <img src={greaterThanRed} width={30} height={26} />
+          </button>
+        </div>
+
+        {/* <div className='flex justify-between font-medium text-[base] leading-[1.5rem]'>
           <div
             className='border border-[#d8dae5] rounded-[.5rem] h-[2.75rem] flex items-center justify-center text-[#667085]'
             style={{
               width: '10.375rem',
               height: '2.75rem',
             }}
-            onClick={closeModalFunction}
+            onClick={handleSetFormType}
           >
             Switch to legacy form
           </div>
@@ -77,11 +140,11 @@ const GraceFormModal = ({ closeModalFunction, switchFunction, message }: Props) 
               width: '10.375rem',
               height: '2.75rem',
             }}
-            onClick={switchFunction}
+            onClick={closeModalFunction}
           >
             Continue
           </div>
-        </div>
+        </div> */}
       </section>
     </aside>
   )
