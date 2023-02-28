@@ -8,6 +8,7 @@ import {
   getTotalRequestStatusReducer,
   getRequestsByDateReducer,
   getProductsCategoriesReducer,
+  getAllProductsReducer,
 } from './reducers/CustomerManagement.reducer'
 import {
   getFormReducer,
@@ -68,6 +69,7 @@ export type ReducersType = {
   publishedForm: ResponseType
   bulkProcessSummary: BulkProcessSummaryTypes
   allProductCategories: customersManagementResponseType
+  allProducts: customersManagementResponseType
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   deleteRequest: customersManagementResponseType
@@ -112,6 +114,7 @@ export type ReducersType = {
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
   allCustomers: getCustomersReducer,
+  allProducts:getAllProductsReducer,
   allProductCategories: getProductsCategoriesReducer,
   customerActivityLog: getActivityLogReducer,
   allRequests: getCustomersRequestReducer,

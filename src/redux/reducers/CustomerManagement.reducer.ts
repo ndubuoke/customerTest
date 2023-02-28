@@ -35,6 +35,9 @@ import {
   GET_REQUESTS_FAIL,
   GET_REQUESTS_REQUEST,
   GET_REQUESTS_SUCCESS,
+  GET_ALL_PRODUCTS_REQUEST,
+  GET_ALL_PRODUCTS_SUCCESS,
+  GET_ALL_PRODUCTS_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 export type customersManagementResponseType = {
@@ -256,3 +259,26 @@ export const getProductsCategoriesReducer = (state: customersManagementResponseT
       return state
   }
 }
+
+
+export const getAllProductsReducer = (
+  state: customersManagementResponseType = initialStateRequest,
+  action: { type: string; payload: any }
+) => {
+  switch (action.type) {
+    case GET_ALL_PRODUCTS_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_ALL_PRODUCTS_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_ALL_PRODUCTS_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+
+

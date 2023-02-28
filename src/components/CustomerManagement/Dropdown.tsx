@@ -1,6 +1,6 @@
 import { caret } from 'Assets/svgs'
 import { memo, useState } from 'react'
-import getProductTypeDetail from '../../utilities/getProductTypeDetail'
+import getProductTypeDetail from '../../utilities/getProductDetail'
 
 type DropdownType = {
   showLists: boolean
