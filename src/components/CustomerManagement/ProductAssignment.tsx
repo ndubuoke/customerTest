@@ -6,16 +6,17 @@ import SearchAndSelect from './SearchAndSelect'
 import Dropdown from './Dropdown'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.actions'
+import { getAllProductsAction, getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import ProductType from './ProductType'
-import ProductTypesTable from './ProductTypesTable'
+import ProductsTable from './ProductsTable'
 
 const ProductAssignment = () => {
   const initialRef: any = null
   const dropdownListRef = useRef(initialRef)
   const response = useSelector<ReducersType>((state: ReducersType) => state?.allProductCategories) as customersManagementResponseType
+  const allProducts = useSelector<ReducersType>((state: ReducersType) => state?.allProducts) as customersManagementResponseType
   const allProductCategories = response.serverResponse.data
   const [showLists, setShowLists] = useState(false)
   const [selectedItem, setSelectedItem] = useState('All')
@@ -28,10 +29,8 @@ const ProductAssignment = () => {
     setShowLists(false)
   }
   useEffect(() => {
-
-
     // dispatch(getCategorizedProductsAction() as any)
-
+     dispatch(getAllProductsAction() as any)
     //when an item is selected on the dropdown filter the data above and get the product types alone
   }, [selectedItem])
 
@@ -51,7 +50,7 @@ const ProductAssignment = () => {
     }
   }, [showLists])
 
-  // console.log(allProductCategories)
+  //  console.log(allProducts)
 
   return (
     <div className=' h-screen bg-[#E5E5E5] w-full '>
@@ -66,7 +65,7 @@ const ProductAssignment = () => {
         />
       </div>
 
-      <div className='  bg-white p-[5%]  h-auto overflow-auto mx-[2%] my-[2%]    rounded-md '>
+      <div className='  bg-white p-[5%]  h-auto  mx-[2%] my-[2%]    rounded-md '>
         <div className=' w-full flex flex-col  justify-center  items-center'>
           <div className='flex gap-12'>
             <h1 className='font-normal  text-[18px]'>Product Type</h1>
@@ -89,10 +88,10 @@ const ProductAssignment = () => {
               data={allProductCategories}
               selectedItem={selectedItem}
             />
-          </div>
-          <div className='border w-full mt-6'>
-            <ProductTypesTable activeProductType={activeProductType} data={response} />
           </div> */}
+          <div className=' w-full mt-6'>
+            <ProductsTable activeProductType={activeProductType} data={allProducts} />
+          </div>
         </div>
       </div>
     </div>
