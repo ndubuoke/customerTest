@@ -7,6 +7,9 @@ const getProductTypeDetail = (product, field: string): any => {
       return product.product_type
   
   }
+  if(field === 'name'){
+     return product.name
+  }
 }
 
 export default getProductTypeDetail

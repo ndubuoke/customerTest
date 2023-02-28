@@ -3,7 +3,7 @@ import { customersManagementResponseType } from 'Redux/reducers/CustomerManageme
 import React from 'react'
 import ProductTypesDetailsRow from './ProductTypesDetailsRow'
 
-const ProductTypesTableHeads = ['PRODUCT NAME', 'PRODUCT CODE', 'CURRENCY', 'PRODUCT DESCRIPTION']
+const ProductTypesTableHeads = ['','PRODUCT NAME', 'PRODUCT CODE', 'CURRENCY', 'PRODUCT DESCRIPTION']
 
 type props = { data: customersManagementResponseType; activeProductType: string }
 
@@ -35,16 +35,19 @@ const ProductTypesTable = ({ data, activeProductType }: props) => {
           </tbody>
         ) : (
           <>
-            {!data.loading && data.success
-              ? allProductCategories.map((product) => {
+            {!data.loading && data.success ? (
+              <tbody>
+                {/* {allProductCategories.map((product) => {
                   return product.product_types.map((type: any) => {
-                    if (type.product_type == activeProductType) {
-                        return <ProductTypesDetailsRow />
-                    }
+                    // if (type.product_type == activeProductType) {
+                    //     return <ProductTypesDetailsRow />
+                    // }
+                    return <ProductTypesDetailsRow product={type} />
                   })
-                  // console.log(product)
-                })
-              : null}
+               
+                })} */}
+              </tbody>
+            ) : null}
           </>
         )}
       </table>

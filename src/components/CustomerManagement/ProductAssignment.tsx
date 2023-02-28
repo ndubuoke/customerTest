@@ -18,18 +18,21 @@ const ProductAssignment = () => {
   const response = useSelector<ReducersType>((state: ReducersType) => state?.allProductCategories) as customersManagementResponseType
   const allProductCategories = response.serverResponse.data
   const [showLists, setShowLists] = useState(false)
-  const [selectedItem, setSelectedItem] = useState('')
-   const [activeProductType, setActiveProductType] = useState('')
+  const [selectedItem, setSelectedItem] = useState('All')
+  const [activeProductType, setActiveProductType] = useState('')
   const dispatch = useDispatch()
 
   let { customerType } = useParams()
-  const selectedItemHandler = (item) => {
+  const selectedItemHandler = (item: string) => {
     setSelectedItem(item)
     setShowLists(false)
   }
   useEffect(() => {
-    dispatch(getCategorizedProductsAction() as any)
-    //when an item is selected on the dropdown filter the data above and get the product types alone 
+
+
+    // dispatch(getCategorizedProductsAction() as any)
+
+    //when an item is selected on the dropdown filter the data above and get the product types alone
   }, [selectedItem])
 
   useEffect(() => {
@@ -78,7 +81,7 @@ const ProductAssignment = () => {
               />
             </div>
           </div>
-          <div className=' w-full mt-6'>
+          {/* <div className=' w-full mt-6'>
             <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
             <ProductType
               activeProductType={activeProductType}
@@ -89,7 +92,7 @@ const ProductAssignment = () => {
           </div>
           <div className='border w-full mt-6'>
             <ProductTypesTable activeProductType={activeProductType} data={response} />
-          </div>
+          </div> */}
         </div>
       </div>
     </div>
