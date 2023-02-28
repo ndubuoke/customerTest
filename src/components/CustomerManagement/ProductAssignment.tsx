@@ -19,6 +19,7 @@ const ProductAssignment = () => {
   const allProductCategories = response.serverResponse.data
   const [showLists, setShowLists] = useState(false)
   const [selectedItem, setSelectedItem] = useState('')
+   const [activeProductType, setActiveProductType] = useState('')
   const dispatch = useDispatch()
 
   let { customerType } = useParams()
@@ -28,7 +29,8 @@ const ProductAssignment = () => {
   }
   useEffect(() => {
     dispatch(getCategorizedProductsAction() as any)
-  }, [])
+    //when an item is selected on the dropdown filter the data above and get the product types alone 
+  }, [selectedItem])
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -62,7 +64,7 @@ const ProductAssignment = () => {
       </div>
 
       <div className='  bg-white p-[5%]  h-auto overflow-auto mx-[2%] my-[2%]    rounded-md '>
-        <div className=' w-full flex flex-col  justify-center border items-center'>
+        <div className=' w-full flex flex-col  justify-center  items-center'>
           <div className='flex gap-12'>
             <h1 className='font-normal  text-[18px]'>Product Type</h1>
             <div className=''>
@@ -78,10 +80,15 @@ const ProductAssignment = () => {
           </div>
           <div className=' w-full mt-6'>
             <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
-            <ProductType data={allProductCategories} selectedItem={selectedItem} />
+            <ProductType
+              activeProductType={activeProductType}
+              setActiveProductType={setActiveProductType}
+              data={allProductCategories}
+              selectedItem={selectedItem}
+            />
           </div>
           <div className='border w-full mt-6'>
-            <ProductTypesTable />
+            <ProductTypesTable activeProductType={activeProductType} data={response} />
           </div>
         </div>
       </div>

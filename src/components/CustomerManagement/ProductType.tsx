@@ -6,13 +6,15 @@ import { useState, useEffect } from 'react'
 type props = {
   data: []
   selectedItem: string
+  activeProductType:string
+  setActiveProductType: (e) => void
 }
 
-const ProductType = ({ data, selectedItem }: props) => {
-  const [activeProductType, setActiveProductType] = useState('')
+const ProductType = ({ data, selectedItem, setActiveProductType, activeProductType }: props) => {
+  // const [activeProductType, setActiveProductType] = useState('')
 
   useEffect(() => {}, [activeProductType])
-  console.log(activeProductType)
+  // console.log(activeProductType)
   return (
     <div className='my-4 flex justify-between'>
       <div>
