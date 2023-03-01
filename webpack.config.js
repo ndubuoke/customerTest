@@ -2,6 +2,7 @@ const { merge } = require( 'webpack-merge' )
 const path = require( 'path' )
 const paths = require( './paths' )
 const singleSpaDefaults = require( 'webpack-config-single-spa-react-ts' )
+const DotenvWebpackPlugin = require( 'dotenv-webpack' );
 
 module.exports = ( webpackConfigEnv, argv ) => {
   const defaultConfig = singleSpaDefaults( {
@@ -39,6 +40,11 @@ module.exports = ( webpackConfigEnv, argv ) => {
         { test: /\.xlsx$/, loader: "webpack-xlsx-loader" },
       ],
     },
+    plugins: [
+      new DotenvWebpackPlugin( {
+        path: `./environments/.env${ webpackConfigEnv.file ? `.${ webpackConfigEnv.file }` : '' }`
+      } ),
+    ],
     // modify the webpack config however you'd like to by adding to this object
   } )
 }
