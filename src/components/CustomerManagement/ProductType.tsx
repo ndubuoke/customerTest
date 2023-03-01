@@ -1,6 +1,6 @@
 import { Search } from 'Components/Search'
 import React from 'react'
-import getProductTypeDetail from '../../utilities/getProductTypeDetail'
+import getProductTypeDetail from '../../utilities/getProductDetail'
 import { useState, useEffect } from 'react'
 
 type props = {

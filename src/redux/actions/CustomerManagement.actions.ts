@@ -40,6 +40,9 @@ import {
   GET_CATEGORIZED_PRODUCTS_SUCCESS,
   GET_CATEGORIZED_PRODUCTS_REQUEST,
   GET_CATEGORIZED_PRODUCTS_FAIL,
+  GET_ALL_PRODUCTS_REQUEST,
+  GET_ALL_PRODUCTS_SUCCESS,
+  GET_ALL_PRODUCTS_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -333,6 +336,22 @@ export const getCategorizedProductsAction = () => async (dispatch: Dispatch, get
   } catch (error) {
     dispatch({
       type: GET_CATEGORIZED_PRODUCTS_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
+
+
+export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_ALL_PRODUCTS_REQUEST })
+
+    const { data } = await axios.get(`${PRODUCT_URL}/product`)
+
+    dispatch({ type: GET_ALL_PRODUCTS_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_PRODUCTS_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
   }
