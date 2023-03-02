@@ -13,7 +13,7 @@ import {
   SAVE_BULK_CUSTOMER_SUCCESS
 } from 'Redux/constants/BulkCreation'
 
-const SERVER_URL = `https://customer-management-api-dev.reventtechnologies.com`
+const REVENT_BASE_URL = process.env.REVENT_BASE_URL
 
 interface ActionTypes {
   SET_FILE_UPLOADED: any,
@@ -64,7 +64,7 @@ export const validateCustomers = (customers: any) => async (dispatch: Dispatch) 
 
       }
     }
-    const { data } = await axios.post(`${SERVER_URL}/v1/bulk-customer/validate`, customers)
+    const { data } = await axios.post(`${REVENT_BASE_URL}/bulk-customer/validate`, customers)
     console.log(data)
     if (data?.status === 'success') {
       dispatch({
@@ -91,7 +91,7 @@ export const saveCustomers = (customerData: any) => async (dispatch: Dispatch) =
       }
     }
     // https://retailcore-customerservice.herokuapp.com/v1/bulk-customer/create
-    const { data } = await axios.post(`${SERVER_URL}/v1/bulk-customer/create`, customerData)
+    const { data } = await axios.post(`${REVENT_BASE_URL}/bulk-customer/create`, customerData)
 
     if (data?.status === 'success') {
       dispatch({

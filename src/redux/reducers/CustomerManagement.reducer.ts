@@ -218,13 +218,13 @@ export const getSingleRequestReducer = (state: customersManagementResponseType =
 export const getActivityLogReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
   switch (action.type) {
     case GET_CUSTOMERS_ACTIVITY_LOG_REQUEST:
-      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+      return { ...state, loading: true, success: false }
 
     case GET_CUSTOMERS_ACTIVITY_LOG_SUCCESS:
-      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+      return { ...state, loading: false, success: true, activityLogs: action.payload }
 
     case GET_CUSTOMERS_ACTIVITY_LOG_FAIL:
-      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+      return { ...state, loading: false, success: false, error: true, message: action.payload }
 
     default:
       return state

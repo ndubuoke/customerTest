@@ -10,7 +10,7 @@ import {
   GET_USER_ROLE_AND_PERMISSIONS_SUCCESS
 } from 'Redux/constants/UserPersmissions'
 
-const SERVER_URL = `https://api.sterlingv2.prunedge.org/api`
+const PRUNEDGE_AUTH_URL = process.env.PRUNEDGE_AUTH_URL
 // https://api.sterlingv2.prunedge.org/api/v1/users/profile/
 interface ActionTypes {
   GET_USER_ROLE_AND_PERMISSIONS_FAILED: any
@@ -42,7 +42,7 @@ export const getRolesAndPermissions = () => async (dispatch: Dispatch) => {
       }
     }
     // Authorization: `Bearer ${token}`
-    const { data } = await axios.get(`${SERVER_URL}/v1/roles/?page_size=50`, config)
+    const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/roles/?page_size=50`, config)
     console.log(data)
     if (data) {
       dispatch({
@@ -71,7 +71,7 @@ export const getUserProfile = () => async (dispatch: Dispatch) => {
         Authorization: `Bearer ${token}`
       }
     }
-    const { data } = await axios.get(`${SERVER_URL}/v1/users/profile`, config)
+    const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/users/profile`, config)
     //  console.log(data)
     if (data?.success) {
       dispatch({

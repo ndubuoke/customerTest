@@ -87,6 +87,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           key: 'id',
         },
       ],
+      isCompleted: null,
     },
     contactInformation: {
       title: "Customer's Address",
@@ -146,6 +147,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           key: 'emailAddress',
         },
       ],
+      isCompleted: null,
     },
     employmentDetails: {
       title: "Customer's Livelihood",
@@ -229,6 +231,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           key: 'employersEmailAddress',
         },
       ],
+      isCompleted: null,
     },
     watchlist: {
       title: 'Watchlist',
@@ -271,6 +274,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         },
       ],
       fields: [],
+      isCompleted: null,
     },
   })
   console.log('fillingFormState-RiskAssessment', fillingFormState.data)
@@ -310,6 +314,17 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
     //   parameter: 'Is customer a Non-Resident?',
     //   parameterOption: 'Yes',
     // },
+
+    setRiskAssessmentData((prev) => {
+      const riskAssessmentDataCopy = { ...prev }
+      for (let key in riskAssessmentDataCopy) {
+        riskAssessmentDataCopy[key].isCompleted = !riskAssessmentDataCopy[key].standardRiskAssessmentData.some(
+          (parameter) => parameter.selectedParameterOption.status === 'Not verified'
+        )
+      }
+      return riskAssessmentDataCopy
+    })
+
     const userAssessment = []
     Object.keys(riskAssessmentData).forEach((assessment) => {
       riskAssessmentData[assessment].standardRiskAssessmentData.forEach((data) =>
@@ -339,6 +354,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               standardRiskAssessmentData={riskAssessmentData[data.sectionName].standardRiskAssessmentData}
               assessmentData={data.data}
               handleSelectedParameterOption={handleSelectedParameterOption}
+              isCompleted={riskAssessmentData[data.sectionName].isCompleted}
             />
           )
         }
@@ -349,6 +365,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         title={riskAssessmentData['watchlist'].title}
         standardRiskAssessmentData={riskAssessmentData['watchlist'].standardRiskAssessmentData}
         handleSelectedParameterOption={handleSelectedParameterOption}
+        isCompleted={riskAssessmentData['watchlist'].isCompleted}
       />
 
       <div className='flex justify-center items-center gap-12 py-10'>
@@ -371,7 +388,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 padding: '7px 0 7px 8px',
                 maxWidth: '200px',
                 fontWeight: '700',
-                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '#D5A62F',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : riskScoreGuide.rating === 'MEDIUM' ? '#D5A62F' : 'green',
               }}
             >
               {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}
@@ -387,7 +404,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 alignItems: 'center',
                 marginTop: '0.5rem',
                 fontWeight: '500',
-                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : '#D5A62F',
+                color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : riskScoreGuide.rating === 'MEDIUM' ? '#D5A62F' : 'green',
               }}
             >
               {riskScoreGuide.rating === 'HIGH' ? (
