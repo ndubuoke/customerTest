@@ -30,7 +30,7 @@ const ProductAssignment = () => {
   }
   useEffect(() => {
     // dispatch(getCategorizedProductsAction() as any)
-     dispatch(getAllProductsAction() as any)
+    dispatch(getAllProductsAction() as any)
     //when an item is selected on the dropdown filter the data above and get the product types alone
   }, [selectedItem])
 

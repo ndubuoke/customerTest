@@ -17,7 +17,7 @@ const Checkbox = ({ disabled, externalFunctionToDoSomething, checked, setChecked
 
 
   return (
-    <div className='flex items-center  mb-2'>
+    <div className='flex items-center   mb-2 '>
       <input
         type='checkbox'
         className={`w-5 h-5 cursor-pointer appearance-none border border-primay-main p-0.5 ${checked ? 'bg-primay-main' : 'bg-transparent'}  

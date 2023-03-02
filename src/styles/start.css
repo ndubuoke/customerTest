@@ -26,6 +26,9 @@ body {
   scroll-behavior: smooth;
   /* color: #db353905 */
 }
+input{
+  outline: none
+}
 
 input {
   outline: none;
