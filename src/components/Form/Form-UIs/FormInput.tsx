@@ -63,6 +63,8 @@ const FormInput = ({
   const [columnName, setColumnName] = useState<string>('')
 
   // const [columnName, setColumnName] =
+  console.log('columnName', columnName)
+  console.log('getColumnMap?.serverResponse?', getColumnMap)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)

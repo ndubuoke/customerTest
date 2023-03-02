@@ -41,10 +41,11 @@ type Props = {
   assessmentData?: Record<string, string>
   standardRiskAssessmentData: any[]
   handleSelectedParameterOption: (parentKey: string, parameter: string, parameterOptionStatus: string) => void
+  isCompleted: boolean
 }
 
 const RiskAssessmentLayout = memo(
-  ({ parentKey, title, fields = [], standardRiskAssessmentData = [], assessmentData = {}, handleSelectedParameterOption }: Props) => {
+  ({ parentKey, title, fields = [], standardRiskAssessmentData = [], assessmentData = {}, handleSelectedParameterOption, isCompleted }: Props) => {
     const [collapsed, setCollapsed] = useState<boolean>(false)
 
     const handleCollapseSection = () => {
@@ -57,12 +58,14 @@ const RiskAssessmentLayout = memo(
       <>
         <section className='max-w-[66.25rem] mx-4'>
           <div
-            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]
+            className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between
             {setRequiredFormFieldsRedux.} $
             `}
             style={{
               boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
               background: 'rgba(170, 170, 170, 0.07)',
+              padding: '0.5rem 1rem',
+              border: isCompleted === true ? '1px solid green' : isCompleted === false ? '1px solid red' : '',
             }}
           >
             <div className='flex items-center'>
