@@ -43,6 +43,9 @@ import {
   GET_ALL_PRODUCTS_REQUEST,
   GET_ALL_PRODUCTS_SUCCESS,
   GET_ALL_PRODUCTS_FAIL,
+  GET_SINGLE_PRODUCT_REQUEST,
+  GET_SINGLE_PRODUCT_SUCCESS,
+  GET_SINGLE_PRODUCT_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -352,6 +355,22 @@ export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (
   } catch (error) {
     dispatch({
       type: GET_ALL_PRODUCTS_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
+
+
+export const getSingleProductAction = (productId:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_SINGLE_PRODUCT_REQUEST })
+
+    const { data } = await axios.get(`${PRODUCT_URL}/product/${productId}`)
+
+    dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_SINGLE_PRODUCT_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
   }
