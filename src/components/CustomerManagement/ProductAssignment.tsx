@@ -17,21 +17,42 @@ const ProductAssignment = () => {
   const dropdownListRef = useRef(initialRef)
   const response = useSelector<ReducersType>((state: ReducersType) => state?.allProductCategories) as customersManagementResponseType
   const allProducts = useSelector<ReducersType>((state: ReducersType) => state?.allProducts) as customersManagementResponseType
+  type productCategoryType = 'All' | 'Payment' | 'Credit' | 'Deposit' | 'Investment'
   const allProductCategories = response.serverResponse.data
   const [showLists, setShowLists] = useState(false)
-  const [selectedItem, setSelectedItem] = useState('All')
+  const [selectedItem, setSelectedItem] = useState<productCategoryType>('All')
   const [activeProductType, setActiveProductType] = useState('')
+  const [searchTerm, setSearchTerm] = useState('')
   const dispatch = useDispatch()
 
   let { customerType } = useParams()
-  const selectedItemHandler = (item: string) => {
+  const selectedItemHandler = (item: productCategoryType) => {
     setSelectedItem(item)
     setShowLists(false)
   }
+
+  const searchBarHandler = (event) => {
+    setSearchTerm(event.target.value)
+  }
+
   useEffect(() => {
-    // dispatch(getCategorizedProductsAction() as any)
-    dispatch(getAllProductsAction() as any)
-    //when an item is selected on the dropdown filter the data above and get the product types alone
+    if (selectedItem === 'All') {
+      // dispatch(getAllProductsAction() as any)
+      dispatch(getCategorizedProductsAction('') as any)
+    }
+
+    if (selectedItem === 'Credit') {
+      dispatch(getCategorizedProductsAction(selectedItem) as any)
+    }
+    if (selectedItem === 'Payment') {
+      dispatch(getCategorizedProductsAction(selectedItem) as any)
+    }
+    if (selectedItem === 'Deposit') {
+      dispatch(getCategorizedProductsAction(selectedItem) as any)
+    }
+    if (selectedItem === 'Investment') {
+      dispatch(getCategorizedProductsAction(selectedItem) as any)
+    }
   }, [selectedItem])
 
   useEffect(() => {
@@ -69,28 +90,30 @@ const ProductAssignment = () => {
         <div className=' w-full flex flex-col  justify-center  items-center'>
           <div className='flex gap-12'>
             <h1 className='font-normal  text-[18px]'>Product Type</h1>
-            <div className=''>
+            <div className='top-4'>
               <Dropdown
                 selectedItem={selectedItem}
                 setShowLists={setShowLists}
                 showLists={showLists}
-                data={allProductCategories}
                 selectedItemHandler={selectedItemHandler}
                 dropdownListRef={dropdownListRef}
               />
             </div>
           </div>
-          {/* <div className=' w-full mt-6'>
+          <div className=' w-full mt-6'>
             <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
             <ProductType
               activeProductType={activeProductType}
               setActiveProductType={setActiveProductType}
               data={allProductCategories}
               selectedItem={selectedItem}
+              onChange={searchBarHandler}
+              searchTerm={searchTerm}
+              
             />
-          </div> */}
+          </div>
           <div className=' w-full mt-6'>
-            <ProductsTable activeProductType={activeProductType} data={allProducts} />
+            <ProductsTable searchTerm={searchTerm} activeProductType={activeProductType} data={response} />
           </div>
         </div>
       </div>

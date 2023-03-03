@@ -2,15 +2,18 @@ import { Search } from 'Components/Search'
 import React from 'react'
 import getProductTypeDetail from '../../utilities/getProductDetail'
 import { useState, useEffect } from 'react'
+import SearchBar from './SearchBar';
 
 type props = {
+   searchTerm: string
   data: []
   selectedItem: string
-  activeProductType:string
+  activeProductType: string
   setActiveProductType: (e) => void
+  onChange: (e) => void
 }
 
-const ProductType = ({ data, selectedItem, setActiveProductType, activeProductType }: props) => {
+const ProductType = ({ data, selectedItem, setActiveProductType, activeProductType, onChange, searchTerm }: props) => {
   // const [activeProductType, setActiveProductType] = useState('')
 
   useEffect(() => {}, [activeProductType])
@@ -18,7 +21,7 @@ const ProductType = ({ data, selectedItem, setActiveProductType, activeProductTy
   return (
     <div className='my-4 flex justify-between'>
       <div>
-        {data &&
+        {/* {data &&
           data.map((type: any) => {
             if (type?.product_category == selectedItem) {
               return type?.product_types.map((productType) => {
@@ -39,10 +42,10 @@ const ProductType = ({ data, selectedItem, setActiveProductType, activeProductTy
                 )
               })
             }
-          })}
+          })} */}
       </div>
       <div className='w-[35%]'>
-        <Search />
+        <Search onChange={onChange} value={searchTerm} placeholder='Search by product name or code' />
       </div>
     </div>
   )
