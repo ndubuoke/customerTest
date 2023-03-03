@@ -4,12 +4,13 @@ import React from 'react'
 import ProductDetailsRow from './ProductDetailsRow'
 import { useState } from 'react'
 import SingleProductModal from './SingleProductModal'
+import getProductDetail from 'Utilities/getProductDetail'
 
 const ProductsTableHeads = ['', 'PRODUCT NAME', 'PRODUCT CODE', 'CURRENCY', 'PRODUCT DESCRIPTION', '']
 
-type props = { data: customersManagementResponseType; activeProductType: string }
+type props = { data: customersManagementResponseType; activeProductType: string; searchTerm: string }
 
-const ProductsTable = ({ data, activeProductType }: props) => {
+const ProductsTable = ({ data, activeProductType, searchTerm }: props) => {
   const [showProductModal, setShowProductModal] = useState(false)
   const [productId, setProductId] = useState(null)
   const allProducts = data.serverResponse.data?.products
@@ -47,13 +48,20 @@ const ProductsTable = ({ data, activeProductType }: props) => {
             <>
               {!data.loading && data.success ? (
                 <tbody className=''>
-                  {allProducts.map((product, index) => {
-                    // if (type.product_type == activeProductType) {
-                    //     return <ProductTypesDetailsRow />
-                    // }
-
-                    return <ProductDetailsRow productFunctionsHandler={productFunctionsHandler} key={index} index={index} product={product} />
-                  })}
+                  {allProducts
+                    .filter((product) => {
+                      if (searchTerm === '') {
+                        return product
+                      } else if (
+                        getProductDetail(product, 'name').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                        getProductDetail(product, 'code').toString().toLowerCase().includes(searchTerm.toLowerCase())
+                      ) {
+                        return product
+                      }
+                    })
+                    .map((product, index) => {
+                      return <ProductDetailsRow productFunctionsHandler={productFunctionsHandler} key={index} index={index} product={product} />
+                    })}
                 </tbody>
               ) : null}
             </>

@@ -329,11 +329,11 @@ export const updateRequestAction =
 
 //  {*  PRODUCT ACTIONS *}
 
-export const getCategorizedProductsAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const getCategorizedProductsAction = (productCategory:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
     dispatch({ type: GET_CATEGORIZED_PRODUCTS_REQUEST })
 
-    const { data } = await axios.get(`${PRODUCT_URL}/product-category`)
+    const { data } = await axios.get(`${PRODUCT_URL}/product?product_category=${productCategory}`)
 
     dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
   } catch (error) {
