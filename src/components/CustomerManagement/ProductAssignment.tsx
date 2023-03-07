@@ -6,7 +6,12 @@ import SearchAndSelect from './SearchAndSelect'
 import Dropdown from './Dropdown'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProductTypesAction, getAllProductsAction, getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.actions'
+import {
+  assignProductAction,
+  getAllProductTypesAction,
+  getAllProductsAction,
+  getCategorizedProductsAction,
+} from 'Redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import ProductType from './ProductType'
@@ -14,18 +19,23 @@ import ProductsTable from './ProductsTable'
 import Button from 'Components/Shareables/Button'
 import { getCustomerProfileAction } from '../../redux/actions/CustomerManagement.actions'
 import getCustomerDetail from 'Utilities/getCustomerDetail'
+import CustomerAlertModal from './customerAlertModal'
+import { AppRoutes } from 'Routes/AppRoutes'
+import AlertModal from 'Components/Shareables/AlertModal'
 
 const ProductAssignment = () => {
   const initialRef: any = null
   const dropdownListRef = useRef(initialRef)
   const response = useSelector<ReducersType>((state: ReducersType) => state?.allProductCategories) as customersManagementResponseType
   const customerProfileResponse = useSelector<ReducersType>((state: ReducersType) => state?.customerProfile) as customersManagementResponseType
+  const assignProduct = useSelector<ReducersType>((state: ReducersType) => state?.assignProduct) as customersManagementResponseType
   const allProductTypes = useSelector<ReducersType>((state: ReducersType) => state?.allProductTypes) as customersManagementResponseType
   type productCategoryType = 'All' | 'Payment' | 'Credit' | 'Deposit' | 'Investment'
   const customerProfile = customerProfileResponse.serverResponse.data
   const [showLists, setShowLists] = useState(false)
   const [assignButtonDisabled, setAssignButtonDisabled] = useState(true)
-  const [toBeAssignedProductsIds, setToBeAssignedProductsIds] = useState([])
+  const [showProductAssignmentCustomerAlertModal, setShowProductAssignmentCustomerAlertModal] = useState(false)
+  const [toBeAssignedProducts, setToBeAssignedProducts] = useState([])
   const [selectedItem, setSelectedItem] = useState<productCategoryType>('All')
   const [activeProductType, setActiveProductType] = useState({ name: '', id: '' })
   const [searchTerm, setSearchTerm] = useState('')
@@ -42,12 +52,42 @@ const ProductAssignment = () => {
     setSearchTerm(event.target.value)
   }
 
-  const selectProductsToBeAssigned = (productId: string) => {
-     const existingId = toBeAssignedProductsIds.find((id) => id === productId)
-     if(!existingId){
-      
-     }
-    console.log(productId)
+  const selectProductsToBeAssigned = (data: { productId: ''; productName: ''; productCode: '' }) => {
+    // console.log(data)
+    const existingProduct = toBeAssignedProducts.find((product) => product.productId === data.productId)
+
+    if (!existingProduct) {
+      setToBeAssignedProducts([
+        ...toBeAssignedProducts,
+        {
+          productId: data.productId,
+          productCode: data.productCode,
+          productName: data.productName,
+        },
+      ])
+    } else {
+      setToBeAssignedProducts(toBeAssignedProducts.filter((product) => product.productId !== existingProduct.productId))
+    }
+  }
+
+  const assignProductHandler = () => {
+    const body = {
+      data: {
+        productData: [...toBeAssignedProducts],
+      },
+    }
+    let request = new Promise(function (myResolve, myReject) {
+      let request = customerProfile?.requests.filter((request) => {
+        return request.requestType === 'Creation'
+      })
+
+      myResolve(request[0].requestId) // when successful
+      myReject('ERROR') // when error
+    })
+    request.then(function (value: string) {
+      setShowProductAssignmentCustomerAlertModal(true)
+      dispatch(assignProductAction(body, value) as any)
+    })
   }
 
   useEffect(() => {
@@ -115,66 +155,89 @@ const ProductAssignment = () => {
   }, [customerId])
 
   useEffect(() => {
-    if (toBeAssignedProductsIds.length > 0) {
+    if (toBeAssignedProducts.length > 0) {
       setAssignButtonDisabled(false)
+    } else {
+      setAssignButtonDisabled(true)
     }
-  }, [toBeAssignedProductsIds])
+  }, [toBeAssignedProducts])
 
-  console.log(customerProfile)
-
+  //  console.log(customerProfile)
+  // console.log(toBeAssignedProducts)
   return (
-    <div className='h-screen'>
-      <div className='h-[15%] bg-white '>
-        <GoBack
-          headerText='PRODUCT ASSIGNMENT'
-          breadCrumbsList={[
-            { text: 'CUSTOMER MANAGEMENT', link: '/' },
-            { text: `${customerProfile?.customerType ? convertToUppercase(customerProfile?.customerType) : ''} CUSTOMER `, link: '' },
-            { text: `PRODUCT ASSIGNMENT`, link: '' },
-          ]}
+    <>
+      {showProductAssignmentCustomerAlertModal && (
+        <AlertModal
+          leftClick={() => {
+            setShowProductAssignmentCustomerAlertModal(false)
+            navigate(AppRoutes.mainScreen)
+          }}
+          rightClick={() => {
+            setShowProductAssignmentCustomerAlertModal(false)
+          }}
+          rightClickText='Assign another product'
+          closeModal={() => {
+            setShowProductAssignmentCustomerAlertModal(false)
+          }}
+          message={'Product Assignment Request Submitted For Approval'}
+          isOpen={showProductAssignmentCustomerAlertModal}
+          loading={assignProduct.loading}
+          status={assignProduct.serverResponse.status === 'success' ? 'success' : 'error'}
         />
-      </div>
-      <div className=' h-[85%] bg-[#E5E5E5] w-full p-[1%] '>
-        <div className='  bg-white p-[5%]  h-full   '>
-          <div className=' w-full flex flex-col justify-around mt-8  h-full  items-center'>
-            <div className='flex gap-12  w-full justify-center items-center'>
-              <h1 className='font-normal  text-[18px]'>Product Type</h1>
-              <div className='top-4'>
-                <Dropdown
+      )}
+      <div className='h-screen'>
+        <div className='h-[15%] bg-white '>
+          <GoBack
+            headerText='PRODUCT ASSIGNMENT'
+            breadCrumbsList={[
+              { text: 'CUSTOMER MANAGEMENT', link: '/' },
+              { text: `${customerProfile?.customerType ? convertToUppercase(customerProfile?.customerType) : ''} CUSTOMER `, link: '' },
+              { text: `PRODUCT ASSIGNMENT`, link: '' },
+            ]}
+          />
+        </div>
+        <div className=' h-[85%] bg-[#E5E5E5] w-full p-[1%] '>
+          <div className='  bg-white p-[5%]  h-full   '>
+            <div className=' w-full flex flex-col justify-around mt-8  h-full  items-center'>
+              <div className='flex gap-12  w-full justify-center items-center'>
+                <h1 className='font-normal  text-[18px]'>Product Type</h1>
+                <div className='top-4'>
+                  <Dropdown
+                    selectedItem={selectedItem}
+                    setShowLists={setShowLists}
+                    showLists={showLists}
+                    selectedItemHandler={selectedItemHandler}
+                    dropdownListRef={dropdownListRef}
+                  />
+                </div>
+              </div>
+              <div className=' w-full mt-6  '>
+                <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
+                <ProductType
+                  activeProductType={activeProductType}
+                  setActiveProductType={setActiveProductType}
+                  data={allProductTypes}
                   selectedItem={selectedItem}
-                  setShowLists={setShowLists}
-                  showLists={showLists}
-                  selectedItemHandler={selectedItemHandler}
-                  dropdownListRef={dropdownListRef}
+                  onChange={searchBarHandler}
+                  searchTerm={searchTerm}
                 />
               </div>
-            </div>
-            <div className=' w-full mt-6  '>
-              <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
-              <ProductType
-                activeProductType={activeProductType}
-                setActiveProductType={setActiveProductType}
-                data={allProductTypes}
-                selectedItem={selectedItem}
-                onChange={searchBarHandler}
-                searchTerm={searchTerm}
-              />
-            </div>
-            <div className=' w-full mt-6 '>
-              <ProductsTable
-                selectProductsToBeAssigned={selectProductsToBeAssigned}
-                searchTerm={searchTerm}
-                activeProductType={activeProductType}
-                data={response}
-              />
-            </div>
-            <div className=' w-full  flex justify-center items-center '>
-              <Button disabled={assignButtonDisabled} text={'Assign Product'} onClick={() => {}} />
+              <div className=' w-full mt-6 '>
+                <ProductsTable
+                  selectProductsToBeAssigned={selectProductsToBeAssigned}
+                  searchTerm={searchTerm}
+                  activeProductType={activeProductType}
+                  data={response}
+                />
+              </div>
+              <div className=' w-full  flex justify-center items-center '>
+                <Button disabled={assignButtonDisabled} text={'Assign Product'} onClick={assignProductHandler} />
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
+    </>
   )
 }
 
