@@ -164,9 +164,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   }, [])
 
   useEffect(() => {
-    API.get('/interim-approval-config').then((data) => {
+    API.get(`/interim-approval-config/type/${customerType}`).then((data) => {
       console.log('data-/interim-approval-config', data)
-      if (!data.data?.data[0]?.gracePeriod) {
+      if (!data.data?.data?.gracePeriod) {
         setShowGraceModal(true)
       }
     })

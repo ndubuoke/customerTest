@@ -145,3 +145,9 @@ export function getProperty(properties: PageProperties, name: PagePropertyName, 
 
   return { text: '', list: [] }
 }
+
+export const getVisibleProperty = (properties: PageProperties) => {
+  return getProperty(properties, 'Visibility', 'value').text
+    ? getProperty(properties, 'Visibility', 'value').text === 'On'
+    : getProperty(properties, 'Visibility', 'defaultState').text === 'On'
+}
