@@ -55,6 +55,9 @@ import {
   DEACTIVATE_CUSTOMER_REQUEST,
   DEACTIVATE_CUSTOMER_SUCCESS,
   DEACTIVATE_CUSTOMER_FAIL,
+  ASSIGN_PRODUCT_REQUEST,
+  ASSIGN_PRODUCT_SUCCESS,
+  ASSIGN_PRODUCT_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -477,3 +480,22 @@ export const getAllProductTypesAction = () => async (dispatch: Dispatch, getStat
     })
   }
 }
+
+export const assignProductAction =
+  (body = {}, requestId: string) =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      dispatch({ type: ASSIGN_PRODUCT_REQUEST })
+
+      
+
+      const { data } = await axios.post(`${SERVER_URL}/request/assign-products/${requestId}`, body)
+
+      dispatch({ type: ASSIGN_PRODUCT_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: ASSIGN_PRODUCT_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }

@@ -19,7 +19,11 @@ const ProductDetailsRow = ({ product, index, productFunctionsHandler, selectProd
         <Checkbox
           checked={checked}
           setChecked={setChecked}
-          externalFunctionToDoSomething={selectProductsToBeAssigned.bind(null, getProductDetail(product, 'product_id'))}
+          externalFunctionToDoSomething={selectProductsToBeAssigned.bind(null, {
+            productId: getProductDetail(product, 'product_id'),
+            productName: getProductDetail(product, 'name'),
+            productCode: getProductDetail(product, 'code'),
+          })}
         />
       </td>
       <td className='py-2 px-2 capitalize'>{getProductDetail(product, 'name')}</td>
