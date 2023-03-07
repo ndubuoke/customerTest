@@ -3,8 +3,8 @@ import { dots, ExclaimateIcon } from 'Assets/svgs'
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
-import { getProperty } from 'Utilities/getProperty'
-import { FormControlType, FormControlTypeWithSection, PageInstance } from '../Types'
+import { getProperty, getVisibleProperty } from 'Utilities/getProperty'
+import { FormControlType, FormControlTypeWithSection, PageInstance, PageProperties } from '../Types'
 import FormInput from './FormInput'
 import FormDropdown from './FormDropdown'
 import FormDate from './FormDate'
@@ -56,6 +56,7 @@ type Props = {
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
   backupForSwitchFormState: any
+  shouldCollapseByDefault?: boolean
 }
 
 const FormLayout = memo(
@@ -69,8 +70,9 @@ const FormLayout = memo(
     fillingFormState,
     setBackupForSwitchFormState,
     backupForSwitchFormState,
+    shouldCollapseByDefault = false,
   }: Props) => {
-    const [collapsed, setCollapsed] = useState<boolean>(false)
+    const [collapsed, setCollapsed] = useState<boolean>(shouldCollapseByDefault)
     const [detailsOfSpouseIsDisabled, setDetailsOfSpouseIsDisabled] = useState<boolean>(true)
 
     const handleCollapseSection = () => {
@@ -83,14 +85,14 @@ const FormLayout = memo(
       }
     }
 
-    console.log({ item })
+    // console.log({ item })
 
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
     // console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
     useEffect(() => {
       if (isSpouseDetailsSection) {
         const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
-        console.log('customerDataBioDataSection', customerDataBioDataSection)
+        // console.log('customerDataBioDataSection', customerDataBioDataSection)
         if (customerDataBioDataSection) {
           console.log(
             '!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() ==',
@@ -105,6 +107,7 @@ const FormLayout = memo(
         }
       }
     }, [fillingFormState])
+    console.log('shouldCollapseByDefault', shouldCollapseByDefault)
     console.log('collapsed', collapsed)
     console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
     const isSpouseDetailsSection = useMemo(() => {
@@ -170,19 +173,20 @@ const FormLayout = memo(
             padding: '.625rem',
             paddingBottom: '0',
             paddingTop: '0.2rem',
-            background: '#FAFAFA',
+            background: '#fff',
             fontFamily: 'Inter',
           }}
         >
           {fields?.length > 0 &&
             fields?.map((field, index) => {
               if (
-                field.name === fieldsNames.INFOTEXT ||
-                field.name === fieldsNames.NUMBERCOUNTER ||
-                field.name === fieldsNames.PASSWORD ||
-                field.name === fieldsNames.SHORTEXT ||
-                field.name === fieldsNames.URL ||
-                field.name === fieldsNames.EMAIL
+                (field.name === fieldsNames.INFOTEXT ||
+                  field.name === fieldsNames.NUMBERCOUNTER ||
+                  field.name === fieldsNames.PASSWORD ||
+                  field.name === fieldsNames.SHORTEXT ||
+                  field.name === fieldsNames.URL ||
+                  field.name === fieldsNames.EMAIL) &&
+                getVisibleProperty(field?.formControlProperties)
               ) {
                 return (
                   <FormInput
@@ -199,7 +203,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.DROPDOWN) {
+              if (field.name === fieldsNames.DROPDOWN && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormDropdown
                     item={field}
@@ -216,11 +220,12 @@ const FormLayout = memo(
               }
 
               if (
-                field.name === fieldsNames.DATE ||
-                field.name === fieldsNames.DATETIME ||
-                field.name === fieldsNames.MONTH ||
-                field.name === fieldsNames.TIME ||
-                field.name === fieldsNames.WEEK
+                (field.name === fieldsNames.DATE ||
+                  field.name === fieldsNames.DATETIME ||
+                  field.name === fieldsNames.MONTH ||
+                  field.name === fieldsNames.TIME ||
+                  field.name === fieldsNames.WEEK) &&
+                getVisibleProperty(field?.formControlProperties)
               ) {
                 return (
                   <FormDate
@@ -237,7 +242,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.LONGTEXT) {
+              if (field.name === fieldsNames.LONGTEXT && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormTextArea
                     item={field}
@@ -253,7 +258,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.SEARCHANDSELECT) {
+              if (field.name === fieldsNames.SEARCHANDSELECT && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormSearchAndSelect
                     item={field}
@@ -268,7 +273,7 @@ const FormLayout = memo(
                   />
                 )
               }
-              if (field.name === fieldsNames.PHONEINPUT) {
+              if (field.name === fieldsNames.PHONEINPUT && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormPhoneInput
                     item={field}
@@ -284,7 +289,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.FILEUPLOAD) {
+              if (field.name === fieldsNames.FILEUPLOAD && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormFileUpload
                     activePageState={item}
@@ -299,7 +304,7 @@ const FormLayout = memo(
                   />
                 )
               }
-              if (field.name === fieldsNames.ACTIONTOGGLE) {
+              if (field.name === fieldsNames.ACTIONTOGGLE && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormActionToggle
                     item={field}
@@ -315,7 +320,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.CHECKBOX) {
+              if (field.name === fieldsNames.CHECKBOX && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormCheckbox
                     item={field}
@@ -331,7 +336,7 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.HEADING) {
+              if (field.name === fieldsNames.HEADING && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormHeading
                     item={field}
@@ -347,10 +352,10 @@ const FormLayout = memo(
                 )
               }
 
-              if (field.name === fieldsNames.BUTTON) {
+              if (field.name === fieldsNames.BUTTON && getVisibleProperty(field?.formControlProperties)) {
                 return <FormButton item={field} key={field.id} collapsed={collapsed} />
               }
-              if (field.name === fieldsNames.RADIO) {
+              if (field.name === fieldsNames.RADIO && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormRadio
                     item={field}
@@ -363,7 +368,7 @@ const FormLayout = memo(
                   />
                 )
               }
-              if (field.name === fieldsNames.RANGE) {
+              if (field.name === fieldsNames.RANGE && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormRange
                     item={field}

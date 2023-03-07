@@ -119,7 +119,7 @@ const AdditionalDetails = memo(() => {
   return (
     <>
       {/* affiliated company details section */}
-      <section className='max-w-[66.25rem] mx-4 bg-slate-50'>
+      {/* <section className='max-w-[66.25rem] mx-4 bg-slate-50'>
         <div
           className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[10px] border-[#FAFAFA]`}
           style={{
@@ -146,7 +146,7 @@ const AdditionalDetails = memo(() => {
         <div className={`${collapsedAffiliatedCompany ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-3 border-[#C22626]'} py-6`}>
           <AffiliatedSection affiliatedCompanyDetails={companyDetails} setAffiliatedCompanyDetails={setCompanyDetails} />
         </div>
-      </section>
+      </section> */}
 
       {/* accounts held with other banks section */}
       <section className='max-w-[1060px] mx-4 bg-slate-50'>

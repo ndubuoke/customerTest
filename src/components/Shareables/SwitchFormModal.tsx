@@ -16,7 +16,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
         zIndex: '1000',
       }}
     >
-      <section className='bg-white min-w-[25rem] w-[25rem] h-auto rounded-[.5rem] py-6 px-6 flex flex-col gap-6'>
+      <section className='bg-white min-w-[25rem] w-[25rem] h-auto rounded-[.5rem] py-6 px-6 flex flex-col gap-4'>
         <div className='flex justify-between '>
           <div>
             <img src={danger} width={30} height={30} alt='danger' />
@@ -26,7 +26,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
           </button>
         </div>
         <div className='py-3 text-[1.125rem] leading-[1.75rem] text-[#333333] font-medium  '>
-          Truncate form and proceed?
+          {/* Truncate form and proceed? */}
           <div className='py-3 text-[1rem] leading-[1.75rem] text-[#333333]  '>{message}</div>
         </div>
 

@@ -204,7 +204,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg   h-[12.5rem] overflow-y-auto'
+              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg h-auto  max-h-[12rem] overflow-y-auto'
               style={{
                 zIndex: 999,
               }}
@@ -226,26 +226,26 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
               ) : null}
               {optionsField?.length > 0
                 ? optionsField?.map((selected, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleSelectedDropdownItem(selected)
-                        // if (text.toLowerCase().includes('state')) {
-                        const country = countries?.find((x) => x.countryName === selected)
-                        if (country) {
-                          sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
-                        }
-                        // }
-                        setShowLists(false)
-                      }}
-                    >
-                      {selected.trim()}
-                    </div>
-                  )
-                })
+                    return (
+                      <div
+                        key={index}
+                        className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleSelectedDropdownItem(selected)
+                          // if (text.toLowerCase().includes('state')) {
+                          const country = countries?.find((x) => x.countryName === selected)
+                          if (country) {
+                            sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
+                          }
+                          // }
+                          setShowLists(false)
+                        }}
+                      >
+                        {selected.trim()}
+                      </div>
+                    )
+                  })
                 : null}
             </div>
           )}

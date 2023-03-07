@@ -1,5 +1,6 @@
-import React, { useState } from 'react'
+import React, { useRef, useState } from 'react'
 import { caret } from 'Assets/svgs'
+import useOnClickOutside from '../../hooks/useClickOutside'
 
 type Props = {
   options: Array<string>
@@ -8,9 +9,10 @@ type Props = {
 }
 
 const DropDown = ({ options, defaultOption = '', getValue }: Props) => {
+  const ref = useRef(null)
   const [value, setValue] = useState<string>(defaultOption)
   const [showDropdown, setShowDropdown] = useState<boolean>(false)
-
+  useOnClickOutside(ref, () => setShowDropdown(false))
   return (
     <div className='relative w-full cursor-pointer'>
       <div
@@ -23,6 +25,7 @@ const DropDown = ({ options, defaultOption = '', getValue }: Props) => {
 
       {showDropdown ? (
         <div
+          ref={ref}
           className='absolute w-3/4 uppercase rounded-lg top-[2.1rem] text-text-secondary bg-[#fff] '
           style={{
             borderRadius: '0 0 8px 8px',
