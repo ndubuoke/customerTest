@@ -25,6 +25,7 @@ import { activateCustomerAction, getRequestsByDateAction, getSingleRequestAction
 import RequestDetailsRow from './RequestDetailsRow'
 import getRequestDetail from '../../utilities/getRequestDetail'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
+import DeactivationModal from './DeactivationModal'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -69,7 +70,7 @@ type CustomerManagementTable = {
   ShowFilterTypeOptions: boolean
   ShowFilterInitiatorOptions: boolean
   showFilterRequestStatusOptions: boolean
-  setShowDeactivationModal: (e) => void
+  // setShowDeactivationModal: (e) => void
   setShowFilterTypeOptions: (e) => void
   setShowCalender: (e) => void
   setShowFilterInitiatorOptions: (e) => void
@@ -104,7 +105,7 @@ const CustomerManagementTable = ({
   filterRequestStatusOptionsRef,
   showFilterRequestStatusOptions,
   ShowFilterInitiatorOptions,
-  setShowDeactivationModal,
+  // setShowDeactivationModal,
   selectedStatus,
   AllCustomers,
   allRequests,
@@ -149,6 +150,7 @@ const CustomerManagementTable = ({
   const [showActivateCustomerRequestModal, setShowActivateCustomerRequestModal] = useState(false)
   const [customerAlertModalMessage, setCustomerAlertModalMessage] = useState('')
   const [RequestModalMessage, setRequestModalMessage] = useState('')
+  const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date())
   const [isAsc, setIsAsc] = useState(false)
   const deleteRequest = useSelector<ReducersType>((state: ReducersType) => state?.deleteRequest) as customersManagementResponseType
@@ -347,7 +349,8 @@ const CustomerManagementTable = ({
       sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
       sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
     } else if (option === 'Deactivate') {
-      setShowDeactivationModal(customer)
+      // setShowDeactivationModal(customer)
+      deactivateCustomerHandler(customer)
     } else if (option === 'Activate') {
       setCustomer(customer)
       setShowActivateCustomerRequestModal(true)
@@ -399,6 +402,9 @@ const CustomerManagementTable = ({
     }
     dispatch(activateCustomerAction(body) as any)
   }
+
+
+  
   type dateFilterType = 'day' | 'month'
 
   const dispatchDateFilterHandler = (filterBy: dateFilterType, number: number, tableType) => {
@@ -440,6 +446,29 @@ const CustomerManagementTable = ({
 
       customerStatusHandler(option)
     }
+  }
+
+  const deactivateCustomerHandler = (customer) => {
+    // setShowActivateCustomerAlertModal(true)
+    // setShowActivateCustomerRequestModal(false)
+    setShowDeactivationModal(true)
+
+    // const body = {
+    //   requestType: 'reactivation',
+
+    //   firstName: getCustomerDetail(customer, 'firstName')[0],
+
+    //   surname: getCustomerDetail(customer, 'surname')[0],
+
+    //   customerType: customer?.customerType,
+
+    //   initiator: 'testing Initiator',
+
+    //   initiatorId: '8d8711ca-362f-4541-b977-7faeebde91de',
+
+    //   customerId: getCustomerDetail(customer, 'customerId')[0],
+    // }
+    // dispatch(activateCustomerAction(body) as any)
   }
 
   useEffect(() => {
@@ -565,8 +594,10 @@ const CustomerManagementTable = ({
         />
       )}
 
+      {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}
+
       <div className=' relative mt-[3%]  mx-4 overflow-auto h-[25rem] overflow-auto '>
-        <table className='w-full text-sm text-left table-fixed '>
+        <table className='w-full text-sm text-left  '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'

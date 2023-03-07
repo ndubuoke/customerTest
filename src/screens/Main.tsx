@@ -79,7 +79,7 @@ const Main = (props: Props) => {
   const [customersSelectedStatus, setCustomersSelectedStatus] = useState<DropdownSelectedStatusType>(null)
   const [requestsSelectedStatus, setRequestsSelectedStatus] = useState('')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
-  const [showDeactivationModal, setShowDeactivationModal] = useState(false)
+  // const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
@@ -152,10 +152,10 @@ const Main = (props: Props) => {
       setCustomerManagementTableType('Requests')
     }
   }
-  const setShowDeactivationModalHandler = (customerId) => {
-    //  alert(customerId)
-    setShowDeactivationModal(true)
-  }
+  // const setShowDeactivationModalHandler = (customerId) => {
+  //   //  alert(customerId)
+  //   setShowDeactivationModal(true)
+  // }
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       // If the menu is open and the clicked target is not within the menu,
@@ -370,7 +370,7 @@ const Main = (props: Props) => {
 
   return (
     <>
-      {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}
+      {/* {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null} */}
 
       {showSystemAlert ? (
         <>
@@ -794,7 +794,7 @@ const Main = (props: Props) => {
                   filterStateOptionsRef={filterStateOptionsRef}
                   setShowFilterStateOptions={setShowFilterStateOptions}
                   ShowFilterStateOptions={ShowFilterStateOptions}
-                  setShowDeactivationModal={setShowDeactivationModalHandler}
+                  // setShowDeactivationModal={setShowDeactivationModalHandler}
                   ShowFilterTypeOptions={ShowFilterTypeOptions}
                   filterTypeOptionsRef={filterTypeOptionsRef}
                   setShowFilterTypeOptions={setShowFilterTypeOptions}
