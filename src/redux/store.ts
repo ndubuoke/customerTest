@@ -12,6 +12,7 @@ import {
   getSingleProductReducer,
   getProductTypesReducer,
   getCustomerProfileReducer,
+  deactivateCustomerReducer,
 } from './reducers/CustomerManagement.reducer'
 import {
   getFormReducer,
@@ -75,11 +76,12 @@ export type ReducersType = {
   allProductCategories: customersManagementResponseType
   allProducts: customersManagementResponseType
   allProductTypes: customersManagementResponseType
-  customerProfile:customersManagementResponseType
+  customerProfile: customersManagementResponseType
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   deleteRequest: customersManagementResponseType
   activateCustomer: customersManagementResponseType
+  deactivateCustomer: customersManagementResponseType
   updatedRequest: customersManagementResponseType
   bulkCustomerValidationProfile: BulkCustomerValidationProfileTypes
   allCustomersByDate: customersManagementResponseType
@@ -119,11 +121,11 @@ export type ReducersType = {
 
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
-  singleProduct:getSingleProductReducer,
-  customerProfile:getCustomerProfileReducer,
+  singleProduct: getSingleProductReducer,
+  customerProfile: getCustomerProfileReducer,
   allCustomers: getCustomersReducer,
-  allProductTypes:getProductTypesReducer,
-  allProducts:getAllProductsReducer,
+  allProductTypes: getProductTypesReducer,
+  allProducts: getAllProductsReducer,
   allProductCategories: getProductsCategoriesReducer,
   customerActivityLog: getActivityLogReducer,
   allRequests: getCustomersRequestReducer,
@@ -131,6 +133,8 @@ const reducer = combineReducers<ReducersType>({
   deleteRequest: deleteRequestReducer,
   allCustomersByDate: getCustomersByDateReducer,
   activateCustomer: activateCustomerReducer,
+  deactivateCustomer: deactivateCustomerReducer,
+
   updatedRequest: updateRequestReducer,
   totalStatusCustomers: getTotalRequestStatusReducer,
   allRequestsByDate: getRequestsByDateReducer,

@@ -106,7 +106,7 @@ const CustomerDetailsRow = ({
                         <div
                           key={index}
                           className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
-                          onClick={customerFunctionHandler.bind(null, { option, customerId: customer.customerId })}
+                          onClick={customerFunctionHandler.bind(null, { option,  customer })}
                         >
                           <span className='flex w-full  '>
                             {' '}

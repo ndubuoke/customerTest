@@ -12,6 +12,7 @@ import {
   deleteRequestAction,
   getCustomersByDateAction,
   getCustomersAction,
+  deactivateCustomerAction,
 } from '../../redux/actions/CustomerManagement.actions'
 import ViewCustomerModal from './ViewCustomerModal'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
@@ -26,6 +27,7 @@ import RequestDetailsRow from './RequestDetailsRow'
 import getRequestDetail from '../../utilities/getRequestDetail'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import DeactivationModal from './DeactivationModal'
+import { UserProfileTypes } from 'Redux/reducers/UserPersmissions'
 
 type customerTableHeadsType = ['NAME/ID', 'Phone number', 'Email', 'State', 'updated on']
 type requestFunctionOptionsType = ['View', 'Withdraw & Delete Request', 'Delete Request', 'Modify', 'Regularize Documents', 'Continue Request']
@@ -123,11 +125,11 @@ const CustomerManagementTable = ({
   setShowCalender,
   userRole,
   searchTerm,
- 
 }: CustomerManagementTable) => {
   const [customerId, setCustomerId] = useState(0)
   const [requestId, setRequestId] = useState(0)
   const [requestIdToBeDeleted, setRequestIdToBeDeleted] = useState('')
+
   const [customer, setCustomer] = useState() as any
   const [allChecked, setallChecked] = useState(false)
   const [activeChecked, setActiveChecked] = useState(false)
@@ -147,14 +149,19 @@ const CustomerManagementTable = ({
   const [reactivationRequestTypeOptionChecked, setReactivationRequestTypeOptionChecked] = useState(false)
   const [showCustomerAlertModal, setShowCustomerAlertModal] = useState(false)
   const [showActivateCustomerAlertModal, setShowActivateCustomerAlertModal] = useState(false)
+  const [showDeactivateCustomerAlertModal, setShowDeactivateCustomerAlertModal] = useState(false)
   const [showActivateCustomerRequestModal, setShowActivateCustomerRequestModal] = useState(false)
   const [customerAlertModalMessage, setCustomerAlertModalMessage] = useState('')
   const [RequestModalMessage, setRequestModalMessage] = useState('')
   const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [currentDate, setCurrentDate] = useState(new Date())
   const [isAsc, setIsAsc] = useState(false)
+  const [deactivateCustomerJustification, setDeactivateCustomerJustification] = useState('')
+  const [uploadKeys, setUploadKeys] = useState([])
+  const userData = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
   const deleteRequest = useSelector<ReducersType>((state: ReducersType) => state?.deleteRequest) as customersManagementResponseType
   const activateCustomer = useSelector<ReducersType>((state: ReducersType) => state?.activateCustomer) as customersManagementResponseType
+  const deactivateCustomer = useSelector<ReducersType>((state: ReducersType) => state?.deactivateCustomer) as customersManagementResponseType
   const allCustomersByDate = useSelector<ReducersType>((state: ReducersType) => state?.allCustomersByDate) as customersManagementResponseType
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
   const customers = AllCustomers?.serverResponse?.data?.customer
@@ -196,7 +203,6 @@ const CustomerManagementTable = ({
   const ShowCalenderHandler = () => {
     setShowCalender(true)
   }
-
 
   const checkIfRequestStatusOptionChecked = (option: requestStatusType) => {
     if (option === 'Select all') {
@@ -350,7 +356,8 @@ const CustomerManagementTable = ({
       sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
     } else if (option === 'Deactivate') {
       // setShowDeactivationModal(customer)
-      deactivateCustomerHandler(customer)
+
+      showDeactivationModalHandler(customer)
     } else if (option === 'Activate') {
       setCustomer(customer)
       setShowActivateCustomerRequestModal(true)
@@ -394,17 +401,15 @@ const CustomerManagementTable = ({
 
       customerType: customer?.customerType,
 
-      initiator: 'testing Initiator',
+      initiator: `${userData.user?.firstname} ${userData.user?.lastname}`,
 
-      initiatorId: '8d8711ca-362f-4541-b977-7faeebde91de',
+      initiatorId: `${userData.user?.id}`,
 
       customerId: getCustomerDetail(customer, 'customerId')[0],
     }
     dispatch(activateCustomerAction(body) as any)
   }
 
-
-  
   type dateFilterType = 'day' | 'month'
 
   const dispatchDateFilterHandler = (filterBy: dateFilterType, number: number, tableType) => {
@@ -416,7 +421,6 @@ const CustomerManagementTable = ({
     }
   }
 
-  
   const checkIfCustomerStatusOptionChecked = (option: customerStatusType) => {
     if (option === 'All') {
       if (allChecked) {
@@ -448,27 +452,33 @@ const CustomerManagementTable = ({
     }
   }
 
-  const deactivateCustomerHandler = (customer) => {
-    // setShowActivateCustomerAlertModal(true)
-    // setShowActivateCustomerRequestModal(false)
+  const showDeactivationModalHandler = (customer) => {
+    setCustomer(customer)
     setShowDeactivationModal(true)
+  }
 
-    // const body = {
-    //   requestType: 'reactivation',
+  const deactivateCustomerHandler = () => {
+    const body = {
+      requestType: 'deactivation',
 
-    //   firstName: getCustomerDetail(customer, 'firstName')[0],
+      firstName: getCustomerDetail(customer, 'firstName')[0],
 
-    //   surname: getCustomerDetail(customer, 'surname')[0],
+      surname: getCustomerDetail(customer, 'surname')[0],
 
-    //   customerType: customer?.customerType,
+      customerType: customer?.customerType,
+      waiverRequestId: null,
 
-    //   initiator: 'testing Initiator',
+      initiator: `${userData.user?.firstname} ${userData.user?.lastname}`,
 
-    //   initiatorId: '8d8711ca-362f-4541-b977-7faeebde91de',
+      initiatorId: `${userData.user?.id}`,
 
-    //   customerId: getCustomerDetail(customer, 'customerId')[0],
-    // }
-    // dispatch(activateCustomerAction(body) as any)
+      customerId: getCustomerDetail(customer, 'customerId')[0],
+      justification: `${deactivateCustomerJustification}`,
+      documents: uploadKeys,
+    }
+    setShowDeactivationModal(false)
+    setShowDeactivateCustomerAlertModal(true)
+    dispatch(deactivateCustomerAction(body) as any)
   }
 
   useEffect(() => {
@@ -543,10 +553,10 @@ const CustomerManagementTable = ({
     }
   }, [customerStatus, tableType, requestStatus])
 
-    // console.log(allCustomersByDate)
+  // console.log(allCustomersByDate)
   // console.log(AllCustomers)
   const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
-  // console.log(allRequestsForChecker)
+  //  console.log(userData)
 
   return (
     <>
@@ -594,7 +604,31 @@ const CustomerManagementTable = ({
         />
       )}
 
-      {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null}
+      {showDeactivateCustomerAlertModal && (
+        <CustomerAlertModal
+          leftClick={() => {
+            setShowDeactivateCustomerAlertModal(false)
+            refreshTableHandler()
+          }}
+          closeModal={() => {
+            setShowDeactivateCustomerAlertModal(false)
+          }}
+          loadingMessage={'Submitting'}
+          message={'Customer Submitted for Deactivation'}
+          isOpen={showDeactivateCustomerAlertModal}
+          loading={deactivateCustomer.loading}
+          status={deactivateCustomer.serverResponse.status === 'success' ? 'success' : 'error'}
+        />
+      )}
+
+      {showDeactivationModal ? (
+        <DeactivationModal
+          setUploadKeys={setUploadKeys}
+          setDeactivateCustomerJustification={setDeactivateCustomerJustification}
+          deactivateCustomerHandler={deactivateCustomerHandler}
+          setShowDeactivationModal={setShowDeactivationModal}
+        />
+      ) : null}
 
       <div className=' relative mt-[3%]  mx-4 overflow-auto h-[25rem] overflow-auto '>
         <table className='w-full text-sm text-left  '>

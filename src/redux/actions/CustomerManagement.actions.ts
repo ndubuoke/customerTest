@@ -52,6 +52,9 @@ import {
   GET_CUSTOMER_PROFILE_REQUEST,
   GET_CUSTOMER_PROFILE_SUCCESS,
   GET_CUSTOMER_PROFILE_FAIL,
+  DEACTIVATE_CUSTOMER_REQUEST,
+  DEACTIVATE_CUSTOMER_SUCCESS,
+  DEACTIVATE_CUSTOMER_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -165,6 +168,27 @@ export const activateCustomerAction = (body: any) => async (dispatch: Dispatch, 
   } catch (error) {
     dispatch({
       type: ACTIVATE_CUSTOMER_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
+
+export const deactivateCustomerAction = (body: any) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: DEACTIVATE_CUSTOMER_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.post(`${SERVER_URL}/request/`, body)
+
+    dispatch({ type: DEACTIVATE_CUSTOMER_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: DEACTIVATE_CUSTOMER_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
   }
