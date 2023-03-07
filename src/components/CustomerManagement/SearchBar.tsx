@@ -1,6 +1,6 @@
 import React from 'react'
 import { useState } from 'react'
-import {useEffect} from 'react';
+import { useEffect } from 'react'
 
 type searchBarType = {
   setSearchTerm: (e) => void
@@ -9,15 +9,20 @@ type searchBarType = {
 
 const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
   const [hideX, setHideX] = useState(true)
+
   const searchBarHandler = (e) => {
-    setSearchTerm(e.target.value)
-    setHideX(false)
+    //  if space bar is clicked dont do anything
+    if (e.nativeEvent.data == ' ') {
+      return
+    } else {
+      setSearchTerm(e.target.value)
+      setHideX(false)
+    }
   }
   useEffect(() => {
     if (searchTerm == '') {
       setHideX(true)
     }
-
   }, [searchTerm])
   return (
     <div className='relative w-[15.625rem]'>

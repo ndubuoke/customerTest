@@ -15,13 +15,13 @@ type props = {
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const navigate = useNavigate()
 
+  const customerType = customer?.customerType
+  const customerId = customer?.customerId
   const viewInCustomer360Handler = () => {
-    const customerId = customer?.customerId
     navigate(`/customer-management/customer-360/${customerId}`)
   }
   const addProductHandler = ()=>{
-    const customerType = customer?.customerType
-     navigate(`/customer-management/product-assignment/${customerType}`)
+     navigate(`/customer-management/product-assignment/${customerId}`)
   }
   const closeModal = () => {
     setShowCustomerModal(false)

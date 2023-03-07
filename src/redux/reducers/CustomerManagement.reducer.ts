@@ -41,6 +41,12 @@ import {
   GET_SINGLE_PRODUCT_REQUEST,
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_FAIL,
+  GET_ALL_PRODUCT_TYPE_REQUEST,
+  GET_ALL_PRODUCT_TYPE_SUCCESS,
+  GET_ALL_PRODUCT_TYPE_FAIL,
+  GET_CUSTOMER_PROFILE_REQUEST,
+  GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_CUSTOMER_PROFILE_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 export type customersManagementResponseType = {
@@ -74,6 +80,22 @@ export const getCustomersReducer = (state: customersManagementResponseType = ini
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case GET_CUSTOMERS_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const getCustomerProfileReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CUSTOMER_PROFILE_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CUSTOMER_PROFILE_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_CUSTOMER_PROFILE_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:
@@ -300,5 +322,24 @@ export const getSingleProductReducer = (state: customersManagementResponseType =
   }
 }
 
+
+export const getProductTypesReducer = (
+  state: customersManagementResponseType = initialStateRequest,
+  action: { type: string; payload: any }
+) => {
+  switch (action.type) {
+    case GET_ALL_PRODUCT_TYPE_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_ALL_PRODUCT_TYPE_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_ALL_PRODUCT_TYPE_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
 
 

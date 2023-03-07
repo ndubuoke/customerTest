@@ -10,6 +10,8 @@ import {
   getProductsCategoriesReducer,
   getAllProductsReducer,
   getSingleProductReducer,
+  getProductTypesReducer,
+  getCustomerProfileReducer,
 } from './reducers/CustomerManagement.reducer'
 import {
   getFormReducer,
@@ -72,6 +74,8 @@ export type ReducersType = {
   singleProduct: customersManagementResponseType
   allProductCategories: customersManagementResponseType
   allProducts: customersManagementResponseType
+  allProductTypes: customersManagementResponseType
+  customerProfile:customersManagementResponseType
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
   deleteRequest: customersManagementResponseType
@@ -116,7 +120,9 @@ export type ReducersType = {
 const reducer = combineReducers<ReducersType>({
   publishedForm: getFormReducer,
   singleProduct:getSingleProductReducer,
+  customerProfile:getCustomerProfileReducer,
   allCustomers: getCustomersReducer,
+  allProductTypes:getProductTypesReducer,
   allProducts:getAllProductsReducer,
   allProductCategories: getProductsCategoriesReducer,
   customerActivityLog: getActivityLogReducer,

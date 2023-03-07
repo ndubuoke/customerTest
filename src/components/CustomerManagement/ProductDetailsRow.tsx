@@ -6,15 +6,21 @@ type props = {
   product: any
   index: number
   productFunctionsHandler: (e) => void
+  selectProductsToBeAssigned:(e)=> void
 }
 
-const ProductDetailsRow = ({ product, index, productFunctionsHandler }: props) => {
+const ProductDetailsRow = ({ product, index, productFunctionsHandler, selectProductsToBeAssigned }: props) => {
   const [checked, setChecked] = useState(false)
+
   // console.log(product)
   return (
     <tr key={index} className='bg-background-lightRed border-b text-text-secondary   '>
-      <td  className='py-2 px-2 flex justify-center items-center  font-medium    relative '>
-        <Checkbox checked={checked} setChecked={setChecked} externalFunctionToDoSomething={() => {}} />
+      <td className='py-2 px-2 flex justify-center items-center  font-medium    relative '>
+        <Checkbox
+          checked={checked}
+          setChecked={setChecked}
+          externalFunctionToDoSomething={selectProductsToBeAssigned.bind(null, getProductDetail(product, 'product_id'))}
+        />
       </td>
       <td className='py-2 px-2 capitalize'>{getProductDetail(product, 'name')}</td>
       <td className='py-2 px-2 capitalize'>{getProductDetail(product, 'code')}</td>
