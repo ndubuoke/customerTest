@@ -46,6 +46,12 @@ import {
   GET_SINGLE_PRODUCT_REQUEST,
   GET_SINGLE_PRODUCT_SUCCESS,
   GET_SINGLE_PRODUCT_FAIL,
+  GET_ALL_PRODUCT_TYPE_REQUEST,
+  GET_ALL_PRODUCT_TYPE_SUCCESS,
+  GET_ALL_PRODUCT_TYPE_FAIL,
+  GET_CUSTOMER_PROFILE_REQUEST,
+  GET_CUSTOMER_PROFILE_SUCCESS,
+  GET_CUSTOMER_PROFILE_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -327,29 +333,72 @@ export const updateRequestAction =
     }
   }
 
-//  {*  PRODUCT ACTIONS *}
-
-export const getCategorizedProductsAction = (productCategory:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const getCustomerProfileAction = (customerId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
-    dispatch({ type: GET_CATEGORIZED_PRODUCTS_REQUEST })
+    dispatch({ type: GET_CUSTOMER_PROFILE_REQUEST })
 
-    const { data } = await axios.get(`${PRODUCT_URL}/product?product_category=${productCategory}`)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
 
-    dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
+    const { data } = await axios.get(`${SERVER_URL}/customer/profile/${customerId}`, config)
+
+    dispatch({ type: GET_CUSTOMER_PROFILE_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
-      type: GET_CATEGORIZED_PRODUCTS_FAIL,
+      type: GET_CUSTOMER_PROFILE_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
   }
 }
 
+//  {*  PRODUCT ACTIONS *}
+
+export const getCategorizedProductsAction =
+  (productCategory: string, product_type_id: string = '') =>
+  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+     
+      dispatch({ type: GET_CATEGORIZED_PRODUCTS_REQUEST })
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      if (product_type_id == '' || undefined) {
+        
+        const { data } = await axios.get(`${PRODUCT_URL}/product?product_category=${productCategory}`, config)
+        dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
+      } else {
+        const { data } = await axios.get(`${PRODUCT_URL}/product?product_category=${productCategory}&product_type_id=${product_type_id}`, config)
+        dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
+      }
+    } catch (error) {
+      dispatch({
+        type: GET_CATEGORIZED_PRODUCTS_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }
 
 export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
+     const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+     
     dispatch({ type: GET_ALL_PRODUCTS_REQUEST })
-
-    const { data } = await axios.get(`${PRODUCT_URL}/product`)
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+ 
+    const { data } = await axios.get(`${PRODUCT_URL}/product`,config)
 
     dispatch({ type: GET_ALL_PRODUCTS_SUCCESS, payload: data })
   } catch (error) {
@@ -360,17 +409,46 @@ export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (
   }
 }
 
-
-export const getSingleProductAction = (productId:string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const getSingleProductAction = (productId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
+     const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
     dispatch({ type: GET_SINGLE_PRODUCT_REQUEST })
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
-    const { data } = await axios.get(`${PRODUCT_URL}/product/${productId}`)
+    const { data } = await axios.get(`${PRODUCT_URL}/product/${productId}`,config)
 
     dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: data })
   } catch (error) {
     dispatch({
       type: GET_SINGLE_PRODUCT_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
+  }
+}
+
+export const getAllProductTypesAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+    dispatch({ type: GET_ALL_PRODUCT_TYPE_REQUEST })
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+   
+    const { data } = await axios.get(`${PRODUCT_URL}/product-type`,config)
+
+    dispatch({ type: GET_ALL_PRODUCT_TYPE_SUCCESS, payload: data })
+  } catch (error) {
+    dispatch({
+      type: GET_ALL_PRODUCT_TYPE_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
   }

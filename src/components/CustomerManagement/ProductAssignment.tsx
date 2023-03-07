@@ -1,31 +1,38 @@
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import convertToUppercase from 'Utilities/convertToUppercase'
 import React from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import SearchAndSelect from './SearchAndSelect'
 import Dropdown from './Dropdown'
 import { useState, useEffect, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllProductsAction, getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.actions'
+import { getAllProductTypesAction, getAllProductsAction, getCategorizedProductsAction } from 'Redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
 import ProductType from './ProductType'
 import ProductsTable from './ProductsTable'
+import Button from 'Components/Shareables/Button'
+import { getCustomerProfileAction } from '../../redux/actions/CustomerManagement.actions'
+import getCustomerDetail from 'Utilities/getCustomerDetail'
 
 const ProductAssignment = () => {
   const initialRef: any = null
   const dropdownListRef = useRef(initialRef)
   const response = useSelector<ReducersType>((state: ReducersType) => state?.allProductCategories) as customersManagementResponseType
-  const allProducts = useSelector<ReducersType>((state: ReducersType) => state?.allProducts) as customersManagementResponseType
+  const customerProfileResponse = useSelector<ReducersType>((state: ReducersType) => state?.customerProfile) as customersManagementResponseType
+  const allProductTypes = useSelector<ReducersType>((state: ReducersType) => state?.allProductTypes) as customersManagementResponseType
   type productCategoryType = 'All' | 'Payment' | 'Credit' | 'Deposit' | 'Investment'
-  const allProductCategories = response.serverResponse.data
+  const customerProfile = customerProfileResponse.serverResponse.data
   const [showLists, setShowLists] = useState(false)
+  const [assignButtonDisabled, setAssignButtonDisabled] = useState(true)
+  const [toBeAssignedProductsIds, setToBeAssignedProductsIds] = useState([])
   const [selectedItem, setSelectedItem] = useState<productCategoryType>('All')
-  const [activeProductType, setActiveProductType] = useState('')
+  const [activeProductType, setActiveProductType] = useState({ name: '', id: '' })
   const [searchTerm, setSearchTerm] = useState('')
   const dispatch = useDispatch()
+  const navigate = useNavigate()
 
-  let { customerType } = useParams()
+  let { customerId } = useParams()
   const selectedItemHandler = (item: productCategoryType) => {
     setSelectedItem(item)
     setShowLists(false)
@@ -35,25 +42,53 @@ const ProductAssignment = () => {
     setSearchTerm(event.target.value)
   }
 
-  useEffect(() => {
-    if (selectedItem === 'All') {
-      // dispatch(getAllProductsAction() as any)
-      dispatch(getCategorizedProductsAction('') as any)
-    }
+  const selectProductsToBeAssigned = (productId: string) => {
+     const existingId = toBeAssignedProductsIds.find((id) => id === productId)
+     if(!existingId){
+      
+     }
+    console.log(productId)
+  }
 
-    if (selectedItem === 'Credit') {
-      dispatch(getCategorizedProductsAction(selectedItem) as any)
+  useEffect(() => {
+    const productTypeId = activeProductType.id
+    if (activeProductType.name === '' && productTypeId === '') {
+      if (selectedItem === 'All') {
+        dispatch(getCategorizedProductsAction('') as any)
+        dispatch(getAllProductTypesAction() as any)
+      }
+
+      if (selectedItem === 'Credit') {
+        dispatch(getCategorizedProductsAction(selectedItem) as any)
+        dispatch(getAllProductTypesAction() as any)
+      }
+      if (selectedItem === 'Payment') {
+        dispatch(getCategorizedProductsAction(selectedItem) as any)
+        dispatch(getAllProductTypesAction() as any)
+      }
+      if (selectedItem === 'Deposit') {
+        dispatch(getCategorizedProductsAction(selectedItem) as any)
+        dispatch(getAllProductTypesAction() as any)
+      }
+      if (selectedItem === 'Investment') {
+        dispatch(getCategorizedProductsAction(selectedItem) as any)
+        dispatch(getAllProductTypesAction() as any)
+      }
+    } else {
+      if (selectedItem === 'Credit') {
+        dispatch(getCategorizedProductsAction(selectedItem, productTypeId) as any)
+      }
+      if (selectedItem === 'Payment') {
+        dispatch(getCategorizedProductsAction(selectedItem, productTypeId) as any)
+      }
+      if (selectedItem === 'Deposit') {
+        dispatch(getCategorizedProductsAction(selectedItem, productTypeId) as any)
+      }
+      if (selectedItem === 'Investment') {
+        dispatch(getCategorizedProductsAction(selectedItem, productTypeId) as any)
+      }
     }
-    if (selectedItem === 'Payment') {
-      dispatch(getCategorizedProductsAction(selectedItem) as any)
-    }
-    if (selectedItem === 'Deposit') {
-      dispatch(getCategorizedProductsAction(selectedItem) as any)
-    }
-    if (selectedItem === 'Investment') {
-      dispatch(getCategorizedProductsAction(selectedItem) as any)
-    }
-  }, [selectedItem])
+  }, [selectedItem, activeProductType])
 
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
@@ -71,49 +106,71 @@ const ProductAssignment = () => {
     }
   }, [showLists])
 
-  //  console.log(allProducts)
+  useEffect(() => {
+    if (customerId == '' || undefined) {
+      navigate(-1)
+    }
+
+    dispatch(getCustomerProfileAction(customerId) as any)
+  }, [customerId])
+
+  useEffect(() => {
+    if (toBeAssignedProductsIds.length > 0) {
+      setAssignButtonDisabled(false)
+    }
+  }, [toBeAssignedProductsIds])
+
+  console.log(customerProfile)
 
   return (
-    <div className=' h-screen bg-[#E5E5E5] w-full '>
-      <div className='h-[120px] bg-white '>
+    <div className='h-screen'>
+      <div className='h-[15%] bg-white '>
         <GoBack
           headerText='PRODUCT ASSIGNMENT'
           breadCrumbsList={[
             { text: 'CUSTOMER MANAGEMENT', link: '/' },
-            { text: `${convertToUppercase(customerType)} CUSTOMER `, link: '' },
+            { text: `${customerProfile?.customerType ? convertToUppercase(customerProfile?.customerType) : ''} CUSTOMER `, link: '' },
             { text: `PRODUCT ASSIGNMENT`, link: '' },
           ]}
         />
       </div>
-
-      <div className='  bg-white p-[5%]  h-auto  mx-[2%] my-[2%]    rounded-md '>
-        <div className=' w-full flex flex-col  justify-center  items-center'>
-          <div className='flex gap-12'>
-            <h1 className='font-normal  text-[18px]'>Product Type</h1>
-            <div className='top-4'>
-              <Dropdown
+      <div className=' h-[85%] bg-[#E5E5E5] w-full p-[1%] '>
+        <div className='  bg-white p-[5%]  h-full   '>
+          <div className=' w-full flex flex-col justify-around mt-8  h-full  items-center'>
+            <div className='flex gap-12  w-full justify-center items-center'>
+              <h1 className='font-normal  text-[18px]'>Product Type</h1>
+              <div className='top-4'>
+                <Dropdown
+                  selectedItem={selectedItem}
+                  setShowLists={setShowLists}
+                  showLists={showLists}
+                  selectedItemHandler={selectedItemHandler}
+                  dropdownListRef={dropdownListRef}
+                />
+              </div>
+            </div>
+            <div className=' w-full mt-6  '>
+              <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
+              <ProductType
+                activeProductType={activeProductType}
+                setActiveProductType={setActiveProductType}
+                data={allProductTypes}
                 selectedItem={selectedItem}
-                setShowLists={setShowLists}
-                showLists={showLists}
-                selectedItemHandler={selectedItemHandler}
-                dropdownListRef={dropdownListRef}
+                onChange={searchBarHandler}
+                searchTerm={searchTerm}
               />
             </div>
-          </div>
-          <div className=' w-full mt-6'>
-            <h1 className='font-normal  text-[18px]'>Choose Deposit Product</h1>
-            <ProductType
-              activeProductType={activeProductType}
-              setActiveProductType={setActiveProductType}
-              data={allProductCategories}
-              selectedItem={selectedItem}
-              onChange={searchBarHandler}
-              searchTerm={searchTerm}
-              
-            />
-          </div>
-          <div className=' w-full mt-6'>
-            <ProductsTable searchTerm={searchTerm} activeProductType={activeProductType} data={response} />
+            <div className=' w-full mt-6 '>
+              <ProductsTable
+                selectProductsToBeAssigned={selectProductsToBeAssigned}
+                searchTerm={searchTerm}
+                activeProductType={activeProductType}
+                data={response}
+              />
+            </div>
+            <div className=' w-full  flex justify-center items-center '>
+              <Button disabled={assignButtonDisabled} text={'Assign Product'} onClick={() => {}} />
+            </div>
           </div>
         </div>
       </div>

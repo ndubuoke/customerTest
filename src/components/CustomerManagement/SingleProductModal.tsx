@@ -32,7 +32,7 @@ const SingleProductModal = ({ productId, setShowProductModal }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` flex flex-col h-[85%] min-w-[70%] bg-white py-6 px-6 rounded-2xl `}>
+      <div className={` flex flex-col h-[90%] min-w-[70%] bg-white py-6 px-6 rounded-2xl `}>
         {singleProductResponse.loading ? (
           <div className='min-h-[18.75rem]   flex items-center justify-center'>
             <Spinner size='large' />
@@ -47,7 +47,7 @@ const SingleProductModal = ({ productId, setShowProductModal }: props) => {
                     <img src={Close} />
                   </button>
                 </div>
-                <div className='flex flex-col w-full h-full justify-between  mt-8'>
+                <div className='flex flex-col w-full h-full justify-between  mt-6'>
                   <div className='flex  w-full h-[85%] '>
                     <div className='w-[50%] flex justify-center items-center '>
                       {' '}

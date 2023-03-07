@@ -195,36 +195,6 @@ const CustomerManagementTable = ({
     setShowCalender(true)
   }
 
-  const checkIfCustomerStatusOptionChecked = (option: customerStatusType) => {
-    if (option === 'All') {
-      if (allChecked) {
-        return
-      }
-      setActiveChecked(false)
-      setInactiveChecked(false)
-      customerStatusHandler(option)
-    }
-
-    if (option === 'Active') {
-      if (activeChecked) {
-        return
-      }
-      setInactiveChecked(false)
-      setallChecked(false)
-
-      customerStatusHandler(option)
-    }
-
-    if (option === 'Inactive') {
-      if (inactiveChecked) {
-        return
-      }
-      setActiveChecked(false)
-      setallChecked(false)
-
-      customerStatusHandler(option)
-    }
-  }
 
   const checkIfRequestStatusOptionChecked = (option: requestStatusType) => {
     if (option === 'Select all') {
@@ -441,12 +411,42 @@ const CustomerManagementTable = ({
   }
 
   
+  const checkIfCustomerStatusOptionChecked = (option: customerStatusType) => {
+    if (option === 'All') {
+      if (allChecked) {
+        return
+      }
+      setActiveChecked(false)
+      setInactiveChecked(false)
+      customerStatusHandler(option)
+    }
+
+    if (option === 'Active') {
+      if (activeChecked) {
+        return
+      }
+      setInactiveChecked(false)
+      setallChecked(false)
+
+      customerStatusHandler(option)
+    }
+
+    if (option === 'Inactive') {
+      if (inactiveChecked) {
+        return
+      }
+      setActiveChecked(false)
+      setallChecked(false)
+
+      customerStatusHandler(option)
+    }
+  }
 
   useEffect(() => {
     if (tableType === 'All Customers') {
       if (customerStatus === 'All') {
-        setActiveChecked(false)
-        setInactiveChecked(false)
+        setActiveChecked(true)
+        setInactiveChecked(true)
         setallChecked(true)
       }
       if (customerStatus === 'Inactive') {
@@ -684,7 +684,7 @@ const CustomerManagementTable = ({
                           {filterRequestTypeList?.map((option: filterRequestType, index) => {
                             if (option === 'Select all') {
                               return (
-                                <div key={index} className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -701,7 +701,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Creation') {
                               return (
-                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className=' capitalize  cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -718,7 +718,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Modification') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -735,7 +735,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Deactivation') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -752,7 +752,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Reactivation') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -897,7 +897,7 @@ const CustomerManagementTable = ({
                           {filterRequestStatus?.map((option: requestStatusType, index) => {
                             if (option === 'Select all') {
                               return (
-                                <div key={index} className='  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize  px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -914,7 +914,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Approved') {
                               return (
-                                <div key={index} className='cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -931,7 +931,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Interim Approval') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -948,7 +948,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'In-Review') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -965,7 +965,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'In Issue') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>
@@ -982,7 +982,7 @@ const CustomerManagementTable = ({
                             }
                             if (option == 'Draft') {
                               return (
-                                <div key={index} className=' cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
+                                <div key={index} className='capitalize cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'>
                                   <span className='flex w-full  '>
                                     {' '}
                                     <span className='mr-2'>

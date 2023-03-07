@@ -8,13 +8,18 @@ import getProductDetail from 'Utilities/getProductDetail'
 
 const ProductsTableHeads = ['', 'PRODUCT NAME', 'PRODUCT CODE', 'CURRENCY', 'PRODUCT DESCRIPTION', '']
 
-type props = { data: customersManagementResponseType; activeProductType: string; searchTerm: string }
+type props = {
+  data: customersManagementResponseType
+  activeProductType: { name: string; id: string }
+  searchTerm: string
+  selectProductsToBeAssigned: (e) => void
+}
 
-const ProductsTable = ({ data, activeProductType, searchTerm }: props) => {
+const ProductsTable = ({ data, activeProductType,selectProductsToBeAssigned, searchTerm }: props) => {
   const [showProductModal, setShowProductModal] = useState(false)
   const [productId, setProductId] = useState(null)
   const allProducts = data.serverResponse.data?.products
-  // console.log(allProducts)
+  //  console.log(allProducts)
   const productFunctionsHandler = (productId) => {
     setProductId(productId)
     setShowProductModal(true)
@@ -23,7 +28,7 @@ const ProductsTable = ({ data, activeProductType, searchTerm }: props) => {
   return (
     <>
       {showProductModal && <SingleProductModal productId={productId} setShowProductModal={setShowProductModal} />}
-      <div className='overflow-auto   mx-4  h-[25rem]  '>
+      <div className='overflow-y-scroll    h-[15rem]  '>
         <table className='w-full text-sm text-left  '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
@@ -60,7 +65,15 @@ const ProductsTable = ({ data, activeProductType, searchTerm }: props) => {
                       }
                     })
                     .map((product, index) => {
-                      return <ProductDetailsRow productFunctionsHandler={productFunctionsHandler} key={index} index={index} product={product} />
+                      return (
+                        <ProductDetailsRow
+                          selectProductsToBeAssigned={selectProductsToBeAssigned}
+                          productFunctionsHandler={productFunctionsHandler}
+                          key={index}
+                          index={index}
+                          product={product}
+                        />
+                      )
                     })}
                 </tbody>
               ) : null}
