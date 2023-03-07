@@ -469,8 +469,8 @@ const Main = (props: Props) => {
           </div>
         </div>
         <div className='    bg-background-default h-fit  px-4 py-4 '>
-          <div className=' flex'>
-            <div className='w-[90%] flex flex-col    mr-4 '>
+          <div className=' flex '>
+            <div className='  w-full flex flex-col mr-4   '>
               <div className=' bg-white flex h-[8.125rem] rounded-md '>
                 <div className='flex flex-col  border w-[18%] rounded-l-md'>
                   <button
@@ -818,7 +818,7 @@ const Main = (props: Props) => {
                 />
               </div>
             </div>
-            <div className='w-auto'>
+            <div className='w-auto lg:block hidden'>
               <QuickLinks
                 links={[
                   { urlName: 'Link1', url: '/customer360' },
