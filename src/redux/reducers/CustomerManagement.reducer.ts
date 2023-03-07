@@ -47,6 +47,9 @@ import {
   GET_CUSTOMER_PROFILE_REQUEST,
   GET_CUSTOMER_PROFILE_SUCCESS,
   GET_CUSTOMER_PROFILE_FAIL,
+  DEACTIVATE_CUSTOMER_REQUEST,
+  DEACTIVATE_CUSTOMER_SUCCESS,
+  DEACTIVATE_CUSTOMER_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 export type customersManagementResponseType = {
@@ -163,6 +166,22 @@ export const activateCustomerReducer = (state: customersManagementResponseType =
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case ACTIVATE_CUSTOMER_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}
+
+export const deactivateCustomerReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case DEACTIVATE_CUSTOMER_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case DEACTIVATE_CUSTOMER_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case DEACTIVATE_CUSTOMER_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     default:

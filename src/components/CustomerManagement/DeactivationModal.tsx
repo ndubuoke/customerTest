@@ -8,9 +8,12 @@ import Textarea from './Textarea'
 
 type props = {
   setShowDeactivationModal: (e) => void
+  deactivateCustomerHandler: () => void
+  setUploadKeys: (e) => void
+  setDeactivateCustomerJustification:(e)=> void
 }
 
-const DeactivationModal = ({ setShowDeactivationModal }: props) => {
+const DeactivationModal = ({ setShowDeactivationModal, deactivateCustomerHandler, setUploadKeys, setDeactivateCustomerJustification }: props) => {
   const [localUpload, setLocalUpload] = useState<Array<any>>([])
   const [buttonDisabledStatus, setButtonDisabledStatus] = useState(true)
   const [uploadKey, setUploadKey] = useState<Array<string>>([])
@@ -18,16 +21,20 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
   const closeModal = () => {
     setShowDeactivationModal(false)
   }
-  //  console.log(uploadKey)
-  // console.log(localUpload)
+  // console.log(uploadKey)
+  //  console.log(localUpload)
   useEffect(() => {
     if (uploadKey.length > 0) {
       setButtonDisabledStatus(false)
+      setUploadKeys(uploadKey)
     }
     if (localUpload.length < 1) {
       setButtonDisabledStatus(true)
     }
-  }, [uploadKey, localUpload, buttonDisabledStatus])
+    if (character !== '') {
+      setDeactivateCustomerJustification(character)
+    }
+  }, [uploadKey, localUpload, buttonDisabledStatus, character])
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -57,13 +64,7 @@ const DeactivationModal = ({ setShowDeactivationModal }: props) => {
           </div>
 
           <div className='w-full mt-12 text-center'>
-            <Button
-              disabled={buttonDisabledStatus}
-              text={'Submit'}
-              onClick={() => {
-                console.log('yes')
-              }}
-            />
+            <Button disabled={buttonDisabledStatus} text={'Submit'} onClick={deactivateCustomerHandler} />
           </div>
         </div>
       </div>
