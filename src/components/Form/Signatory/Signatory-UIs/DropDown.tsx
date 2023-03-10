@@ -1,6 +1,6 @@
 import { caret } from 'Assets/svgs'
 import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import FieldLabel from './FieldLabel'
 import { ReducersType } from 'Redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import {
 import Spinner from 'Components/Shareables/Spinner'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
+import useOnClickOutside from '../../../../hooks/useClickOutside'
 
 type Props = {
   required: 'on' | 'off'
@@ -29,8 +30,10 @@ type Props = {
 // TODO: Handle states and LGAS
 
 const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
+  const ref = useRef(null)
+  useOnClickOutside(ref, () => setShowLists(false))
   const dispatch = useDispatch()
-
+  console.log('selectedDropdownItem', selectedDropdownItem)
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
     (state) => state.unfilledRequiredSignatoryList
   ) as UnfilledRequiredSignatoryListReducerType
@@ -42,6 +45,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   const [showLists, setShowLists] = useState<boolean>(false)
   const [optionsField, setOptionsField] = useState<Array<string>>(_optionsField)
 
+  useOnClickOutside(ref, () => setShowLists(false))
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
@@ -84,10 +88,12 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   }, [getCountriesRedux])
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
+    console.log('selectedItem', selectedItem)
     setShowLists((prev) => !prev)
     setSelectedDropdownItem((prev: any) => ({
       ...prev,
-      [camelize(replaceSpecialCharacters(text))]: selectedItem.trim(),
+      [text]: selectedItem.trim(),
+      // [camelize(replaceSpecialCharacters(text]: selectedItem.trim(),
     }))
     handleRedispatchOfRequiredFields()
   }
@@ -204,6 +210,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
           {showLists && (
             <div
+              ref={ref}
               className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg h-auto  max-h-[12rem] overflow-y-auto'
               style={{
                 zIndex: 999,

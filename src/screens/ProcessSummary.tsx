@@ -86,7 +86,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       setInitiator(userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname)
     }
   }, [userProfileRedux])
-
+  console.log('userprofile', userProfileRedux)
   useEffect(() => {
     if (showWaiverModalInFormStorage && showWaiverModalInFormStorage === 'show') {
       // console.log('In the stoirage')
@@ -198,7 +198,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               >
                 {customerType.split('--')[0].trim()} Customer Creation
               </h2>
-              <div className='px-4 flex flex-col gap-8 '>
+              <div className='flex flex-col gap-8 px-4 '>
                 {!fillingFormInStorage
                   ? null
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {
