@@ -119,17 +119,17 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         })
         .filter(Boolean)
 
-      // console.log({ _fieldLabelsOfRequiredFields })
+      console.log('_fieldLabelsOfRequiredFields', { _fieldLabelsOfRequiredFields })
 
       const _fillingFormState = fillingFormState as FormStructureType
-
+      console.log('_fillingFormState.data.customerData', _fillingFormState.data.customerData)
       const fieldLabelsOfNotFilledRequiredFields = [] as Array<RequiredFieldsType>
 
       _fieldLabelsOfRequiredFields.forEach((x) => {
         if (x.sectionId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.sectionId === x.sectionId)
 
-          // console.log({ sectionThatMatched })
+          // console.log('x.sectionId', { sectionThatMatched })
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
@@ -138,7 +138,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
         if (!x.sectionId && x.pageId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.pageId === x.pageId)
-
+          // console.log('!x.sectionId && x.pageId', { sectionThatMatched })
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
           }
@@ -150,7 +150,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
         (x) => camelize(x.formType) !== camelize('File Upload')
       )
-
+      // console.log({ fieldLabelsOfNotFilledRequiredFields })
       // console.log({ checkIfUnfilledRequiredFieldsAreNotDocsOnly })
 
       if (checkIfUnfilledRequiredFieldsAreNotDocsOnly) {

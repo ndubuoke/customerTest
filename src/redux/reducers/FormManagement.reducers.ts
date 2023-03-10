@@ -86,7 +86,10 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
                   ...payload.data,
                   builtFormMetadata: {
                     ...payload.data.builtFormMetadata,
-                    pages: [...payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
+                    pages: [
+                      ...payload.data.builtFormMetadata.pages,
+                      ...defaultPublishedFormPages.filter((page) => page.id !== '1662112333552788291'),
+                    ],
                   },
                 },
               }
