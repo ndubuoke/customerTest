@@ -87,6 +87,15 @@ const standardRiskAssessmentData = [
     percentageOptionsWeightAllocation: [100, 0],
     score: [30, 0],
   },
+  {
+    parameter: 'Customer Persona',
+    impliedWeight: 5,
+    parameterOptions: ['High net worth', 'Upper Middle Class', 'Middle Class', 'Floating Middle Class', 'Low Income', 'Not verified'],
+    assessmentType: ['EDD Required', 'CDD', 'CDD', 'CDD', 'CDD', 'Deal Breaker'],
+    escalationFactor: [1, 1, 1, 1, 1, 1],
+    percentageOptionsWeightAllocation: [60, 40, 20, 10, 0, 100],
+    score: [3, 2, 1, 0.5, 0, 5],
+  },
 ]
 const riskAssessmentScore = (assessmentArray) => {
   return assessmentArray.map((_assessment, index) => {
