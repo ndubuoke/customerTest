@@ -44,6 +44,15 @@ type Props = {
   isCompleted: boolean
 }
 
+const getText = (prefix = '', suffix = '') => {
+  if (prefix.trim() && suffix.trim()) {
+    return `${prefix} ${suffix}`
+  } else if (prefix.trim() || suffix.trim()) {
+    return prefix || suffix
+  }
+  return '-'
+}
+
 const RiskAssessmentLayout = memo(
   ({ parentKey, title, fields = [], standardRiskAssessmentData = [], assessmentData = {}, handleSelectedParameterOption, isCompleted }: Props) => {
     const [collapsed, setCollapsed] = useState<boolean>(false)
@@ -131,7 +140,29 @@ const RiskAssessmentLayout = memo(
                           marginTop: '0.3rem',
                         }}
                       >
-                        {assessmentData[field.key] + ' ' + assessmentData['firstName'] || '-'}
+                        {getText(assessmentData[field.key], assessmentData['firstName'])}
+                      </p>
+                    ) : field.key === 'stateOfOrigin' ? (
+                      <p
+                        style={{
+                          fontWeight: '400',
+                          fontSize: '16px',
+                          lineHeight: '18px',
+                          marginTop: '0.3rem',
+                        }}
+                      >
+                        {getText(assessmentData[field.key], assessmentData['lGA'])}
+                      </p>
+                    ) : field.key === 'iDNumber' ? (
+                      <p
+                        style={{
+                          fontWeight: '400',
+                          fontSize: '16px',
+                          lineHeight: '18px',
+                          marginTop: '0.3rem',
+                        }}
+                      >
+                        {getText(assessmentData['chooseAnID'], assessmentData[field.key] ? `[${assessmentData[field.key]}]` : '')}
                       </p>
                     ) : (
                       <p
@@ -142,21 +173,9 @@ const RiskAssessmentLayout = memo(
                           marginTop: '0.3rem',
                         }}
                       >
-                        {assessmentData[field.key] || '-'}
+                        {getText(assessmentData[field.key])}
                       </p>
                     )}
-                    {field.key === 'stateOfOrigin' ? (
-                      <p
-                        style={{
-                          fontWeight: '400',
-                          fontSize: '16px',
-                          lineHeight: '18px',
-                          marginTop: '0.3rem',
-                        }}
-                      >
-                        {assessmentData[field.key] + ' ' + assessmentData['lGA'] || '-'}
-                      </p>
-                    ) : null}
                   </div>
                 )
               })}
@@ -170,7 +189,7 @@ const RiskAssessmentLayout = memo(
                       <span className='px-3 border-l-2'>PARAMETER</span>
                     </th>
                     <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa] min-w-[155px  max-w-[155px]   w-[20%] '>
-                      <span className='border-l-2  px-3 '>IMPLIED WEIGHT</span>
+                      <span className='px-3 border-l-2 '>IMPLIED WEIGHT</span>
                     </th>
                     <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[25%] min-w-[155px]'>
                       <span className='px-3 border-l-2'>STATUS</span>

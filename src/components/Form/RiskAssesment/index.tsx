@@ -84,7 +84,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         },
         {
           title: 'ID Document [ID Number]',
-          key: 'id',
+          key: 'iDNumber',
         },
       ],
       isCompleted: null,
@@ -204,11 +204,11 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         },
         {
           title: 'Date of Employment',
-          key: 'mobileNumber',
+          key: 'dateOfEmployment',
         },
         {
           title: 'Nature of Business/Occupation',
-          key: 'mobileNumber',
+          key: 'natureOfBusinessOccupation',
         },
         {
           title: 'Annual Salary/Expected Annual Income',
@@ -270,6 +270,41 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           selectedParameterOption: {
             status: 'Yes',
             weight: 80,
+          },
+        },
+
+        {
+          parameter: 'Customer Persona',
+          impliedWeight: 5,
+          parameterOptions: [
+            {
+              status: 'High net worth',
+              weight: 60,
+            },
+            {
+              status: 'Upper middle class',
+              weight: 40,
+            },
+            {
+              status: 'Middle Class',
+              weight: 20,
+            },
+            {
+              status: 'Floating middle class',
+              weight: 10,
+            },
+            {
+              status: 'Low Income',
+              weight: 0,
+            },
+            {
+              status: 'Not Verified',
+              weight: 100,
+            },
+          ],
+          selectedParameterOption: {
+            status: 'Not verified',
+            weight: 100,
           },
         },
       ],
@@ -339,26 +374,44 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
     dispatch(riskAssessmentResultAction(score.scoreGuide) as any)
     setRiskScoreGuide(score.scoreGuide)
   }
-
+  console.log('data-customerData', fillingFormState.data.customerData)
   return (
     <>
-      {fillingFormState.data.customerData.map((data) => {
-        if (riskAssessmentData[data.sectionName]) {
-          // console.log('data', data)
-          return (
-            <RiskAssessmentLayout
-              key={riskAssessmentData[data.sectionName].title}
-              parentKey={data.sectionName}
-              title={riskAssessmentData[data.sectionName].title}
-              fields={riskAssessmentData[data.sectionName].fields}
-              standardRiskAssessmentData={riskAssessmentData[data.sectionName].standardRiskAssessmentData}
-              assessmentData={data.data}
-              handleSelectedParameterOption={handleSelectedParameterOption}
-              isCompleted={riskAssessmentData[data.sectionName].isCompleted}
-            />
-          )
-        }
-      })}
+      {fillingFormState.data.customerData
+        .map((data) => {
+          if (data.sectionName === 'bio-Data') {
+            const identityVerification: any = fillingFormState.data.customerData.find((data) => data.sectionName === 'identityVerification')
+            if (identityVerification) {
+              return {
+                ...data,
+                data: {
+                  ...data.data,
+                  chooseAnID: identityVerification.data?.chooseAnID || '',
+                  iDNumber: identityVerification.data?.iDNumber || '',
+                },
+              }
+            }
+          }
+          return data
+        })
+        .map((data) => {
+          // console.log('data-customerData', data)
+          if (riskAssessmentData[data.sectionName]) {
+            // console.log('data', data)
+            return (
+              <RiskAssessmentLayout
+                key={riskAssessmentData[data.sectionName].title}
+                parentKey={data.sectionName}
+                title={riskAssessmentData[data.sectionName].title}
+                fields={riskAssessmentData[data.sectionName].fields}
+                standardRiskAssessmentData={riskAssessmentData[data.sectionName].standardRiskAssessmentData}
+                assessmentData={data.data}
+                handleSelectedParameterOption={handleSelectedParameterOption}
+                isCompleted={riskAssessmentData[data.sectionName].isCompleted}
+              />
+            )
+          }
+        })}
       {/* watchlist section */}
       <RiskAssessmentLayout
         parentKey='watchlist'
@@ -368,7 +421,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
         isCompleted={riskAssessmentData['watchlist'].isCompleted}
       />
 
-      <div className='flex justify-center items-center gap-12 py-10'>
+      <div className='flex items-center justify-center gap-12 py-10'>
         <button className='border text-[#667085] px-5 py-1 rounded-md' onClick={computeScore}>
           Compute Risk Score
         </button>

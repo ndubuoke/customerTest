@@ -33,7 +33,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   const ref = useRef(null)
   useOnClickOutside(ref, () => setShowLists(false))
   const dispatch = useDispatch()
-  console.log('selectedDropdownItem', selectedDropdownItem)
+
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
     (state) => state.unfilledRequiredSignatoryList
   ) as UnfilledRequiredSignatoryListReducerType
@@ -174,7 +174,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
       }}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={text} colspan={colspan} id={id} />
       </div>
 
@@ -217,17 +217,17 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
               }}
             >
               {text.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
               {text.toLowerCase().includes('state') && getStatesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
               {text.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
