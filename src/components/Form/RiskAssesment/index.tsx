@@ -54,10 +54,14 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               status: 'No',
               weight: 20,
             },
+            {
+              status: 'Not verified',
+              weight: 100,
+            },
           ],
           selectedParameterOption: {
-            status: 'Yes',
-            weight: 80,
+            status: 'Not verified',
+            weight: 100,
           },
         },
       ],
@@ -104,10 +108,14 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               status: 'No',
               weight: 20,
             },
+            {
+              status: 'Not verified',
+              weight: 100,
+            },
           ],
           selectedParameterOption: {
-            status: 'Yes',
-            weight: 80,
+            status: 'Not verified',
+            weight: 100,
           },
         },
         {
@@ -248,10 +256,14 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               status: 'No',
               weight: 20,
             },
+            {
+              status: 'Not verified',
+              weight: 100,
+            },
           ],
           selectedParameterOption: {
-            status: 'Yes',
-            weight: 80,
+            status: 'Not verified',
+            weight: 100,
           },
         },
         {
@@ -266,10 +278,14 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
               status: 'No',
               weight: 0,
             },
+            {
+              status: 'Not verified',
+              weight: 100,
+            },
           ],
           selectedParameterOption: {
-            status: 'Yes',
-            weight: 80,
+            status: 'Not verified',
+            weight: 100,
           },
         },
 
