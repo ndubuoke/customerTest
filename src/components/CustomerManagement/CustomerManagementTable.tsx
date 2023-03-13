@@ -631,7 +631,7 @@ const CustomerManagementTable = ({
       ) : null}
 
       <div className=' relative mt-[3%]  mx-4 overflow-auto h-[25rem] overflow-auto '>
-        <table className='w-full text-sm text-left  '>
+        <table className='w-full text-sm text-left table-auto '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
@@ -650,7 +650,7 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className='   absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
+                          className=' w-[180px]  absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {

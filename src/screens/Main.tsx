@@ -500,12 +500,12 @@ const Main = (props: Props) => {
                         <div className=' flex gap-2  '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                            className={`flex flex-col py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
                               customerStatus === 'All' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
-                            <span className='text-[.875rem] font-bold'>All</span>
-                            <h3 className='font-bold text-[1.5rem]'>
+                            <span className='text-[.875rem]  font-bold'>All</span>
+                            <h3 className='font-bold text-[1.5rem] '>
                               {customerStatusResponsedata ? customerStatusResponsedata?.active + customerStatusResponsedata?.inactive : ''}
                             </h3>
                           </div>
@@ -669,11 +669,11 @@ const Main = (props: Props) => {
                             )}
                           </div>
                           <span>
-                            <img src={chevron} className='' />
+                            <img src={chevron} className={`${showStatusLists ? 'rotate-180' : ''} transition-all`} />
                           </span>
                         </button>
                         {showStatusLists && (
-                          <div ref={statusListRef} className=' w-full  absolute z-20  bg-background-paper  flex flex-col  border rounded-md'>
+                          <div ref={statusListRef} className=' w-[180px]  absolute z-20 right-4  bg-background-paper  flex flex-col  border '>
                             {customermanagementTableType === 'All Customers' && (
                               <>
                                 {userRole === 'maker' && (
