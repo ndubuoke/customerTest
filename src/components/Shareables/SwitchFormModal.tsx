@@ -5,12 +5,13 @@ type Props = {
   closeModalFunction: () => void
   switchFunction: any
   message: string
+  mode?: string
 }
 
-const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props) => {
+const SwitchFormModal = ({ closeModalFunction, switchFunction, message, mode }: Props) => {
   return (
     <aside
-      className='fixed top-0 right-0 bottom-0 left-0 flex justify-center items-center '
+      className='fixed top-0 bottom-0 left-0 right-0 flex items-center justify-center '
       style={{
         backgroundColor: 'rgba(0, 0, 0, 0.5)',
         zIndex: '1000',
@@ -26,7 +27,7 @@ const SwitchFormModal = ({ closeModalFunction, switchFunction, message }: Props)
           </button>
         </div>
         <div className='py-3 text-[1.125rem] leading-[1.75rem] text-[#333333] font-medium  '>
-          {/* Truncate form and proceed? */}
+          Switch to {mode === 'accelerated' ? 'legacy' : 'accelerated'} form?
           <div className='py-3 text-[1rem] leading-[1.75rem] text-[#333333]  '>{message}</div>
         </div>
 

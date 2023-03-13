@@ -180,7 +180,13 @@ const Form = memo(
                 <span> Drag and Drop documents across the placeholders to rearrange documents</span>{' '}
               </div>
             )}
-            <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
+            <div
+              className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'
+              style={{
+                maxWidth: '950px',
+                margin: 'auto',
+              }}
+            >
               {activePageState?.sections?.length > 0
                 ? activePageState?.sections?.map((sects, index) => {
                     return (
