@@ -35,7 +35,7 @@ const RequestDetailsRow = ({
   return (
     <>
       <tr key={request?.requestId} className='bg-background-lightRed border-b text-text-secondary   '>
-        <td scope='row' className='py-2 px-2 truncate flex flex-col font-medium  whitespace-nowrap '>
+        <td  className='py-2 px-2 truncate flex flex-col  font-medium  whitespace-nowrap '>
           {request?.requestTitle}
         </td>
         <td className='py-2 px-2'>{request?.requestType}</td>
