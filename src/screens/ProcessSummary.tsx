@@ -71,7 +71,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const [openWaiver, setOpenWaiver] = useState<TimelineType>('hide')
   const [formType, setFormType] = useState<FormTypeType>(null)
 
-  const [initiator, setInitiator] = useState('Ade Adeshina')
+  const [initiator, setInitiator] = useState('A Adeshina')
   const [initiatorId, setInitiatorId] = useState('abf93efb-18c5-4c5e-a8d3-2692675ee3e6')
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
@@ -86,7 +86,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       setInitiator(userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname)
     }
   }, [userProfileRedux])
-
+  console.log('userprofile', userProfileRedux)
   useEffect(() => {
     if (showWaiverModalInFormStorage && showWaiverModalInFormStorage === 'show') {
       // console.log('In the stoirage')
@@ -149,8 +149,9 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
       setProcessActionsMode('edd')
       setEddRequest('show')
     }
-  }, [riskAssessmentRedux])
-
+  }, [riskAssessmentRedux, formType])
+  // console.log('formtype', formType)
+  // console.log('customerType', customerType)
   // TODO: Handle submitted state when form is submitted successfully
 
   useEffect(() => {
@@ -197,7 +198,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               >
                 {customerType.split('--')[0].trim()} Customer Creation
               </h2>
-              <div className='px-4 flex flex-col gap-8 '>
+              <div className='flex flex-col gap-8 px-4 '>
                 {!fillingFormInStorage
                   ? null
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {

@@ -25,6 +25,7 @@ import EDDAlert from 'Components/ProcessSummary/EddAlert'
 import { CustomerTypeType } from 'Screens/ProcessSummary'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { getColumnName } from 'Utilities/getColumnName'
+import SaveToDraftsModal from 'Components/Shareables/SavetoDraftModal'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -52,8 +53,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
   const [showEDDAlert, setShowEDDAlert] = useState<boolean>(false)
+  const [showSaveToDraftAlert, setShowSaveToDraftAlert] = useState<boolean>(false)
   // const [riskScore, setRiskScore] = useState<number>(90)
-  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
+  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(false)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -119,17 +121,17 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
         })
         .filter(Boolean)
 
-      // console.log({ _fieldLabelsOfRequiredFields })
+      console.log('_fieldLabelsOfRequiredFields', { _fieldLabelsOfRequiredFields })
 
       const _fillingFormState = fillingFormState as FormStructureType
-
+      console.log('_fillingFormState.data.customerData', _fillingFormState.data.customerData)
       const fieldLabelsOfNotFilledRequiredFields = [] as Array<RequiredFieldsType>
 
       _fieldLabelsOfRequiredFields.forEach((x) => {
         if (x.sectionId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.sectionId === x.sectionId)
 
-          // console.log({ sectionThatMatched })
+          // console.log('x.sectionId', { sectionThatMatched })
 
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
@@ -138,7 +140,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
         if (!x.sectionId && x.pageId) {
           const sectionThatMatched = _fillingFormState.data.customerData.find((y) => y.pageId === x.pageId)
-
+          // console.log('!x.sectionId && x.pageId', { sectionThatMatched })
           if (!sectionThatMatched?.data[x.fieldLabel] || !sectionThatMatched?.data.hasOwnProperty(x.fieldLabel)) {
             fieldLabelsOfNotFilledRequiredFields.push(x)
           }
@@ -150,7 +152,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
         (x) => camelize(x.formType) !== camelize('File Upload')
       )
-
+      // console.log({ fieldLabelsOfNotFilledRequiredFields })
       // console.log({ checkIfUnfilledRequiredFieldsAreNotDocsOnly })
 
       if (checkIfUnfilledRequiredFieldsAreNotDocsOnly) {
@@ -255,8 +257,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
       <div>
         <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
       </div>
+
       <div className='flex gap-3'>
-        <Button disabled={true} onClick={() => console.log('test saved to draft')} text='Save to draft' />
+        <Button disabled={false} onClick={() => setShowSaveToDraftAlert(true)} text='Save to draft' />
         <Button
           disabled={false}
           onClick={handleNextAndOtherAddOns}
@@ -266,6 +269,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
       {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
       {showEDDAlert ? <EDDAlert closeModalFunction={handleDiscardEDDWaiver} proceedToProcessSummary={handleProceedEDD} /> : null}
+      {showSaveToDraftAlert && <SaveToDraftsModal closeModalFunction={() => setShowSaveToDraftAlert(false)} />}
     </div>
   )
 }

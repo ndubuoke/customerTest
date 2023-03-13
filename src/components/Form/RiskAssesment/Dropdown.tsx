@@ -27,8 +27,9 @@ const DropDown = ({ options, defaultOption = '', getValue }: Props) => {
           style={{
             borderRadius: '0 0 8px 8px',
             zIndex: '99',
-            overflow: 'hidden',
+            overflow: 'auto',
             boxShadow: '0px 0px 4px rgba(0, 0, 0, 0.25)',
+            maxHeight: '11rem',
           }}
         >
           {options.map((x, i) => {

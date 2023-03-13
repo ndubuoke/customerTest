@@ -80,9 +80,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
-  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(formStruture)
+  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(() => JSON.parse(JSON.stringify(formStruture)))
   const [newFillingFormState, setNewFillingFormState] = useState<any>(null)
-
+  console.log('formStruture', formStruture)
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
   const [showGraceModal, setShowGraceModal] = useState(false)
@@ -164,9 +164,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   }, [])
 
   useEffect(() => {
-    API.get('/interim-approval-config').then((data) => {
+    API.get(`/interim-approval-config/type/${customerType}`).then((data) => {
       console.log('data-/interim-approval-config', data)
-      if (!data.data?.data[0]?.gracePeriod) {
+      if (!data.data?.data?.gracePeriod) {
         setShowGraceModal(true)
       }
     })
@@ -237,8 +237,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                 />
 
                 {creationMode === CreationModeEnum.Single ? (
-                  <div className='flex  justify-center relative  gap-1 mt-24'>
-                    <div className=' absolute right-3 top-1'>
+                  <div className='relative flex justify-center gap-1 mt-24'>
+                    <div className='absolute right-3 top-1'>
                       <SkipToForm
                         onClick={() => {
                           setFormCreationStarted(true)

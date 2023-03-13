@@ -3,11 +3,11 @@ import Spinner from 'Components/Shareables/Spinner'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createColumnMapAction, getColumnMapAction, getPublishedFormSectionAction } from 'Redux/actions/FormManagement.actions'
+import { createColumnMapAction, getColumnMapAction, getPublishedFormSectionAction, activePageAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import { getProperty } from 'Utilities/getProperty'
+import { getProperty, getVisibleProperty } from 'Utilities/getProperty'
 import AdditionalDetails from './AdditionalInfo'
 import Executives from './ExecutiveandDirector'
 import { FormLayout, Steps } from './Form-UIs'
@@ -56,6 +56,21 @@ const Form = memo(
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
 
     const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+    console.log('pageIndex', pageIndex)
+
+    useEffect(() => {
+      console.log('publishedForm', publishedForm)
+      if (publishedForm?.success && publishedForm?.serverResponse?.data) {
+        const page = publishedForm?.serverResponse?.data.builtFormMetadata.pages[pageIndex]
+        if (!page) {
+          const index = publishedForm?.serverResponse?.data.builtFormMetadata.pages.length - 1
+          const newPage = publishedForm?.serverResponse?.data.builtFormMetadata.pages[index]
+          dispatch(activePageAction(newPage, index) as any)
+          setActivePageState(newPage)
+          setPageIndex(index)
+        }
+      }
+    }, [publishedForm])
 
     // console.log('activePage', activePage)
     // console.log('activePageState', getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase())
@@ -170,20 +185,30 @@ const Form = memo(
                 ? activePageState?.sections?.map((sects, index) => {
                     return (
                       <div key={index}>
-                        <FormLayout
-                          isSection={true}
-                          item={sects}
-                          fields={sects.fields}
-                          key={sects.id}
-                          setFillingFormState={setFillingFormState}
-                          publishedFormState={publishedFormState}
-                          fillingFormState={fillingFormState}
-                          setBackupForSwitchFormState={setBackupForSwitchFormState}
-                          backupForSwitchFormState={backupForSwitchFormState}
-                        />
-                        {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
-                          <Signatories key={'Signatories' + index} />
-                        ) : null}
+                        {getVisibleProperty(sects.formControlProperties) && (
+                          <>
+                            <FormLayout
+                              isSection={true}
+                              item={sects}
+                              fields={sects.fields}
+                              key={sects.id}
+                              setFillingFormState={setFillingFormState}
+                              publishedFormState={publishedFormState}
+                              fillingFormState={fillingFormState}
+                              setBackupForSwitchFormState={setBackupForSwitchFormState}
+                              backupForSwitchFormState={backupForSwitchFormState}
+                              shouldCollapseByDefault={index !== 0}
+                            />
+                            {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
+                              <Signatories key={'Signatories' + index} />
+                            ) : null}
+                            {customerType === 'sme' &&
+                              activePage &&
+                              index === activePageState?.sections?.length - 1 &&
+                              getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase().trim() ===
+                                'additional details' && <AdditionalDetails key='aditional' />}
+                          </>
+                        )}
                       </div>
                     )
                   })
@@ -193,7 +218,7 @@ const Form = memo(
               ) : null}
               {customerType === 'sme' && activePage && activePage?.page?.id === '16686080340726503201' ? <Executives key='executives' /> : null}
 
-              {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails key='aditional' /> : null}
+              {/* {customerType === 'sme' && activePage && activePage?.page?.id === '16691120330052585191' ? <AdditionalDetails key='aditional' /> : null} */}
               {/* {getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase().trim() === 'documentation' && <h1>HELLO DOCS</h1>} */}
 
               {activePageState?.fields?.length > 0 && (

@@ -10,7 +10,7 @@ type Props = {}
 
 const Signatories = memo((props: Props) => {
   const [showSignatoryForm, setShowSignatoryForm] = useState<boolean>(false)
-  const [collapsed, setCollapsed] = useState<boolean>(false)
+  const [collapsed, setCollapsed] = useState<boolean>(true)
   const [signatories, setSignatories] = useState<Array<SignatoryInitialDetailsType>>([])
   const [openModal, setOpenModal] = useState<boolean>(false)
   const [modification, setModification] = useState<boolean>(false)
@@ -58,17 +58,27 @@ const Signatories = memo((props: Props) => {
   }, [])
 
   return (
-    <section className='max-w-[66.25rem] mx-4 bg-slate-50'>
+    <section className='max-w-[66.25rem] mx-4 '>
       <div
-        className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+        className={`ControlUILayout  w-full  pr-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
         style={{
           boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+          background: '#FAFAFA',
+          fontFamily: 'Inter',
         }}
       >
         <div className='flex items-center'>
-          <h6>Account Signatorie&apos;s Details</h6>
+          {/* &apos; */}
+          <h6
+            style={{
+              fontWeight: '500',
+              fontSize: '16px',
+            }}
+          >
+            Account Signatories Details
+          </h6>
         </div>
-        <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+        <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'

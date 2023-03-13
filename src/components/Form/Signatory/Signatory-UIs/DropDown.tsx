@@ -1,6 +1,6 @@
 import { caret } from 'Assets/svgs'
 import { SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useRef } from 'react'
 import FieldLabel from './FieldLabel'
 import { ReducersType } from 'Redux/store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -15,6 +15,7 @@ import {
 import Spinner from 'Components/Shareables/Spinner'
 import { camelize } from 'Utilities/convertStringToCamelCase'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
+import useOnClickOutside from '../../../../hooks/useClickOutside'
 
 type Props = {
   required: 'on' | 'off'
@@ -29,6 +30,8 @@ type Props = {
 // TODO: Handle states and LGAS
 
 const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, selectedDropdownItem, setSelectedDropdownItem }: Props) => {
+  const ref = useRef(null)
+  useOnClickOutside(ref, () => setShowLists(false))
   const dispatch = useDispatch()
 
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
@@ -42,6 +45,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   const [showLists, setShowLists] = useState<boolean>(false)
   const [optionsField, setOptionsField] = useState<Array<string>>(_optionsField)
 
+  useOnClickOutside(ref, () => setShowLists(false))
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
@@ -84,10 +88,12 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   }, [getCountriesRedux])
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
+    console.log('selectedItem', selectedItem)
     setShowLists((prev) => !prev)
     setSelectedDropdownItem((prev: any) => ({
       ...prev,
-      [camelize(replaceSpecialCharacters(text))]: selectedItem.trim(),
+      [text]: selectedItem.trim(),
+      // [camelize(replaceSpecialCharacters(text]: selectedItem.trim(),
     }))
     handleRedispatchOfRequiredFields()
   }
@@ -168,7 +174,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
       }}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={text} colspan={colspan} id={id} />
       </div>
 
@@ -204,48 +210,49 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
 
           {showLists && (
             <div
-              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg   h-[12.5rem] overflow-y-auto'
+              ref={ref}
+              className='absolute w-full top-8 bg-background-paper   flex flex-col z-50 border rounded-lg h-auto  max-h-[12rem] overflow-y-auto'
               style={{
                 zIndex: 999,
               }}
             >
               {text.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
               {text.toLowerCase().includes('state') && getStatesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
               {text.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
-                <div className='h-full flex justify-center items-center w-full'>
+                <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
               ) : null}
               {optionsField?.length > 0
                 ? optionsField?.map((selected, index) => {
-                  return (
-                    <div
-                      key={index}
-                      className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
-                      onClick={(e) => {
-                        e.stopPropagation()
-                        handleSelectedDropdownItem(selected)
-                        // if (text.toLowerCase().includes('state')) {
-                        const country = countries?.find((x) => x.countryName === selected)
-                        if (country) {
-                          sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
-                        }
-                        // }
-                        setShowLists(false)
-                      }}
-                    >
-                      {selected.trim()}
-                    </div>
-                  )
-                })
+                    return (
+                      <div
+                        key={index}
+                        className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200' : ''} `}
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          handleSelectedDropdownItem(selected)
+                          // if (text.toLowerCase().includes('state')) {
+                          const country = countries?.find((x) => x.countryName === selected)
+                          if (country) {
+                            sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
+                          }
+                          // }
+                          setShowLists(false)
+                        }}
+                      >
+                        {selected.trim()}
+                      </div>
+                    )
+                  })
                 : null}
             </div>
           )}

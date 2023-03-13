@@ -69,6 +69,7 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
       <div className='max-w-[61.9375rem] overflow-auto mx-auto '>
         <div className='z-10 flex justify-end  w-fit'>
           {form?.builtFormMetadata?.pages?.map((page: PageInstance, index: number) => {
+            // console.log('index: number', index)
             return (
               <StepNumbers
                 key={index}

@@ -395,10 +395,9 @@ const Main = (props: Props) => {
           <h1 className='text-[#636363] text-[2.375rem] font-bold'>Customer Management</h1>
 
           {userRole === 'maker' && (
-            <div className='ml-6 relative ' ref={createCustomerListRef}>
+            <div className='relative ml-6 ' ref={createCustomerListRef}>
               <button
-                className='flex cursor-pointer  rounded-md justify-between px-2 items-center  bg-primay-main
-          py-1'
+                className='flex items-center justify-between px-2 py-1 rounded-md cursor-pointer bg-primay-main'
                 onClick={() => setShowLists(true)}
               >
                 <span>
@@ -410,7 +409,7 @@ const Main = (props: Props) => {
                 </div>
               </button>
               {showLists && (
-                <div className='absolute w-full top-0   bg-background-paper  flex flex-col z-20 border rounded-md'>
+                <div className='absolute top-0 z-20 flex flex-col w-full border rounded-md bg-background-paper'>
                   {customerTypeoptions?.map((list, index) => {
                     return (
                       <div key={index} className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
@@ -424,7 +423,7 @@ const Main = (props: Props) => {
           )}
         </div>
 
-        <div className=' flex justify-between px-6 mt-10'>
+        <div className='flex justify-between px-6 mt-10 '>
           <div>
             <button
               className={` ${
@@ -448,7 +447,7 @@ const Main = (props: Props) => {
 
           <div>
             <div className='relative w-[15.625rem]'>
-              <div className='flex absolute inset-y-0 left-0 items-center pl-3 pointer-events-none'>
+              <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
                 <svg
                   aria-hidden='true'
                   className='w-5 h-5 text-gray-500 '
@@ -462,15 +461,15 @@ const Main = (props: Props) => {
               </div>
               <input
                 type='search'
-                className='block border-b-2   py-1 pl-10 w-full text-sm text-gray-900 border border-gray-300'
+                className='block w-full py-1 pl-10 text-sm text-gray-900 border border-b-2 border-gray-300'
                 placeholder='Search for Customer'
               />
             </div>
           </div>
         </div>
-        <div className='    bg-background-default h-fit  px-4 py-4 '>
-          <div className=' flex '>
-            <div className='  w-full flex flex-col mr-4   '>
+        <div className='px-4 py-4 bg-background-default h-fit'>
+          <div className='flex '>
+            <div className='flex flex-col w-full mr-4 '>
               <div className=' bg-white flex h-[8.125rem] rounded-md '>
                 <div className='flex flex-col  border w-[18%] rounded-l-md'>
                   <button
@@ -479,9 +478,9 @@ const Main = (props: Props) => {
                     } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
                     onClick={nextLevelButtonHandler.bind(null, 1)}
                   >
-                    {nextLevelButtonId === 1 && <img className='  absolute left-1' src={redCaret} />}
-                    {userRole === 'checker' && <span className=' '>Records </span>}
-                    {userRole === 'maker' && <span className=' '>All Customers </span>}
+                    {nextLevelButtonId === 1 && <img className='absolute left-1' src={redCaret} />}
+                    {userRole === 'checker' && <span className=''>Records </span>}
+                    {userRole === 'maker' && <span className=''>All Customers </span>}
                   </button>
                   <button
                     className={`${
@@ -489,15 +488,15 @@ const Main = (props: Props) => {
                     } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
                     onClick={nextLevelButtonHandler.bind(null, 2)}
                   >
-                    {nextLevelButtonId === 2 && <img className=' absolute left-1' src={redCaret} />}
-                    <span className=' '>Requests</span>
+                    {nextLevelButtonId === 2 && <img className='absolute left-1' src={redCaret} />}
+                    <span className=''>Requests</span>
                   </button>
                 </div>
                 <div className=' w-full pl-[5%]  '>
-                  <div className=' flex  h-full'>
+                  <div className='flex h-full '>
                     <div className=' w-[80%] mt-6 '>
                       {nextLevelButtonId === 1 && customermanagementTableType === 'All Customers' ? (
-                        <div className=' flex gap-2  '>
+                        <div className='flex gap-2 '>
                           <div
                             onClick={customerStatusHandler.bind(null, 'All')}
                             className={`flex flex-col py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
@@ -534,7 +533,7 @@ const Main = (props: Props) => {
                         </div>
                       ) : null}
                       {nextLevelButtonId === 2 && customermanagementTableType === 'Requests' ? (
-                        <div className=' flex gap-2 '>
+                        <div className='flex gap-2 '>
                           <div
                             onClick={requestStatusHandler.bind(null, 'All', '')}
                             className={` py-1 px-4 cursor-pointer flex flex-col justify-center items-center hover:border rounded-md hover:border-[#EFEFEF] ${
@@ -639,8 +638,8 @@ const Main = (props: Props) => {
                       ) : null}
                     </div>
 
-                    <div className='flex  mt-2 pr-4  ml-auto w-fit'>
-                      <div className='relative  text-sm   '>
+                    <div className='flex pr-4 mt-2 ml-auto w-fit'>
+                      <div className='relative text-sm '>
                         <button
                           className='flex cursor-pointer border border-[#D0D5DD]   rounded-md justify-between px-2 items-center
           py-1'
@@ -749,26 +748,26 @@ const Main = (props: Props) => {
                   </div>
                 </div>
               </div>
-              <div className=' mt-6 bg-white rounded-md'>
-                <div className='flex justify-end gap-2 mt-2 mx-4'>
+              <div className='mt-6 bg-white rounded-md '>
+                <div className='flex justify-end gap-2 mx-4 mt-2'>
                   <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
                   <div className='border'></div>
-                  <div className='flex  justify-center items-center px-2 cursor-pointer' onClick={refreshTableHandler}>
+                  <div className='flex items-center justify-center px-2 cursor-pointer' onClick={refreshTableHandler}>
                     <img src={Refresh} />
                     <span className='text-sm text-[#636363]'>Refresh Table</span>
                   </div>
                   <div className='border'></div>
-                  <div onClick={downloadCustomersDataHandler} className='flex  justify-center items-center px-2 cursor-pointer '>
+                  <div onClick={downloadCustomersDataHandler} className='flex items-center justify-center px-2 cursor-pointer '>
                     <img src={Download} />
                     <span className='text-sm text-[#636363]'>Download</span>
                     {/* <ReactHTMLTableToExcel
                       id='test-table-xls-button'
-                      className='w-full download-table-xls-button rounded '
+                      className='w-full rounded download-table-xls-button '
                       table='table-to-xlsx'
                       filename='Customer Management Table Details'
                       sheet='Customer Management Table Details'
                       buttonText={
-                        <div className='flex justify-center items-center'>
+                        <div className='flex items-center justify-center'>
                           <img src={Download} />
                           <span className='text-sm text-[#636363]'>Download</span>
                         </div>
@@ -818,7 +817,7 @@ const Main = (props: Props) => {
                 />
               </div>
             </div>
-            <div className='w-auto lg:block hidden'>
+            <div className='hidden w-auto lg:block'>
               <QuickLinks
                 links={[
                   { urlName: 'Link1', url: '/customer360' },

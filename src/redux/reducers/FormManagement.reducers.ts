@@ -32,6 +32,7 @@ import {
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
+import { getVisibleProperty } from 'Utilities/getProperty'
 
 export type ResponseType = {
   loading: boolean
@@ -61,37 +62,49 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
+      console.log('action.payload', action.payload)
+      let payload = { ...action.payload }
+      payload = {
+        ...payload,
+        data: {
+          ...payload.data,
+          builtFormMetadata: {
+            ...payload.data.builtFormMetadata,
+            pages: payload.data.builtFormMetadata.pages.filter((page) => getVisibleProperty(page.pageProperties)),
+          },
+        },
+      }
       return {
         ...state,
         loading: false,
         success: true,
         serverResponse:
-          action.payload.data.formType === 'smeLegacy'
+          payload.data.formType === 'smeLegacy'
             ? {
-                ...action.payload,
+                ...payload,
                 data: {
-                  ...action.payload.data,
+                  ...payload.data,
                   builtFormMetadata: {
-                    ...action.payload.data.builtFormMetadata,
-                    pages: [...action.payload.data.builtFormMetadata.pages, ...defaultPublishedFormPages],
-                  },
-                },
-              }
-            : action.payload.data.formType === 'individualLegacy'
-            ? {
-                ...action.payload,
-                data: {
-                  ...action.payload.data,
-                  builtFormMetadata: {
-                    ...action.payload.data.builtFormMetadata,
+                    ...payload.data.builtFormMetadata,
                     pages: [
-                      ...action.payload.data.builtFormMetadata.pages,
-                      defaultPublishedFormPages.find((page) => page.id === '1662112333552788291'),
+                      ...payload.data.builtFormMetadata.pages,
+                      ...defaultPublishedFormPages.filter((page) => page.id !== '1662112333552788291'),
                     ],
                   },
                 },
               }
-            : action.payload,
+            : payload.data.formType === 'individualLegacy'
+            ? {
+                ...payload,
+                data: {
+                  ...payload.data,
+                  builtFormMetadata: {
+                    ...payload.data.builtFormMetadata,
+                    pages: [...payload.data.builtFormMetadata.pages, defaultPublishedFormPages.find((page) => page.id === '1662112333552788291')],
+                  },
+                },
+              }
+            : payload,
         serverError: {},
       }
     // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }

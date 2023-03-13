@@ -55,7 +55,8 @@ const TextInput = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue((prev: any) => ({
       ...prev,
-      [camelize(replaceSpecialCharacters(text))]: e.target.value.trim(),
+      [text]: e.target.value.trim(),
+      // [camelize(replaceSpecialCharacters(text))]: e.target.value.trim(),
     }))
     // handleRedispatchOfRequiredFields()
   }
@@ -85,7 +86,7 @@ const TextInput = ({
       }}
     >
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={text} colspan={colspan} id={id} />
       </div>
 
@@ -105,7 +106,7 @@ const TextInput = ({
             {value?.length}/{maximumNumbersOfCharacters}
           </div>
         ) : null}
-        <div className='absolute bottom-2 right-10  z-10 '>
+        <div className='absolute z-10 bottom-2 right-10 '>
           {loading ? (
             <Spinner size='medium' />
           ) : success ? (

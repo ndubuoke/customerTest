@@ -82,30 +82,30 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
   const handleSubmitForm = () => {
     // Simulate success
     setOpenModal(true)
-    if (customerType === 'individual') {
-      fillingFormInStorage.data.requestData = {
-        initiator,
-        initiatorId,
-        requestType: mode,
-      }
-      // console.log(fillingFormInStorage)
-      dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    // if (customerType === 'individual') {
+    fillingFormInStorage.data.requestData = {
+      initiator,
+      initiatorId,
+      requestType: mode,
     }
+    // console.log(fillingFormInStorage)
+    dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    // }
   }
 
   const handleSubmitModifiedForm = () => {
     // Simulate success
     setOpenModal(true)
-    if (customerType === 'individual') {
-      fillingFormInStorage.data.requestData = {
-        initiator,
-        initiatorId,
-        requestType: mode,
-      }
-
-      // console.log(fillingFormInStorage)
-      dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    // if (customerType === 'individual') {
+    fillingFormInStorage.data.requestData = {
+      initiator,
+      initiatorId,
+      requestType: mode,
     }
+
+    // console.log(fillingFormInStorage)
+    dispatch(submitFormAction(formType, customerType, fillingFormInStorage) as any)
+    // }
   }
   console.log('submitFormRedux', submitFormRedux)
   useEffect(() => {
