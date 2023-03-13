@@ -20,8 +20,8 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const viewInCustomer360Handler = () => {
     navigate(`/customer-management/customer-360/${customerId}`)
   }
-  const addProductHandler = ()=>{
-     navigate(`/customer-management/product-assignment/${customerId}`)
+  const addProductHandler = () => {
+    navigate(`/customer-management/product-assignment/${customerId}`)
   }
   const closeModal = () => {
     setShowCustomerModal(false)
@@ -64,8 +64,8 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
     >
       <div className={` min-h-[40rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
         <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
-          <div className='flex   justify-between  pb-4'>
-            <h6 className='text-text-secondary text-3xl'>
+          <div className='flex   justify-between  pb-4  border-b mb-4'>
+            <h6 className='text-text-secondary text-3xl uppercase'>
               {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
             </h6>
             <button onClick={closeModal}>
@@ -117,27 +117,27 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
 
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[5rem] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
-                  <div className='flex gap-2 cursor-pointer ' onClick={modifyCustomerHandler}>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center ' onClick={modifyCustomerHandler}>
                     {' '}
                     <img src={Edit} />
                     <span>Modify</span>
                   </div>
-                  <div className='flex gap-2 cursor-pointer  '>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center '>
                     <img src={Disable} />
                     <span>Deactivate</span>
                   </div>
-                  <div className='flex gap-2 cursor-pointer   ' onClick={viewInCustomer360Handler}>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center  ' onClick={viewInCustomer360Handler}>
                     <img src={customer360} />
                     <span>View in Customer 360</span>
                   </div>
                 </div>
-                <div className='w-full flex justify-between text-[#636363]'>
-                  <div className='flex gap-2 cursor-pointer '>
+                <div className='w-full flex justify-between gap-2 text-[#636363]'>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center'>
                     {' '}
                     <img src={add} />
                     <span>Add Cusomer to Group</span>
                   </div>
-                  <div className='flex gap-2 cursor-pointer ' onClick={addProductHandler}>
+                  <div className='flex gap-2 cursor-pointer  items-center justify-center' onClick={addProductHandler}>
                     <img src={add} />
                     <span>Add Product</span>
                   </div>

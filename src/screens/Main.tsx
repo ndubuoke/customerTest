@@ -475,7 +475,7 @@ const Main = (props: Props) => {
                   <button
                     className={`${
                       nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
-                    } flex items-center pl-[25%] relative h-[50%]     py-2 text-text-secondary `}
+                    } flex items-center pl-[20%] relative h-[50%]     py-2 text-text-secondary `}
                     onClick={nextLevelButtonHandler.bind(null, 1)}
                   >
                     {nextLevelButtonId === 1 && <img className='absolute left-1' src={redCaret} />}
@@ -485,7 +485,7 @@ const Main = (props: Props) => {
                   <button
                     className={`${
                       nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
-                    } flex   items-center  pl-[25%] relative h-[50%]    py-2 text-text-secondary`}
+                    } flex   items-center  pl-[20%] relative h-[50%]    py-2 text-text-secondary`}
                     onClick={nextLevelButtonHandler.bind(null, 2)}
                   >
                     {nextLevelButtonId === 2 && <img className='absolute left-1' src={redCaret} />}
@@ -494,7 +494,7 @@ const Main = (props: Props) => {
                 </div>
                 <div className=' w-full pl-[5%]  '>
                   <div className='flex h-full '>
-                    <div className=' w-[80%] mt-6 '>
+                    <div className=' w-[80%] mt-8  '>
                       {nextLevelButtonId === 1 && customermanagementTableType === 'All Customers' ? (
                         <div className='flex gap-2 '>
                           <div
