@@ -19,7 +19,7 @@ const Textarea = ({ rows, disabled = false, value, label, characterLengthChangeH
       </div>
       <textarea
         rows={rows ? rows : 4}
-        maxLength={150}
+        maxLength={60}
         onChange={characterLengthChangeHandler}
         className=' bg-transparent   text-text-secondary p-2 rounded  resize-none text-sm   w-full  border-common-title border outline-none '
         placeholder='Reason'

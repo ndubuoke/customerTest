@@ -650,7 +650,7 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className=' w-[180px]  absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
+                          className=' w-[180px]  absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col items-center justify-center  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {
@@ -669,7 +669,7 @@ const CustomerManagementTable = ({
                                         externalFunctionToDoSomething={checkIfCustomerStatusOptionChecked.bind(null, 'All')}
                                       />
                                     </span>
-                                    [ Select all]
+                                    [Select all]
                                   </span>
                                 </div>
                               )
