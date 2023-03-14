@@ -127,7 +127,9 @@ const FormLayout = memo(
               background: '#FAFAFA',
               fontFamily: 'Inter',
               opacity: isSpouseDetailsSection && detailsOfSpouseIsDisabled && '0.5',
+              cursor: 'pointer',
             }}
+            onClick={handleCollapseSection}
           >
             <div className='flex items-center'>
               <h6
@@ -149,14 +151,14 @@ const FormLayout = memo(
                 </span>
               )}
             </div>
-            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
                 viewBox='0 0 24 24'
                 strokeWidth='1.5'
                 stroke='currentColor'
-                className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+                className={`w-4 h-4  ${!collapsed ? 'rotate-180' : ''}`}
               >
                 <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
               </svg>
