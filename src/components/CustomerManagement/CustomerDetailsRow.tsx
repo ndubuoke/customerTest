@@ -31,7 +31,7 @@ const CustomerDetailsRow = ({
   //  console.log(customer)
   return (
     <tr key={customer?.customerId} className='bg-background-lightRed border-b text-text-secondary   '>
-      <td scope='row' className='py-2 px-2 flex flex-col font-medium  whitespace-nowrap '>
+      <td scope='row' className='py-2 px-2 pl-6 flex flex-col font-medium  whitespace-nowrap '>
         {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
         {/* {customer.customer_profiles.firstName} {customer.customer_profiles.surname} */}
         <span className='text-common-title'>{getCustomerDetail(customer, 'customerEntityId')}</span>
@@ -47,7 +47,7 @@ const CustomerDetailsRow = ({
         </span>
       </td>
       <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-        {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' HH:mm a")}
+        {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' hh:mm a")}
         {userRole === 'maker' && (
           <>
             <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.customerId)} />
@@ -58,7 +58,7 @@ const CustomerDetailsRow = ({
                     return (
                       <div
                         key={index}
-                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
+                        className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                         onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                       >
                         <span className='flex w-full  '>
@@ -73,7 +73,7 @@ const CustomerDetailsRow = ({
                     return (
                       <div
                         key={index}
-                        className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
+                        className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                         onClick={customerFunctionHandler.bind(null, { option: option, customer: customer })}
                       >
                         <span className='flex w-full  '>
@@ -89,7 +89,7 @@ const CustomerDetailsRow = ({
                       return (
                         <div
                           key={index}
-                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
+                          className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
                           onClick={customerFunctionHandler.bind(null, { option, customer: customer })}
                         >
                           <span className='flex w-full  '>
@@ -105,8 +105,8 @@ const CustomerDetailsRow = ({
                       return (
                         <div
                           key={index}
-                          className='hover:bg-lists-background cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
-                          onClick={customerFunctionHandler.bind(null, { option,  customer })}
+                          className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2 flex flex-col  w-[15.625rem] text-[#636363]'
+                          onClick={customerFunctionHandler.bind(null, { option, customer })}
                         >
                           <span className='flex w-full  '>
                             {' '}

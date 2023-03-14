@@ -53,12 +53,12 @@ export const useIdFormPrefiller = () => {
             return `${SERVER_URL}/v1/customer-signatory/${number}`
 
           default:
-            return `${SERVER_URL}/v1/customer/id/?field=${id}&id=${number}`
+            return `${SERVER_URL}/v1/verification/${id}/${number}`
         }
       }
 
       const { data } = await axios.get(url(idType, idNumber), config)
-      setLoading(true)
+      setLoading(false)
       setSuccess(true)
       setResponse(data)
       console.log({ data })

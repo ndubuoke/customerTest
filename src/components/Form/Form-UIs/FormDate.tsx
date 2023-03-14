@@ -209,8 +209,10 @@ const FormDate = ({
           const pageId = item?.pageId
 
           if (!copiedPrev?.data?.formInfomation?.formId) {
-            copiedPrev.data.formInfomation.formId = theForm?._id
-            copiedPrev.data.formInfomation.formType = theForm?.formType
+            if (copiedPrev.data) {
+              copiedPrev.data.formInfomation.formId = theForm?._id
+              copiedPrev.data.formInfomation.formType = theForm?.formType
+            }
           }
 
           // const theItemSectionName = formGetProperty(theForm?.builtFormMetadata?., 'Section name', 'Section')
@@ -281,8 +283,8 @@ const FormDate = ({
       }}
       title={helpText}
     >
-      <div className='relative w-fit bg-transparent'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+      <div className='relative bg-transparent w-fit'>
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
       <div className='bg-transparent'>

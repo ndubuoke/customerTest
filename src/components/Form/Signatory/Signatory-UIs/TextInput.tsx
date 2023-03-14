@@ -55,7 +55,8 @@ const TextInput = ({
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setValue((prev: any) => ({
       ...prev,
-      [camelize(replaceSpecialCharacters(text))]: e.target.value.trim(),
+      [text]: e.target.value.trim(),
+      // [camelize(replaceSpecialCharacters(text))]: e.target.value.trim(),
     }))
     // handleRedispatchOfRequiredFields()
   }

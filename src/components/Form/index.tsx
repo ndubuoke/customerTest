@@ -145,7 +145,7 @@ const Form = memo(
     }, [backupForSwitchFormState])
 
     return (
-      <div className='flex flex-col justify-center max-w-[1060px] mx-auto pt-12'>
+      <div className='flex flex-col justify-center max-w-[990px]  mx-auto pt-12'>
         {publishedFormState?.serverError?.status ? <AppAlert alertType='error' message={publishedFormState?.serverError?.error?.message} /> : null}
         {publishedForm?.loading ? (
           <div className='w-full min-h-[300px] flex items-center justify-center'>
@@ -174,13 +174,20 @@ const Form = memo(
                   gap: '0.625rem',
                   margin: '0.5rem 0',
                   color: '#636363',
+                  alignItems: 'center',
                 }}
               >
-                <img src={info} />
+                <img src={info} alt='' height='16px' width='16px' />
                 <span> Drag and Drop documents across the placeholders to rearrange documents</span>{' '}
               </div>
             )}
-            <div className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'>
+            <div
+              className='h-[605px]  overflow-y-auto  bg-[rgba(170, 170, 170, 0.07)] flex flex-col'
+              style={{
+                maxWidth: '990px',
+                margin: 'auto',
+              }}
+            >
               {activePageState?.sections?.length > 0
                 ? activePageState?.sections?.map((sects, index) => {
                     return (

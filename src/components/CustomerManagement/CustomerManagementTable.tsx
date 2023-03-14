@@ -631,14 +631,14 @@ const CustomerManagementTable = ({
       ) : null}
 
       <div className=' relative mt-[3%]  mx-4 overflow-auto h-[25rem] overflow-auto '>
-        <table className='w-full text-sm text-left  '>
+        <table className='w-full text-sm text-left table-auto '>
           <thead className='text-xs uppercase     '>
             <tr className='  '>
               {tableType === 'All Customers'
                 ? customerTableHeads.map((tableHead) => (
-                    <th key={tableHead} className='py-3 relative   text-common-title'>
+                    <th key={tableHead} className='py-3  relative   text-common-title'>
                       {tableHead === 'NAME/ID' ? (
-                        <span onClick={sortCustomersAlphabetically} className='border-l  px-2 cursor-pointer'>
+                        <span onClick={sortCustomersAlphabetically} className='border-l  pl-6 cursor-pointer'>
                           {tableHead}
                         </span>
                       ) : (
@@ -650,7 +650,7 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className='   absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col  border rounded-md'
+                          className=' w-full  absolute z-40 top-8 right-4 drop-shadow-md   bg-background-paper  flex flex-col items-center justify-center  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {
@@ -669,7 +669,7 @@ const CustomerManagementTable = ({
                                         externalFunctionToDoSomething={checkIfCustomerStatusOptionChecked.bind(null, 'All')}
                                       />
                                     </span>
-                                    [ Select all]
+                                    [Select all]
                                   </span>
                                 </div>
                               )
@@ -737,7 +737,7 @@ const CustomerManagementTable = ({
               {tableType === 'Requests'
                 ? requestTableHeads.map((tableHead) => (
                     <th key={tableHead} className='py-3 relative   text-common-title'>
-                      <span className='border-l  px-2'>{tableHead}</span>
+                      <span className='border-l  px-2 pl-6'>{tableHead}</span>
                       {tableHead === 'TYPE' ? (
                         <img src={Filter} alt='' onClick={filterTypeHandler} className='absolute right-0 top-[35%] mr-2 cursor-pointer' />
                       ) : null}

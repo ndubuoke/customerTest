@@ -25,6 +25,8 @@ import EDDAlert from 'Components/ProcessSummary/EddAlert'
 import { CustomerTypeType } from 'Screens/ProcessSummary'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { getColumnName } from 'Utilities/getColumnName'
+import SaveToDraftsModal from 'Components/Shareables/SavetoDraftModal'
+import DraftButton from 'Components/Shareables/SaveToDraftBtn'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -52,8 +54,9 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   const [submit, setSubmit] = useState<number>(1)
   const [showWaiverAlert, setShowWaiverAlert] = useState<boolean>(false)
   const [showEDDAlert, setShowEDDAlert] = useState<boolean>(false)
+  const [showSaveToDraftAlert, setShowSaveToDraftAlert] = useState<boolean>(false)
   // const [riskScore, setRiskScore] = useState<number>(90)
-  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(true)
+  const [flagCustomerStatus, setFlagCustomerStatus] = useState<boolean>(false)
 
   const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
 
@@ -251,12 +254,18 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   // Handle RequiredFields
 
   return (
-    <div className='flex justify-between gap-6 p-4'>
+    <div
+      className='flex justify-between gap-6 '
+      style={{
+        padding: '5rem 1rem 1.5rem',
+      }}
+    >
       <div>
         <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
       </div>
+
       <div className='flex gap-3'>
-        <Button disabled={true} onClick={() => console.log('test saved to draft')} text='Save to draft' />
+        <DraftButton disabled={false} onClick={() => setShowSaveToDraftAlert(true)} text='Save to draft' />
         <Button
           disabled={false}
           onClick={handleNextAndOtherAddOns}
@@ -266,6 +275,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
       {showWaiverAlert ? <WaiverAlert closeModalFunction={handleShowModal} proceedToProcessSummary={handleProceedToProcessSummary} /> : null}
       {showEDDAlert ? <EDDAlert closeModalFunction={handleDiscardEDDWaiver} proceedToProcessSummary={handleProceedEDD} /> : null}
+      {showSaveToDraftAlert && <SaveToDraftsModal closeModalFunction={() => setShowSaveToDraftAlert(false)} />}
     </div>
   )
 }
