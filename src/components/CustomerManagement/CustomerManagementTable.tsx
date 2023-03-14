@@ -1107,6 +1107,7 @@ const CustomerManagementTable = ({
                           return customer
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((customer) => (
                         <CustomerDetailsRow
                           userRole={userRole}
@@ -1134,6 +1135,7 @@ const CustomerManagementTable = ({
                           return customer
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((customer) => (
                         <CustomerDetailsRow
                           key={customer?.customerId}
@@ -1210,6 +1212,7 @@ const CustomerManagementTable = ({
                           return request
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((request) => {
                         if (request.customerType === customerType) {
                           return (
@@ -1257,6 +1260,7 @@ const CustomerManagementTable = ({
                           return request
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((request) => {
                         if (request.customerType === customerType) {
                           return (
