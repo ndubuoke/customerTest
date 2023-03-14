@@ -47,7 +47,6 @@ const CustomerDetailsRow = ({
         </span>
       </td>
       <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-        {console.log(customer?.updatedAt)}
         {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' hh:mm a")}
         {userRole === 'maker' && (
           <>
