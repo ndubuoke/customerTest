@@ -451,7 +451,7 @@ const FormFileUpload = ({
             <input type={`file`} hidden {...getInputProps()} multiple={false} className='' />
 
             <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
-              <img src={add} className='inline mr-1' />
+              <img src={add} className='inline mr-1' height='18px' width='18px' />
             </div>
           </div>
         )}
