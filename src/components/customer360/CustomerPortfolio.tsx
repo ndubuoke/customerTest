@@ -10,7 +10,7 @@ const CustomerPortfolio = (Props: Props) => {
   const [activeTab, setActiveTab] = useState<string>('all')
 
   return (
-    <div className='min-w-[27.125rem] h-[26.875rem] mt-4 font-roboto rounded-[.25rem] bg-[#fff] shadow-lg relative mx-3'>
+    <div className='min-w-[27.125rem] h-[26.875rem] mt-4 font-roboto rounded-[.25rem] bg-[#fff] shadow-lg relative'>
       <header className='flex justify-between text-[#636363]  border-b border-[#cccccc] py-3 px-4'>
         <h6 className='text-base capitalize'> customer portfolio</h6>
         <div className='flex items-center gap-2 capitalize hover:text-[#636363] cursor-pointer'>
