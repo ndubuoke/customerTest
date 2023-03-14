@@ -10,7 +10,7 @@ type props = {
   setShowDeactivationModal: (e) => void
   deactivateCustomerHandler: () => void
   setUploadKeys: (e) => void
-  setDeactivateCustomerJustification:(e)=> void
+  setDeactivateCustomerJustification: (e) => void
 }
 
 const DeactivationModal = ({ setShowDeactivationModal, deactivateCustomerHandler, setUploadKeys, setDeactivateCustomerJustification }: props) => {
@@ -42,15 +42,15 @@ const DeactivationModal = ({ setShowDeactivationModal, deactivateCustomerHandler
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[18.75rem] min-w-[31.25rem] bg-white py-6 px-8 rounded-2xl `}>
-        <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
+      <div className={` w-[50%] h-[70%] bg-white py-6 px-8 rounded-2xl `}>
+        <div className=' w-full h-full flex flex-col  justify-between'>
           <div className='flex border-b  justify-between border-b-[#CCCCCC] pb-4'>
             <h6 className='text-text-secondary'>DEACTIVATION REQUEST</h6>
             <button onClick={closeModal}>
               <img src={Close} />
             </button>
           </div>
-          <div className='mt-12'>
+          <div className='mt-4 h-fit '>
             <Textarea
               character={character}
               characterCount={characterCount}
@@ -59,11 +59,11 @@ const DeactivationModal = ({ setShowDeactivationModal, deactivateCustomerHandler
             />
           </div>
 
-          <div className='mt-6'>
+          <div className='mt-4 h-[30%] '>
             <FileUploadComponent setLocalUpload={setLocalUpload} setUploadKey={setUploadKey} />
           </div>
 
-          <div className='w-full mt-12 text-center'>
+          <div className='w-full mt-12 h-[10%] text-center '>
             <Button disabled={buttonDisabledStatus} text={'Submit'} onClick={deactivateCustomerHandler} />
           </div>
         </div>

@@ -62,10 +62,10 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
         backgroundColor: 'rgba(0,0,0,0.3)',
       }}
     >
-      <div className={` min-h-[40rem] min-w-[62.5rem] bg-white py-6 px-8 rounded-2xl `}>
-        <div className=' w-full  min-h-[18.75rem] flex flex-col  justify-between'>
-          <div className='flex   justify-between  pb-4  border-b mb-4'>
-            <h6 className='text-text-secondary text-3xl uppercase'>
+      <div className={`w-[70%] h-[80%] bg-white py-6 px-8 rounded-2xl `}>
+        <div className=' w-full h-full  flex flex-col   '>
+          <div className='flex  justify-between  pb-2   border-b mb-2'>
+            <h6 className='text-text-secondary text-[24px] uppercase'>
               {getCustomerDetail(customer, 'firstName')} {getCustomerDetail(customer, 'surname')}
             </h6>
             <button onClick={closeModal}>
@@ -73,13 +73,13 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
             </button>
           </div>
 
-          <div className=' flex'>
-            <div className=' w-full flex flex-col '>
-              <div className='justify-center w-full flex'>
-                <img src={Avatar} />
+          <div className=' h-[80%] flex gap-4 mt-6 '>
+            <div className=' w-full flex h-full flex-col '>
+              <div className='justify-center w-full h-[30%]  flex'>
+                <img src={Avatar} className='' />
               </div>
-              <div className='flex gap-24 mt-4   text-[#636363] max-h-[17.5rem] py-4 overflow-y-scroll'>
-                <div className=' font-bold   w-full items-end flex  flex-col '>
+              <div className='flex gap-24 mt-2   text-[#636363]   h-[50%]   overflow-y-auto'>
+                <div className=' font-bold text-[16px]  w-full items-end flex  flex-col '>
                   <p className='mb-2'>Surname</p>
                   <p className='mb-2'>First Name</p>
                   <p className='mb-2'>Other Names</p>
@@ -88,7 +88,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p className='mb-2'>Risk Status</p>
                   <p className='mb-2'>Customer Groups</p>
                 </div>
-                <div className=' font-[400] w-full flex flex-col items-start  '>
+                <div className=' font-[400] w-full flex flex-col items-start text-[16px]  '>
                   <p className='mb-2'>
                     {getCustomerDetail(customer, 'surname') !== '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}{' '}
                   </p>
@@ -115,23 +115,32 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                 </div>
               </div>
 
-              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[5rem] rounded-md'>
-                <div className='w-full flex   justify-between text-[#636363]'>
-                  <div className='flex gap-2 cursor-pointer items-center justify-center ' onClick={modifyCustomerHandler}>
-                    {' '}
-                    <img src={Edit} />
-                    <span>Modify</span>
-                  </div>
-                  <div className='flex gap-2 cursor-pointer items-center justify-center '>
-                    <img src={Disable} />
-                    <span>Deactivate</span>
-                  </div>
-                  <div className='flex gap-2 cursor-pointer items-center justify-center  ' onClick={viewInCustomer360Handler}>
-                    <img src={customer360} />
-                    <span>View in Customer 360</span>
-                  </div>
+              <div className='w-full py-2 px-6 justify-between flex flex-wrap   border border-[#E5E9EB] h-[20%] text-[16px] text-[#636363] rounded-md'>
+                <div className='flex gap-2 cursor-pointer items-center justify-center ' onClick={modifyCustomerHandler}>
+                  {' '}
+                  <img src={Edit} />
+                  <span>Modify</span>
                 </div>
-                <div className='w-full flex justify-between gap-2 text-[#636363]'>
+                <div className='flex gap-2 cursor-pointer items-center justify-center '>
+                  <img src={Disable} />
+                  <span>Deactivate</span>
+                </div>
+                <div className='flex gap-2 cursor-pointer items-center justify-center  ' onClick={viewInCustomer360Handler}>
+                  <img src={customer360} />
+                  <span>View in Customer 360</span>
+                </div>
+                <div className='flex gap-2 cursor-pointer items-center justify-center'>
+                  {' '}
+                  <img src={add} />
+                  <span>Add Cusomer to Group</span>
+                </div>
+                <div className='flex gap-2 cursor-pointer  items-center justify-center' onClick={addProductHandler}>
+                  <img src={add} />
+                  <span>Add Product</span>
+                </div>
+                {/* <div className='w-full flex flex-wrap gap-2   justify-between text-[#636363]'>
+                </div> */}
+                {/* <div className='w-full flex justify-between gap-2 text-[#636363]'>
                   <div className='flex gap-2 cursor-pointer items-center justify-center'>
                     {' '}
                     <img src={add} />
@@ -141,20 +150,22 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                     <img src={add} />
                     <span>Add Product</span>
                   </div>
-                </div>
+                </div> */}
               </div>
             </div>
-            <div className='border rounded w-full justify-between flex flex-col  text-[#636363]'>
-              <span className='text-2xl mx-4 font-bold'>ASSIGNED PRODUCTS</span>
-              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[5rem] rounded-md'>
+            <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
+              <div className='h-[80%] px-6 mt-6'>
+                <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
+              </div>
+              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
-                  <div className='flex gap-2 '>
+                  <div className='flex gap-6 '>
                     {' '}
                     <span>Customer Status:</span>
                     <span
                       className={` ${
                         customer?.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
-                      } p-1 rounded font-medium`}
+                      } px-1 rounded font-medium`}
                     >
                       {customer?.status}
                     </span>
