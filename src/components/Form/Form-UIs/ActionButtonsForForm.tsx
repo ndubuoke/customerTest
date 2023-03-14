@@ -26,6 +26,7 @@ import { CustomerTypeType } from 'Screens/ProcessSummary'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 import { getColumnName } from 'Utilities/getColumnName'
 import SaveToDraftsModal from 'Components/Shareables/SavetoDraftModal'
+import DraftButton from 'Components/Shareables/SaveToDraftBtn'
 
 export type RequiredFieldsType = {
   fieldLabel: string
@@ -253,13 +254,18 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   // Handle RequiredFields
 
   return (
-    <div className='flex justify-between gap-6 p-4'>
+    <div
+      className='flex justify-between gap-6 '
+      style={{
+        padding: '5rem 1rem 1.5rem',
+      }}
+    >
       <div>
         <Button disabled={findIndexOfObject(form, activePageState?.id) === 0} onClick={() => handleActivePage('prev')} text='Previous' />
       </div>
 
       <div className='flex gap-3'>
-        <Button disabled={false} onClick={() => setShowSaveToDraftAlert(true)} text='Save to draft' />
+        <DraftButton disabled={false} onClick={() => setShowSaveToDraftAlert(true)} text='Save to draft' />
         <Button
           disabled={false}
           onClick={handleNextAndOtherAddOns}

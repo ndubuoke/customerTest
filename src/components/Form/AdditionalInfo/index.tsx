@@ -149,17 +149,26 @@ const AdditionalDetails = memo(() => {
       </section> */}
 
       {/* accounts held with other banks section */}
-      <section className='max-w-[1060px] mx-4 bg-slate-50'>
+      <section className='max-w-[1000px] mx-4 bg-slate-50'>
         <div
-          className={`ControlUILayout  w-full  p-2 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
+          className={`ControlUILayout  w-full   pr-1 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between border-[.625rem] border-[#FAFAFA]`}
           style={{
             boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
+            background: '#FAFAFA',
+            fontFamily: 'Inter',
           }}
         >
           <div className='flex items-center'>
-            <h6>Accounts Held with Other Banks </h6>
+            <h6
+              style={{
+                fontWeight: '500',
+                fontSize: '16px',
+              }}
+            >
+              Accounts Held with Other Banks{' '}
+            </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
@@ -173,11 +182,11 @@ const AdditionalDetails = memo(() => {
           </div>
         </div>
 
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-3 border-[#C22626]'} py-6`}>
-          <div className='flex justify-end'>
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626]'}`}>
+          <div className='flex items-center justify-end mt-2'>
             <button
               className='flex gap-2 font-medium
-           leading-[20px] text-[#636363]'
+           leading-[20px] text-[#636363] items-center'
               onClick={closeModalFunction}
               type='button'
             >
