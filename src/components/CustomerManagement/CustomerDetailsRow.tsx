@@ -47,7 +47,7 @@ const CustomerDetailsRow = ({
         </span>
       </td>
       <td className='py-2 pl-2 pr-4 relative flex items-center justify-between'>
-        {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' HH:mm a")}
+        {format(parseISO(customer?.updatedAt), " dd MMM yyyy ',' hh:mm a")}
         {userRole === 'maker' && (
           <>
             <img src={Menu} alt='' className='cursor-pointer' onClick={showCustomersFunctionHandler.bind(null, customer.customerId)} />
