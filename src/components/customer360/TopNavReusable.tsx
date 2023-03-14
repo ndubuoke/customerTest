@@ -1,7 +1,7 @@
 import React from 'react'
 
 type Props = {
-  type: 'bvn' | 'phone number' | 'email address' | 'relationship manager'
+  type: 'bvn' | 'phone number' | 'email address' | 'relationship manager' | 'text'
   heading: string
   Id: any
   text: string
@@ -19,7 +19,7 @@ const TopNavReusable = ({ type, heading, Id, text, subHeader }: Props) => {
         <p className=' text-[1rem] font-bold text-[#636363]'>{subHeader}</p>
 
         {type === 'bvn' ? (
-          <p className='font-roboto text-[1rem] mt-[.4688rem] tracking-[.0156rem] text-[#3FA2F7] capitalize'>{text}(HNI)</p>
+          <p className='font-roboto text-[1rem] mt-[.4688rem] tracking-[.0156rem] text-[#3FA2F7] capitalize'>{text}</p>
         ) : type === 'email address' ? (
           <div className='flex items-center gap-[.5625rem] mt-[.4688rem]'>
             <div className='bg-[#2FB755] w-[.8125rem] h-[.8125rem] rounded-[50%]'></div>{' '}

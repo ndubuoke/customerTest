@@ -35,23 +35,23 @@ const ConsessionGroups = (props: Props) => {
   }
 
   return (
-    <div className='min-w-[27.125rem] border-2 border-[#f1ebeb] px-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] z-30 relative'>
-      <header className=' text-[#636363]  border-b-2 border-[#968f8f] p-2'>
-        <h6 className='capitalize'>concession groups</h6>
+    <div className='min-w-[27.125rem] shadow-lg mt-4 font-roboto rounded-[.25rem] bg-[#fff] z-30 relative'>
+      <header className=' text-[#636363] border-b border-[#cccccc] py-3 px-4'>
+        <h6 className='text-base capitalize'>concession groups</h6>
       </header>
-      <div className=' '>
-        <img src={caret} alt='caret' className='rotate-90 absolute left-0 top-[10rem] z-30 px-1' onClick={handleBackClick} />
-        <img src={redCaret} alt='caret' className='absolute right-0 top-[10rem] z-30 px-1' onClick={handleNext} />
+      <div className='absolute w-full px-4 top-[7rem]'>
+        <img src={caret} alt='caret' className='rotate-90 absolute left-4 z-30' onClick={handleBackClick} />
+        <img src={redCaret} alt='caret' className='absolute right-4 top-[-7.5px] z-30' onClick={handleNext} />
       </div>
-      <div className=' flex justify-around gap-4 overflow-x-auto w-full py-2 mt-4  absolute bottom-0' ref={scrollBarRef}>
+      <div className='flex justify-around gap-4 px-6 overflow-x-auto w-full py-2 mt-4' ref={scrollBarRef}>
         {groupData?.length > 0 &&
           groupData?.map((group: any, index: any) => {
             return (
-              <div key={index} className='  flex items-center flex-col justify-center gap-2 px-2 pt-6 w-[5.625rem]'>
+              <div key={index} className='  flex items-center flex-col justify-center gap-2 px-2 w-[5.625rem]'>
                 <div>
                   <img src={salaryEarners} alt={group?.type} className='w-[3rem] h-[3rem]' />
                 </div>
-                <p className='text-center'>{group?.type}</p>
+                <p className='text-sm text-[#96989a] text-center'>{group?.type}</p>
               </div>
             )
           })}

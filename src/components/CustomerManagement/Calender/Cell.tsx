@@ -1,6 +1,7 @@
 import React from 'react'
 type CellProps = {
   className?: string
+  children?: any
   onClick?: (e) => void
 }
 

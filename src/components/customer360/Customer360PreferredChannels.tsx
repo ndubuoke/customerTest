@@ -55,18 +55,18 @@ const Customer360PreferredChannels = (props: Props) => {
   //   value.scrollTo(-100, 0)
   // }
   return (
-    <div className='min-w-[28.125rem] h-[26.875rem] border-2 border-[#f1ebeb] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative'>
-      <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f] p-2'>
-        <h6 className='capitalize'> preferred channels</h6>
-        <div className='flex items-center gap-4 capitalize hover:text-[#636363] cursor-pointer'>
-          <img src={infoVector} alt='information vector' /> <span>view more</span>
+    <div className='min-w-[28.125rem] h-[26.875rem] shadow-lg mt-4 font-roboto rounded-[.25rem] bg-[#fff] relative'>
+      <header className='flex justify-between text-[#636363]  border-b border-[#cccccc] py-3 px-4'>
+        <h6 className='text-base capitalize'> preferred channels</h6>
+        <div className='flex items-center gap-2 capitalize hover:text-[#636363] cursor-pointer'>
+          <img src={infoVector} alt='information vector' /> <span className='text-sm'>view more</span>
         </div>
       </header>
       {/* <div>
         <img src={caret} alt='caret' className='rotate-90 absolute left-0 top-[10rem] z-30 px-2' onClick={handleNext} />
         <img src={redCaret} alt='caret' className='absolute right-0 top-[10rem] z-30 px-2' onClick={handleBackClick} />
       </div> */}
-      <div className='flex gap-x-[6.2862rem] gap-y-[2.3125rem] justify-around flex-wrap pt-[3.625rem] pb-[6.625rem] overflow-y-auto'>
+      <div className='flex gap-x-[2.2862rem] gap-y-[2.3125rem] justify-around flex-wrap pt-[3.625rem] pb-[1.625rem] overflow-y-auto'>
         {preferredChannelList.length > 0 &&
           preferredChannelList?.map((channelList: any, index: any) => {
             return (

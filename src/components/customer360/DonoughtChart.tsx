@@ -42,7 +42,7 @@ const DonoughtChart = (props: Props) => {
 
   const series = [2, 5, 4]
   return (
-    <div className='absolute bottom-6 m-auto '>
+    <div className='relative py-5'>
       <Chart type='donut' options={options} series={series} width='100%' height={350} />
     </div>
   )

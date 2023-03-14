@@ -283,7 +283,7 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
                       <div className=' font-[400] w-full flex flex-col items-start '>
                         {Object.values(detail?.data).map((data, index) => (
                           <p key={index} className='mb-2 text-[16px] font-normal'>
-                            {data ? data : 'Not Available'}
+                            {`${data ? data : 'Not Available'}`}
                           </p>
                         ))}
                       </div>
