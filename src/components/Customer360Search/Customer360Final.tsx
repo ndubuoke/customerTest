@@ -143,7 +143,9 @@ const Customer360Final = (props: Props) => {
       </section>
       {/* end of result section */}
 
-      <p className=' w-[77.625rem] mt-[11.75rem] text-end text-[#636363]'>{searchResult} result(s) found</p>
+      <p className=' w-[77.625rem] mt-[11.75rem] text-end text-[#636363]'>
+        {`${searchResult} result(s) found`}
+      </p>
     </div>
   )
 }

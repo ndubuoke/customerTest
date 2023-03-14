@@ -22,13 +22,13 @@ const Customer360Body = (props: Props) => {
       <BodyNav activeTab={activeTab} setActiveTab={setActiveTab} />
       <div className=' grid grid-cols-3 justify-between px-2 gap-[1rem] '>
         <CustomerPortfolio />
-        <Customer360Chart />
+        <Customer360Products />
         <Customer360RecentTransaction />
       </div>
       <div className=' grid grid-cols-3 justify-between px-2 gap-[1rem]'>
-        <Customer360Products />
-        <Customer360PreferredChannels />
+        <Customer360Chart />
         <Customer360AlertsAndNotification />
+        <Customer360PreferredChannels />
       </div>
       <div className=' grid grid-cols-3 justify-between px-2 gap-[1rem]'>
         <ConsessionGroups />
