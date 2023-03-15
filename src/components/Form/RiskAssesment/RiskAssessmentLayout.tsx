@@ -9,31 +9,6 @@ import { FormStructureType as FormStructureType } from 'Components/types/FormStr
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import DropDown from './Dropdown'
 
-export const fieldsNames = {
-  DROPDOWN: 'Dropdown', //done-
-  LONGTEXT: 'Long text', //done-
-  SHORTEXT: 'Short text', //done-
-  ACTIONTOGGLE: 'Action Toggle', //done-
-  CHECKBOX: 'Multiple Choice (checkbox)', //done-
-  RADIO: 'Single Choice (radio)', // done-
-  BUTTON: 'Button', //done-
-  FILEUPLOAD: 'File Upload', //done-
-  PASSWORD: 'Password', //done-
-  PHONEINPUT: 'Phone Input', //done-
-  HEADING: 'Heading', //done-
-  INFOTEXT: 'Info text', //done -
-  DATE: 'Date', //done-
-  NUMBERCOUNTER: 'Number counter', //done-
-  EMAIL: 'Email', //done-
-  RANGE: 'Range', //done-
-  TIME: 'Time', //done-
-  URL: 'URL', // done-
-  SEARCHANDSELECT: 'Search and Select', //done-
-  MONTH: 'Month', //done----
-  WEEK: 'Week', //done-
-  DATETIME: 'Date-Time', //done-
-}
-
 type Props = {
   title: string
   fields?: { title: string; key: string }[]
@@ -42,6 +17,7 @@ type Props = {
   standardRiskAssessmentData: any[]
   handleSelectedParameterOption: (parentKey: string, parameter: string, parameterOptionStatus: string) => void
   isCompleted: boolean
+  isCollapsed?: boolean
 }
 
 const getText = (prefix = '', suffix = '') => {
@@ -54,8 +30,17 @@ const getText = (prefix = '', suffix = '') => {
 }
 
 const RiskAssessmentLayout = memo(
-  ({ parentKey, title, fields = [], standardRiskAssessmentData = [], assessmentData = {}, handleSelectedParameterOption, isCompleted }: Props) => {
-    const [collapsed, setCollapsed] = useState<boolean>(false)
+  ({
+    parentKey,
+    title,
+    fields = [],
+    standardRiskAssessmentData = [],
+    assessmentData = {},
+    handleSelectedParameterOption,
+    isCompleted,
+    isCollapsed = true,
+  }: Props) => {
+    const [collapsed, setCollapsed] = useState<boolean>(isCollapsed)
 
     const handleCollapseSection = () => {
       setCollapsed((prev) => !prev)
@@ -189,7 +174,7 @@ const RiskAssessmentLayout = memo(
                       <span className='px-3 border-l-2'>PARAMETER</span>
                     </th>
                     <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa] min-w-[155px  max-w-[155px]   w-[20%] '>
-                      <span className='px-3 border-l-2 '>IMPLIED WEIGHT</span>
+                      <span className='px-2 border-l-2 '>IMPLIED WEIGHT</span>
                     </th>
                     <th className='  align-middle  text-left font-bold text-[14px] text-[#aaaaaa]   max-w-[255px]   w-[25%] min-w-[155px]'>
                       <span className='px-3 border-l-2'>STATUS</span>

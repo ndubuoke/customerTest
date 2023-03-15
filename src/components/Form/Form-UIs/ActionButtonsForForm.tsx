@@ -225,7 +225,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
           getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
           'account services'
         ) {
-          if (riskAssessment.score >= highRiskScore) {
+          if (riskAssessment.riskScoreGuide?.score >= highRiskScore) {
             handleShowEDDModal()
           }
         } else {

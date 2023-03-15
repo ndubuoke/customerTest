@@ -8,30 +8,30 @@ import { getProperty } from 'Utilities/getProperty'
 import { FormStructureType as FormStructureType } from 'Components/types/FormStructure.types'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 
-export const fieldsNames = {
-  DROPDOWN: 'Dropdown', //done-
-  LONGTEXT: 'Long text', //done-
-  SHORTEXT: 'Short text', //done-
-  ACTIONTOGGLE: 'Action Toggle', //done-
-  CHECKBOX: 'Multiple Choice (checkbox)', //done-
-  RADIO: 'Single Choice (radio)', // done-
-  BUTTON: 'Button', //done-
-  FILEUPLOAD: 'File Upload', //done-
-  PASSWORD: 'Password', //done-
-  PHONEINPUT: 'Phone Input', //done-
-  HEADING: 'Heading', //done-
-  INFOTEXT: 'Info text', //done -
-  DATE: 'Date', //done-
-  NUMBERCOUNTER: 'Number counter', //done-
-  EMAIL: 'Email', //done-
-  RANGE: 'Range', //done-
-  TIME: 'Time', //done-
-  URL: 'URL', // done-
-  SEARCHANDSELECT: 'Search and Select', //done-
-  MONTH: 'Month', //done----
-  WEEK: 'Week', //done-
-  DATETIME: 'Date-Time', //done-
-}
+// export const fieldsNames = {
+//   DROPDOWN: 'Dropdown', //done-
+//   LONGTEXT: 'Long text', //done-
+//   SHORTEXT: 'Short text', //done-
+//   ACTIONTOGGLE: 'Action Toggle', //done-
+//   CHECKBOX: 'Multiple Choice (checkbox)', //done-
+//   RADIO: 'Single Choice (radio)', // done-
+//   BUTTON: 'Button', //done-
+//   FILEUPLOAD: 'File Upload', //done-
+//   PASSWORD: 'Password', //done-
+//   PHONEINPUT: 'Phone Input', //done-
+//   HEADING: 'Heading', //done-
+//   INFOTEXT: 'Info text', //done -
+//   DATE: 'Date', //done-
+//   NUMBERCOUNTER: 'Number counter', //done-
+//   EMAIL: 'Email', //done-
+//   RANGE: 'Range', //done-
+//   TIME: 'Time', //done-
+//   URL: 'URL', // done-
+//   SEARCHANDSELECT: 'Search and Select', //done-
+//   MONTH: 'Month', //done----
+//   WEEK: 'Week', //done-
+//   DATETIME: 'Date-Time', //done-
+// }
 
 type Props = {
   title: string

@@ -143,7 +143,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
     if (
       customerType === 'individual' &&
       formType === 'legacy' &&
-      (riskAssessmentRedux.rating === 'HIGH' || riskAssessmentRedux.rating === 'MEDIUM')
+      (riskAssessmentRedux.riskScoreGuide?.rating === 'HIGH' || riskAssessmentRedux.riskScoreGuide?.rating === 'MEDIUM')
     ) {
       setOpenWaiver('show')
       setProcessActionsMode('edd')
