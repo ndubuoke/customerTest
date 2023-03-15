@@ -61,7 +61,7 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
       })
       setLastSevenDays(lastSevenDaysDates)
 
-       dispatchDateFilterHandler('day', 7, tableType)
+      dispatchDateFilterHandler('day', 7, tableType)
     }
     if (func === 'Last 14 days') {
       dispatchDateFilterHandler('day', 14, tableType)
@@ -133,11 +133,10 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
           {Array.from({ length: numDays }).map((_, index) => {
             const date = index + 1
 
-
             return (
               <Cell
                 onClick={handleClickDate.bind(null, date)}
-                 className={`${lastSevenDays.includes(date) ? 'bg-[#F9E5E5] text-[#CF2A2A] font-bold':""}`}
+                className={`${lastSevenDays.includes(date) ? 'bg-[#F9E5E5] text-[#CF2A2A] font-bold' : ''}`}
                 key={date}
               >
                 {date}

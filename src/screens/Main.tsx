@@ -511,7 +511,7 @@ const Main = (props: Props) => {
                           <div className='border'></div>
                           <div
                             onClick={customerStatusHandler.bind(null, 'Active')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${
+                            className={`flex flex-col justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF] ${
                               customerStatus === 'Active' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
@@ -523,7 +523,7 @@ const Main = (props: Props) => {
 
                           <div
                             onClick={customerStatusHandler.bind(null, 'Inactive')}
-                            className={`flex flex-col items-center justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
+                            className={`flex flex-col justify-center py-1 px-4 cursor-pointer rounded-md hover:border hover:border-[#EFEFEF]  ${
                               customerStatus === 'Inactive' ? 'bg-[#EFEFEF]' : ''
                             }`}
                           >
