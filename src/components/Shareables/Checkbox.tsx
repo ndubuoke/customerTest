@@ -8,19 +8,18 @@ type CheckboxType = {
 }
 
 const Checkbox = ({ disabled, externalFunctionToDoSomething, checked, setChecked }: CheckboxType) => {
-
   const checkTheBox = () => {
     setChecked(!checked)
     externalFunctionToDoSomething()
   }
 
-
-
   return (
-    <div className='flex items-center   mb-2 '>
+    <div className='flex items-center '>
       <input
         type='checkbox'
-        className={`w-5 h-5 cursor-pointer appearance-none border border-primay-main p-0.5 ${checked ? 'bg-primay-main' : 'bg-transparent'}  
+        className={`w-4 rounded-sm h-4 cursor-pointer appearance-none border border-primay-main p-0.5 ${
+          checked ? 'bg-primay-main' : 'bg-transparent'
+        }  
       `}
       />
       <svg
@@ -30,7 +29,7 @@ const Checkbox = ({ disabled, externalFunctionToDoSomething, checked, setChecked
         onClick={checkTheBox}
         strokeWidth='4'
         stroke='currentColor'
-        className={`w-5 h-5 text-white  text-base absolute p-0.5  transition
+        className={`w-4 h-4 text-white  text-base absolute p-0.5  transition
         duration-500 ease-in-out transform cursor-pointer  ${checked ? 'opacity-100' : 'opacity-0'}  `}
       >
         <path strokeLinecap='round' strokeLinejoin='round' d='M4.5 12.75l6 6 9-13.5' />
