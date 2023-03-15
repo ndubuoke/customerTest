@@ -759,7 +759,7 @@ const CustomerManagementTable = ({
                                         externalFunctionToDoSomething={checkIfRequestTypeOptionChecked.bind(null, option)}
                                       />
                                     </span>
-                                    [ Select all]
+                                    [Select all]
                                   </span>
                                 </div>
                               )

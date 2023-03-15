@@ -45,11 +45,11 @@ const RecommendedProducts = (props: Props) => {
   }
 
   return (
-    <div className='min-w-[27.125rem] border-2 border-[#f1ebeb] px-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff] '>
-      <header className=' text-[#636363]  border-b-2 border-[#968f8f] p-2'>
-        <h6 className='capitalize'>recommended products</h6>
+    <div className='relative min-w-[27.125rem] shadow-lg mt-4 font-roboto rounded-[.25rem] bg-[#fff]'>
+      <header className='text-[#636363]  border-b border-[#cccccc] py-3 px-4'>
+        <h6 className='text-base capitalize'>recommended products</h6>
       </header>
-      <nav className='mt-2 capitalize text-[#8F8F8F] cursor-pointer'>
+      <nav className='mt-2 capitalize px-4 text-[#8F8F8F] cursor-pointer'>
         <ul className='flex gap-4'>
           <li className={`border-b-2  ${activeTab === 'all' ? 'border-[#CF2A2A] text-[#636363]' : null}`} onClick={() => setActiveTab('all')}>
             all
@@ -68,15 +68,15 @@ const RecommendedProducts = (props: Props) => {
           </li>
         </ul>
       </nav>
-      <div className=' flex justify-between my-10 '>
-        <img src={caret} alt='caret' className='rotate-90' onClick={handleBackClick} />
-        <img src={redCaret} alt='caret' onClick={handleNext} />
+      <div className='absolute w-full px-4 top-[8rem]'>
+        <img src={caret} alt='caret' className='rotate-90 absolute left-4 z-30' onClick={handleBackClick} />
+        <img src={redCaret} alt='caret' className='absolute right-4 top-[-7.5px] z-30' onClick={handleNext} />
       </div>
-      <div className='flex justify-around gap-2 overflow-x-auto w-full py-2' ref={scrollBarRef}>
+      <div className='flex justify-around gap-4 px-12 overflow-x-auto w-full py-6' ref={scrollBarRef}>
         {accountTypeState?.length > 0 &&
           accountTypeState?.map((account: any, index: any) => {
             return (
-              <div key={index} className=' text-[#636363] min-w-[6rem]  flex items-center flex-col'>
+              <div key={index} className=' text-[#636363] min-w-[6rem] flex items-center flex-col'>
                 <div>
                   <img src={savingsTier1} alt='savings icon' className='mb-3' />
                 </div>

@@ -6,8 +6,9 @@ import { getFormAction } from 'Redux/actions/FormManagement.actions'
 import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { formStruture } from 'Components/Form/formStructure'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { API } from 'Utilities/api'
+import { ReducersType } from 'Redux/store'
 
 type Props = {
   closeModalFunction: () => void
@@ -15,6 +16,7 @@ type Props = {
 
 const SaveToDraftsModal = ({ closeModalFunction }: Props) => {
   const dispatch = useDispatch()
+  const userProfileRedux = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as any
 
   //   const handleSetFormType = () => {
   //     console.log('hello')
@@ -55,8 +57,8 @@ const SaveToDraftsModal = ({ closeModalFunction }: Props) => {
         surname: 'Adekunle',
         customerType: 'Individual',
         waiverRequestId: null,
-        initiator: fillingFormInStorage.data?.requestData?.initiator || '',
-        initiatorId: fillingFormInStorage.data?.requestData?.initiatorId || '',
+        initiator: userProfileRedux?.user?.firstname || '' + ' ' + userProfileRedux?.user?.lastname || '',
+        initiatorId: userProfileRedux?.user?.id || '',
         data,
       })
         .then((res) => console.log('res', res))

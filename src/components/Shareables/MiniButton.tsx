@@ -1,12 +1,13 @@
 import { plusIcon } from 'Assets/svgs'
-import React from 'react'
+import { ReactNode } from 'react'
 
 type Props = {
   onClick: () => any
   text: string
+  children?: ReactNode
 }
 
-const MiniButton = ({ onClick, text }: Props) => {
+const MiniButton = ({ onClick, text, children }: Props) => {
   console.log({ text })
   return (
     <button
@@ -15,7 +16,8 @@ py-1'
       onClick={onClick}
     >
       <span className='flex items-center gap-[.5rem] capitalize'>
-        <img src={plusIcon} className='w-[.625rem] h-[.625rem] fill-[#CF2A2A]' />
+        {!children && <img src={plusIcon} className='w-[.625rem] h-[.625rem] fill-[#CF2A2A]' />}
+        { children }
         <span className='text-[1rem] font-medium'>{text}</span>
       </span>
 

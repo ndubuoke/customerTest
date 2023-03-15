@@ -47,27 +47,7 @@ const TopNavProfile = (props: Props) => {
   }, [singleCustomerSuccess])
 
   return (
-    <div className='flex gap-[1.25rem] items-center   '>
-      {/* <div className=' w-[9.375rem] h-[9.375rem] p-[1.6744rem] border-[.1875rem] border-[#AAAAAA] rounded-[50%]  flex items-center justify-center'>
-        <img src={profileImage} alt='profile image' className='w-[5.5806rem] h-[5.7062rem]' />
-      </div>
-      <div>
-        <p className='text-[1rem] font-roboto text-[#636363] font-bold'>
-          {firstName} {lastName} <br /> {otherName}
-        </p>
-        <span className='text-[1rem]'>ID :{id} </span>
-
-        <section className='flex gap-[1.8125rem] mt-[.8975rem]'>
-          <div className='flex items-center gap-[.75rem] cursor-pointer'>
-            <img src={modifyVector} alt='modify vector' className='w-[1.1869rem] h-[1.1869rem]' />{' '}
-            <span className='text-[1rem] tracking-wider capitalize '>modify</span>
-          </div>
-          <div className='flex items-center gap-[.75rem] cursor-pointer'>
-            <img src={disableVector} alt='disable vector' className='w-[1.1869rem] h-[1.1869rem]' />{' '}
-            <span className='text-[1rem]  capitalize '>disabled</span>
-          </div>
-        </section>
-      </div> */}
+    <div className='flex gap-[1.25rem] items-center'>
 
       {singleCustomerProfile.length > 0
         ? singleCustomerProfile.map((customerDetails: any, customerIndex: any) => {
@@ -88,8 +68,8 @@ const TopNavProfile = (props: Props) => {
                 </div>
 
                 <div>
-                  <p className='text-[1rem] font-roboto text-[#636363] font-bold'>
-                    {customerDetails?.firstName} {customerDetails?.lastName} <br /> {customerDetails?.otherName}
+                  <p className='flex text-[1.5rem] font-roboto text-[#636363] font-medium' style={{minHeight: '56px'}}>
+                    {[customerDetails?.firstName, customerDetails?.lastName, customerDetails?.otherName].join(' ')}
                   </p>
                   <span className='text-[1rem]'>ID :{customerDetails?.idNumber} </span>
 
@@ -100,7 +80,7 @@ const TopNavProfile = (props: Props) => {
                     </div>
                     <div className='flex items-center gap-[.75rem] cursor-pointer'>
                       <img src={disableVector} alt='disable vector' className='w-[1.1869rem] h-[1.1869rem]' />{' '}
-                      <span className='text-[1rem]  capitalize '>disabled</span>
+                      <span className='text-[1rem]  capitalize '>deactivate</span>
                     </div>
                   </section>
                 </div>

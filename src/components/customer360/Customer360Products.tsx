@@ -103,9 +103,9 @@ const Customer360Products = (props: Props) => {
   // }
 
   return (
-    <div className=' min-w-[27.125rem] h-[26.875rem] border-2 border-[#f1ebeb]   mt-4 font-roboto rounded-[.25rem] bg-[#fff] '>
-      <header className=' text-[#636363]  border-b-2 border-[#968f8f] p-2 pl-[1.25rem] h-[3.375rem] '>
-        <h6 className='capitalize p-2'>products</h6>
+    <div className=' min-w-[27.125rem] h-[26.875rem] shadow-lg mt-4 font-roboto rounded-[.25rem] bg-[#fff] '>
+      <header className=' text-[#636363]  border-b border-[#cccccc] py-3 px-4 pl-[1.25rem] h-[3.375rem] '>
+        <h6 className='text-base capitalize'>products</h6>
       </header>
       <nav className='mt-2 capitalize text-[#8F8F8F] cursor-pointer pl-[1.25rem] mb-[1.5rem]'>
         <ul className='flex gap-4'>

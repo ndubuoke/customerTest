@@ -33,20 +33,20 @@ const Customer360RecentTransaction = (props: Props) => {
   const year = new Date().getFullYear()
 
   return (
-    <div className='min-w-[27.125rem] h-[26.875rem] border-2 border-[#968f8f] p-2  mt-4 font-roboto rounded-[.25rem] bg-[#fff]'>
-      <header className='flex justify-between text-[#636363]  border-b-2 border-[#968f8f] p-2'>
-        <h6 className='capitalize'>Recent transactions</h6>
-        <div className='flex items-center gap-4 capitalize hover:text-[#636363] cursor-pointer'>
-          <img src={infoVector} alt='information vector' /> <span>view more</span>
+    <div className='min-w-[27.125rem] h-[26.875rem] shadow-lg mt-4 font-roboto rounded-[.25rem] bg-[#fff]'>
+      <header className='flex justify-between text-[#636363]  border-b border-[#cccccc] py-3 px-4'>
+        <h6 className='text-base capitalize'>Recent transactions</h6>
+        <div className='flex items-center gap-2 capitalize hover:text-[#636363] cursor-pointer'>
+          <img src={infoVector} alt='information vector' /><span className='text-sm'>view more</span>
         </div>
       </header>
 
-      <section className='p-6'>
+      <section className='p-4'>
         {transactionData.map((item, index) => {
           return (
-            <div key={index} className='flex justify-between mb-2 gap-4 border-b-2 py-2'>
+            <div key={index} className='flex justify-between mb-2 gap-4 border-b border-[#eeeeee] py-2'>
               <aside className='text-[#636363] capitalize'>
-                <p className={`text-[#636363]`}>{item?.title}</p>{' '}
+                <p className={`font-medium text-[#636363]`}>{item?.title}</p>{' '}
                 <p className='text-[.75rem]'>
                   {day} / {month} / {year}
                 </p>

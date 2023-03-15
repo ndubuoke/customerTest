@@ -11,8 +11,8 @@ const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
   const [hideX, setHideX] = useState(true)
 
   const searchBarHandler = (e) => {
-    //  if space bar is clicked dont do anything
-    if (e.nativeEvent.data == ' ') {
+    //  if space bar is initially clicked dont do anything
+    if (searchTerm == '' && e.nativeEvent.data == ' ') {
       return
     } else {
       setSearchTerm(e.target.value)
