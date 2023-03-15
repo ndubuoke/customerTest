@@ -426,8 +426,8 @@ const CustomerManagementTable = ({
       if (allChecked) {
         return
       }
-      setActiveChecked(false)
-      setInactiveChecked(false)
+      setActiveChecked(true)
+      setInactiveChecked(true)
       customerStatusHandler(option)
     }
 
@@ -636,7 +636,7 @@ const CustomerManagementTable = ({
             <tr className='  '>
               {tableType === 'All Customers'
                 ? customerTableHeads.map((tableHead) => (
-                    <th key={tableHead} className='py-3  relative    text-common-title'>
+                    <th key={tableHead} className={`py-3  relative   text-common-title ${tableHead === 'State' ? 'w-40' : ''}`}>
                       {tableHead === 'NAME/ID' ? (
                         <span onClick={sortCustomersAlphabetically} className='border-l  pl-6 cursor-pointer'>
                           {tableHead}
@@ -650,17 +650,17 @@ const CustomerManagementTable = ({
                       {ShowFilterStateOptions && tableHead === 'State' && (
                         <div
                           ref={filterStateOptionsRef}
-                          className=' w-full  absolute z-40 drop-shadow-md   bg-background-paper  flex flex-col   border rounded-md'
+                          className=' w-40  absolute z-40 top-12 font-[Inter] py-4  drop-shadow-md    bg-background-paper  flex flex-col justify-center  border rounded-md'
                         >
                           {filterStateOptions?.map((option, index) => {
                             if (option === 'Select all') {
                               return (
                                 <div
                                   key={index}
-                                  className='  px-3 py-2 flex flex-col justify-content items-center  w-[15.625rem] text-[#636363]'
+                                  className='  px-3 py-2 flex flex-col text-[#636363] '
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full normal-case  '>
+                                  <span className='flex w-full normal-case items-center text-sm font-normal'>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
@@ -678,10 +678,10 @@ const CustomerManagementTable = ({
                               return (
                                 <div
                                   key={index}
-                                  className='cursor-pointer px-3 py-2 flex flex-col justify-content items-center  w-[15.625rem] text-[#636363]'
+                                  className='cursor-pointer px-3 py-2 flex flex-col text-[#636363] '
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full normal-case  '>
+                                  <span className='flex w-full normal-case items-center text-sm font-normal'>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
@@ -699,10 +699,10 @@ const CustomerManagementTable = ({
                               return (
                                 <div
                                   key={index}
-                                  className=' cursor-pointer px-3 py-2 flex flex-col justify-content items-center  w-[15.625rem] text-[#636363]'
+                                  className=' cursor-pointer px-3 py-2 flex flex-col text-[#636363]'
                                   // onClick={filterStateHandler.bind(null, option)}
                                 >
-                                  <span className='flex w-full  normal-case '>
+                                  <span className='flex w-full  normal-case items-center text-sm font-normal'>
                                     {' '}
                                     <span className='mr-2'>
                                       <Checkbox
@@ -1107,6 +1107,7 @@ const CustomerManagementTable = ({
                           return customer
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((customer) => (
                         <CustomerDetailsRow
                           userRole={userRole}
@@ -1134,6 +1135,7 @@ const CustomerManagementTable = ({
                           return customer
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((customer) => (
                         <CustomerDetailsRow
                           key={customer?.customerId}
@@ -1210,6 +1212,7 @@ const CustomerManagementTable = ({
                           return request
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((request) => {
                         if (request.customerType === customerType) {
                           return (
@@ -1257,6 +1260,7 @@ const CustomerManagementTable = ({
                           return request
                         }
                       })
+                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
                       .map((request) => {
                         if (request.customerType === customerType) {
                           return (
