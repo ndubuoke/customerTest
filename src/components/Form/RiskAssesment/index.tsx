@@ -4,9 +4,10 @@ import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 import RiskAssessmentLayout from './RiskAssessmentLayout'
 import { FormStructureType } from 'Components/types/FormStructure.types'
-import { riskAssessmentResultAction } from 'Redux/actions/RiskAssessment.actions'
-import { useDispatch } from 'react-redux'
+import { computeAssessmentAction, selectedParameterOptionAction } from 'Redux/actions/RiskAssessment.actions'
+import { useDispatch, useSelector } from 'react-redux'
 import { calcScore } from './calculate'
+import { ReducersType } from 'Redux/store'
 
 type Props = {
   fillingFormState: FormStructureType
@@ -14,320 +15,10 @@ type Props = {
 
 const RiskAssessment = memo(({ fillingFormState }: Props) => {
   const dispatch = useDispatch()
+  const { riskAssessmentData, riskScoreGuide } = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as any
   const [collapsed, setCollapsed] = useState<boolean>(false)
-  const [riskScoreGuide, setRiskScoreGuide] = useState<{ score: number; rating: string; resolution: string }>(null)
-  const [riskAssessmentData, setRiskAssessmentData] = useState({
-    'bio-Data': {
-      title: "Customer's Identity",
-      standardRiskAssessmentData: [
-        {
-          parameter: 'Status of customer identity verification',
-          impliedWeight: 10,
-          parameterOptions: [
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-            {
-              status: 'Failed',
-              weight: 80,
-            },
-            {
-              status: 'Passed',
-              weight: 0,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-        {
-          parameter: 'Is Customer a Politically Exposed Person?',
-          impliedWeight: 8,
-          parameterOptions: [
-            {
-              status: 'Yes',
-              weight: 80,
-            },
-            {
-              status: 'No',
-              weight: 20,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-      ],
-      fields: [
-        {
-          title: "Customer's Name",
-          key: 'surname',
-        },
-        {
-          title: 'Gender',
-          key: 'gender',
-        },
-        {
-          title: 'Date of Birth',
-          key: 'dateOfBirth',
-        },
-        {
-          title: 'Marital Status',
-          key: 'maritalStatus',
-        },
-        {
-          title: 'Origin',
-          key: 'stateOfOrigin',
-        },
-        {
-          title: 'ID Document [ID Number]',
-          key: 'iDNumber',
-        },
-      ],
-      isCompleted: null,
-    },
-    contactInformation: {
-      title: "Customer's Address",
-      standardRiskAssessmentData: [
-        {
-          parameter: 'Is Customer a Non-Resident?',
-          impliedWeight: 7,
-          parameterOptions: [
-            {
-              status: 'Yes',
-              weight: 80,
-            },
-            {
-              status: 'No',
-              weight: 20,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-        {
-          parameter: 'Status of customer address verification',
-          impliedWeight: 10,
-          parameterOptions: [
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-            {
-              status: 'Failed',
-              weight: 80,
-            },
-            {
-              status: 'Passed',
-              weight: 0,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-      ],
-      fields: [
-        {
-          title: 'Residential Address',
-          key: 'residentialAddress',
-        },
-        {
-          title: 'Mobile Number',
-          key: 'mobileNumber',
-        },
-        {
-          title: 'Email Address',
-          key: 'emailAddress',
-        },
-      ],
-      isCompleted: null,
-    },
-    employmentDetails: {
-      title: "Customer's Livelihood",
-      standardRiskAssessmentData: [
-        {
-          parameter: 'Status of Customer livelihood verification',
-          impliedWeight: 10,
-          parameterOptions: [
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-            {
-              status: 'Failed',
-              weight: 80,
-            },
-            {
-              status: 'Passed',
-              weight: 0,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-        {
-          parameter: 'Status of Cross border banking relationship',
-          impliedWeight: 6,
-          parameterOptions: [
-            {
-              status: 'Yes',
-              weight: 80,
-            },
-            {
-              status: 'No',
-              weight: 20,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-      ],
-      fields: [
-        {
-          title: 'Employment Status',
-          key: 'employmentStatus',
-        },
-        {
-          title: 'Date of Employment',
-          key: 'dateOfEmployment',
-        },
-        {
-          title: 'Nature of Business/Occupation',
-          key: 'natureOfBusinessOccupation',
-        },
-        {
-          title: 'Annual Salary/Expected Annual Income',
-          key: 'annualSalaryExpectedAnnualIncome',
-        },
-        {
-          title: 'Employer’s Name',
-          key: 'employersName',
-        },
-        {
-          title: 'Employer’s Address',
-          key: 'employersAddress',
-        },
-        {
-          title: 'Employer’s Mobile Number',
-          key: 'employersMobileNumber',
-        },
-        {
-          title: 'Employer’s Email Address',
-          key: 'employersEmailAddress',
-        },
-      ],
-      isCompleted: null,
-    },
-    watchlist: {
-      title: 'Watchlist',
-      standardRiskAssessmentData: [
-        {
-          parameter: 'Is originating Country a FATF listed country?',
-          impliedWeight: 7,
-          parameterOptions: [
-            {
-              status: 'Yes',
-              weight: 80,
-            },
-            {
-              status: 'No',
-              weight: 20,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-        {
-          parameter: 'Is Customer on any AML related sanction list?',
-          impliedWeight: 10,
-          parameterOptions: [
-            {
-              status: 'Yes',
-              weight: 100,
-            },
-            {
-              status: 'No',
-              weight: 0,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
+  // const [riskScoreGuide, setRiskScoreGuide] = useState<{ score: number; rating: string; resolution: string }>(null)
 
-        {
-          parameter: 'Customer Persona',
-          impliedWeight: 5,
-          parameterOptions: [
-            {
-              status: 'High net worth',
-              weight: 60,
-            },
-            {
-              status: 'Upper middle class',
-              weight: 40,
-            },
-            {
-              status: 'Middle Class',
-              weight: 20,
-            },
-            {
-              status: 'Floating middle class',
-              weight: 10,
-            },
-            {
-              status: 'Low Income',
-              weight: 0,
-            },
-            {
-              status: 'Not Verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-      ],
-      fields: [],
-      isCompleted: null,
-    },
-  })
   console.log('fillingFormState-RiskAssessment', fillingFormState.data)
 
   const [collapsedWatchlist, setcollapsedWatchlist] = useState<boolean>(false)
@@ -337,27 +28,40 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
 
   const handleSelectedParameterOption = (parentKey: string, parameter: string, parameterOptionStatus: string) => {
     console.log(parentKey, parameter, parameterOptionStatus)
-    const standardRiskAssessmentData = riskAssessmentData[parentKey]?.standardRiskAssessmentData
-    if (standardRiskAssessmentData) {
-      const mappedStandardRiskAssessmentData = standardRiskAssessmentData.map((assessment) => {
-        if (assessment.parameter === parameter) {
-          const parameterOption = assessment.parameterOptions.find((option) => option.status === parameterOptionStatus)
-          if (parameterOption) {
-            assessment = { ...assessment, selectedParameterOption: { ...parameterOption } }
-          }
-        }
-        return assessment
-      })
-      setRiskAssessmentData((prev) => {
-        return {
-          ...prev,
-          [parentKey]: {
-            ...prev[parentKey],
-            standardRiskAssessmentData: [...mappedStandardRiskAssessmentData],
-          },
-        }
-      })
-    }
+    dispatch(
+      selectedParameterOptionAction({
+        parentKey,
+        parameter,
+        parameterOptionStatus,
+      }) as any
+    )
+    // const standardRiskAssessmentData = riskAssessmentData[parentKey]?.standardRiskAssessmentData
+    // if (standardRiskAssessmentData) {
+    //   const mappedStandardRiskAssessmentData = standardRiskAssessmentData.map((assessment) => {
+    //     if (assessment.parameter === parameter) {
+    //       const parameterOption = assessment.parameterOptions.find((option) => option.status === parameterOptionStatus)
+    //       if (parameterOption) {
+    //         assessment = { ...assessment, selectedParameterOption: { ...parameterOption } }
+    //       }
+    //     }
+    //     return assessment
+    //   })
+    //   setRiskAssessmentData((prev) => {
+    //     const updatedRiskAssessmentData = {
+    //       ...prev,
+    //       [parentKey]: {
+    //         ...prev[parentKey],
+    //         standardRiskAssessmentData: [...mappedStandardRiskAssessmentData],
+    //       },
+    //     }
+    //     for (let key in updatedRiskAssessmentData) {
+    //       updatedRiskAssessmentData[key].isCompleted = !updatedRiskAssessmentData[key].standardRiskAssessmentData.some(
+    //         (parameter) => parameter.selectedParameterOption.status === 'Not verified'
+    //       )
+    //     }
+    //     return updatedRiskAssessmentData
+    //   })
+    // }
   }
 
   const computeScore = () => {
@@ -366,29 +70,29 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
     //   parameterOption: 'Yes',
     // },
 
-    setRiskAssessmentData((prev) => {
-      const riskAssessmentDataCopy = { ...prev }
-      for (let key in riskAssessmentDataCopy) {
-        riskAssessmentDataCopy[key].isCompleted = !riskAssessmentDataCopy[key].standardRiskAssessmentData.some(
-          (parameter) => parameter.selectedParameterOption.status === 'Not verified'
-        )
-      }
-      return riskAssessmentDataCopy
-    })
+    // setRiskAssessmentData((prev) => {
+    //   const riskAssessmentDataCopy = { ...prev }
+    //   for (let key in riskAssessmentDataCopy) {
+    //     riskAssessmentDataCopy[key].isCompleted = !riskAssessmentDataCopy[key].standardRiskAssessmentData.some(
+    //       (parameter) => parameter.selectedParameterOption.status === 'Not verified'
+    //     )
+    //   }
+    //   return riskAssessmentDataCopy
+    // })
 
-    const userAssessment = []
-    Object.keys(riskAssessmentData).forEach((assessment) => {
-      riskAssessmentData[assessment].standardRiskAssessmentData.forEach((data) =>
-        userAssessment.push({
-          parameter: data.parameter,
-          parameterOption: data.selectedParameterOption.status,
-        })
-      )
-    })
-    const score = calcScore(userAssessment)
-    console.log('score', score)
-    dispatch(riskAssessmentResultAction(score.scoreGuide) as any)
-    setRiskScoreGuide(score.scoreGuide)
+    // const userAssessment = []
+    // Object.keys(riskAssessmentData).forEach((assessment) => {
+    //   riskAssessmentData[assessment].standardRiskAssessmentData.forEach((data) =>
+    //     userAssessment.push({
+    //       parameter: data.parameter,
+    //       parameterOption: data.selectedParameterOption.status,
+    //     })
+    //   )
+    // })
+    // const score = calcScore(userAssessment)
+    // console.log('score', score)
+    dispatch(computeAssessmentAction() as any)
+    // setRiskScoreGuide(score.scoreGuide)
   }
   console.log('data-customerData', fillingFormState.data.customerData)
   return (
@@ -410,7 +114,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
           }
           return data
         })
-        .map((data) => {
+        .map((data, idx) => {
           // console.log('data-customerData', data)
           if (riskAssessmentData[data.sectionName]) {
             // console.log('data', data)
@@ -424,6 +128,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 assessmentData={data.data}
                 handleSelectedParameterOption={handleSelectedParameterOption}
                 isCompleted={riskAssessmentData[data.sectionName].isCompleted}
+                isCollapsed={idx !== 0}
               />
             )
           }
@@ -458,6 +163,8 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 maxWidth: '200px',
                 fontWeight: '700',
                 color: riskScoreGuide.rating === 'HIGH' ? '#CF2A2A' : riskScoreGuide.rating === 'MEDIUM' ? '#D5A62F' : 'green',
+                textOverflow: 'ellipsis',
+                overflow: 'hidden',
               }}
             >
               {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}

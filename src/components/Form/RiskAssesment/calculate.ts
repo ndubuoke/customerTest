@@ -57,7 +57,7 @@ const standardRiskAssessmentData = [
     parameterOptions: ['Yes', 'No', 'Not verified'],
     assessmentType: ['EDD Required', 'CDD', 'CDD'],
     escalationFactor: [2, 1, 1],
-    percentageOptionsWeightAllocation: [100, 20, 100],
+    percentageOptionsWeightAllocation: [10, 90, 100],
     score: [14, 1.4, 7],
   },
   {
