@@ -75,49 +75,45 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
 
           <div className=' h-[80%] flex gap-4 mt-6 '>
             <div className=' w-full flex h-full flex-col '>
-              <div className='justify-center w-full h-[30%]  flex'>
+              <div className='justify-center w-full h-[30%]  flex' style={{ marginBottom: '40px' }}>
                 <img src={Avatar} className='' />
               </div>
-              <div className='flex gap-24 mt-2   text-[#636363]   h-[50%]   overflow-y-auto'>
+              <div className='flex gap-16 mt-2   text-[#636363]   h-[50%]   overflow-y-auto'>
                 <div className=' font-bold text-[16px]  w-full items-end flex  flex-col '>
-                  <p className='mb-2'>Surname</p>
-                  <p className='mb-2'>First Name</p>
-                  <p className='mb-2'>Other Names</p>
+                  <p style={{ marginBottom: '18px' }}>Surname</p>
+                  <p style={{ marginBottom: '18px' }}>First Name</p>
+                  <p style={{ marginBottom: '18px' }}>Other Names</p>
                   <p className='mb-6 '>Customer ID</p>
-                  <p className='mb-2'>Customer BVN</p>
-                  <p className='mb-2'>Risk Status</p>
-                  <p className='mb-2'>Customer Groups</p>
+                  <p style={{ marginBottom: '18px' }}>Customer BVN</p>
+                  <p style={{ marginBottom: '18px' }}>Risk Status</p>
+                  <p style={{ marginBottom: '18px' }}>Customer Groups</p>
                 </div>
                 <div className=' font-[400] w-full flex flex-col items-start text-[16px]  '>
-                  <p className='mb-2'>
-                    {getCustomerDetail(customer, 'surname') !== '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}{' '}
+                  <p style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'surname') !== '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}
                   </p>
-                  <p className='mb-2'>
-                    {getCustomerDetail(customer, 'firstName') != '' || null ? getCustomerDetail(customer, 'firstName') : 'Not Available'}{' '}
+                  <p style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'firstName') != '' || null ? getCustomerDetail(customer, 'firstName') : 'Not Available'}
                   </p>
-                  <p className='mb-2'>
+                  <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
-                  <p className='  '>
-                    {getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}{' '}
-                  </p>
-                  <p className='mb-2 '> {getCustomerDetail(customer, 'bvn') != '' || null ? getCustomerDetail(customer, 'bvn') : 'Not Available'} </p>
-                  <p className='mb-2'>
+                  <p>{getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}</p>
+                  <p style={{ marginBottom: '18px' }}>
                     {' '}
-                    {getCustomerDetail(customer, 'riskStatus') != '' || null ? getCustomerDetail(customer, 'riskStatus') : 'Not Available'}{' '}
+                    {getCustomerDetail(customer, 'bvn') != '' || null ? getCustomerDetail(customer, 'bvn') : 'Not Available'}{' '}
                   </p>
-                  <p className='mb-2'>
-                    {' '}
-                    {getCustomerDetail(customer, 'customerGroups') != '' || null
-                      ? getCustomerDetail(customer, 'customerGroups')
-                      : 'Not Available'}{' '}
+                  <p style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'riskStatus') != '' || null ? getCustomerDetail(customer, 'riskStatus') : 'Not Available'}
+                  </p>
+                  <p style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'customerGroups') != '' || null ? getCustomerDetail(customer, 'customerGroups') : 'Not Available'}
                   </p>
                 </div>
               </div>
 
               <div className='w-full py-2 px-6 justify-between flex flex-wrap   border border-[#E5E9EB] h-[20%] text-[16px] text-[#636363] rounded-md'>
                 <div className='flex gap-2 cursor-pointer items-center justify-center ' onClick={modifyCustomerHandler}>
-                  {' '}
                   <img src={Edit} />
                   <span>Modify</span>
                 </div>
@@ -130,7 +126,6 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <span>View in Customer 360</span>
                 </div>
                 <div className='flex gap-2 cursor-pointer items-center justify-center'>
-                  {' '}
                   <img src={add} />
                   <span>Add Cusomer to Group</span>
                 </div>
@@ -142,7 +137,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                 </div> */}
                 {/* <div className='w-full flex justify-between gap-2 text-[#636363]'>
                   <div className='flex gap-2 cursor-pointer items-center justify-center'>
-                    {' '}
+                    
                     <img src={add} />
                     <span>Add Cusomer to Group</span>
                   </div>
@@ -160,7 +155,6 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
                   <div className='flex gap-6 '>
-                    {' '}
                     <span>Customer Status:</span>
                     <span
                       className={` ${
