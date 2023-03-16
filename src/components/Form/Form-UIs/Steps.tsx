@@ -39,6 +39,8 @@ const Steps = ({ setActivePageState, activePageState, setCanSubmit, canSubmit, c
 
   useEffect(() => {
     if (publishedForm?.success) {
+      console.log(publishedForm?.serverResponse?.data)
+
       setForm(publishedForm?.serverResponse?.data)
       // setForm(
       //   customerType === 'sme'

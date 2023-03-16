@@ -90,7 +90,8 @@ const Calender: React.FC<CalenderProps> = ({ tableType, value = new Date(), onCh
   return (
     <div
       ref={calenderRef}
-      className='w-[27rem] drop-shadow-md h-[21.875rem] border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '
+      className='w-[27rem] drop-shadow-md border border-line-faint-background  bg-background-paper right-4  absolute z-50 top-8 '
+      style={{ height: 'fit-content', paddingBottom: '20px' }}
     >
       <div className='grid grid-cols-3 mt-2 mr-2'>
         <div className=' h-full  pt-2  grid grid-cols-1'>
