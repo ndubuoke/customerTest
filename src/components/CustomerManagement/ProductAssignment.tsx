@@ -123,6 +123,7 @@ const ProductAssignment = () => {
         dispatch(getAllProductTypesAction() as any)
       }
       if (selectedItem === 'Payment') {
+        
         dispatch(getCategorizedProductsAction(selectedItem) as any)
         dispatch(getAllProductTypesAction() as any)
       }
