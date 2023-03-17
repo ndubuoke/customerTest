@@ -388,7 +388,7 @@ export const getCategorizedProductsAction =
   async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
-     
+
       dispatch({ type: GET_CATEGORIZED_PRODUCTS_REQUEST })
       const config = {
         headers: {
@@ -398,7 +398,6 @@ export const getCategorizedProductsAction =
       }
 
       if (product_type_id == '' || undefined) {
-        
         const { data } = await axios.get(`${PRODUCT_URL}/product?product_category=${productCategory}`, config)
         dispatch({ type: GET_CATEGORIZED_PRODUCTS_SUCCESS, payload: data })
       } else {
@@ -415,8 +414,8 @@ export const getCategorizedProductsAction =
 
 export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
-     const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
-     
+    const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+
     dispatch({ type: GET_ALL_PRODUCTS_REQUEST })
     const config = {
       headers: {
@@ -424,8 +423,8 @@ export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (
         Authorization: `Bearer ${token}`,
       },
     }
- 
-    const { data } = await axios.get(`${PRODUCT_URL}/product`,config)
+
+    const { data } = await axios.get(`${PRODUCT_URL}/product`, config)
 
     dispatch({ type: GET_ALL_PRODUCTS_SUCCESS, payload: data })
   } catch (error) {
@@ -438,7 +437,7 @@ export const getAllProductsAction = () => async (dispatch: Dispatch, getState: (
 
 export const getSingleProductAction = (productId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
-     const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+    const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
     dispatch({ type: GET_SINGLE_PRODUCT_REQUEST })
     const config = {
       headers: {
@@ -447,7 +446,7 @@ export const getSingleProductAction = (productId: string) => async (dispatch: Di
       },
     }
 
-    const { data } = await axios.get(`${PRODUCT_URL}/product/${productId}`,config)
+    const { data } = await axios.get(`${PRODUCT_URL}/product/${productId}`, config)
 
     dispatch({ type: GET_SINGLE_PRODUCT_SUCCESS, payload: data })
   } catch (error) {
@@ -469,8 +468,7 @@ export const getAllProductTypesAction = () => async (dispatch: Dispatch, getStat
       },
     }
 
-   
-    const { data } = await axios.get(`${PRODUCT_URL}/product-type`,config)
+    const { data } = await axios.get(`${PRODUCT_URL}/product-type`, config)
 
     dispatch({ type: GET_ALL_PRODUCT_TYPE_SUCCESS, payload: data })
   } catch (error) {
@@ -482,16 +480,21 @@ export const getAllProductTypesAction = () => async (dispatch: Dispatch, getStat
 }
 
 export const assignProductAction =
-  (body = {}, requestId: string) =>
+  (body = {}, requestId: string, admin?: boolean, customerId?: string) =>
   async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
     try {
       dispatch({ type: ASSIGN_PRODUCT_REQUEST })
 
+      if (admin) {
+        const { data } = await axios.post(`${SERVER_URL}/assign-products/${customerId}?superAdmin=${admin}`, body)
+
+        dispatch({ type: ASSIGN_PRODUCT_SUCCESS, payload: data })
+      } else {
+        const { data } = await axios.post(`${SERVER_URL}/request/assign-products/${requestId}`, body)
+        dispatch({ type: ASSIGN_PRODUCT_SUCCESS, payload: data })
+      }
+
       
-
-      const { data } = await axios.post(`${SERVER_URL}/request/assign-products/${requestId}`, body)
-
-      dispatch({ type: ASSIGN_PRODUCT_SUCCESS, payload: data })
     } catch (error) {
       dispatch({
         type: ASSIGN_PRODUCT_FAIL,

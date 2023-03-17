@@ -22,6 +22,7 @@ import getCustomerDetail from 'Utilities/getCustomerDetail'
 import CustomerAlertModal from './customerAlertModal'
 import { AppRoutes } from 'Routes/AppRoutes'
 import AlertModal from 'Components/Shareables/AlertModal'
+import { UserProfileTypes } from 'Redux/reducers/UserPersmissions'
 
 const ProductAssignment = () => {
   const initialRef: any = null
@@ -31,6 +32,7 @@ const ProductAssignment = () => {
   const assignProduct = useSelector<ReducersType>((state: ReducersType) => state?.assignProduct) as customersManagementResponseType
   const allProductTypes = useSelector<ReducersType>((state: ReducersType) => state?.allProductTypes) as customersManagementResponseType
   type productCategoryType = 'All' | 'Payment' | 'Credit' | 'Deposit' | 'Investment'
+  const userData = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
   const customerProfile = customerProfileResponse.serverResponse.data
   const [showLists, setShowLists] = useState(false)
   const [assignButtonDisabled, setAssignButtonDisabled] = useState(true)
@@ -87,7 +89,7 @@ const ProductAssignment = () => {
       })
       request.then(function (value: string) {
         setShowProductAssignmentCustomerAlertModal(true)
-        dispatch(assignProductAction(body, value) as any)
+        dispatch(assignProductAction(body, value, userData.user?.tenant_admin, customerId) as any)
       })
     }else{
       const body = {
@@ -105,7 +107,7 @@ const ProductAssignment = () => {
       })
       request.then(function (value: string) {
         setShowProductAssignmentCustomerAlertModal(true)
-        dispatch(assignProductAction(body, value) as any)
+        dispatch(assignProductAction(body, value, userData.user?.tenant_admin, customerId) as any)
       })
     }
   }
@@ -123,7 +125,7 @@ const ProductAssignment = () => {
         dispatch(getAllProductTypesAction() as any)
       }
       if (selectedItem === 'Payment') {
-        
+
         dispatch(getCategorizedProductsAction(selectedItem) as any)
         dispatch(getAllProductTypesAction() as any)
       }
