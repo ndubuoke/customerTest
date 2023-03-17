@@ -2,6 +2,7 @@ import { RemoveButton } from 'Components/Shareables'
 import React, { useState, memo, useRef } from 'react'
 // import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
 // import { UploadFile } from '.'
+import PdfImage from '../../../assets/images/pdf.png'
 
 type Props = {
   file: string
@@ -13,7 +14,6 @@ type Props = {
 const IndividualFileForm = memo(({ file, removeFile, height = 110, waiverRequest = false }: Props) => {
   const [showRemove, setShowRemove] = useState<boolean>(true)
   const isImage = file.includes('.png') || file.includes('.jpg') || file.includes('.jpeg')
-
   // console.log('file', file.file)
   if (waiverRequest) {
     return (
@@ -28,6 +28,7 @@ const IndividualFileForm = memo(({ file, removeFile, height = 110, waiverRequest
       <RemoveButton onClick={removeFile} showRemoveButton={showRemove} />
       <div className={`h-[${height}px] w-[12.125rem]`}>
         {isImage && <img src={file} className='object-contain' width={194} height={height} style={{ width: '194px', height }} />}
+        {file.includes('.pdf') && <img src={PdfImage} className='object-contain' width={194} height={height} style={{ width: '194px', height }} />}
         {/* {file.file.type.endsWith('pdf') && (
 
           <Document file={file.signedUrl || file.file}>
