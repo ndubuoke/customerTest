@@ -493,6 +493,7 @@ export const assignProductAction =
         const { data } = await axios.post(`${SERVER_URL}/request/assign-products/${requestId}`, body)
         dispatch({ type: ASSIGN_PRODUCT_SUCCESS, payload: data })
       }
+
       
     } catch (error) {
       dispatch({
