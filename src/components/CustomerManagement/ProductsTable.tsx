@@ -13,9 +13,10 @@ type props = {
   activeProductType: { name: string; id: string }
   searchTerm: string
   selectProductsToBeAssigned: (e) => void
+  assignProductHandler:(e)=> void
 }
 
-const ProductsTable = ({ data, activeProductType,selectProductsToBeAssigned, searchTerm }: props) => {
+const ProductsTable = ({ data, activeProductType, selectProductsToBeAssigned, searchTerm, assignProductHandler }: props) => {
   const [showProductModal, setShowProductModal] = useState(false)
   const [productId, setProductId] = useState(null)
   const allProducts = data.serverResponse.data?.products
@@ -27,7 +28,9 @@ const ProductsTable = ({ data, activeProductType,selectProductsToBeAssigned, sea
 
   return (
     <>
-      {showProductModal && <SingleProductModal productId={productId} setShowProductModal={setShowProductModal} />}
+      {showProductModal && (
+        <SingleProductModal assignProductHandler={assignProductHandler} productId={productId} setShowProductModal={setShowProductModal} />
+      )}
       <div className='overflow-y-scroll    h-[15rem]  '>
         <table className='w-full text-sm text-left  '>
           <thead className='text-xs uppercase     '>
