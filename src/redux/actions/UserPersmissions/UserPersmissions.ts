@@ -43,7 +43,7 @@ export const getRolesAndPermissions = () => async (dispatch: Dispatch) => {
     }
     // Authorization: `Bearer ${token}`
     const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/roles/?page_size=50`, config)
-    console.log(data)
+    console.log(data, 'perm')
     if (data) {
       dispatch({
         type: GET_USER_ROLE_AND_PERMISSIONS_SUCCESS,
@@ -72,7 +72,7 @@ export const getUserProfile = () => async (dispatch: Dispatch) => {
       },
     }
     const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/users/profile`, config)
-    console.log(data)
+    console.log(data, 'perm2')
     if (data?.success) {
       dispatch({
         type: GET_USER_PROFILE_SUCCESS,
