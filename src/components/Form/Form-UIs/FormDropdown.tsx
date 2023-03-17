@@ -671,7 +671,7 @@ const FormDropdown = ({
                   selectedDropdownItem
                 )
               ) : (
-                <span className={`text-text-disabled`}>Select</span>
+                <span className={`text-text-disabled`}>Selectz</span>
               )}
             </div>
           ) : null}
