@@ -70,24 +70,44 @@ const ProductAssignment = () => {
     }
   }
 
-  const assignProductHandler = () => {
-    const body = {
-      data: {
-        productData: [...toBeAssignedProducts],
-      },
-    }
-    let request = new Promise(function (myResolve, myReject) {
-      let request = customerProfile?.requests.filter((request) => {
-        return request.requestType === 'Creation'
+  const assignProductHandler = (data?: { productId: ''; productName: ''; productCode: '' }) => {
+    if (data.productId === undefined || '') {
+      const body = {
+        data: {
+          productData: [...toBeAssignedProducts],
+        },
+      }
+      let request = new Promise(function (myResolve, myReject) {
+        let request = customerProfile?.requests.filter((request) => {
+          return request.requestType === 'Creation'
+        })
+  
+        myResolve(request[0].requestId) // when successful
+        myReject('ERROR') // when error
       })
+      request.then(function (value: string) {
+        setShowProductAssignmentCustomerAlertModal(true)
+        dispatch(assignProductAction(body, value) as any)
+      })
+    }else{
+      const body = {
+        data: {
+          productData: [data],
+        },
+      }
+      let request = new Promise(function (myResolve, myReject) {
+        let request = customerProfile?.requests.filter((request) => {
+          return request.requestType === 'Creation'
+        })
 
-      myResolve(request[0].requestId) // when successful
-      myReject('ERROR') // when error
-    })
-    request.then(function (value: string) {
-      setShowProductAssignmentCustomerAlertModal(true)
-      dispatch(assignProductAction(body, value) as any)
-    })
+        myResolve(request[0].requestId) // when successful
+        myReject('ERROR') // when error
+      })
+      request.then(function (value: string) {
+        setShowProductAssignmentCustomerAlertModal(true)
+        dispatch(assignProductAction(body, value) as any)
+      })
+    }
   }
 
   useEffect(() => {
@@ -103,6 +123,7 @@ const ProductAssignment = () => {
         dispatch(getAllProductTypesAction() as any)
       }
       if (selectedItem === 'Payment') {
+        
         dispatch(getCategorizedProductsAction(selectedItem) as any)
         dispatch(getAllProductTypesAction() as any)
       }
@@ -224,6 +245,7 @@ const ProductAssignment = () => {
               </div>
               <div className=' w-full mt-6 '>
                 <ProductsTable
+                  assignProductHandler={assignProductHandler}
                   selectProductsToBeAssigned={selectProductsToBeAssigned}
                   searchTerm={searchTerm}
                   activeProductType={activeProductType}

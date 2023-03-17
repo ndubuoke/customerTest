@@ -12,11 +12,13 @@ import Button from 'Components/Shareables/Button'
 type props = {
   productId: string
   setShowProductModal: (e) => void
+  assignProductHandler: (e) => void
 }
 
-const SingleProductModal = ({ productId, setShowProductModal }: props) => {
+const SingleProductModal = ({ productId, setShowProductModal, assignProductHandler }: props) => {
   const singleProductResponse = useSelector<ReducersType>((state: ReducersType) => state?.singleProduct) as customersManagementResponseType
   const dispatch = useDispatch()
+  let product = { productId: '', productName: '', productCode: '' }
   const singleProduct = singleProductResponse.serverResponse.data
   const closeModal = () => {
     setShowProductModal(false)
@@ -119,7 +121,19 @@ const SingleProductModal = ({ productId, setShowProductModal }: props) => {
                     </div>
                   </div>
                   <div className=' w-full  flex justify-center items-center '>
-                    <Button disabled={false} text={'Assign Product'} onClick={() => {}} />
+                    <Button
+                      disabled={false}
+                      text={'Assign Product'}
+                      onClick={() => {
+                        closeModal()
+
+                        assignProductHandler.bind(null, {
+                          productId: getProductDetail(singleProduct, 'product_id'),
+                          productName: getProductDetail(singleProduct, 'name'),
+                          productCode: getProductDetail(singleProduct, 'code'),
+                        })
+                      }}
+                    />
                   </div>
                 </div>
               </div>
