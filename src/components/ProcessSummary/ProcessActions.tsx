@@ -24,11 +24,11 @@ type Props = {
   customerType: 'individual' | 'sme'
   waiverType: WaiverTypeType
   formType: FormTypeType
-  initiator: string
-  initiatorId: string
+  initiator?: string
+  initiatorId?: string
 }
 
-const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', formType, initiator, initiatorId }: Props) => {
+const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', formType }: Props) => {
   console.log('openWaiver', openWaiver)
   console.log('waiverType', waiverType)
   const fillingFormInStorage: FormStructureType = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
@@ -45,6 +45,14 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
   const [openModal, setOpenModal] = useState<boolean>(false)
 
   const submitFormRedux = useSelector<ReducersType>((state: ReducersType) => state.submitForm) as any // ResponseType
+  const userProfileRedux = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as any
+
+  const initiator = userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname
+  const initiatorId = userProfileRedux?.user?.id
+
+  console.log('userProfileRedux', userProfileRedux)
+  console.log('initiator', initiator)
+  console.log('initiatorId', initiatorId)
 
   const handleBackToForm = (e: any) => {
     e.stopPropagation()
@@ -85,7 +93,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
     // if (customerType === 'individual') {
     fillingFormInStorage.data.requestData = {
       initiator,
-      initiatorId,
+      initiatorId: userProfileRedux?.user?.id,
       requestType: mode,
     }
     // console.log(fillingFormInStorage)
@@ -99,7 +107,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
     // if (customerType === 'individual') {
     fillingFormInStorage.data.requestData = {
       initiator,
-      initiatorId,
+      initiatorId: userProfileRedux?.user?.id,
       requestType: mode,
     }
 
@@ -182,7 +190,13 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
         </>
       ) : null}  */}
       {openModal && submitFormRedux?.loading ? <FormSubmissionLoader /> : null}
-      {openModal && submitFormRedux?.success ? <FormSubmissionAlert closeModalFunction={() => setOpenModal(false)} /> : null}
+      {openModal && submitFormRedux?.success ? (
+        <FormSubmissionAlert
+          customerId={submitFormRedux?.serverResponse?.data?.customerId}
+          isAdmin={userProfileRedux?.user?.tenant_admin}
+          closeModalFunction={() => setOpenModal(false)}
+        />
+      ) : null}
       {openModal && submitFormRedux?.serverError && Object.keys(submitFormRedux.serverError).length ? (
         <FormSubmissionError
           error={submitFormRedux?.serverError?.error?.message || 'An error occurred. Could not save the form'}

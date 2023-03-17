@@ -71,8 +71,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const [openWaiver, setOpenWaiver] = useState<TimelineType>('hide')
   const [formType, setFormType] = useState<FormTypeType>(null)
 
-  const [initiator, setInitiator] = useState('A Adeshina')
-  const [initiatorId, setInitiatorId] = useState('abf93efb-18c5-4c5e-a8d3-2692675ee3e6')
+  // const [initiator, setInitiator] = useState('A Adeshina')
+  // const [initiatorId, setInitiatorId] = useState('abf93efb-18c5-4c5e-a8d3-2692675ee3e6')
 
   // const showWaiverModalInForm = useSelector<ReducersType>((state: ReducersType) => state?.showWaiverModalInForm) as ShowModalInFormType
 
@@ -80,13 +80,13 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
   const riskAssessmentRedux = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as any
   console.log('profile-summary-riskAssessmentRedux', riskAssessmentRedux)
   // handle initiator
-  useEffect(() => {
-    if (userProfileRedux?.user?.id) {
-      setInitiatorId(userProfileRedux?.user?.id)
-      setInitiator(userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname)
-    }
-  }, [userProfileRedux])
-  console.log('userprofile', userProfileRedux)
+  // useEffect(() => {
+  //   if (userProfileRedux?.user?.id) {
+  //     setInitiatorId(userProfileRedux?.user?.id)
+  //     setInitiator(userProfileRedux?.user?.firstname + ' ' + userProfileRedux?.user?.lastname)
+  //   }
+  // }, [userProfileRedux])
+  // console.log('userprofile', userProfileRedux)
   useEffect(() => {
     if (showWaiverModalInFormStorage && showWaiverModalInFormStorage === 'show') {
       // console.log('In the stoirage')
@@ -218,15 +218,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               </div>
             </div>
           </div>
-          <ProcessActions
-            mode={formMode}
-            waiverType={processActionsMode}
-            customerType={customerType}
-            openWaiver={openWaiver}
-            formType={formType}
-            initiator={initiator}
-            initiatorId={initiatorId}
-          />
+          <ProcessActions mode={formMode} waiverType={processActionsMode} customerType={customerType} openWaiver={openWaiver} formType={formType} />
         </section>
         <section className={`w-[25%] min-w-[377px]`}>
           <div

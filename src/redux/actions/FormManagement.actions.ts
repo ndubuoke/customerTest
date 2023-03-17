@@ -33,7 +33,7 @@ import {
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
 } from 'Redux/constants/FormManagement.constants'
-import { ReducersType } from 'Redux/store'
+import store, { ReducersType } from 'Redux/store'
 import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
@@ -144,13 +144,18 @@ export const unfilledRequiredSignatoryListButtonAction =
 
 export const submitFormAction =
   (formType: FormTypeType, customerType: CustomerTypeType, filledForm: FormStructureType) =>
-  async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  async (dispatch: Dispatch, getState: (store: any) => ReducersType) => {
     try {
+      const { userProfile } = getState(store)
+
       dispatch({ type: SUBMIT_FORM_REQUEST })
 
       const config = {
         headers: {
           'Content-Type': 'application/json',
+        },
+        params: {
+          superAdmin: userProfile?.user?.tenant_admin || undefined,
         },
       }
 
