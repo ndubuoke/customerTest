@@ -83,7 +83,7 @@ const ProductAssignment = () => {
         let request = customerProfile?.requests.filter((request) => {
           return request.requestType === 'Creation'
         })
-  
+
         myResolve(request[0].requestId) // when successful
         myReject('ERROR') // when error
       })
@@ -91,7 +91,7 @@ const ProductAssignment = () => {
         setShowProductAssignmentCustomerAlertModal(true)
         dispatch(assignProductAction(body, value, userData.user?.tenant_admin, customerId) as any)
       })
-    }else{
+    } else {
       const body = {
         data: {
           productData: [data],
@@ -125,7 +125,6 @@ const ProductAssignment = () => {
         dispatch(getAllProductTypesAction() as any)
       }
       if (selectedItem === 'Payment') {
-
         dispatch(getCategorizedProductsAction(selectedItem) as any)
         dispatch(getAllProductTypesAction() as any)
       }
@@ -202,7 +201,7 @@ const ProductAssignment = () => {
           closeModal={() => {
             setShowProductAssignmentCustomerAlertModal(false)
           }}
-          message={'Product Assignment Request Submitted For Approval'}
+          message={`${userData.user?.tenant_admin ? 'Product(s) Has Been Assigned To Customer' : 'Product Assignment Request Submitted For Approval'}`}
           isOpen={showProductAssignmentCustomerAlertModal}
           loading={assignProduct.loading}
           status={assignProduct.serverResponse.status === 'success' ? 'success' : 'error'}

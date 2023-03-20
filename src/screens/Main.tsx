@@ -82,6 +82,7 @@ const Main = (props: Props) => {
   // const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
+  const [hideX, setHideX] = useState(true)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   // const [userRole, setUserRole] = useState('checker')
   const [userRole, setUserRole] = useState<userType>('maker')
@@ -318,6 +319,16 @@ const Main = (props: Props) => {
     XLSX.writeFile(wb, 'Customer Details.csv')
   }
 
+  const searchBarHandler = (e) => {
+    //  if space bar is initially clicked dont do anything
+    if (searchTerm == '' && e.nativeEvent.data == ' ') {
+      return
+    } else {
+      setSearchTerm(e.target.value)
+      setHideX(false)
+    }
+  }
+
   useEffect(() => {
     if (userRole === 'checker') {
       setNextLevelButtonId(2)
@@ -446,7 +457,9 @@ const Main = (props: Props) => {
           </div>
 
           <div className=''>
-            <div className='relative   w-[15.625rem]'>
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={()=>{}} />
+
+            {/* <div className='relative   w-[15.625rem]'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
                 <svg
                   aria-hidden='true'
@@ -464,7 +477,7 @@ const Main = (props: Props) => {
                 className='block w-full py-1 pl-10 text-sm text-gray-900 border border-b-2 border-gray-300'
                 placeholder='Search for Customer'
               />
-            </div>
+            </div> */}
           </div>
         </div>
         <div className='px-4 py-4 bg-background-default h-fit'>
@@ -750,7 +763,7 @@ const Main = (props: Props) => {
               </div>
               <div className='mt-6 bg-white rounded-md '>
                 <div className='flex justify-end gap-2 mx-4 mt-2'>
-                  <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} />
+                  <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={searchBarHandler} />
                   <div className='border'></div>
                   <div className='flex items-center justify-center px-2 cursor-pointer' onClick={refreshTableHandler}>
                     <img src={Refresh} />
