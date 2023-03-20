@@ -22,6 +22,7 @@ const FormSubmissionAlert = ({ closeModalFunction, customerId, isAdmin }: Props)
     >
       {isAdmin ? (
         <section className='bg-white min-w-[25rem] max-w-[34.6875rem] min-h-[13.9375rem] h-[25.5rem] rounded-[.5rem] py-6 px-6 flex flex-col gap-6 justify-between'>
+          <h3>Customer profile created successfully</h3>
           <div className='relative flex justify-center'>
             <img src={Success} alt='success' />
           </div>
@@ -30,13 +31,24 @@ const FormSubmissionAlert = ({ closeModalFunction, customerId, isAdmin }: Props)
               Please proceed to assign product to customer, else, default Savings product will be assigned to the customer.
             </p>
           </div>
-          <button
-            className='flex items-center justify-center text-white '
-            onClick={() => navigate(`${AppRoutes.mainScreen}product-assignment/${customerId}`, { replace: true })}
-          >
-            <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Assign Product</span>
-            <img src={greaterThanRed} width={30} height={26} />
-          </button>
+          <div className='flex justify-between font-medium text-[base] leading-[1.5rem]'>
+            <button
+              className='  flex items-center justify-center text-[#667085]'
+              onClick={() => {
+                navigate(AppRoutes.mainScreen, { replace: true })
+              }}
+            >
+              <img src={returnIcon} width={30} height={26} alt='return to modify' />
+              <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Return to Dashboard</span>
+            </button>
+            <button
+              className='flex items-center justify-center text-white '
+              onClick={() => navigate(`${AppRoutes.mainScreen}product-assignment/${customerId}`, { replace: true })}
+            >
+              <span className='text-[#667085] text-[1rem] leading-[1.1875rem] mx-4'>Assign Product</span>
+              <img src={greaterThanRed} width={30} height={26} />
+            </button>
+          </div>
         </section>
       ) : (
         <section className='bg-white min-w-[25rem] max-w-[34.6875rem] min-h-[13.9375rem] h-[25.5rem] rounded-[.5rem] py-6 px-6 flex flex-col gap-6 justify-between'>
