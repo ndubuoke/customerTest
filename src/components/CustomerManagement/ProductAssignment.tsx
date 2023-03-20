@@ -201,7 +201,7 @@ const ProductAssignment = () => {
           closeModal={() => {
             setShowProductAssignmentCustomerAlertModal(false)
           }}
-          message={`${userData.user?.tenant_admin ? 'Products Has Been Assigned To Customer' : 'Product Assignment Request Submitted For Approval'}`}
+          message={`${userData.user?.tenant_admin ? 'Product(s) Has Been Assigned To Customer' : 'Product Assignment Request Submitted For Approval'}`}
           isOpen={showProductAssignmentCustomerAlertModal}
           loading={assignProduct.loading}
           status={assignProduct.serverResponse.status === 'success' ? 'success' : 'error'}
