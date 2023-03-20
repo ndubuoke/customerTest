@@ -23,10 +23,15 @@ const SingleProductModal = ({ productId, setShowProductModal, assignProductHandl
   const closeModal = () => {
     setShowProductModal(false)
   }
+
+  const assignProductButtonHandler = (data) => {
+    closeModal()
+    assignProductHandler(data)
+  }
   useEffect(() => {
     dispatch(getSingleProductAction(productId) as any)
   }, [productId])
-  console.log(singleProduct)
+  // console.log(singleProduct)
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
@@ -124,15 +129,11 @@ const SingleProductModal = ({ productId, setShowProductModal, assignProductHandl
                     <Button
                       disabled={false}
                       text={'Assign Product'}
-                      onClick={() => {
-                        closeModal()
-
-                        assignProductHandler.bind(null, {
-                          productId: getProductDetail(singleProduct, 'product_id'),
-                          productName: getProductDetail(singleProduct, 'name'),
-                          productCode: getProductDetail(singleProduct, 'code'),
-                        })
-                      }}
+                      onClick={assignProductButtonHandler.bind(null, {
+                        productId: getProductDetail(singleProduct, 'product_id'),
+                        productName: getProductDetail(singleProduct, 'name'),
+                        productCode: getProductDetail(singleProduct, 'code'),
+                      })}
                     />
                   </div>
                 </div>
