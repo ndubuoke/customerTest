@@ -5,20 +5,21 @@ import { useEffect } from 'react'
 type searchBarType = {
   setSearchTerm: (e) => void
   searchTerm: string
+  hideX: boolean
+  setHideX:(e)=> void
+  onChange:(e)=> void
 }
 
-const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
-  const [hideX, setHideX] = useState(true)
-
-  const searchBarHandler = (e) => {
-    //  if space bar is initially clicked dont do anything
-    if (searchTerm == '' && e.nativeEvent.data == ' ') {
-      return
-    } else {
-      setSearchTerm(e.target.value)
-      setHideX(false)
-    }
-  }
+const SearchBar = ({ setSearchTerm, searchTerm, hideX, setHideX, onChange }: searchBarType) => {
+  // const searchBarHandler = (e) => {
+  //   //  if space bar is initially clicked dont do anything
+  //   if (searchTerm == '' && e.nativeEvent.data == ' ') {
+  //     return
+  //   } else {
+  //     setSearchTerm(e.target.value)
+  //     setHideX(false)
+  //   }
+  // }
   useEffect(() => {
     if (searchTerm == '') {
       setHideX(true)
@@ -41,7 +42,7 @@ const SearchBar = ({ setSearchTerm, searchTerm }: searchBarType) => {
       <input
         type='search'
         value={searchTerm}
-        onChange={searchBarHandler}
+        onChange={onChange}
         className='block border-b-2   py-1 pl-10 w-full text-sm text-gray-900 border border-gray-300 outline-none'
         placeholder='Search by customer name'
       />
