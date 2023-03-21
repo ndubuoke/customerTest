@@ -3,7 +3,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { memo, useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { getCitiesAction, getCountriesAction, getStatesAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { getCitiesAction, getCountriesAction, getStatesAction, getLgaAction, setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -120,10 +120,9 @@ const FormDropdown = ({
 
   const [optionsField, setOptionsField] = useState<any>([])
   const [columnName, setColumnName] = useState<string>('')
-  console.log('optionsField', optionsField)
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
-  const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
+  const [states, setStates] = useState<Array<{ stateName: string; stateID: string }>>([])
   const [cities, setCities] = useState<Array<any>>([])
 
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
@@ -140,6 +139,7 @@ const FormDropdown = ({
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
   const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
   const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
+  const getLgaRedux = useSelector<ReducersType>((state: ReducersType) => state?.getLga) as ResponseType
   const getCitiesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCities) as ResponseType
 
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
@@ -202,6 +202,15 @@ const FormDropdown = ({
       dispatch(getStatesAction(checkCountriesInStorage?.country?.countryId) as any)
     }
   }
+  const checkIfItemIsLga = (_item: FormControlType | FormControlTypeWithSection) => {
+    const checkStateInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
+      ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
+      : null
+
+    if (checkStateInStorage?.sectionId === item?.sectionId || checkStateInStorage?.pageId === item?.pageId) {
+      dispatch(getLgaAction(checkStateInStorage?.state?.stateId) as any)
+    }
+  }
 
   const checkIfItemIsCity = () => {
     const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
@@ -220,13 +229,17 @@ const FormDropdown = ({
   useEffect(() => {
     if (fieldLabel.toLowerCase().includes('state') && getStatesRedux) {
       if (getStatesRedux?.success) {
-        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.stateName))
         setStates(
           getStatesRedux?.serverResponse?.data?.map((x) => {
-            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.cityId, stateName: x?.cityName }
+            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.stateId, stateName: x?.stateName }
           })
         )
-        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+        console.log(
+          getStatesRedux?.serverResponse?.data?.map((x) => {
+            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.stateId, stateName: x?.stateName }
+          })
+        )
       }
     }
   }, [getStatesRedux])
@@ -244,6 +257,26 @@ const FormDropdown = ({
     // setSelectedDropdownItem(prev => ([]...prev, }))
   }
 
+  //This is LGA
+  useEffect(() => {
+    // console.log(first)
+    if (fieldLabel.toLowerCase().includes('lga') && getLgaRedux) {
+      if (getLgaRedux?.success) {
+        setOptionsField(getLgaRedux?.serverResponse?.data?.map((x) => x?.lgaName))
+        setCities(
+          getLgaRedux?.serverResponse?.data?.map((x) => {
+            return { lgaId: x?.lgaId, lgaName: x?.lgaName, stateId: x?.stateId }
+          })
+        )
+        console.log(
+          getLgaRedux?.serverResponse?.data?.map((x) => {
+            return { lgaId: x?.lgaId, lgaName: x?.lgaName, stateId: x?.stateId }
+          })
+        )
+      }
+    }
+  }, [getLgaRedux])
+
   //This is city
   useEffect(() => {
     // console.log(first)
@@ -252,10 +285,10 @@ const FormDropdown = ({
         setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.cityName))
         setCities(
           getCitiesRedux?.serverResponse?.data?.map((x) => {
-            return { countryId: x?.countryId, countryName: x?.countryName, cityId: x?.cityId, cityName: x?.cityName }
+            return { countryId: x?.countryId, cityId: x?.cityId, cityName: x?.cityName }
           })
         )
-        // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
+        console.log({ getCitiesRedux: getCitiesRedux?.serverResponse })
       }
     }
   }, [getCitiesRedux])
@@ -656,6 +689,9 @@ const FormDropdown = ({
             if (fieldLabel.toLowerCase().includes('state')) {
               checkIfItemIsState(item)
             }
+            if (fieldLabel.toLowerCase().includes('lga')) {
+              checkIfItemIsLga(item)
+            }
             if (fieldLabel.toLowerCase().includes('city')) {
               checkIfItemIsCity()
             }
@@ -723,12 +759,18 @@ const FormDropdown = ({
                         onClick={(e) => {
                           e.stopPropagation()
                           handleSelectedDropdownItem(selected, item)
-
                           const country = countries.find((x) => x.countryName === selected)
+                          const state = states.find((x) => x.stateName === selected)
                           if (country) {
                             sessionStorage.setItem(
                               `${item?.sectionId || item?.pageId}`,
                               JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+                            )
+                          }
+                          if (state) {
+                            sessionStorage.setItem(
+                              `${item?.sectionId || item?.pageId}`,
+                              JSON.stringify({ selected, state, sectionId: item?.sectionId, pageId: item?.pageId })
                             )
                           }
 

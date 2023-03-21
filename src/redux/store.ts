@@ -30,6 +30,7 @@ import {
   getCountriesReducer,
   getStatesReducer,
   getCitiesReducer,
+  getLgaReducer,
   getColumnMapReducer,
   createColumnMapReducer,
 } from './reducers/FormManagement.reducers'
@@ -77,7 +78,7 @@ export type ReducersType = {
   allProductCategories: customersManagementResponseType
   allProducts: customersManagementResponseType
   allProductTypes: customersManagementResponseType
-  assignProduct:customersManagementResponseType
+  assignProduct: customersManagementResponseType
   customerProfile: customersManagementResponseType
   allCustomers: customersManagementResponseType
   allRequests: customersManagementResponseType
@@ -106,6 +107,7 @@ export type ReducersType = {
   getCountries: ResponseType
   getStates: ResponseType
   getCities: ResponseType
+  getLga: ResponseType
   getColumnMap: ResponseType
   createColumnMap: ResponseType
   riskAssessment: riskAssessmentType
@@ -127,7 +129,7 @@ const reducer = combineReducers<ReducersType>({
   customerProfile: getCustomerProfileReducer,
   allCustomers: getCustomersReducer,
   allProductTypes: getProductTypesReducer,
-  assignProduct:assignProductReducer,
+  assignProduct: assignProductReducer,
   allProducts: getAllProductsReducer,
   allProductCategories: getProductsCategoriesReducer,
   customerActivityLog: getActivityLogReducer,
@@ -158,6 +160,7 @@ const reducer = combineReducers<ReducersType>({
   getCountries: getCountriesReducer,
   getStates: getStatesReducer,
   getCities: getCitiesReducer,
+  getLga: getLgaReducer,
   getColumnMap: getColumnMapReducer,
   createColumnMap: createColumnMapReducer,
   riskAssessment: riskAssessmentReducer,
