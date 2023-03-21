@@ -457,7 +457,7 @@ const Main = (props: Props) => {
           </div>
 
           <div className=''>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={()=>{}} />
+            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={() => {}} />
 
             {/* <div className='relative   w-[15.625rem]'>
               <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
@@ -487,7 +487,7 @@ const Main = (props: Props) => {
                 <div className='flex flex-col  border w-[18%] rounded-l-md'>
                   <button
                     className={`${
-                      nextLevelButtonId === 1 ? 'bg-[#EFEFEF] font-bold' : ''
+                      nextLevelButtonId === 1 ? 'font-bold' : 'bg-[#EFEFEF] '
                     } flex items-center pl-[20%] relative h-[50%]     py-2 text-text-secondary `}
                     onClick={nextLevelButtonHandler.bind(null, 1)}
                   >
@@ -497,7 +497,7 @@ const Main = (props: Props) => {
                   </button>
                   <button
                     className={`${
-                      nextLevelButtonId === 2 ? 'bg-[#EFEFEF] font-bold' : ''
+                      nextLevelButtonId === 2 ? 'font-bold' : 'bg-[#EFEFEF] '
                     } flex   items-center  pl-[20%] relative h-[50%]    py-2 text-text-secondary`}
                     onClick={nextLevelButtonHandler.bind(null, 2)}
                   >

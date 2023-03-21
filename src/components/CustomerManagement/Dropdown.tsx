@@ -8,14 +8,12 @@ type DropdownType = {
 
   selectedItemHandler: (e) => void
   selectedItem: string
-  dropdownListRef:any
-
+  dropdownListRef: any
 }
 
-
 const Dropdown = memo(({ showLists, selectedItemHandler, setShowLists, selectedItem, dropdownListRef }: DropdownType) => {
-  const productCategoryType = ['All' , 'Payment' ,'Credit' ,'Deposit' , 'Investment']
- 
+  const productCategoryType = ['All', 'Payment', 'Credit', 'Deposit', 'Investment']
+
   return (
     <div className=' relative '>
       <button
@@ -41,7 +39,8 @@ const Dropdown = memo(({ showLists, selectedItemHandler, setShowLists, selectedI
       {showLists && (
         <div
           ref={dropdownListRef}
-          className='absolute w-[80%] top-5 overflow-auto h-[100px]   bg-background-paper  flex flex-col z-20 border rounded-md'
+          className='absolute w-[80%] top-10 overflow-auto  bg-background-paper  flex flex-col z-20 border rounded-md'
+          style={{ height: 'max-content' }}
         >
           {productCategoryType?.map((list, index) => {
             return (
