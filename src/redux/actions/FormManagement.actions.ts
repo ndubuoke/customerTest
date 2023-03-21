@@ -25,6 +25,9 @@ import {
   GET_STATES_FAIL,
   GET_STATES_REQUEST,
   GET_STATES_SUCCESS,
+  GET_LGA_REQUEST,
+  GET_LGA_SUCCESS,
+  GET_LGA_FAIL,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -209,7 +212,7 @@ export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, g
       },
     }
 
-    const { data } = await axios.get(`${SERVER_URL}/v1/country/city/${stateId}`, config)
+    const { data } = await axios.get(`${SERVER_URL}/v1/country/state/${stateId}`, config)
 
     dispatch({ type: GET_STATES_SUCCESS, payload: data })
 
@@ -219,6 +222,30 @@ export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, g
     console.log(error)
     dispatch({
       type: GET_STATES_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
+export const getLgaAction = (stateId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_LGA_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL}/v1/country/lga/${stateId}`, config)
+
+    dispatch({ type: GET_LGA_SUCCESS, payload: data })
+
+    // localStorage.removeItem('form')
+  } catch (error) {
+    // localStorage.removeItem('form')
+    console.log(error)
+    dispatch({
+      type: GET_LGA_FAIL,
       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
     })
   }
