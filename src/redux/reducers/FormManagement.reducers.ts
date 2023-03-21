@@ -7,6 +7,7 @@ import {
   CREATE_COLUMN_MAP_REQUEST,
   CREATE_COLUMN_MAP_SUCCESS,
   GET_CITIES_FAIL,
+  GET_CITIES_RESET,
   GET_CITIES_REQUEST,
   GET_CITIES_SUCCESS,
   GET_COLUMN_MAP_FAIL,
@@ -22,6 +23,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   GET_STATES_FAIL,
+  GET_STATES_RESET,
   GET_STATES_REQUEST,
   GET_STATES_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
@@ -255,8 +257,8 @@ export const getStatesReducer = (state: ResponseType = initialStateRequest, acti
     case GET_STATES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
-    //   case RESET_STATe:
-    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    case GET_STATES_RESET:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
     default:
       return state
   }
@@ -274,8 +276,8 @@ export const getCitiesReducer = (state: ResponseType = initialStateRequest, acti
     case GET_CITIES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
-    //   case RESET_STATe:
-    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    case GET_CITIES_RESET:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
     default:
       return state
   }

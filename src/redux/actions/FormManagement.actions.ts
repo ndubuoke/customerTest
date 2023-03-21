@@ -8,6 +8,7 @@ import {
   CREATE_COLUMN_MAP_REQUEST,
   CREATE_COLUMN_MAP_SUCCESS,
   GET_CITIES_FAIL,
+  GET_CITIES_RESET,
   GET_CITIES_REQUEST,
   GET_CITIES_SUCCESS,
   GET_COLUMN_MAP_FAIL,
@@ -23,6 +24,7 @@ import {
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   GET_STATES_FAIL,
+  GET_STATES_RESET,
   GET_STATES_REQUEST,
   GET_STATES_SUCCESS,
   SHOW_WAIVER_MODAL_IN_FORM,
@@ -177,6 +179,7 @@ export const submitFormAction =
 export const getCountriesAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
     dispatch({ type: GET_COUNTRIES_REQUEST })
+    dispatch(resetStatesAction() as any)
 
     const config = {
       headers: {
@@ -199,7 +202,7 @@ export const getCountriesAction = () => async (dispatch: Dispatch, getState: (st
   }
 }
 
-export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const getStatesAction = (countryId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
     dispatch({ type: GET_STATES_REQUEST })
 
@@ -209,7 +212,7 @@ export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, g
       },
     }
 
-    const { data } = await axios.get(`${SERVER_URL}/v1/country/city/${stateId}`, config)
+    const { data } = await axios.get(`${SERVER_URL}/v1/country/state/${countryId}`, config)
 
     dispatch({ type: GET_STATES_SUCCESS, payload: data })
 
@@ -223,8 +226,11 @@ export const getStatesAction = (stateId: string) => async (dispatch: Dispatch, g
     })
   }
 }
+export const resetStatesAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  dispatch({ type: GET_STATES_RESET })
+}
 
-export const getCitiesAction = (cityId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+export const getCitiesAction = (stateId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   try {
     dispatch({ type: GET_CITIES_REQUEST })
 
@@ -234,7 +240,7 @@ export const getCitiesAction = (cityId: string) => async (dispatch: Dispatch, ge
       },
     }
 
-    const { data } = await axios.get(`${SERVER_URL}/v1/country/city/${cityId}`, config)
+    const { data } = await axios.get(`${SERVER_URL}/v1/country/lga/${stateId}`, config)
 
     dispatch({ type: GET_CITIES_SUCCESS, payload: data })
 
@@ -247,6 +253,10 @@ export const getCitiesAction = (cityId: string) => async (dispatch: Dispatch, ge
       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
     })
   }
+}
+
+export const resetCitiesAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  dispatch({ type: GET_CITIES_RESET })
 }
 
 export const getColumnMapAction = (formId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
