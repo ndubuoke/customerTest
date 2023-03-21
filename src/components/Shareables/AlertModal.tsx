@@ -33,8 +33,9 @@ const AlertModal = ({
       }}
     >
       <div
-        className={`${loading ? 'min-h-[6.25rem] min-w-[7.5rem]' : 'min-h-[18.75rem] min-w-[31.25rem]'}  ${loading ? 'flex justify-center items-center' : ''
-          } bg-white p-6 rounded-2xl `}
+        className={`${loading ? 'min-h-[6.25rem] min-w-[7.5rem]' : 'min-h-[18.75rem] min-w-[31.25rem]'}  ${
+          loading ? 'flex justify-center items-center' : ''
+        } bg-white p-6 rounded-2xl `}
       >
         {loading && (
           <div className='flex flex-col items-center justify-center p-2 text-text-secondary w-fit h-fit'>
@@ -61,13 +62,6 @@ const AlertModal = ({
             <div className='flex items-center justify-center font-light text-text-secondary'>
               <h6>{message}</h6>
             </div>
-
-            <div className='flex items-center justify-center font-light text-text-secondary'>
-              <h6>
-                DATE AND TIME: {new Date().toDateString()}[{new Date().toLocaleTimeString('en-US', { hour12: true })}]
-              </h6>
-            </div>
-
             <div className='flex justify-between text-text-secondary'>
               <button className='flex items-center justify-center' onClick={leftClick}>
                 <img src={leftArrow} alt='' className='mr-2' />

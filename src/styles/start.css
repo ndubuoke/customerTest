@@ -208,6 +208,11 @@ html {
   color: #667085;
   cursor: not-allowed;
 }
+.previous-btn {
+  background-color: #fff;
+  border: 1px solid #d8dae5;
+  color: #667085;
+}
 
 /* End Style datalist */
 
