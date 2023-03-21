@@ -58,7 +58,8 @@ type CustomerManagementTable = {
   showCustomerFunctionOptions: boolean
   showCalender: boolean
   selectedStatus: string
-
+  customer: any
+  setCustomer: (e) => void
   setShowCustomerFunctionOptions: (e) => void
   customerFunctionListRef: any
   filterStateOptionsRef: any
@@ -87,6 +88,8 @@ type CustomerManagementTable = {
   refreshTableHandler: () => void
   userRole: string
   searchTerm: string
+
+  setShowCustomerModal: (e) => void
 }
 
 const CustomerManagementTable = ({
@@ -107,6 +110,9 @@ const CustomerManagementTable = ({
   filterRequestStatusOptionsRef,
   showFilterRequestStatusOptions,
   ShowFilterInitiatorOptions,
+  setShowCustomerModal,
+  customer,
+  setCustomer,
   // setShowDeactivationModal,
   selectedStatus,
   AllCustomers,
@@ -121,6 +127,7 @@ const CustomerManagementTable = ({
   setShowSystemAlert,
   refreshTableHandler,
   showCalender,
+
   filterDateRef,
   setShowCalender,
   userRole,
@@ -130,7 +137,6 @@ const CustomerManagementTable = ({
   const [requestId, setRequestId] = useState(0)
   const [requestIdToBeDeleted, setRequestIdToBeDeleted] = useState('')
 
-  const [customer, setCustomer] = useState() as any
   const [allChecked, setallChecked] = useState(false)
   const [activeChecked, setActiveChecked] = useState(false)
   const [inactiveChecked, setInactiveChecked] = useState(false)
@@ -140,7 +146,7 @@ const CustomerManagementTable = ({
   const [interimApprovalRequestStatusOptionChecked, setInterimApprovalRequestStatusOptionChecked] = useState(false)
   const [draftRequestStatusOptionChecked, setDraftRequestStatusOptionChecked] = useState(false)
   const [allRequestStatusOptionChecked, setAllRequestStatusOptionChecked] = useState(false)
-  const [showCustomerModal, setShowCustomerModal] = useState(false)
+
   const [showRequestModal, setShowRequestModal] = useState(false)
   const [allRequestTypeOptionChecked, setAllRequestTypeOptionChecked] = useState(false)
   const [creationRequestTypeOptionChecked, setCreationRequestTypeOptionChecked] = useState(false)
@@ -560,7 +566,6 @@ const CustomerManagementTable = ({
 
   return (
     <>
-      {showCustomerModal && <ViewCustomerModal customer={customer} setShowCustomerModal={setShowCustomerModal} />}
       {showRequestModal && (
         <RequestModal externalFunctionToDoSomething={deleteRequestHandler} message={RequestModalMessage} setShowRequestModal={setShowRequestModal} />
       )}
