@@ -13,6 +13,7 @@ import {
   getCustomersRequestsAction,
   getTotalRequestStatusCustomersAction,
   getRequestsForCheckerAction,
+  getCustomerByNameAction,
 } from '../redux/actions/CustomerManagement.actions'
 import { ReducersType } from '../redux/store'
 import { customersManagementResponseType } from '../redux/reducers/CustomerManagement.reducer'
@@ -22,6 +23,9 @@ import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmis
 import SearchBar from 'Components/CustomerManagement/SearchBar'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import * as XLSX from 'xlsx'
+import Spinner from 'Components/Shareables/Spinner'
+import SearchBarModal from '../components/CustomerManagement/searchBarModal'
+import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
 
 type Props = {}
 
@@ -49,6 +53,7 @@ const Main = (props: Props) => {
   const dispatch = useDispatch()
   const initialRef: any = null
   const statusListRef = useRef(initialRef)
+  const searchBarModalRef = useRef(initialRef)
   const createCustomerListRef = useRef(initialRef)
   const customerFunctionListRef = useRef(initialRef)
   const requestFunctionListRef = useRef(initialRef)
@@ -63,6 +68,7 @@ const Main = (props: Props) => {
   const userData = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
   const totalStatusCustomers = useSelector<ReducersType>((state: ReducersType) => state?.totalStatusCustomers) as customersManagementResponseType
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
+  const customerByName = useSelector<ReducersType>((state: ReducersType) => state?.customerByName) as customersManagementResponseType
   type userType = 'maker' | 'checker'
   const [showLists, setShowLists] = useState(false)
   const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>(null)
@@ -79,14 +85,19 @@ const Main = (props: Props) => {
   const [customersSelectedStatus, setCustomersSelectedStatus] = useState<DropdownSelectedStatusType>(null)
   const [requestsSelectedStatus, setRequestsSelectedStatus] = useState('')
   const [nextLevelButtonId, setNextLevelButtonId] = useState(1)
+  const [showCustomerModal, setShowCustomerModal] = useState(false)
+  const [customer, setCustomer] = useState() as any
   // const [showDeactivationModal, setShowDeactivationModal] = useState(false)
   const [showSystemAlert, setShowSystemAlert] = useState(false)
   const [showCalender, setShowCalender] = useState(false)
-  const [hideX, setHideX] = useState(true)
   const [customerType, setCustomerType] = useState<customerType>('Individual')
   // const [userRole, setUserRole] = useState('checker')
   const [userRole, setUserRole] = useState<userType>('maker')
-  const [searchTerm, setSearchTerm] = useState('')
+  const [searchTerm1, setSearchTerm1] = useState('')
+  const [searchTerm2, setSearchTerm2] = useState('')
+  const [hideX1, setHideX1] = useState(true)
+  const [hideX2, setHideX2] = useState(true)
+  const [showSearchBarModal, setShowSearchBarModal] = useState(false)
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
 
@@ -188,6 +199,9 @@ const Main = (props: Props) => {
       if (showLists && createCustomerListRef.current && !createCustomerListRef.current.contains(e.target)) {
         setShowLists(false)
       }
+      if (showSearchBarModal && searchBarModalRef.current && !searchBarModalRef.current.contains(e.target)) {
+        setShowSearchBarModal(false)
+      }
     }
 
     document.addEventListener('mousedown', checkIfClickedOutside)
@@ -206,7 +220,16 @@ const Main = (props: Props) => {
     showRequestFunctionOptions,
     showCalender,
     showLists,
+    showSearchBarModal,
   ])
+
+  
+
+
+  const viewCustomerModalHandler = (customer) => {
+    setShowCustomerModal(true)
+    setCustomer(customer)
+  }
 
   const refreshTableHandler = () => {
     if (customermanagementTableType === 'All Customers') {
@@ -321,13 +344,34 @@ const Main = (props: Props) => {
 
   const searchBarHandler = (e) => {
     //  if space bar is initially clicked dont do anything
-    if (searchTerm == '' && e.nativeEvent.data == ' ') {
+    if (searchTerm1 == '' && e.nativeEvent.data == ' ') {
       return
     } else {
-      setSearchTerm(e.target.value)
-      setHideX(false)
+      setSearchTerm1(e.target.value)
+      setHideX1(false)
     }
   }
+
+  const searchBar2Handler = (e) => {
+    //  if space bar is initially clicked dont do anything
+    if (searchTerm2 == '' && e.nativeEvent.data == ' ') {
+      return
+    } else {
+      setSearchTerm2(e.target.value)
+      setHideX2(false)
+    }
+  }
+
+  useEffect(() => {
+    if (searchTerm2 == '') {
+      return setShowSearchBarModal(false)
+    }
+    const timer = setTimeout(() => {
+      dispatch(getCustomerByNameAction(searchTerm2) as any)
+      setShowSearchBarModal(true)
+    }, 500)
+    return () => clearTimeout(timer)
+  }, [searchTerm2])
 
   useEffect(() => {
     if (userRole === 'checker') {
@@ -378,11 +422,10 @@ const Main = (props: Props) => {
   //  console.log(allRequestsForChecker)
   // console.log(user)
   // console.log(totalStatusCustomers?.serverResponse?.data?.total)
+ 
 
   return (
     <>
-      {/* {showDeactivationModal ? <DeactivationModal setShowDeactivationModal={setShowDeactivationModal} /> : null} */}
-
       {showSystemAlert ? (
         <>
           {userRole === 'maker' && totalStatusCustomers?.serverResponse?.data?.total > 0 ? (
@@ -400,6 +443,7 @@ const Main = (props: Props) => {
           ) : null}
         </>
       ) : null}
+      {showCustomerModal && <ViewCustomerModal customer={customer} setShowCustomerModal={setShowCustomerModal} />}
 
       <div className='  flex flex-col bg-[#FFFFFF] '>
         <div className=' flex w-[62.5rem] mt-10 pl-6 items-center'>
@@ -456,28 +500,15 @@ const Main = (props: Props) => {
             </button>
           </div>
 
-          <div className=''>
-            <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={()=>{}} />
-
-            {/* <div className='relative   w-[15.625rem]'>
-              <div className='absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none'>
-                <svg
-                  aria-hidden='true'
-                  className='w-5 h-5 text-gray-500 '
-                  fill='none'
-                  stroke='currentColor'
-                  viewBox='0 0 24 24'
-                  xmlns='http://www.w3.org/2000/svg'
-                >
-                  <path strokeLinecap='round' strokeLinejoin='round' strokeWidth='2' d='M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z'></path>
-                </svg>
-              </div>
-              <input
-                type='search'
-                className='block w-full py-1 pl-10 text-sm text-gray-900 border border-b-2 border-gray-300'
-                placeholder='Search for Customer'
+          <div className='relative'>
+            <SearchBar searchTerm={searchTerm2} setSearchTerm={setSearchTerm2} hideX={hideX2} setHideX={setHideX2} onChange={searchBar2Handler} />
+            {showSearchBarModal && (
+              <SearchBarModal
+                searchBarModalRef={searchBarModalRef}
+                externalFunctionToDoSomething={viewCustomerModalHandler}
+                response={customerByName}
               />
-            </div> */}
+            )}
           </div>
         </div>
         <div className='px-4 py-4 bg-background-default h-fit'>
@@ -763,7 +794,13 @@ const Main = (props: Props) => {
               </div>
               <div className='mt-6 bg-white rounded-md '>
                 <div className='flex justify-end gap-2 mx-4 mt-2'>
-                  <SearchBar searchTerm={searchTerm} setSearchTerm={setSearchTerm} hideX={hideX} setHideX={setHideX} onChange={searchBarHandler} />
+                  <SearchBar
+                    searchTerm={searchTerm1}
+                    setSearchTerm={setSearchTerm1}
+                    hideX={hideX1}
+                    setHideX={setHideX1}
+                    onChange={searchBarHandler}
+                  />
                   <div className='border'></div>
                   <div className='flex items-center justify-center px-2 cursor-pointer' onClick={refreshTableHandler}>
                     <img src={Refresh} />
@@ -792,7 +829,7 @@ const Main = (props: Props) => {
                 {/* Customer Managament Table */}
 
                 <CustomerManagementTable
-                  searchTerm={searchTerm}
+                  searchTerm={searchTerm1}
                   filterRequestStatusOptionsRef={filterRequestStatusOptionsRef}
                   showFilterRequestStatusOptions={showFilterRequestStatusOptions}
                   setShowFilterRequestStatusOptions={setShowFilterRequestStatusOptions}
@@ -814,6 +851,9 @@ const Main = (props: Props) => {
                   setShowFilterInitiatorOptions={setShowFilterInitiatorOptions}
                   ShowFilterInitiatorOptions={ShowFilterInitiatorOptions}
                   selectedStatus={''}
+                  customer={customer}
+                  setCustomer={setCustomer}
+                  setShowCustomerModal={setShowCustomerModal}
                   AllCustomers={AllCustomers}
                   allRequests={allRequests}
                   customerType={customerType}
