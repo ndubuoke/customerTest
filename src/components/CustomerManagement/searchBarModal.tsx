@@ -3,14 +3,14 @@ import Spinner from 'Components/Shareables/Spinner'
 import getCustomerDetail from 'Utilities/getCustomerDetail'
 import React from 'react'
 
-
 type props = {
   response: any
   externalFunctionToDoSomething: (e) => void
-  searchBarModalRef:any
+  searchBarModalRef: any
 }
 
 const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModalRef }: props) => {
+  // console.log(response)
   return (
     <div
       ref={searchBarModalRef}
@@ -21,7 +21,10 @@ const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModa
           <Spinner size='large' />
         </div>
       )}
-      {!response.loading &&
+      {!response.loading && response?.serverResponse?.data?.length === 0 &&(
+        <p>No Customer Exist with search term</p>
+      )}
+      {!response.loading && response?.serverResponse?.data?.length > 0 &&
         response?.serverResponse?.data?.map((customer, index) => {
           if (customer?.customerType === 'Individual') {
             return (
@@ -30,14 +33,18 @@ const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModa
                   <img src={searchCaret} alt='' />
                   Individual Customers
                 </p>
-                <div className='mt-2 w-full flex gap-2 cursor-pointer' onClick={externalFunctionToDoSomething.bind(null, customer)}>
-                  <img src={search} alt='' className='w-4' />
+                <div className='mt-2 w-full flex gap-2 cursor-pointer ' onClick={externalFunctionToDoSomething.bind(null, customer)}>
+                  <span className='flex justify-start mt-1  '>
+                    <div className='w-[60%]'>
+                      <img src={search} alt='' className=' w-6' />
+                    </div>
+                  </span>
                   <div>
                     <p className='text-[#636363] capitalize text-[16px]'>
                       {getCustomerDetail(customer, 'surname')} {getCustomerDetail(customer, 'otherNames')} {getCustomerDetail(customer, 'firstName')}
                     </p>
                     <p className='text-[#636363] text-[12px]'>{getCustomerDetail(customer, 'emailAddress')}</p>
-                    <p></p>
+                    <p className='text-[#AAAAAA] text-[12px] capitalize'>Last request initiated by {getCustomerDetail(customer, 'initiator')}</p>
                   </div>
                 </div>
               </div>
@@ -57,7 +64,7 @@ const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModa
                       {getCustomerDetail(customer, 'surname')} {getCustomerDetail(customer, 'otherNames')} {getCustomerDetail(customer, 'firstName')}
                     </p>
                     <p className='text-[#636363] text-[12px]'>{getCustomerDetail(customer, 'emailAddress')}</p>
-                    <p></p>
+                    <p className='text-[#AAAAAA] text-[12px] capitalize'>Last request initiated by {getCustomerDetail(customer, 'initiator')}</p>
                   </div>
                 </div>
               </div>

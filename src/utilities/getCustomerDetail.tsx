@@ -1,4 +1,5 @@
-const getCustomerDetail = (customer, field:string): string | string[] | ''  => {
+import getRequestIntitiatorWithRecentDate from './getRequestIntitiatorWithRecentDate'
+const getCustomerDetail = (customer, field: string): string | string[] | '' => {
   if (field === 'surname') {
     return customer.customer_profiles.map((profile) => {
       return profile.surname
@@ -54,6 +55,10 @@ const getCustomerDetail = (customer, field:string): string | string[] | ''  => {
     return customer.customer_profiles.map((profile) => {
       return profile.customerGroups
     })
+  }
+  if (field === 'initiator') {
+    
+    return getRequestIntitiatorWithRecentDate(customer?.requests)
   }
 }
 

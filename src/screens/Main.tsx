@@ -27,6 +27,7 @@ import Spinner from 'Components/Shareables/Spinner'
 import SearchBarModal from '../components/CustomerManagement/searchBarModal'
 import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
 
+
 type Props = {}
 
 const customerTypeoptions = ['Individual', 'SME']
@@ -69,6 +70,7 @@ const Main = (props: Props) => {
   const totalStatusCustomers = useSelector<ReducersType>((state: ReducersType) => state?.totalStatusCustomers) as customersManagementResponseType
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
   const customerByName = useSelector<ReducersType>((state: ReducersType) => state?.customerByName) as customersManagementResponseType
+ 
   type userType = 'maker' | 'checker'
   const [showLists, setShowLists] = useState(false)
   const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>(null)
@@ -365,6 +367,7 @@ const Main = (props: Props) => {
     }
     const timer = setTimeout(() => {
       dispatch(getCustomerByNameAction(searchTerm2) as any)
+     
       setShowSearchBarModal(true)
     }, 500)
     return () => clearTimeout(timer)
@@ -500,6 +503,7 @@ const Main = (props: Props) => {
             <SearchBar searchTerm={searchTerm2} setSearchTerm={setSearchTerm2} hideX={hideX2} setHideX={setHideX2} onChange={searchBar2Handler} />
             {showSearchBarModal && (
               <SearchBarModal
+              
                 searchBarModalRef={searchBarModalRef}
                 externalFunctionToDoSomething={viewCustomerModalHandler}
                 response={customerByName}
