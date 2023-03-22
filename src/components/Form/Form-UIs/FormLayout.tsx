@@ -94,10 +94,6 @@ const FormLayout = memo(
         const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
         // console.log('customerDataBioDataSection', customerDataBioDataSection)
         if (customerDataBioDataSection) {
-          console.log(
-            '!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() ==',
-            !(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married')
-          )
           setDetailsOfSpouseIsDisabled(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
 
           setCollapsed(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
@@ -107,9 +103,9 @@ const FormLayout = memo(
         }
       }
     }, [fillingFormState])
-    console.log('shouldCollapseByDefault', shouldCollapseByDefault)
-    console.log('collapsed', collapsed)
-    console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
+    // console.log('shouldCollapseByDefault', shouldCollapseByDefault)
+    // console.log('collapsed', collapsed)
+    // console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
     const isSpouseDetailsSection = useMemo(() => {
       return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
     }, [item])

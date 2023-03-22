@@ -28,12 +28,12 @@ import { ReducersType } from 'Redux/store'
 import { formStruture } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { info } from 'Assets/svgs'
 import GraceFormModal from 'Components/Shareables/gracemodal'
 
 type Props = {
-  customerType: 'sme' | 'individual'
+  customerType?: 'sme' | 'individual'
 }
 
 export type CustomerType = 'sme' | 'individual'
@@ -165,7 +165,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   useEffect(() => {
     API.get(`/interim-approval-config/type/${customerType}`).then((data) => {
-      console.log('data-/interim-approval-config', data)
+      // console.log('data-/interim-approval-config', data)
       if (!data.data?.data?.gracePeriod) {
         setShowGraceModal(true)
       }

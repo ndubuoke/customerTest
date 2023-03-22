@@ -56,10 +56,10 @@ const Form = memo(
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
 
     const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
-    console.log('pageIndex', pageIndex)
+    // console.log('pageIndex', pageIndex)
 
     useEffect(() => {
-      console.log('publishedForm', publishedForm)
+      // console.log('publishedForm', publishedForm)
       if (publishedForm?.success && publishedForm?.serverResponse?.data) {
         const page = publishedForm?.serverResponse?.data.builtFormMetadata.pages[pageIndex]
         if (!page) {
@@ -114,7 +114,7 @@ const Form = memo(
     }, [getColumnMap])
 
     useEffect(() => {
-      console.log({ fillingFormState })
+      // console.log({ fillingFormState })
 
       if (fillingFormState?.data?.customerData?.length > 0) {
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))

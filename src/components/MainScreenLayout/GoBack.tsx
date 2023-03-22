@@ -21,7 +21,7 @@ export type BreadCrumbsListItemType = {
 }
 
 type Props = {
-  headerText: string
+  headerText?: string
   breadCrumbsList: Array<BreadCrumbsListItemType>
 }
 
@@ -40,8 +40,7 @@ const GoBack = memo(({ breadCrumbsList, headerText }: Props) => {
         background: '#fff',
       }}
     >
-      <h1 className='text-xl font-bold leading-8 uppercase text-[#747373]'>{headerText}</h1>
-
+      {headerText && <h1 className='text-xl font-bold leading-8 uppercase text-[#747373]'>{headerText}</h1>}
       <div className='flex gap-4'>
         <Link to={AppRoutes.mainScreen}>
           <img src={arrow} title='Go back' />

@@ -127,7 +127,7 @@ const FormDropdown = ({
 
   const [optionsField, setOptionsField] = useState<any>([])
   const [columnName, setColumnName] = useState<string>('')
-  console.log('optionsField', optionsField)
+  // `console`.log('optionsField', optionsField)
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ stateName: string; stateId: string }>>([])
@@ -163,7 +163,7 @@ const FormDropdown = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // console.log({
+      // `console`.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -197,7 +197,7 @@ const FormDropdown = ({
             return { countryId: x?.countryId, countryName: x?.countryName }
           })
         )
-        // console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+        // `console`.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
   }, [getCountriesRedux])
@@ -238,7 +238,7 @@ const FormDropdown = ({
             return { stateId: x?.stateId, stateName: x?.stateName }
           })
         )
-        console.log({ getStatesRedux: getStatesRedux?.serverResponse?.data })
+        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
     if (fieldLabel.toLowerCase().includes('lga') && !Object(getStatesRedux.serverResponse).hasOwnProperty('data')) {
@@ -270,7 +270,7 @@ const FormDropdown = ({
             return { lgaId: x?.lgaId, lgaName: x?.lgaName }
           })
         )
-        console.log({ getCityRedux: getCitiesRedux?.serverResponse?.data })
+        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
   }, [getCitiesRedux])
@@ -287,7 +287,7 @@ const FormDropdown = ({
       return
     }
     if (enableMultipleSelection.toLowerCase() === 'on') {
-      //   console.log(multipleSelectedDropdownItems)
+      //   `console`.log(multipleSelectedDropdownItems)
       // if (multipleSelectedDropdownItems.length === 0) {
       //   return
       // } else {
