@@ -53,6 +53,9 @@ import {
   ASSIGN_PRODUCT_REQUEST,
   ASSIGN_PRODUCT_SUCCESS,
   ASSIGN_PRODUCT_FAIL,
+  GET_CUSTOMER_BY_NAME_REQUEST,
+  GET_CUSTOMER_BY_NAME_SUCCESS,
+  GET_CUSTOMER_BY_NAME_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 export type customersManagementResponseType = {
@@ -381,3 +384,19 @@ export const assignProductReducer = (state: customersManagementResponseType = in
   }
 }
 
+
+export const getCustomerByNameReducer = (state: customersManagementResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_CUSTOMER_BY_NAME_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_CUSTOMER_BY_NAME_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_CUSTOMER_BY_NAME_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    default:
+      return state
+  }
+}

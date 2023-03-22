@@ -58,6 +58,9 @@ import {
   ASSIGN_PRODUCT_REQUEST,
   ASSIGN_PRODUCT_SUCCESS,
   ASSIGN_PRODUCT_FAIL,
+  GET_CUSTOMER_BY_NAME_REQUEST,
+  GET_CUSTOMER_BY_NAME_SUCCESS,
+  GET_CUSTOMER_BY_NAME_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -498,6 +501,30 @@ export const assignProductAction =
     } catch (error) {
       dispatch({
         type: ASSIGN_PRODUCT_FAIL,
+        payload: error?.response && error?.response?.data?.message,
+      })
+    }
+  }
+
+
+
+  export const getCustomerByNameAction = (customerName: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+    try {
+      const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+      dispatch({ type: GET_CUSTOMER_BY_NAME_REQUEST })
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+      }
+
+      const { data } = await axios.get(`${SERVER_URL}/customer/search?search=${customerName}`)
+
+      dispatch({ type: GET_CUSTOMER_BY_NAME_SUCCESS, payload: data })
+    } catch (error) {
+      dispatch({
+        type: GET_CUSTOMER_BY_NAME_FAIL,
         payload: error?.response && error?.response?.data?.message,
       })
     }

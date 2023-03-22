@@ -14,6 +14,7 @@ import {
   getCustomerProfileReducer,
   deactivateCustomerReducer,
   assignProductReducer,
+  getCustomerByNameReducer,
 } from './reducers/CustomerManagement.reducer'
 import {
   getFormReducer,
@@ -74,6 +75,7 @@ import { getCustomer360ProductTypeReducer } from './reducers/Customer360GetProdu
 export type ReducersType = {
   publishedForm: ResponseType
   bulkProcessSummary: BulkProcessSummaryTypes
+  customerByName:customersManagementResponseType
   singleProduct: customersManagementResponseType
   allProductCategories: customersManagementResponseType
   allProducts: customersManagementResponseType
@@ -124,6 +126,7 @@ export type ReducersType = {
 }
 
 const reducer = combineReducers<ReducersType>({
+  customerByName:getCustomerByNameReducer,
   publishedForm: getFormReducer,
   singleProduct: getSingleProductReducer,
   customerProfile: getCustomerProfileReducer,

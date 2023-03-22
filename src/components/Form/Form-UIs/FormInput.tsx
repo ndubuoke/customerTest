@@ -40,6 +40,8 @@ const FormInput = ({
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
 
+  console.log('forminput-item', item.formControlProperties, 'Field label', 'Field label')
+
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')

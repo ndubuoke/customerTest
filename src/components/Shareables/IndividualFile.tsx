@@ -2,7 +2,7 @@ import React, { useState, memo, useRef } from 'react'
 // import { Document, Page } from 'react-pdf/dist/esm/entry.webpack'
 // import { UploadFile } from '.'
 import RemoveButton from './RemoveButton'
-
+import PdfImage from '../../assets/images/pdf.png'
 type Props = {
   file: {
     file: File
@@ -53,12 +53,10 @@ const IndividualFile = memo(({ file, removeFile, height = 110, waiverRequest = f
             style={{ width: '194', height }}
           />
         )}
-        {/* {file.file.type.endsWith('pdf') && (
-
-          <Document file={file.signedUrl || file.file}>
-            <Page pageNumber={1} width={94} height={104} renderTextLayer={false} renderAnnotationLayer={false} />
-          </Document>
-        )} */}
+        {/* {file.includes('.pdf') && } */}
+        {file.file.type.endsWith('pdf') && (
+          <img src={PdfImage} className='object-contain' width={194} height={height} style={{ width: '194px', height }} />
+        )}
       </div>
       {/* <p>Upload Key: {file.key}</p> */}
     </div>
