@@ -61,6 +61,9 @@ import {
   GET_CUSTOMER_BY_NAME_REQUEST,
   GET_CUSTOMER_BY_NAME_SUCCESS,
   GET_CUSTOMER_BY_NAME_FAIL,
+  // GET_INITIATOR_BY_ID_REQUEST,
+  // GET_INITIATOR_BY_ID_SUCCESS,
+  // GET_INITIATOR_BY_ID_FAIL,
 } from '../constants/CustomerManagement.constants'
 
 type order = '' | 'asc' | 'desc'
@@ -69,6 +72,7 @@ type dateFilterType = 'day' | 'month' | ''
 // const SERVER_URL = 'https://9e99-18-133-131-7.eu.ngrok.io/v1'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com/v1'
 const PRODUCT_URL = 'https://product-management-api-dev.reventtechnologies.com/v1'
+const PRUNEDGE_AUTH_URL = process.env.PRUNEDGE_AUTH_URL
 
 export const getCustomersAction =
   (customerType: string, customerStatus: string = '', order: order = '', initiatorId: string = '', approverId: string = '') =>
@@ -529,3 +533,26 @@ export const assignProductAction =
       })
     }
   }
+
+
+  //  export const getInitiatorByIdAction = (intiatorId: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  //    try {
+  //      const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+  //      dispatch({ type: GET_INITIATOR_BY_ID_REQUEST })
+  //      const config = {
+  //        headers: {
+  //          'Content-Type': 'application/json',
+  //          Authorization: `Bearer ${token}`,
+  //        },
+  //      }
+
+  //      const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/users/${intiatorId}`, config)
+
+  //      dispatch({ type: GET_INITIATOR_BY_ID_SUCCESS, payload: data })
+  //    } catch (error) {
+  //      dispatch({
+  //        type: GET_INITIATOR_BY_ID_FAIL,
+  //        payload: error?.response && error?.response?.data?.message,
+  //      })
+  //    }
+  //  }
