@@ -248,11 +248,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                       />
                     </div>
                     <div style={{ marginTop: '2rem' }}>
-                      <Button
-                        text='Proceed'
-                        disabled={!identificationDetails.identificationNumber || !identificationDetails.identificationType}
-                        onClick={() => handleProceed()}
-                      />
+                      <Button text='Proceed' disabled={false} onClick={() => handleProceed()} />
                     </div>
                   </div>
                 ) : null}
