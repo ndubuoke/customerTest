@@ -7,6 +7,7 @@ import {
   CREATE_COLUMN_MAP_REQUEST,
   CREATE_COLUMN_MAP_SUCCESS,
   GET_CITIES_FAIL,
+  GET_CITIES_RESET,
   GET_CITIES_REQUEST,
   GET_CITIES_SUCCESS,
   GET_COLUMN_MAP_FAIL,
@@ -22,8 +23,12 @@ import {
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
   GET_STATES_FAIL,
+  GET_STATES_RESET,
   GET_STATES_REQUEST,
   GET_STATES_SUCCESS,
+  GET_LGA_REQUEST,
+  GET_LGA_SUCCESS,
+  GET_LGA_FAIL,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -255,6 +260,24 @@ export const getStatesReducer = (state: ResponseType = initialStateRequest, acti
     case GET_STATES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
+    case GET_STATES_RESET:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+export const getLgaReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_LGA_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_LGA_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+    // return { ...state, ...publishedForm }
+
+    case GET_LGA_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
     //   case RESET_STATe:
     //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
     default:
@@ -274,8 +297,8 @@ export const getCitiesReducer = (state: ResponseType = initialStateRequest, acti
     case GET_CITIES_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
-    //   case RESET_STATe:
-    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    case GET_CITIES_RESET:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
     default:
       return state
   }
