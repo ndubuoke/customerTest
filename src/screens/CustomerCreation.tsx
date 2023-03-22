@@ -118,9 +118,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   useEffect(() => {
     if (formCreationStarted) {
-      // console.log('identificationDetails', identificationDetails)
+      console.log('identificationDetails', identificationDetails)
       if (identificationDetails.identityData) {
-        setBackupForSwitchFormState({ ...identificationDetails.identityData })
+        setBackupForSwitchFormState({ ...identificationDetails.identityData, bVN: identificationDetails.identityData.idNumber || '' })
       }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
