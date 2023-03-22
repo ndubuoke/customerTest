@@ -15,6 +15,7 @@ import {
   deactivateCustomerReducer,
   assignProductReducer,
   getCustomerByNameReducer,
+  
 } from './reducers/CustomerManagement.reducer'
 import {
   getFormReducer,
@@ -73,6 +74,7 @@ import { getCustomer360RecommendedProductsReducer } from './reducers/Customer360
 import { getCustomer360ProductTypeReducer } from './reducers/Customer360GetProductByType.reducer'
 
 export type ReducersType = {
+  
   publishedForm: ResponseType
   bulkProcessSummary: BulkProcessSummaryTypes
   customerByName:customersManagementResponseType
@@ -93,6 +95,7 @@ export type ReducersType = {
   allRequestsByDate: customersManagementResponseType
   userRolesAndPermissions: UserRolesAndPersmissionsTypes
   userProfile: UserProfileTypes
+  // initiator:customersManagementResponseType
   validateCustomer: validateCustomerResponseType
   saveBulkCustomerCreation: SaveBulkCreationTypes
   totalStatusCustomers: customersManagementResponseType
@@ -126,6 +129,7 @@ export type ReducersType = {
 }
 
 const reducer = combineReducers<ReducersType>({
+  // initiator:getInitiatorByIdReducer,
   customerByName:getCustomerByNameReducer,
   publishedForm: getFormReducer,
   singleProduct: getSingleProductReducer,
