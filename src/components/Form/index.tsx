@@ -54,8 +54,10 @@ const Form = memo(
     const [canNext, setCanNext] = useState<boolean>(false)
     const [pageIndex, setPageIndex] = useState<number>(0)
     const [notifyUserOfRequiredFields, setNotifyUserOfRequiredFields] = useState<boolean>(false)
+    const [collapsedSection, setCollapsedSection] = useState<{ id: string; isCollapsed: boolean }[]>([])
 
     const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
+
     // console.log('pageIndex', pageIndex)
 
     useEffect(() => {
@@ -64,14 +66,38 @@ const Form = memo(
         const page = publishedForm?.serverResponse?.data.builtFormMetadata.pages[pageIndex]
         if (!page) {
           const index = publishedForm?.serverResponse?.data.builtFormMetadata.pages.length - 1
-          const newPage = publishedForm?.serverResponse?.data.builtFormMetadata.pages[index]
+          const newPage: PageInstance = publishedForm?.serverResponse?.data.builtFormMetadata.pages[index]
           dispatch(activePageAction(newPage, index) as any)
           setActivePageState(newPage)
           setPageIndex(index)
         }
+        // else {
+        //          setCollapsedSection(() => {
+        //     console.log('page.sections',page.sections)
+        //     return page.sections.reduce((acc, curr, idx) => {
+        //       acc[curr.id] = idx !== 0
+        //       return acc
+        //     }, {} as Record<string, boolean>)
+        //   })
+        // }
       }
     }, [publishedForm])
 
+    useEffect(() => {
+      if (activePageState) {
+        setCollapsedSection(() => {
+          console.log('activePageState.sections', activePageState.sections)
+          return activePageState.sections.map((sect, idx) => {
+            return {
+              id: sect.id,
+              isCollapsed: idx !== 0,
+            }
+          })
+        })
+      }
+    }, [activePageState])
+
+    console.log('collapsedSection', collapsedSection)
     // console.log('activePage', activePage)
     // console.log('activePageState', getProperty(activePageState?.pageProperties, 'Page name', 'value').text.toLowerCase())
     // console.log(
@@ -204,7 +230,9 @@ const Form = memo(
                               fillingFormState={fillingFormState}
                               setBackupForSwitchFormState={setBackupForSwitchFormState}
                               backupForSwitchFormState={backupForSwitchFormState}
-                              shouldCollapseByDefault={index !== 0}
+                              // shouldCollapseByDefault={index !== 0}
+                              isCollapsed={collapsedSection.find((collapsedSection) => collapsedSection.id === sects.id)?.isCollapsed}
+                              setCollapsedSection={setCollapsedSection}
                             />
                             {customerType === 'sme' && activePage && activePage?.theIndex === 0 && index === activePageState?.sections?.length - 1 ? (
                               <Signatories key={'Signatories' + index} />

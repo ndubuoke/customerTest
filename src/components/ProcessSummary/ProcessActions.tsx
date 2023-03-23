@@ -1,5 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { goBackToForm, cancelForm, submitForm, ModifyIcon } from 'Assets/svgs'
+import {
+  goBackToForm,
+  cancelForm,
+  submitForm,
+  ModifyIcon,
+  returnIcon,
+  ProcessSummaryCancelIcon,
+  ProcessSummarySubmitIcon,
+  ProcessSummaryModifyIcon,
+} from 'Assets/svgs'
 import { useNavigate } from 'react-router-dom'
 import { AppRoutes } from 'Routes/AppRoutes'
 import { isForm } from 'Screens/CustomerCreation'
@@ -130,25 +139,78 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   return (
     <div
-      className={`absolute   m-auto bottom-2 right-2  grid grid-cols-3 gap-0 rounded-lg  max-w-[31.25rem] px-4 py-2 bg-white`}
+      className=' flex absolute    bottom-2 right-2   rounded-lg  px-4 py-2 mb-[1rem]'
       style={{
-        boxShadow: '0rem 0rem .5rem rgba(0, 0, 0, 0.25)',
+        justifyContent: 'space-between',
+        width: '100%',
         zIndex: '1000',
       }}
     >
-      <div className={`text-center  flex flex-col items-center max-w-[5rem] cursor-pointer `} onClick={handleBackToForm}>
-        <div className='w-[2.1875rem] h-[2.1875rem] mb-2  '>
-          <img src={goBackToForm} alt='go back' width={30} height={24} />
-        </div>
-        <div className='text-[.75rem]  '>Modify Form</div>
+      <div>
+        <button
+          className='flex gap-2 font-medium text-[#667085]  px-[1rem] py-[.5rem] rounded-lg bg-white items-center'
+          style={{
+            cursor: 'pointer',
+            fontFamily: 'Inter',
+            border: '1px solid #D8DAE5',
+          }}
+          onClick={handleOpenCancelFormModal}
+        >
+          <img src={ProcessSummaryCancelIcon} alt='go back' width={15} height={15} color='white' />
+          <p
+            style={{
+              fontSize: '14px',
+            }}
+          >
+            Cancel
+          </p>
+        </button>
       </div>
-      <div className={`text-center  flex flex-col items-center max-w-[5rem] cursor-pointer`} onClick={handleOpenCancelFormModal}>
+      <div className='flex gap-4'>
+        <button
+          className='flex gap-2 font-medium text-[#667085]  px-[1rem] py-[.5rem] rounded-lg bg-white items-center'
+          style={{
+            cursor: 'pointer',
+            fontFamily: 'Inter',
+            border: '1px solid #D8DAE5',
+          }}
+          onClick={handleBackToForm}
+        >
+          <img src={ProcessSummaryModifyIcon} alt='go back' width={15} height={15} />
+          <p
+            style={{
+              fontSize: '14px',
+            }}
+          >
+            Modify
+          </p>
+        </button>
+        <button
+          className='flex gap-2 font-medium text-[#fff]  px-[1rem] py-[.5rem] rounded-lg bg-[#DC5A5D] items-center'
+          style={{
+            cursor: 'pointer',
+            fontFamily: 'Inter',
+            border: '1px solid #D8DAE5',
+          }}
+          onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : mode === 'creation' ? handleSubmitForm : handleSubmitModifiedForm}
+        >
+          <img src={ProcessSummarySubmitIcon} alt='go back' width={15} height={15} />
+          <p
+            style={{
+              fontSize: '14px',
+            }}
+          >
+            {openWaiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}
+          </p>
+        </button>
+      </div>
+      {/* <div className={`text-center  flex flex-col items-center max-w-[5rem] cursor-pointer`} onClick={handleOpenCancelFormModal}>
         <div className='w-[2.1875rem] h-[2.1875rem] mb-2 '>
           <img src={cancelForm} alt='go back' width={30} height={24} />
         </div>
         <div className='text-[12px] '>Cancel</div>
-      </div>
-      <div
+      </div> */}
+      {/* <div
         className={`text-center flex flex-col items-center max-w-[5rem] cursor-pointer`}
         onClick={openWaiver === 'show' ? handleOpenWaiverRequestForm : mode === 'creation' ? handleSubmitForm : handleSubmitModifiedForm}
       >
@@ -156,7 +218,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
           <img src={submitForm} alt='go back' width={30} height={24} />
         </div>
         <div className='text-[12px] '>{openWaiver === 'show' ? 'Request for waiver \n & submit form' : 'Submit form'}</div>
-      </div>
+      </div> */}
       {openCancelFormModal ? <CancelFormModal closeModalFunction={handleOpenCancelFormModal} cancelFormCreation={handleCancelFormCreation} /> : null}
 
       {openWaiverRequestForm ? (

@@ -273,6 +273,7 @@ const FormDate = ({
       }
     }
   }, [publishedFormState, columnName])
+  console.log(helpText)
 
   return (
     <div
@@ -306,6 +307,8 @@ const FormDate = ({
               ? 'week'
               : ''
           }
+          min={helpText === 'Expiry Date' ? new Date().toISOString().slice(0, 10) : ''}
+          max={helpText === 'Issue Date' ? new Date().toISOString().slice(0, 10) : ''}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
           title={helpText}
