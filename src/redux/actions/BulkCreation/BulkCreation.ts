@@ -65,7 +65,7 @@ export const validateCustomers = (customers: any) => async (dispatch: Dispatch) 
       }
     }
     const { data } = await axios.post(`${REVENT_BASE_URL}/bulk-customer/validate`, customers)
-    console.log(data)
+    // console.log(data)
     if (data?.status === 'success') {
       dispatch({
         type: VALIDATE_BULK_CUSTOMER_SUCCESS,

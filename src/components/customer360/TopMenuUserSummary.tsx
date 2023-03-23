@@ -1,16 +1,18 @@
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useLocation, Link } from 'react-router-dom'
+import { useLocation, Link, useParams } from 'react-router-dom'
 import { getSingleCustomerAction } from 'Redux/actions/Customer360.actions'
 import TopNavProfile from './TopNavProfile'
 import TopNavReusable from './TopNavReusable'
 import _ from 'lodash'
+import mapRouteParam from '../../utilities/mapRouteParam'
+import { AppRoutes } from 'Routes/AppRoutes'
 
 type Props = {}
 
 const TopMenuUserSummary = (props: Props) => {
+  const { customerId } = useParams()
   // get location
-
   const dispatch = useDispatch()
   const location = useLocation().pathname
   const splitLocation = location.split('/')
@@ -52,7 +54,6 @@ const TopMenuUserSummary = (props: Props) => {
       {customerDetails?.length
         ? customerDetails?.map((data: any, index: any) => {
             const bvnNo = _.defaultTo(_.get(data, 'bvn'), 'N/A')
-            console.log('bvnNo detail:', bvnNo)
             return (
               <div key={index} className=' bg-white py-[2.75rem] px-3'>
                 <div className='flex justify-between'>
@@ -69,7 +70,7 @@ const TopMenuUserSummary = (props: Props) => {
                   />
                 </div>
                 <div className='flex justify-end leading-none'>
-                  <Link to="/" className='underline text-[#CF2A2A]'>
+                  <Link to={mapRouteParam(AppRoutes.customer360ProfileScreen, ':customerId', customerId)} className='underline text-[#CF2A2A]'>
                     <a>View More</a>
                   </Link>
                 </div>

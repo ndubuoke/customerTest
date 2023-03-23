@@ -8,14 +8,20 @@ export const AppRoutes = {
   individualCustomerCreationScreen: CMR + '/individual-customer-creation',
   bulkCustomerCreationMakerCheckerScreen: CMR + '/bulk-customer',
   SMECustomerCreationScreen: CMR + '/sme-customer-creation',
-  customerAccountModificationScreen: CMR + '/:customerId',
-  customer360Screen: CMR + '/customer-360/:customerId',
+  // customer 360
   customer360SearchScreen: CMR + '/customer-360',
+  customer360Screen: CMR + '/customer-360/:customerId',
+  customer360ProfileScreen: CMR + '/customer-360/:customerId/profile',
   customerManagementProcessSummary: CMR + '/process-summary/:requestId',
   productAssignment: CMR + '/product-assignment/:customerId',
   // process summary
   individualProcessSummary: CMR + '/individual-customer-creation/process-summary',
   SMEProcessSummary: CMR + '/sme-customer-creation/process-summary',
+  // customer related routes
+  customerAccountModificationScreen: CMR + '/:customerId',
+  customerAccountProfile: CMR + '/:customerId/view',
+  customerAccountProfileModify: CMR + '/:customerId/edit',
+  customerAccountProfileDeactivate: CMR + '/:customerId/deactivate',
   // 404
   FOURZEROFOUR: CMR + '*',
 }

@@ -14,7 +14,7 @@ export const getColumnName = ({ columns, pageId, sectionId, fieldId, fieldName }
     columnFound = columns?.find((x) => x?.sectionId === sectionId)
   }
 
-  console.log({ columnFound: columnFound?.data?.find((x) => x?.fieldId === fieldId), fieldName })
+  // console.log({ columnFound: columnFound?.data?.find((x) => x?.fieldId === fieldId), fieldName })
 
   if (columnFound?.length > 0) {
     console.log({ preCol: columnFound?.data?.find((x) => x?.fieldId === fieldId) })
