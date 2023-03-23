@@ -230,7 +230,7 @@ const FormDropdown = ({
   // TODO---
   // CHange this to state and not city
   useEffect(() => {
-    if (fieldLabel.toLowerCase().includes('state') && getStatesRedux) {
+    if (fieldLabel.toLowerCase().includes('state of') && getStatesRedux) {
       if (getStatesRedux?.success) {
         setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.stateName))
         setStates(
@@ -276,7 +276,11 @@ const FormDropdown = ({
   }, [getCitiesRedux])
 
   useEffect(() => {
-    if (!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().includes('state') && !fieldLabel.toLowerCase().includes('lga')) {
+    if (
+      !fieldLabel.toLowerCase().includes('country') &&
+      !fieldLabel.toLowerCase().includes('state of') &&
+      !fieldLabel.toLowerCase().includes('lga')
+    ) {
       setOptionsField(_optionsFieldForm)
     }
   }, [])
@@ -706,7 +710,7 @@ const FormDropdown = ({
         ) : null}
         {showLists && (
           <div
-            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-auto overflow-y-auto'
+            className='absolute z-50 flex flex-col w-full h-auto overflow-y-auto border rounded-lg bg-background-paper'
             style={{
               zIndex: 999,
               maxHeight: '12.5rem',
