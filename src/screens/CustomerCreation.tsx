@@ -189,7 +189,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
         />
       </nav>
 
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
+      <main className='relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
         <div className={`${formCreationStarted ? '' : 'h-[825px]'} min-h-[800px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
           {formModeStatusInStorage === 'creation' ? (
             <SwitchToFormType
