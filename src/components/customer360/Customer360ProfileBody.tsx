@@ -25,7 +25,7 @@ const Customer360ProfileBody = (props: Props) => {
   } = useSelector((store: any) => store.getSingleCustomer)
   const userData = useSelector<ReducersType>((state: ReducersType) => state?.userProfile) as UserProfileTypes
 
-  const [activeTab, setActiveTab] = useState<string>('profile') as any
+  const [activeTab, setActiveTab] = useState<string>('profile')
 
   useEffect(() => {
     if (singleCustomerSuccess) {
@@ -46,7 +46,7 @@ const Customer360ProfileBody = (props: Props) => {
           <ProfileBodyNav activeTab={activeTab} setActiveTab={setActiveTab} />
         </div>}
       </div>
-      {singleCustomerProfile.length > 0
+      {(activeTab === 'profile' && singleCustomerProfile.length > 0)
           ? singleCustomerProfile.map((customerDetails: any, customerIndex: any) => {
               return (
                 <div className='flex flex-col justify-between px-10 py-7 border border-[#EEEEEE] rounded-[10px] gap-[1rem] mt-7' key={customerIndex}>
@@ -56,7 +56,7 @@ const Customer360ProfileBody = (props: Props) => {
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Title</span>
                           <span>
-                            {_.defaultTo(customerDetails?.otherNames, '-')}
+                            {_.defaultTo(customerDetails?.title, '-')}
                           </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
@@ -248,51 +248,109 @@ const Customer360ProfileBody = (props: Props) => {
                   </div>
                   <div>
                     <Accordion title="Details of Next of Kin">
-                    <div className='flex flex-col px-4 lg:px-[70px] py-6 lg:py-8 gap-y-5'>
+                      <div className='flex flex-col px-4 lg:px-[70px] py-6 lg:py-8 gap-y-5'>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Title</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_title, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Surname</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_surname, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>First Name</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_firstName, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Other Names</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_otherNames, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Mother's Maiden Name</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>Relationship</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.relationship, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Gender</span>
-                          <span>Mr</span>
-                        </div>
-                        <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Marital Status</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_gender, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Date of Birth</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_dateOfBirth, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Residential Address
+                          </span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_residentialAddress, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Detailed Description of Address
+                          </span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_detailedDescriptionOfResidentialAddress, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
                           <span className='font-medium w-[260px] pr-5'>Country</span>
-                          <span>Mr</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_countryOfResidence, '-')}
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>State of Origin</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>State</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_stateOfResidence, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>City/Town</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_cityTown, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>
+                            LGA
+                          </span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_lga, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>Mobile Number</span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_mobileNumber, '-')}
+                          </span>
+                        </div>
+                        <div className='flex text-base text-[#636363]'>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Alternate Phone Number
+                          </span>
+                          <span>
+                            {_.defaultTo(customerDetails?.donok_alternatePhoneNumber, '-')}
+                          </span>
                         </div>
                       </div>
                     </Accordion>
                   </div>
-                  <div>
+                  {/* <div>
                     <Accordion title="Section Name">
                     <div className='flex flex-col px-4 lg:px-[70px] py-6 lg:py-8 gap-y-5'>
                         <div className='flex text-base text-[#636363]'>
@@ -337,49 +395,169 @@ const Customer360ProfileBody = (props: Props) => {
                         </div>
                       </div>
                     </Accordion>
-                  </div>
+                  </div> */}
                   <div>
                     <Accordion title="Documentation">
                     <div className='flex flex-col px-4 lg:px-[70px] py-6 lg:py-8 gap-y-5'>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Title</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>Customer Photo</span>
+                          <span>
+                            {customerDetails?.customersPhoto ? 'Uploaded' : 'Not Uploaded'}
+                            {
+                              customerDetails?.customersPhoto &&
+                              <a
+                                href={customerDetails?.customersPhoto}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Surname</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Customer's Signature
+                          </span>
+                          <span>
+                            {customerDetails?.customersSignature ? 'Uploaded' : 'Not Uploaded'}
+                            {
+                              customerDetails?.customersSignature &&
+                              <a
+                                href={customerDetails?.customersSignature}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>First Name</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Proof of Identity
+                          </span>
+                          <span>
+                            {customerDetails?.validID ? 'Uploaded' : 'Not Uploaded'}
+                            {
+                              customerDetails?.validID &&
+                              <a
+                                href={customerDetails?.validID}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Other Names</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Proof of Address
+                          </span>
+                          <span>
+                            {customerDetails?.proofOfResidentialAddress ? 'Uploaded' : 'Not Uploaded'}
+                            {
+                              customerDetails?.proofOfResidentialAddress &&
+                              <a
+                                href={customerDetails?.proofOfResidentialAddress}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Mother's Maiden Name</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Residential Permit
+                          </span>
+                          <span>
+                            {customerDetails?.residentialPermit ? 'Uploaded' : 'Not Applicable'}
+                            {
+                              customerDetails?.residentialPermit &&
+                              <a
+                                href={customerDetails?.residentialPermit}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Gender</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Marriage Certificate
+                          </span>
+                          <span>
+                            {customerDetails?.marriageCertificate ? 'Uploaded' : 'Not Applicable'}
+                            {
+                              customerDetails?.marriageCertificate &&
+                              <a
+                                href={customerDetails?.marriageCertificate}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Marital Status</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Letter from Employer/School/NYSC
+                          </span>
+                          <span>
+                            {customerDetails?.letterFromEmployerSchoolNYSC ? 'Uploaded' : 'Not Applicable'}
+                            {
+                              customerDetails?.letterFromEmployerSchoolNYSC &&
+                              <a
+                                href={customerDetails?.letterFromEmployerSchoolNYSC}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Date of Birth</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Independent Satisfactory References
+                          </span>
+                          <span>
+                            {customerDetails?.letterFromEmployerSchoolNYSC ? 'Uploaded' : 'Not Applicable'}
+                            {
+                              customerDetails?.letterFromEmployerSchoolNYSC &&
+                              <a
+                                href={customerDetails?.letterFromEmployerSchoolNYSC}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                         <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>Country</span>
-                          <span>Mr</span>
-                        </div>
-                        <div className='flex text-base text-[#636363]'>
-                          <span className='font-medium w-[260px] pr-5'>State of Origin</span>
-                          <span>Mr</span>
+                          <span className='font-medium w-[260px] pr-5'>
+                            Other Documents Provided
+                          </span>
+                          <span>
+                            {customerDetails?.otherUncategorizedDocuments ? 'Uploaded' : 'Not Applicable'}
+                            {
+                              customerDetails?.otherUncategorizedDocuments &&
+                              <a
+                                href={customerDetails?.otherUncategorizedDocuments}
+                                target="_blank"
+                                className="pl-2"
+                              >
+                                (View)
+                              </a>
+                            }
+                          </span>
                         </div>
                       </div>
                     </Accordion>
