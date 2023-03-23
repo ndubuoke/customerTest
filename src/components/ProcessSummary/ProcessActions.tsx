@@ -152,7 +152,6 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
           style={{
             cursor: 'pointer',
             fontFamily: 'Inter',
-
             border: '1px solid #D8DAE5',
           }}
           onClick={handleOpenCancelFormModal}

@@ -157,6 +157,7 @@ const AdditionalDetails = memo(() => {
             background: '#FAFAFA',
             fontFamily: 'Inter',
           }}
+          onClick={handleCollapseSection}
         >
           <div className='flex items-center'>
             <h6
@@ -168,21 +169,21 @@ const AdditionalDetails = memo(() => {
               Accounts Held with Other Banks{' '}
             </h6>
           </div>
-          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+          <div className={`border-2 cursor-pointer border-[#C22626] p-1  `}>
             <svg
               xmlns='http://www.w3.org/2000/svg'
               fill='none'
               viewBox='0 0 24 24'
               strokeWidth='1.5'
               stroke='currentColor'
-              className={`w-4 h-4  ${collapsed ? 'rotate-180' : ''}`}
+              className={`w-4 h-4  ${!collapsed ? 'rotate-180' : ''}`}
             >
               <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
             </svg>
           </div>
         </div>
 
-        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626]'}`}>
+        <div className={`${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[200px] border-l-2 border-[#C22626] overflow-hidden'}`}>
           <div className='flex items-center justify-end mt-2'>
             <button
               className='flex gap-2 font-medium
