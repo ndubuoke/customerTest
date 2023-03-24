@@ -26,6 +26,8 @@ import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
 import MultipleSelectionItem from './MultipleSelectionItem'
 import useOnClickOutside from '../../../hooks/useClickOutside'
+import { SearchDropdown } from '../SearchDropdown'
+import { optionizeList } from '../Select'
 
 type Props = {
   item: FormControlType | FormControlTypeWithSection
@@ -652,6 +654,32 @@ const FormDropdown = ({
 
   useOnClickOutside(ref, () => setShowLists(false))
 
+  const handleSelect = (selected: string) => {
+    handleSelectedDropdownItem(selected, item)
+
+    const country = countries.find((x) => x.countryName === selected)
+    if (country) {
+      sessionStorage.setItem(
+        `${item?.sectionId || item?.pageId}`,
+        JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+      )
+    }
+    const state = states.find((x) => x.stateName === selected)
+    if (state) {
+      sessionStorage.setItem(
+        `${item?.sectionId || item?.pageId}-state`,
+        JSON.stringify({ selected, state, sectionId: item?.sectionId, pageId: item?.pageId })
+      )
+    }
+
+    setShowLists(false)
+  }
+
+  // dropdowns for country, state, local government should be searchable (can be filtered by search inputs.)
+  const isDropdownSearchable = () => {
+    return enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country')
+  }
+
   return (
     <div
       ref={ref}
@@ -667,126 +695,146 @@ const FormDropdown = ({
         <FieldLabel fieldItem={item} />
       </div>
 
-      <div className={`relative`}>
-        <div
-          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
-          onClick={() => {
-            setShowLists((prev) => !prev)
-            if (fieldLabel.toLowerCase().includes('state')) {
-              checkIfItemIsState(item)
-            }
-            if (fieldLabel.toLowerCase().includes('lga')) {
-              checkIfItemIsCity()
-            }
-          }}
-          title={selectedDropdownItem && selectedDropdownItem}
-        >
-          {enableMultipleSelection.toLowerCase() === 'off' ? (
-            <div className='overflow-hidden'>
-              {selectedDropdownItem ? (
-                typeof selectedDropdownItem !== 'string' ? (
-                  [].concat(selectedDropdownItem).toString()
-                ) : (
-                  selectedDropdownItem
-                )
-              ) : (
-                <span className={`text-text-disabled`}>Select</span>
-              )}
-            </div>
-          ) : null}
-          {enableMultipleSelection.toLowerCase() === 'on' ? (
-            <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
-              {multipleSelectedDropdownItems.length === 0 ? 'Select' : multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ')}
-            </div>
-          ) : null}
-          <span>
-            <img src={caret} width={15} height={10} />
-          </span>
+      {isDropdownSearchable() && (
+        <div className='mt-1'>
+          <SearchDropdown
+            name={fieldLabel.toLowerCase()}
+            options={optionizeList(optionsField)}
+            placeholder='Select country'
+            handleChange={handleSelect}
+            selected={selectedDropdownItem}
+          />
         </div>
-        {!showLists && required.toLowerCase() === 'on' ? (
-          <p className='text-red-500'>
-            {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName) ? `${fieldLabel} is required!` : null}
-          </p>
-        ) : null}
-        {showLists && (
+      )}
+
+      {!isDropdownSearchable() && (
+        <div className={`relative`}>
           <div
-            className='absolute z-50 flex flex-col w-full h-auto overflow-y-auto border rounded-lg bg-background-paper'
-            style={{
-              zIndex: 999,
-              maxHeight: '12.5rem',
+            className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
+            onClick={() => {
+              setShowLists((prev) => !prev)
+              if (fieldLabel.toLowerCase().includes('state')) {
+                checkIfItemIsState(item)
+              }
+              if (fieldLabel.toLowerCase().includes('lga')) {
+                checkIfItemIsCity()
+              }
             }}
+            title={selectedDropdownItem && selectedDropdownItem}
           >
-            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
-              <div className='flex items-center justify-center w-full h-full'>
-                <Spinner size='large' />
-              </div>
-            ) : null}
-            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state') && getStatesRedux?.loading ? (
-              <div className='flex items-center justify-center w-full h-full'>
-                <Spinner size='large' />
-              </div>
-            ) : null}
-            {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('lga') && getCitiesRedux?.loading ? (
-              <div className='flex items-center justify-center w-full h-full'>
-                <Spinner size='large' />
-              </div>
-            ) : null}
-            {enableMultipleSelection.toLowerCase() === 'off'
-              ? optionsField?.length > 0 &&
-                optionsField?.map((selected, index) => {
-                  return (
-                    selected && (
-                      <div
-                        key={index}
-                        className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${selected === selectedDropdownItem ? 'bg-red-200 ' : ''} `}
-                        onClick={(e) => {
-                          e.stopPropagation()
-                          handleSelectedDropdownItem(selected, item)
-
-                          const country = countries.find((x) => x.countryName === selected)
-                          if (country) {
-                            sessionStorage.setItem(
-                              `${item?.sectionId || item?.pageId}`,
-                              JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
-                            )
-                          }
-                          const state = states.find((x) => x.stateName === selected)
-                          if (state) {
-                            sessionStorage.setItem(
-                              `${item?.sectionId || item?.pageId}-state`,
-                              JSON.stringify({ selected, state, sectionId: item?.sectionId, pageId: item?.pageId })
-                            )
-                          }
-
-                          setShowLists(false)
-                        }}
-                      >
-                        {selected.trim()}
-                      </div>
-                    )
+            {enableMultipleSelection.toLowerCase() === 'off' ? (
+              <div className='overflow-hidden'>
+                {selectedDropdownItem ? (
+                  typeof selectedDropdownItem !== 'string' ? (
+                    [].concat(selectedDropdownItem).toString()
+                  ) : (
+                    selectedDropdownItem
                   )
-                })
-              : null}
-            {enableMultipleSelection.toLowerCase() === 'on'
-              ? optionsField?.length > 0 &&
-                optionsField?.map((selected: string, index: number) => {
-                  return (
-                    <>
-                      {
-                        <MultipleSelectionItem
-                          multipleSelectedDropdownItems={multipleSelectedDropdownItems}
-                          handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
-                          selected={selected}
-                          key={index}
-                        />
-                      }
-                    </>
-                  )
-                })
-              : null}
+                ) : (
+                  <span className={`text-text-disabled`}>Select</span>
+                )}
+              </div>
+            ) : null}
+            {enableMultipleSelection.toLowerCase() === 'on' ? (
+              <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
+                {multipleSelectedDropdownItems.length === 0 ? 'Select' : multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ')}
+              </div>
+            ) : null}
+            <span>
+              <img src={caret} width={15} height={10} />
+            </span>
           </div>
-        )}
-      </div>
+
+          {!showLists && required.toLowerCase() === 'on' ? (
+            <p className='text-red-500'>
+              {setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName) ? `${fieldLabel} is required!` : null}
+            </p>
+          ) : null}
+
+          {showLists && (
+            <div
+              className='absolute z-50 flex flex-col w-full h-auto overflow-y-auto border rounded-lg bg-background-paper'
+              style={{
+                zIndex: 999,
+                maxHeight: '12.5rem',
+              }}
+            >
+              {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
+                <div className='flex items-center justify-center w-full h-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
+              {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state') && getStatesRedux?.loading ? (
+                <div className='flex items-center justify-center w-full h-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
+              {enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('lga') && getCitiesRedux?.loading ? (
+                <div className='flex items-center justify-center w-full h-full'>
+                  <Spinner size='large' />
+                </div>
+              ) : null}
+              {console.log('options field', optionsField, 'field name', fieldLabel)}
+
+              {enableMultipleSelection.toLowerCase() === 'off'
+                ? optionsField?.length > 0 &&
+                  optionsField?.map((selected, index) => {
+                    return (
+                      selected && (
+                        <div
+                          key={index}
+                          className={`hover:bg-red-200 cursor-pointer px-3 py-2 capitalize ${
+                            selected === selectedDropdownItem ? 'bg-red-200 ' : ''
+                          } `}
+                          onClick={(e) => {
+                            e.stopPropagation()
+                            handleSelectedDropdownItem(selected, item)
+
+                            const country = countries.find((x) => x.countryName === selected)
+                            if (country) {
+                              sessionStorage.setItem(
+                                `${item?.sectionId || item?.pageId}`,
+                                JSON.stringify({ selected, country, sectionId: item?.sectionId, pageId: item?.pageId })
+                              )
+                            }
+                            const state = states.find((x) => x.stateName === selected)
+                            if (state) {
+                              sessionStorage.setItem(
+                                `${item?.sectionId || item?.pageId}-state`,
+                                JSON.stringify({ selected, state, sectionId: item?.sectionId, pageId: item?.pageId })
+                              )
+                            }
+
+                            setShowLists(false)
+                          }}
+                        >
+                          {selected.trim()}
+                        </div>
+                      )
+                    )
+                  })
+                : null}
+              {enableMultipleSelection.toLowerCase() === 'on'
+                ? optionsField?.length > 0 &&
+                  optionsField?.map((selected: string, index: number) => {
+                    return (
+                      <>
+                        {
+                          <MultipleSelectionItem
+                            multipleSelectedDropdownItems={multipleSelectedDropdownItems}
+                            handleMultipleSelectedDropdownItem={handleMultipleSelectedDropdownItem}
+                            selected={selected}
+                            key={index}
+                          />
+                        }
+                      </>
+                    )
+                  })
+                : null}
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

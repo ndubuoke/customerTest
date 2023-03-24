@@ -220,7 +220,6 @@ const FormLayout = memo(
             fontFamily: 'Inter',
           }}
         >
-          {console.log('the nonsense fields are', fields)}
           {fields?.length > 0 &&
             fields?.map((field, index) => {
               if (

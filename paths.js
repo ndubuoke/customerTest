@@ -9,6 +9,7 @@ module.exports = {
 }
 
 // make dropdown searchable
-// expiry date should be later than today.
+// DONE: bvn input numeric
+// DONE: expiry date should be later than today.
 // remove date in success modal while creating add on forms.
 // return to dashboard should return to the initial dashboard.
