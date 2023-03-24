@@ -40,7 +40,7 @@ const FormInput = ({
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
 
-  console.log('forminput-item', item.formControlProperties, 'Field label', 'Field label')
+  // console.log('forminput-item', item.formControlProperties, 'Field label', 'Field label')
 
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
@@ -458,41 +458,47 @@ const FormInput = ({
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
         {item.name === fieldsNames.NUMBERCOUNTER ? (
-          <input
-            className={`flex w-full  py-1 leading-6 bg-transparent`}
-            type='number'
-            required={required.toLowerCase() === 'on'}
-            placeholder={placeholder}
-            title={helpText}
-            onChange={(e) => handleChange(e, item)}
-            maxLength={Number(maximumNumbersOfCharacters)}
-            value={text}
-            min='0'
-          />
+          <>
+            <input
+              className={`flex w-full  py-1 leading-6 bg-transparent`}
+              type='number'
+              required={required.toLowerCase() === 'on'}
+              placeholder={placeholder}
+              title={helpText}
+              onChange={(e) => handleChange(e, item)}
+              maxLength={Number(maximumNumbersOfCharacters)}
+              value={text}
+              min='0'
+            />
+          </>
         ) : null}
         {item.name !== fieldsNames.NUMBERCOUNTER ? (
-          <input
-            className={`flex w-full  py-1 leading-6 bg-transparent`}
-            type={
-              item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
-                ? 'text'
-                : item.name === fieldsNames.PHONEINPUT
-                ? 'tel'
-                : item.name === fieldsNames.PASSWORD
-                ? 'password'
-                : item.name === fieldsNames.URL
-                ? 'url'
-                : item.name === fieldsNames.EMAIL
-                ? 'email'
-                : 'text'
-            }
-            required={required.toLowerCase() === 'on'}
-            placeholder={placeholder}
-            title={helpText}
-            onChange={(e) => handleChange(e, item)}
-            maxLength={Number(maximumNumbersOfCharacters)}
-            value={text}
-          />
+          <>
+            <input
+              className={`flex w-full  py-1 leading-6 bg-transparent`}
+              type={
+                isFieldBvn(item)
+                  ? 'number'
+                  : item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
+                  ? 'text'
+                  : item.name === fieldsNames.PHONEINPUT
+                  ? 'tel'
+                  : item.name === fieldsNames.PASSWORD
+                  ? 'password'
+                  : item.name === fieldsNames.URL
+                  ? 'url'
+                  : item.name === fieldsNames.EMAIL
+                  ? 'email'
+                  : 'text'
+              }
+              required={required.toLowerCase() === 'on'}
+              placeholder={placeholder}
+              title={helpText}
+              onChange={(e) => handleChange(e, item)}
+              maxLength={Number(maximumNumbersOfCharacters)}
+              value={text}
+            />
+          </>
         ) : null}
 
         {item.name !== fieldsNames.NUMBERCOUNTER && maximumNumbersOfCharacters ? (
@@ -511,3 +517,25 @@ const FormInput = ({
 }
 
 export default FormInput
+
+const isFieldBvn = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    (getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+    )?.toUpperCase() === 'BVN'
+  )
+}
+
+const isFieldExpiry = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    (getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+    )?.toUpperCase() === 'EXPIRY DATE'
+  )
+}

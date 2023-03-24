@@ -207,7 +207,6 @@ const FormLayout = memo(
             </div>
           </div>
         )}
-
         <div
           className={` ${isCollapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
           style={{
@@ -246,7 +245,6 @@ const FormLayout = memo(
                   />
                 )
               }
-
               if (field.name === fieldsNames.DROPDOWN && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormDropdown
