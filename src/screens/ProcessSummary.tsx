@@ -176,8 +176,13 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
         />
       </nav>
 
-      <main className={` relative flex mx-auto py-[1rem] font-roboto px-[1rem] gap-x-[20px] min-h-50  `}>
-        <section className={`w-[82%] relative `}>
+      <main className={` relative flex mx-auto py-[1rem] font-roboto px-[1rem] gap-x-[20px] min-h-50   `}>
+        <section
+          className={` relative `}
+          style={{
+            maxWidth: '70%',
+          }}
+        >
           <div className={`relative rounded-lg text-[#636363] font-[Inter] w-full h-full  min:h-full max:h-full  bg-white py-6`}>
             <div className='p-4'>
               <ProgressBar
@@ -189,7 +194,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
                 customerType={customerManagementDataInStorage?.customerType.toLowerCase()}
               />
             </div>
-            <div className='pl-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12'>
+            <div className='pl-4 flex flex-col gap-8 h-[70vh] min-h-50  overflow-y-auto pt-4 pb-12 overflow-x-hidden'>
               <h2
                 className='capitalize font-medium text-[24px] leading-[28px] text-[#636363] px-4 py-4 '
                 style={{
@@ -199,7 +204,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
               >
                 {customerType.split('--')[0].trim()} Customer Creation
               </h2>
-              <div className='flex flex-col gap-8  '>
+              <div className='flex flex-col gap-8 '>
                 {!fillingFormInStorage
                   ? null
                   : fillingFormInStorage?.data?.customerData?.map((x, i) => {
@@ -221,7 +226,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           </div>
           <ProcessActions mode={formMode} waiverType={processActionsMode} customerType={customerType} openWaiver={openWaiver} formType={formType} />
         </section>
-        <section className={`w-[18%] min-w-[377px]`}>
+        <section className={`max-w-[30%] min-w-[370px]`}>
           <div
             className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px] overflow-y-auto`}
           >

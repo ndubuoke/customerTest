@@ -30,6 +30,9 @@ import {
   GET_LGA_REQUEST,
   GET_LGA_SUCCESS,
   GET_LGA_FAIL,
+  GET_RELATIONSHIP_OFFICERS_REQUEST,
+  GET_RELATIONSHIP_OFFICERS_SUCCESS,
+  GET_RELATIONSHIP_OFFICERS_FAIL,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -46,6 +49,8 @@ const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
 // const SERVER_URL = 'https://9e39-102-89-46-93.eu.ngrok.io'
 
 const SERVER_URL_PUBLISHED_FORM = 'https://formbuilder-api-dev.reventtechnologies.com'
+
+const PRUNEDGE_AUTH_URL = process.env.PRUNEDGE_AUTH_URL
 
 export const getFormAction = (formType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
   console.log('formtype', formType)
@@ -313,3 +318,30 @@ export const createColumnMapAction =
       })
     }
   }
+
+export const getRelationshipOfficersAction = () => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    const token = localStorage.getItem('@sterling_core_token') ? localStorage.getItem('@sterling_core_token') : null
+    dispatch({ type: GET_RELATIONSHIP_OFFICERS_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+      params: {
+        page_size: 100000,
+      },
+    }
+
+    const { data } = await axios.get(`${PRUNEDGE_AUTH_URL}/users`, config)
+
+    dispatch({ type: GET_RELATIONSHIP_OFFICERS_SUCCESS, payload: data })
+  } catch (error) {
+    console.log(error)
+    dispatch({
+      type: GET_RELATIONSHIP_OFFICERS_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
