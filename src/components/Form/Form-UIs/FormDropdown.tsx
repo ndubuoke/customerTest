@@ -127,7 +127,7 @@ const FormDropdown = ({
 
   const [optionsField, setOptionsField] = useState<any>([])
   const [columnName, setColumnName] = useState<string>('')
-  console.log('optionsField', optionsField)
+  // `console`.log('optionsField', optionsField)
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ stateName: string; stateId: string }>>([])
@@ -163,7 +163,7 @@ const FormDropdown = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // console.log({
+      // `console`.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -197,7 +197,7 @@ const FormDropdown = ({
             return { countryId: x?.countryId, countryName: x?.countryName }
           })
         )
-        // console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+        // `console`.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
   }, [getCountriesRedux])
@@ -230,7 +230,7 @@ const FormDropdown = ({
   // TODO---
   // CHange this to state and not city
   useEffect(() => {
-    if (fieldLabel.toLowerCase().includes('state') && getStatesRedux) {
+    if (fieldLabel.toLowerCase().includes('state of') && getStatesRedux) {
       if (getStatesRedux?.success) {
         setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.stateName))
         setStates(
@@ -238,7 +238,7 @@ const FormDropdown = ({
             return { stateId: x?.stateId, stateName: x?.stateName }
           })
         )
-        console.log({ getStatesRedux: getStatesRedux?.serverResponse?.data })
+        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
     if (fieldLabel.toLowerCase().includes('lga') && !Object(getStatesRedux.serverResponse).hasOwnProperty('data')) {
@@ -270,13 +270,17 @@ const FormDropdown = ({
             return { lgaId: x?.lgaId, lgaName: x?.lgaName }
           })
         )
-        console.log({ getCityRedux: getCitiesRedux?.serverResponse?.data })
+        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
   }, [getCitiesRedux])
 
   useEffect(() => {
-    if (!fieldLabel.toLowerCase().includes('country') && !fieldLabel.toLowerCase().includes('state') && !fieldLabel.toLowerCase().includes('lga')) {
+    if (
+      !fieldLabel.toLowerCase().includes('country') &&
+      !fieldLabel.toLowerCase().includes('state of') &&
+      !fieldLabel.toLowerCase().includes('lga')
+    ) {
       setOptionsField(_optionsFieldForm)
     }
   }, [])
@@ -287,7 +291,7 @@ const FormDropdown = ({
       return
     }
     if (enableMultipleSelection.toLowerCase() === 'on') {
-      //   console.log(multipleSelectedDropdownItems)
+      //   `console`.log(multipleSelectedDropdownItems)
       // if (multipleSelectedDropdownItems.length === 0) {
       //   return
       // } else {
@@ -706,7 +710,7 @@ const FormDropdown = ({
         ) : null}
         {showLists && (
           <div
-            className='absolute w-full bg-background-paper   flex flex-col z-50 border rounded-lg h-auto overflow-y-auto'
+            className='absolute z-50 flex flex-col w-full h-auto overflow-y-auto border rounded-lg bg-background-paper'
             style={{
               zIndex: 999,
               maxHeight: '12.5rem',

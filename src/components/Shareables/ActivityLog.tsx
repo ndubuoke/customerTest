@@ -27,10 +27,10 @@ const ActivityLog = ({ customerId, mode }: Props) => {
   if (mode === 'creation') {
     return (
       <div>
-        <hr className={`w-full mt-4 border border-[#CCCCCC]`} />
+        <p className='ml-4 text-[#636363] text-[1.5rem]'>Activity Log</p>
+        <hr className={`w-full mt-2 border border-[#CCCCCC]`} />
         <br />
         <div className='text-[.875rem] leading-[1.0625rem] text-[#aaaaaa] mb-2'>No activity found</div>
-
         <div className='flex gap-4 items-end  '>
           <LogDots />
           <div

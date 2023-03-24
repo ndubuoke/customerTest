@@ -1,6 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import Customer360 from 'Screens/Customer360'
 import Customer360Search from 'Screens/Customer360Search'
+import Customer360Profile from 'Screens/Customer360Profile'
 import {
   BulkCustomerProcessSummary,
   CustomerAccountModificationScreen,
@@ -26,9 +27,12 @@ export const RouteSwitches = () => (
       <Route path={AppRoutes.customerManagementProcessSummary} element={<CustomerManagementProcessSummary />} />
       <Route path={AppRoutes.productAssignment} element={<ProductAssignment />} />
       <Route path={AppRoutes.SMECustomerCreationScreen} element={<CustomerCreationScreen customerType='sme' />} />
-      <Route path={AppRoutes.customerAccountModificationScreen} element={<CustomerAccountModificationScreen />} />
+      {/* Customer 360 */}
       <Route path={AppRoutes.customer360Screen} element={<Customer360 />} />
       <Route path={AppRoutes.customer360SearchScreen} element={<Customer360Search />} />
+      <Route path={AppRoutes.customer360ProfileScreen} element={<Customer360Profile />} />
+      {/* Customer routes */}
+      <Route path={AppRoutes.customerAccountProfileModify} element={<CustomerCreationScreen customerType={'individual'} />} />
       <Route path={AppRoutes.individualProcessSummary} element={<ProcessSummary headerText={''} customerType={'individual'} />} />
       <Route path={AppRoutes.SMEProcessSummary} element={<ProcessSummary headerText={''} customerType={'sme'} />} />
 

@@ -29,6 +29,9 @@ import {
   GET_LGA_REQUEST,
   GET_LGA_SUCCESS,
   GET_LGA_FAIL,
+  GET_RELATIONSHIP_OFFICERS_REQUEST,
+  GET_RELATIONSHIP_OFFICERS_SUCCESS,
+  GET_RELATIONSHIP_OFFICERS_FAIL,
   SHOW_WAIVER_MODAL_IN_FORM,
   STATUS_FOR_CAN_PROCEED,
   SUBMIT_FORM_FAIL,
@@ -46,6 +49,7 @@ export type ResponseType = {
     status?: string
     message?: string
     data?: any
+    results?: any
   }
   serverError?: {
     status?: string
@@ -67,7 +71,7 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      console.log('action.payload', action.payload)
+      // console.log('action.payload', action.payload)
       let payload = { ...action.payload }
       payload = {
         ...payload,
@@ -337,6 +341,21 @@ export const createColumnMapReducer = (state: ResponseType = initialStateRequest
 
     //   case RESET_STATe:
     //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+
+export const getRelationshipOfficersReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_RELATIONSHIP_OFFICERS_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_RELATIONSHIP_OFFICERS_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_RELATIONSHIP_OFFICERS_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
     default:
       return state
   }

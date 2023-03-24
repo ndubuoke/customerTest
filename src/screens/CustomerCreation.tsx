@@ -28,12 +28,12 @@ import { ReducersType } from 'Redux/store'
 import { formStruture } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
-import { useLocation, useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { info } from 'Assets/svgs'
 import GraceFormModal from 'Components/Shareables/gracemodal'
 
 type Props = {
-  customerType: 'sme' | 'individual'
+  customerType?: 'sme' | 'individual'
 }
 
 export type CustomerType = 'sme' | 'individual'
@@ -165,7 +165,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
   useEffect(() => {
     API.get(`/interim-approval-config/type/${customerType}`).then((data) => {
-      console.log('data-/interim-approval-config', data)
+      // console.log('data-/interim-approval-config', data)
       if (!data.data?.data?.gracePeriod) {
         setShowGraceModal(true)
       }
@@ -188,8 +188,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
           }
         />
       </nav>
-
-      <main className='bg-background-dash relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
+      <main className='relative flex flex-col h-full mx-auto p-[15px] min-h-50 '>
         <div className={`${formCreationStarted ? '' : 'h-[825px]'} min-h-[800px] bg-white rounded-lg border border-[#E5E9EB] relative`}>
           {formModeStatusInStorage === 'creation' ? (
             <SwitchToFormType

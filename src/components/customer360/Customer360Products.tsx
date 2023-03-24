@@ -77,8 +77,6 @@ const Customer360Products = (props: Props) => {
   }, [customer360ProductSuccess])
 
   useEffect(() => {
-    console.log(activeTab)
-
     console.log({ activeTab: getProductByTypeData })
   }, [getProductByTypeSuccess])
 

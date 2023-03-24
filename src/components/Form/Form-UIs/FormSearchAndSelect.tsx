@@ -12,9 +12,9 @@ import { formGetProperty } from './formGetProperty'
 import { fieldsNames } from './FormLayout'
 import DataListInput from 'react-datalist-input'
 import { ReducersType } from 'Redux/store'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, getRelationshipOfficersAction } from 'Redux/actions/FormManagement.actions'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
-
+// https://api.staging.sterlingv2.prunedge.org/api/v1/users?page_size=100000
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
@@ -65,14 +65,20 @@ const FormSearchAndSelect = memo(
         ? importFromURLListValue
         : null
 
+    console.log('fieldLabel-FormSearchAndSelect', fieldLabel)
+    console.log('optionsField-FormSearchAndSelect', optionsField)
+
     const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
     const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
     const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
 
+    const [items, setItems] = useState<{ label: string; key: string }[]>([])
+
     const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
 
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
+    const getRelationshipOfficersRedux = useSelector<ReducersType>((state: ReducersType) => state?.getRelationshipOfficers) as ResponseType
 
     //   console.log(optionsField.split(",").map(function (value) {
     //     return value.trim();
@@ -90,14 +96,54 @@ const FormSearchAndSelect = memo(
       }
     }
 
-    const items = useMemo(
-      () =>
-        optionsField?.split(',')?.map((oneItem) => ({
+    useEffect(() => {
+      if (fieldLabel.toLowerCase().includes('relationship officer')) {
+        dispatch(getRelationshipOfficersAction() as any)
+      }
+      if (fieldLabel.toLowerCase().includes('relationship officer')) {
+        console.log('relationshipOfficer-phew')
+      }
+    }, [])
+
+    //  const items = useMemo(
+    //    () =>
+    //      optionsField?.split(',')?.map((oneItem) => ({
+    //        label: oneItem?.trim(),
+    //        key: oneItem?.trim(),
+    //      })),
+    //    [optionsField]
+    //  )
+
+    useEffect(() => {
+      setItems(() => {
+        return optionsField?.split(',')?.map((oneItem) => ({
           label: oneItem?.trim(),
+          value: oneItem?.trim(),
           key: oneItem?.trim(),
-        })),
-      [optionsField]
-    )
+        }))
+      })
+    }, [optionsField])
+
+    useEffect(() => {
+      if (fieldLabel.toLowerCase().includes('relationship officer')) {
+        if (getRelationshipOfficersRedux?.success) {
+          setItems(
+            getRelationshipOfficersRedux?.serverResponse?.results?.map((x) => ({
+              label: `${x.firstname} ${x.lastname}`,
+              key: x.id,
+              value: x.id,
+            }))
+          )
+          // setOptionsField(getRelationshipOfficersRedux?.serverResponse?.data?.map((x) => x?.countryName))
+          // setCountries(
+          //   getRelationshipOfficersRedux?.serverResponse?.data?.map((x) => {
+          //     return { countryId: x?.countryId, countryName: x?.countryName }
+          //   })
+          // )
+          console.log({ getRelationshipOfficersRedux: getRelationshipOfficersRedux?.serverResponse })
+        }
+      }
+    }, [getRelationshipOfficersRedux])
 
     const onSelect = useCallback((theSelectedItem, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
       setSelectedDropdownItem(theSelectedItem.label)
@@ -126,13 +172,13 @@ const FormSearchAndSelect = memo(
           if (theSection) {
             sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === theItemSectionNameCamelCase)
 
-            theSection.data[theItemFieldNameCamelCase] = theSelectedItem?.label
+            theSection.data[theItemFieldNameCamelCase] = theSelectedItem?.value
             copiedPrev.data.customerData.splice(sectionIndex, 1, theSection)
           } else {
             copiedPrev.data.customerData.push({
               sectionName: theItemSectionNameCamelCase,
               data: {
-                [theItemFieldNameCamelCase]: theSelectedItem?.label,
+                [theItemFieldNameCamelCase]: theSelectedItem?.value,
               },
               pageId,
               sectionId,
@@ -150,13 +196,13 @@ const FormSearchAndSelect = memo(
           if (theSectionlessPage) {
             sectionIndex = copiedPrev?.data?.customerData?.findIndex((x) => x?.sectionName === pageNameToBeUsed)
 
-            theSectionlessPage.data[theItemFieldNameCamelCase] = theSelectedItem?.label
+            theSectionlessPage.data[theItemFieldNameCamelCase] = theSelectedItem?.value
             copiedPrev.data.customerData.splice(sectionIndex, 1, theSectionlessPage)
           } else {
             copiedPrev.data.customerData.push({
               sectionName: pageNameToBeUsed,
               data: {
-                [theItemFieldNameCamelCase]: theSelectedItem?.label,
+                [theItemFieldNameCamelCase]: theSelectedItem?.value,
               },
               pageId,
               sectionId: null,

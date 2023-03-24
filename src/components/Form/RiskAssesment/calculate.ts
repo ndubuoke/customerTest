@@ -150,4 +150,4 @@ export const calcScore = (arr) => {
   }
 }
 const outputData = calcScore(userAssessment)
-console.log(outputData)
+// console.log(outputData)

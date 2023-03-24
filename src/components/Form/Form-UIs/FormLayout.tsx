@@ -56,7 +56,8 @@ type Props = {
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
   backupForSwitchFormState: any
-  shouldCollapseByDefault?: boolean
+  isCollapsed?: boolean
+  setCollapsedSection?: any
 }
 
 const FormLayout = memo(
@@ -70,18 +71,52 @@ const FormLayout = memo(
     fillingFormState,
     setBackupForSwitchFormState,
     backupForSwitchFormState,
-    shouldCollapseByDefault = false,
+    isCollapsed = false,
+    setCollapsedSection,
   }: Props) => {
-    const [collapsed, setCollapsed] = useState<boolean>(shouldCollapseByDefault)
+    // const [isCollapsed, setCollapsed] = useState<boolean>(isCollapsed)
     const [detailsOfSpouseIsDisabled, setDetailsOfSpouseIsDisabled] = useState<boolean>(true)
+    console.log('isCollapsed', isCollapsed)
+    console.log('item.id', item.id)
 
+    const handleSetCollapsedSection = (value?: boolean) => {
+      setCollapsedSection((prev) => {
+        return prev.map((section) => {
+          if (section.id === item.id) {
+            return {
+              ...section,
+              isCollapsed: typeof value === 'boolean' ? value : !section.isCollapsed,
+            }
+          } else {
+            return {
+              ...section,
+              isCollapsed: true,
+            }
+          }
+        })
+      })
+    }
     const handleCollapseSection = () => {
       if (isSpouseDetailsSection) {
         if (!detailsOfSpouseIsDisabled) {
-          setCollapsed((prev) => !prev)
+          // setCollapsed((prev) => !prev)
+          // setCollapsedSection((prev) => {
+          //   return {
+          //     ...prev,
+          //     [item.id]: !prev[item.id],
+          //   }
+          // })
+          handleSetCollapsedSection()
         }
       } else {
-        setCollapsed((prev) => !prev)
+        // setCollapsed((prev) => !prev)
+        // setCollapsedSection((prev) => {
+        //   return {
+        //     ...prev,
+        //     [item.id]: !prev[item.id],
+        //   }
+        // })
+        handleSetCollapsedSection()
       }
     }
 
@@ -94,22 +129,30 @@ const FormLayout = memo(
         const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
         // console.log('customerDataBioDataSection', customerDataBioDataSection)
         if (customerDataBioDataSection) {
-          console.log(
-            '!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() ==',
-            !(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married')
-          )
           setDetailsOfSpouseIsDisabled(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
 
-          setCollapsed(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
+          // setCollapsedSection((prev) => {
+          //   return {
+          //     ...prev,
+          //     [item.id]: !(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'),
+          //   }
+          // })
+          // handleSetCollapsedSection(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
         } else {
           setDetailsOfSpouseIsDisabled(true)
-          setCollapsed(true)
+          // handleSetCollapsedSection(true)
+          // setCollapsedSection((prev) => {
+          //   return {
+          //     ...prev,
+          //     [item.id]: true,
+          //   }
+          // })
         }
       }
     }, [fillingFormState])
-    console.log('shouldCollapseByDefault', shouldCollapseByDefault)
-    console.log('collapsed', collapsed)
-    console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
+    // console.log('isCollapsed', isCollapsed)
+    // console.log('isCollapsed', isCollapsed)
+    // console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
     const isSpouseDetailsSection = useMemo(() => {
       return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
     }, [item])
@@ -157,7 +200,7 @@ const FormLayout = memo(
                 viewBox='0 0 24 24'
                 strokeWidth='1.5'
                 stroke='currentColor'
-                className={`w-4 h-4  ${!collapsed ? 'rotate-180' : ''}`}
+                className={`w-4 h-4  ${!isCollapsed ? 'rotate-180' : ''}`}
               >
                 <path strokeLinecap='round' strokeLinejoin='round' d='M19.5 8.25l-7.5 7.5-7.5-7.5' />
               </svg>
@@ -166,7 +209,7 @@ const FormLayout = memo(
         )}
 
         <div
-          className={` ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
+          className={` ${isCollapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',
@@ -193,7 +236,7 @@ const FormLayout = memo(
                   <FormInput
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -209,7 +252,7 @@ const FormLayout = memo(
                   <FormDropdown
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -232,7 +275,7 @@ const FormLayout = memo(
                   <FormDate
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -248,7 +291,7 @@ const FormLayout = memo(
                   <FormTextArea
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -264,7 +307,7 @@ const FormLayout = memo(
                   <FormSearchAndSelect
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -279,7 +322,7 @@ const FormLayout = memo(
                   <FormPhoneInput
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -296,7 +339,7 @@ const FormLayout = memo(
                     activePageState={item}
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
                     fillingFormState={fillingFormState}
@@ -310,7 +353,7 @@ const FormLayout = memo(
                   <FormActionToggle
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -326,7 +369,7 @@ const FormLayout = memo(
                   <FormCheckbox
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -342,7 +385,7 @@ const FormLayout = memo(
                   <FormHeading
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
@@ -354,14 +397,14 @@ const FormLayout = memo(
               }
 
               if (field.name === fieldsNames.BUTTON && getVisibleProperty(field?.formControlProperties)) {
-                return <FormButton item={field} key={field.id} collapsed={collapsed} />
+                return <FormButton item={field} key={field.id} collapsed={isCollapsed} />
               }
               if (field.name === fieldsNames.RADIO && getVisibleProperty(field?.formControlProperties)) {
                 return (
                   <FormRadio
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     // activePageState={item}
                     // setFillingFormState={setFillingFormState}
                     // publishedFormState={publishedFormState}
@@ -374,7 +417,7 @@ const FormLayout = memo(
                   <FormRange
                     item={field}
                     key={field.id}
-                    collapsed={collapsed}
+                    collapsed={isCollapsed}
                     activePageState={item}
                     setFillingFormState={setFillingFormState}
                     publishedFormState={publishedFormState}
