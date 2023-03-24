@@ -15,9 +15,9 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
       return profile.firstName
     })
   }
-  if (field === 'emailAddress') {
+  if (field === 'email') {
     return customer.customer_profiles.map((profile) => {
-      return profile.emailAddress
+      return profile.email
     })
   }
   if (field === 'customerEntityId') {
