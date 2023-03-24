@@ -12,7 +12,7 @@ type DropdownType = {
 }
 
 const Dropdown = memo(({ showLists, selectedItemHandler, setShowLists, selectedItem, dropdownListRef }: DropdownType) => {
-  const productCategoryType = ['All', 'Payment', 'Credit', 'Deposit', 'Investment']
+  const productCategoryType = ['All', 'Credit', 'Deposit', 'Investment']
 
   return (
     <div className=' relative '>
