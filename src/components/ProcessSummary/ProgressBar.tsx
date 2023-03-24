@@ -31,7 +31,7 @@ const ProgressBar = ({
 
         <div className='relative w-full max-w-[43.75rem] h-fit flex justify-between'>
           <div
-            className=' h-[.625rem] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
+            className=' h-[.625rem] w-[80%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
             style={{
               transform: `translateY('-50% ') `,
               zIndex: 9,

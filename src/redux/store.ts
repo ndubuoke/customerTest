@@ -34,6 +34,7 @@ import {
   getLgaReducer,
   getColumnMapReducer,
   createColumnMapReducer,
+  getRelationshipOfficersReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -75,7 +76,7 @@ import { getCustomer360ProductTypeReducer } from './reducers/Customer360GetProdu
 export type ReducersType = {
   publishedForm: ResponseType
   bulkProcessSummary: BulkProcessSummaryTypes
-  customerByName:customersManagementResponseType
+  customerByName: customersManagementResponseType
   singleProduct: customersManagementResponseType
   allProductCategories: customersManagementResponseType
   allProducts: customersManagementResponseType
@@ -123,10 +124,11 @@ export type ReducersType = {
   customer360RecommendedProducts: ResponseType
   customer360Rewards: ResponseType
   customer360ProductType: ResponseType
+  getRelationshipOfficers: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
-  customerByName:getCustomerByNameReducer,
+  customerByName: getCustomerByNameReducer,
   publishedForm: getFormReducer,
   singleProduct: getSingleProductReducer,
   customerProfile: getCustomerProfileReducer,
@@ -177,6 +179,7 @@ const reducer = combineReducers<ReducersType>({
   customer360RecommendedProducts: getCustomer360RecommendedProductsReducer,
   customer360Rewards: getCustomer360RewardReducer,
   customer360ProductType: getCustomer360ProductTypeReducer,
+  getRelationshipOfficers: getRelationshipOfficersReducer,
 })
 
 const middleware = [thunk]

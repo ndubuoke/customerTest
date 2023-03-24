@@ -22,7 +22,14 @@ const FormSubmissionAlert = ({ closeModalFunction, customerId, isAdmin }: Props)
     >
       {isAdmin ? (
         <section className='bg-white min-w-[25rem] max-w-[34.6875rem] min-h-[13.9375rem] h-[25.5rem] rounded-[.5rem] py-6 px-6 flex flex-col gap-6 justify-between'>
-          <h3>Customer profile created successfully</h3>
+          <h3
+            className='text-[#636363]'
+            style={{
+              margin: 'auto',
+            }}
+          >
+            Customer profile created successfully
+          </h3>
           <div className='relative flex justify-center'>
             <img src={Success} alt='success' />
           </div>
