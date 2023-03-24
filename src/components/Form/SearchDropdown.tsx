@@ -10,6 +10,8 @@ type Props = {
   options: FormTypes['SelectOption'][]
   handleChange: (e: string) => void
   name: string
+  loadingOptions?: boolean
+  noOptionsMessage?: string
 }
 
 /**
@@ -19,7 +21,7 @@ type Props = {
  * @param props
  * @returns JSX.Element
  */
-export const SearchDropdown = memo(({ selected, placeholder, options, handleChange, name }: Props) => {
+export const SearchDropdown = memo(({ selected, placeholder, options, handleChange, name, loadingOptions, noOptionsMessage }: Props) => {
   const [searchInput, setSearchInput] = useState('')
   const [isOpen, setIsOpen] = useState(false)
 
@@ -75,21 +77,20 @@ export const SearchDropdown = memo(({ selected, placeholder, options, handleChan
       ref={dropdownRef}
     >
       {console.log('selected ampmnn', selected)}
-      <div className='border-b border-solid pb-[10px] flex items-center justify-between border-common-title' role='searchbox'>
-        <div className='flex items-center'>
-          <SearchIcon className='h-4 text-[#000000aa] mr-3' />
+      <div className='border-b border-solid cursor-text pb-[10px] flex items-center justify-between border-common-title' role='searchbox'>
+        <div className='flex items-center w-full'>
+          <SearchIcon className='h-4 text-[#000000aa] mr-3 cursor-pointer' />
           <input
-            // onBlur={closeDropdown}
             onFocus={openDropdown}
             onChange={handleSearchInputChange}
             type='text'
             value={searchInput}
             placeholder={placeholder}
             role='search'
-            className='w-full text-sm text-text-secondary font-normal light-placeholder'
+            className='w-full text-sm text-text-secondary font-normal light-placeholder cursor-text'
           />
         </div>
-        <img src={caret} width={15} height={10} />
+        <img src={caret} width={15} height={10} className='cursor-pointer' onClick={openDropdown} />
       </div>
       <Select
         options={filterOptionsByValue(options, searchInput)}
@@ -100,7 +101,7 @@ export const SearchDropdown = memo(({ selected, placeholder, options, handleChan
         isOpen={isOpen}
         displayOnlyDropdown={true}
         name={name}
-        emptyOptionsMessage='No search results'
+        emptyOptionsMessage={loadingOptions ? 'Loading' : noOptionsMessage || 'No search results'}
         isSearchDropdown={true}
       />
     </div>

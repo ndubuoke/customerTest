@@ -677,7 +677,21 @@ const FormDropdown = ({
 
   // dropdowns for country, state, local government should be searchable (can be filtered by search inputs.)
   const isDropdownSearchable = () => {
-    return enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country')
+    return (
+      (enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('country')) ||
+      (enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('state')) ||
+      (enableMultipleSelection?.toLowerCase() === 'off' && fieldLabel.toLowerCase().includes('lga'))
+    )
+  }
+
+  // returns true if the field is fetching data for its options from the api, else false
+  const getFieldLoadingState = (field: string) => {
+    const fieldLoadingStateMap = {
+      country: getCountriesRedux?.loading,
+      state: getStatesRedux?.loading,
+      lga: getCitiesRedux?.loading,
+    }
+    return fieldLoadingStateMap[field?.toLowerCase().trim()]
   }
 
   return (
@@ -700,9 +714,10 @@ const FormDropdown = ({
           <SearchDropdown
             name={fieldLabel.toLowerCase()}
             options={optionizeList(optionsField)}
-            placeholder='Select country'
+            placeholder={`Select ${fieldLabel.toLowerCase()}`}
             handleChange={handleSelect}
             selected={selectedDropdownItem}
+            loadingOptions={getFieldLoadingState(fieldLabel.toLowerCase())}
           />
         </div>
       )}
