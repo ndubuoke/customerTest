@@ -528,3 +528,14 @@ const isFieldBvn = (item: FormControlType | FormControlTypeWithSection) => {
     )?.toUpperCase() === 'BVN'
   )
 }
+
+const isFieldExpiry = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    (getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+    )?.toUpperCase() === 'EXPIRY DATE'
+  )
+}
