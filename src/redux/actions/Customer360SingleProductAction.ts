@@ -40,7 +40,7 @@ export const customer360SingleProductAction = () => async (dispatch: any) => {
 
     dispatch({ type: CUSTOMER360_PRODUCT_SUCCESS, payload: data })
 
-    console.log(data)
+    // console.log(data)
   } catch (error) {
     dispatch({ type: CUSTOMER360_PRODUCT_FAILED, payload: error?.response && error?.response?.data?.message })
   }

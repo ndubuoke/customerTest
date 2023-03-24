@@ -84,6 +84,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>First Name</p>
                   <p style={{ marginBottom: '18px' }}>Other Names</p>
                   <p className='mb-6 '>Customer ID</p>
+                  <p style={{ marginBottom: '18px' }}> Account Number</p>
                   <p style={{ marginBottom: '18px' }}>Customer BVN</p>
                   <p style={{ marginBottom: '18px' }}>Risk Status</p>
                   <p style={{ marginBottom: '18px' }}>Customer Groups</p>
@@ -99,6 +100,9 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
                   <p>{getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}</p>
+                  <p>
+                    {getCustomerDetail(customer, 'accountNumber') != '' || null ? getCustomerDetail(customer, 'accountNumber') : 'Not Availables'}
+                  </p>
                   <p style={{ marginBottom: '18px' }}>
                     {' '}
                     {getCustomerDetail(customer, 'bvn') != '' || null ? getCustomerDetail(customer, 'bvn') : 'Not Available'}{' '}

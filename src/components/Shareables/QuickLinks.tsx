@@ -1,8 +1,9 @@
 import { Close, quicklink, times } from 'Assets/svgs'
 import React from 'react'
 import { Link } from 'react-router-dom';
+import classnames from 'classnames';
 type quickLinksProps = {
-  links: { urlName: string; url: string }[]
+  links: { urlName: string; url: string, disabled?: boolean }[]
 }
 
 const QuickLinks = ({ links }: quickLinksProps) => {
@@ -19,12 +20,14 @@ const QuickLinks = ({ links }: quickLinksProps) => {
         </div>
         <div className='text-[.875rem] text-[#5B6871] mt-2 w-[90%]'>As you use the application, suggested items will automatically show up here.</div>
       </div>
-      <div className=' flex flex-wrap justify-between py-4 px-6 gap-4'>
+      <div className=' flex flex-wrap justify-between py-2 px-6 gap-4 mt-4'>
         {links.map((link) => (
-          <div key={link.urlName} className=' flex flex-col justify-center items-center'>
+          <Link to={link.url} key={link.urlName} className={classnames('flex flex-col justify-center items-center text-center', { disabled: link.disabled })}>
+            <a>
             <img src={quicklink} alt='' className='w-20' />
-            <span>{link.urlName}</span>
-          </div>
+            <span className='block mt-2 text-sm font-medium w-[80px] h-[40px] text-[#636363]'>{link.urlName}</span>
+            </a>
+          </Link>
         ))}
       </div>
     </div>

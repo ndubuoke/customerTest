@@ -8,11 +8,9 @@ type Props = {
 }
 
 const MiniButton = ({ onClick, text, children }: Props) => {
-  console.log({ text })
   return (
     <button
-      className='flex  cursor-pointer  px-2 items-center
-py-1'
+      className='flex cursor-pointer px-2 items-center py-1'
       onClick={onClick}
     >
       <span className='flex items-center gap-[.5rem] capitalize'>

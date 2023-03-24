@@ -71,7 +71,7 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
       return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
 
     case GET_FORM_SUCCESS:
-      console.log('action.payload', action.payload)
+      // console.log('action.payload', action.payload)
       let payload = { ...action.payload }
       payload = {
         ...payload,

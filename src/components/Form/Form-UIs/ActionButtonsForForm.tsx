@@ -64,8 +64,6 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
 
   const riskAssessment = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as riskAssessmentType
 
-  console.log('riskAssessment', riskAssessment)
-
   const handleActivePage = (action: 'next' | 'prev') => {
     if (action === 'prev') {
       if (findIndexOfObject(form, activePageState?.id) === 0) {

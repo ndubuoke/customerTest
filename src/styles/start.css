@@ -35,6 +35,10 @@ input {
   outline: none;
 }
 
+.disabled {
+  pointer-events: none;
+}
+
 /* 
 html {
   font-size: 10px;

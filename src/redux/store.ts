@@ -94,6 +94,7 @@ export type ReducersType = {
   allRequestsByDate: customersManagementResponseType
   userRolesAndPermissions: UserRolesAndPersmissionsTypes
   userProfile: UserProfileTypes
+  // initiator:customersManagementResponseType
   validateCustomer: validateCustomerResponseType
   saveBulkCustomerCreation: SaveBulkCreationTypes
   totalStatusCustomers: customersManagementResponseType
@@ -129,6 +130,7 @@ export type ReducersType = {
 
 const reducer = combineReducers<ReducersType>({
   customerByName: getCustomerByNameReducer,
+  // initiator:getInitiatorByIdReducer,
   publishedForm: getFormReducer,
   singleProduct: getSingleProductReducer,
   customerProfile: getCustomerProfileReducer,
