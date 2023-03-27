@@ -19,8 +19,8 @@ type props = {
 const ProductsTable = ({ data, activeProductType, selectProductsToBeAssigned, searchTerm, assignProductHandler }: props) => {
   const [showProductModal, setShowProductModal] = useState(false)
   const [productId, setProductId] = useState(null)
-  const allProducts = data.serverResponse.data?.products
-  //  console.log(allProducts)
+  const allProducts = data.serverResponse.data?.products.filter((product) => product.product_category  !=='Payment')
+    // console.log(allProducts)
   const productFunctionsHandler = (productId) => {
     setProductId(productId)
     setShowProductModal(true)

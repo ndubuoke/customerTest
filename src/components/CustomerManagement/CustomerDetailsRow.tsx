@@ -39,7 +39,7 @@ const CustomerDetailsRow = ({
       </td>
       <td className='py-2 px-2'>{getCustomerDetail(customer, 'mobileNumber')}</td>
       {/* <td className='py-2 px-2'>{customer.customer_profiles.mobileNumber}</td> */}
-      <td className='py-2 px-2'>{getCustomerDetail(customer, 'emailAddress')}</td>
+      <td className='py-2 px-2'>{getCustomerDetail(customer, 'email')}</td>
       {/* <td className='py-2 px-2'>{customer.customer_profiles.emailAddress}</td> */}
       <td className='py-2 px-2 text-[#1E0A3C]'>
         <span className={` ${customer?.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'} p-1 rounded font-medium`}>
