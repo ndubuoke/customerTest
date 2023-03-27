@@ -30,6 +30,7 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
           try {
             const ocrVerificationResponse = await API.post('/verification/ocr/extraction', {
               imageUrl: signedUrlResponse.data.data,
+              mimeType: response.data.data.mimeType,
             })
             // console.log('ocrVerificationResponse', ocrVerificationResponse.data)
             return {
