@@ -129,7 +129,6 @@ const FormDropdown = ({
 
   const [optionsField, setOptionsField] = useState<any>([])
   const [columnName, setColumnName] = useState<string>('')
-  // `console`.log('optionsField', optionsField)
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
   const [states, setStates] = useState<Array<{ stateName: string; stateId: string }>>([])
@@ -152,6 +151,15 @@ const FormDropdown = ({
   const getCitiesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCities) as ResponseType
 
   const handleSelectedDropdownItem = (selectedItem: string, theItemFromChange) => {
+    // if (selectedItem === 'Yes' && fieldLabel === 'Dual Citizenship') {
+    //
+    //   setOptionsField(
+    //     getCountriesRedux?.serverResponse?.data?.map((x) => {
+    //       return { countryId: x?.countryId, countryName: x?.countryName }
+    //     })
+    //   )
+    // }
+
     setSelectedDropdownItem(selectedItem.trim())
 
     const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName)
@@ -165,7 +173,6 @@ const FormDropdown = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // `console`.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -187,7 +194,6 @@ const FormDropdown = ({
       // }
     }
     if (fieldLabel.toLowerCase().includes('relationshipOfficer')) {
-      console.log('relationshipOfficer')
     }
   }, [])
   useEffect(() => {
@@ -199,7 +205,11 @@ const FormDropdown = ({
             return { countryId: x?.countryId, countryName: x?.countryName }
           })
         )
-        // `console`.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
+      }
+    }
+    if (fieldLabel.toLowerCase().includes('if yes specify')) {
+      if (getCountriesRedux?.success) {
+        setOptionsField(getCountriesRedux?.serverResponse?.data?.map((x) => x?.countryName))
       }
     }
     if (
@@ -219,7 +229,6 @@ const FormDropdown = ({
     const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
       ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
       : null
-    console.log('checkCountriesInStorage-checkIfItemIsState', checkCountriesInStorage)
     if (checkCountriesInStorage?.sectionId === item?.sectionId || checkCountriesInStorage?.pageId === item?.pageId) {
       dispatch(resetCitiesAction() as any)
       dispatch(getStatesAction(checkCountriesInStorage?.country?.countryId) as any)
@@ -772,6 +781,9 @@ const FormDropdown = ({
             handleChange={handleSelect}
             selected={selectedDropdownItem}
             loadingOptions={getFieldLoadingState(fieldLabel.toLowerCase())}
+            checkIfItemIsState={checkIfItemIsState}
+            checkIfItemIsCity={checkIfItemIsCity}
+            item={item}
           />
         </div>
       )}
@@ -786,6 +798,8 @@ const FormDropdown = ({
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)
               }
+              console.log(item)
+
               if (fieldLabel.toLowerCase().includes('lga')) {
                 checkIfItemIsCity()
               }
@@ -844,8 +858,6 @@ const FormDropdown = ({
                   <Spinner size='large' />
                 </div>
               ) : null}
-              {console.log('options field', optionsField, 'field name', fieldLabel)}
-
               {enableMultipleSelection.toLowerCase() === 'off'
                 ? optionsField?.length > 0 &&
                   optionsField?.map((selected, index) => {

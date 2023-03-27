@@ -150,5 +150,5 @@ const SelectMemo = memo(Select)
 export { SelectMemo as Select }
 
 export const optionizeList = (list: string[]): FormTypes['SelectOption'][] => {
-  return list.map((item) => ({ label: item, value: item }))
+  return list.sort((a, b) => a.localeCompare(b)).map((item) => ({ label: item, value: item }))
 }
