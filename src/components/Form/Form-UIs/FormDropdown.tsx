@@ -202,8 +202,19 @@ const FormDropdown = ({
         // `console`.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
+    if (
+      (fieldLabel.toLowerCase().includes('state of') || fieldLabel.toLowerCase().includes('lga')) &&
+      !Object(getCountriesRedux.serverResponse).hasOwnProperty('data')
+    ) {
+      handleSelectedDropdownItem('', item)
+    }
   }, [getCountriesRedux])
 
+  const checkIfItemIsCountry = (_item: FormControlType | FormControlTypeWithSection) => {
+    dispatch(resetStatesAction() as any)
+    dispatch(resetCitiesAction() as any)
+    dispatch(getCountriesAction() as any)
+  }
   const checkIfItemIsState = (_item: FormControlType | FormControlTypeWithSection) => {
     const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
       ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
@@ -708,7 +719,50 @@ const FormDropdown = ({
         {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
-
+      {/* former code for dropdown */}
+      {/* <div className={`relative`}>
+        <div
+          className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
+          onClick={() => {
+            setShowLists((prev) => !prev)
+            if (fieldLabel.toLowerCase().includes('country')) {
+              checkIfItemIsCountry(item)
+            }
+            if (fieldLabel.toLowerCase().includes('state')) {
+              checkIfItemIsState(item)
+            }
+            if (fieldLabel.toLowerCase().includes('lga')) {
+              checkIfItemIsCity()
+            }
+          }}
+          title={selectedDropdownItem && selectedDropdownItem}
+        >
+          {enableMultipleSelection.toLowerCase() === 'off' ? (
+            <div className='overflow-hidden'>
+              {selectedDropdownItem ? (
+                typeof selectedDropdownItem !== 'string' ? (
+                  [].concat(selectedDropdownItem).toString()
+                ) : (
+                  selectedDropdownItem
+                )
+              ) : (
+                <span className={`text-text-disabled`}>Select</span>
+              )}
+            </div>
+          ) : null}
+          {enableMultipleSelection.toLowerCase() === 'on' ? (
+            <div className='max-w-[100%] overflow-x-auto text-text-disabled'>
+              {multipleSelectedDropdownItems.length === 0 ? 'Select' : multipleSelectedDropdownItems.toString().replace(/[,]/g, ', ')}
+            </div>
+          ) : null}
+          <span>
+            <img src={caret} width={15} height={10} />
+          </span>
+        </div>
+       
+       */}
+      {/* end of former code for country dropdown */}
+      {/* new code for country dropdown */}
       {isDropdownSearchable() && (
         <div className='mt-1'>
           <SearchDropdown
@@ -721,6 +775,7 @@ const FormDropdown = ({
           />
         </div>
       )}
+      {/* end of new code for country dropdown */}
 
       {!isDropdownSearchable() && (
         <div className={`relative`}>

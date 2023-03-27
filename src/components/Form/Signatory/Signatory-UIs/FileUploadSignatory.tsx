@@ -160,8 +160,8 @@ const FileUploadSignatory = ({
 
   return (
     <div>
-      <div className='relative w-fit mb-2'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+      <div className='relative mb-2 w-fit'>
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel text={text} colspan={colspan} id={id} />
       </div>
 
@@ -184,7 +184,12 @@ const FileUploadSignatory = ({
                       border: '.0625rem solid #cccccc',
                     }}
                   >
-                    <div>{fileUrl}</div>
+                    {/* <div>{fileUrl}</div> */}
+                    <div className='h-full mx-4 '>
+                      {!!(fileUrl || value) ? (
+                        <IndividualFileForm file={fileUrl || value} removeFile={(e) => handleRemoveFile(e)} height={90} />
+                      ) : null}
+                    </div>
                     <button
                       onClick={(e) => {
                         e.stopPropagation()
@@ -197,13 +202,13 @@ const FileUploadSignatory = ({
                   </div>
                 </>
               ) : (
-                <div {...getRootProps()} className='flex  justify-between items-center pt-3 pb-3 h-full cursor-pointer'>
+                <div {...getRootProps()} className='flex items-center justify-between h-full pt-3 pb-3 cursor-pointer'>
                   <input type={`file`} hidden {...getInputProps()} />
                   <div>
                     <img src={upload} className='w-12' width={48} height={48} />
                   </div>
 
-                  <p className='mb-2 text-sm   '>
+                  <p className='mb-2 text-sm '>
                     <span className='font-semibold text-primay-main'>Click to upload</span>
                     <span> or drag and drop</span>
                   </p>
@@ -211,9 +216,6 @@ const FileUploadSignatory = ({
               )}
             </>
           )}
-        </div>
-        <div className=' h-full mx-4'>
-          {fileUrl || value ? <IndividualFileForm file={fileUrl || value} removeFile={(e) => handleRemoveFile(e)} height={90} /> : null}
         </div>
       </div>
       {fileUploadError.isError && <p className='text-red-400'>{fileUploadError.message}</p>}
