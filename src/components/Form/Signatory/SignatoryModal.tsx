@@ -31,6 +31,7 @@ type Props = {
   signatoryDetails: SignatoryInitialDetailsType
   setSignatoryDetails: (prev: SignatoryInitialDetailsType) => void
 }
+// https://customer-management-api-dev.reventtechnologies.com/v1/customer/profile/54d5ca42-46d7-42a7-a361-b6a811c01f02
 
 const SignatoryModal = memo(
   ({ closeModalFunction, setSignatories, signatories, modification = false, setModification, signatoryDetails, setSignatoryDetails }: Props) => {
@@ -44,7 +45,7 @@ const SignatoryModal = memo(
     const unfilledRequiredSignatoryListButton = useSelector<ReducersType>(
       (state) => state.unfilledRequiredSignatoryListButton
     ) as UnfilledRequiredSignatoryListReducerType
-
+    console.log('unfilledRequiredSignatoryListButton', unfilledRequiredSignatoryListButton)
     const [localUploadPassport, setLocalUploadPassport] = useState<any>('')
     const [localUploadIdentity, setLocalUploadIdentity] = useState<any>('')
     const [localUploadAddress, setLocalUploadAddress] = useState<any>('')
@@ -166,7 +167,7 @@ const SignatoryModal = memo(
             <div className='flex gap-2 mt-3 text-[#8F8F8F]'>
               <img src={info} /> Provide signatory&apos;s identification to prefill form or proceed to fill form manually.
             </div>
-            <IdPrefiller setSignatoryDetails={setSignatoryDetails} />
+            <IdPrefiller setSignatoryDetails={setSignatoryDetails} signatoryDetails={signatoryDetails} />
             <form>
               <div
                 style={{
@@ -332,7 +333,7 @@ const SignatoryModal = memo(
                   colspan={3}
                   type='text'
                 />
-                <SignatoryDropDown
+                {/* <SignatoryDropDown
                   id='Country'
                   required='on'
                   text='Country'
@@ -363,7 +364,7 @@ const SignatoryModal = memo(
                   _optionsField={['Nigerian', 'Ghanaian']}
                   selectedDropdownItem={signatoryDetails['lGARA']}
                   setSelectedDropdownItem={setSignatoryDetails}
-                />
+                /> */}
 
                 <TextInput
                   id='P.O. Box'
@@ -410,7 +411,7 @@ const SignatoryModal = memo(
                   colspan={2}
                   type='email'
                 />
-                <SignatoryDropDown
+                {/* <SignatoryDropDown
                   id='Means of Identification'
                   required='on'
                   text='Means of Identification'
@@ -433,8 +434,8 @@ const SignatoryModal = memo(
                   success={success}
                   idPrefiller
                   error={error?.status}
-                />
-                <TextInput
+                /> */}
+                {/* <TextInput
                   id='ID Issue Date'
                   placeholder='Enter ID Issue Date'
                   required='on'
@@ -455,7 +456,7 @@ const SignatoryModal = memo(
                   text='ID Expiry Date'
                   colspan={1}
                   type='date'
-                />
+                /> */}
               </div>
               <div
                 style={{

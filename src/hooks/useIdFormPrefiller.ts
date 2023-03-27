@@ -4,14 +4,14 @@ import { useState } from 'react'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
 
 export enum PrefillerIDTypeLengths {
-  BVN = 12,
+  BVN = 11,
   NIN = 11,
   'Customer Account Number' = 10,
   'Customer ID' = 9,
   "Permanent Voter's Card" = 10,
   "Driver's License" = 10,
 }
-
+// https://customer-management-api-dev.reventtechnologies.com/v1/verification/bvn/34245367643
 export type PrefillerIDTypeType = 'BVN' | 'NIN' | 'Customer ID' | 'Customer Account Number' | "Permanent Voter's Card" | "Driver's License"
 export type PrefillerIDTypeTypeLower = 'bvn' | 'nin' | 'Customer ID' | 'Customer Account Number' | 'pvc' | 'dl'
 

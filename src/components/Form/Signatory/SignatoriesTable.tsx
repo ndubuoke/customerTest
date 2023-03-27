@@ -1,6 +1,8 @@
 import { closeRed, editRed, eyeRed } from 'Assets/svgs'
 import React, { memo, useState } from 'react'
 import { SignatoryDetailsType } from '../Types/SignatoryTypes'
+import { camelize } from 'Utilities/convertStringToCamelCase'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 
 type Props = {
   signatories?: Array<any>
@@ -26,7 +28,7 @@ const SignatoriesTable = memo(
   }: Props) => {
     return (
       <div className={`py-6 w-[61.6875rem] overflow-x-auto ${collapsed ? 'max-h-0 overflow-hidden hidden' : 'px-3'}  `}>
-        <table className='w-full  '>
+        <table className='w-full '>
           <thead>
             <tr className='bg-white h-[3.75rem]'>
               <th className=' align-middle font-bold text-[.875rem] text-[#aaaaaa]  w-[3.125rem] '>
@@ -51,37 +53,38 @@ const SignatoriesTable = memo(
             ) : null}
             {signatories.length > 0
               ? signatories?.map((x: SignatoryDetailsType, i) => {
-                return (
-                  <tr key={i} className=' align-middle font-bold text-[1rem] text-[#636363] border-b h-[3.75rem] '>
-                    <td>{i + 1}</td>
-                    <td className=' align-middle font-bold text-[1rem] text-[#636363] '>
-                      {x?.['First Name']} {x?.['Surname']}
-                    </td>
-                    <td className=' align-middle font-bold text-[1rem] text-[#636363] '>
-                      <span className='block'>{x?.['Means of Identification']}</span>
+                  // console.log('x', x)
+                  return (
+                    <tr key={i} className=' align-middle font-bold text-[1rem] text-[#636363] border-b h-[3.75rem] '>
+                      <td>{i + 1}</td>
+                      <td className=' align-middle font-bold text-[1rem] text-[#636363] '>
+                        {x?.[camelize(replaceSpecialCharacters('First Name'))]} {x?.[camelize(replaceSpecialCharacters('Surname'))]}
+                      </td>
+                      <td className=' align-middle font-bold text-[1rem] text-[#636363] '>
+                        <span className='block'>{x?.[camelize(replaceSpecialCharacters('Means of Identification'))]}</span>
 
-                      <span className='block text-[#aaaaaa] '>{x?.['ID Number']}</span>
-                    </td>
-                    <td>
-                      {!viewSignatory ? (
-                        <button type='button' className='p-2 bg-white rounded  shadow mr-2' onClick={() => handleModify(x?.id)}>
-                          <img src={editRed} alt='modify' />
-                        </button>
-                      ) : null}
-                      {!viewSignatory ? (
-                        <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveSignatory(x?.id)}>
-                          <img src={closeRed} alt='remove' />
-                        </button>
-                      ) : null}
-                      {viewSignatory ? (
-                        <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleViewSignatory(x?.id)}>
-                          <img src={eyeRed} alt='view' />
-                        </button>
-                      ) : null}
-                    </td>
-                  </tr>
-                )
-              })
+                        <span className='block text-[#aaaaaa] '>{x?.['ID Number']}</span>
+                      </td>
+                      <td>
+                        {!viewSignatory ? (
+                          <button type='button' className='p-2 mr-2 bg-white rounded shadow' onClick={() => handleModify(x?.id)}>
+                            <img src={editRed} alt='modify' />
+                          </button>
+                        ) : null}
+                        {!viewSignatory ? (
+                          <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleRemoveSignatory(x?.id)}>
+                            <img src={closeRed} alt='remove' />
+                          </button>
+                        ) : null}
+                        {viewSignatory ? (
+                          <button type='button' className='p-2 bg-white rounded shadow' onClick={() => handleViewSignatory(x?.id)}>
+                            <img src={eyeRed} alt='view' />
+                          </button>
+                        ) : null}
+                      </td>
+                    </tr>
+                  )
+                })
               : null}
           </tbody>
         </table>

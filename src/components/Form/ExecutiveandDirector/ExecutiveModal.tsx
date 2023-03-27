@@ -49,6 +49,15 @@ const AddExecutiveModal = ({
 
   useEffect(() => {
     console.log('identification', identification)
+    if (identification.meansOfIdentification) {
+      const updatedFields = executiveDetails.map((field) => {
+        if (field.fieldLabel === 'Enter ID Number') {
+          field.maxLength = meansOfIdentificationLength[identification.meansOfIdentification]
+        }
+        return field
+      })
+      setExecutiveDetails(updatedFields)
+    }
     if (
       identification.meansOfIdentification &&
       identification.idNumber.length === meansOfIdentificationLength[identification.meansOfIdentification]

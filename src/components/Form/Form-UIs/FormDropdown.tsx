@@ -200,8 +200,19 @@ const FormDropdown = ({
         // `console`.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
+    if (
+      (fieldLabel.toLowerCase().includes('state of') || fieldLabel.toLowerCase().includes('lga')) &&
+      !Object(getCountriesRedux.serverResponse).hasOwnProperty('data')
+    ) {
+      handleSelectedDropdownItem('', item)
+    }
   }, [getCountriesRedux])
 
+  const checkIfItemIsCountry = (_item: FormControlType | FormControlTypeWithSection) => {
+    dispatch(resetStatesAction() as any)
+    dispatch(resetCitiesAction() as any)
+    dispatch(getCountriesAction() as any)
+  }
   const checkIfItemIsState = (_item: FormControlType | FormControlTypeWithSection) => {
     const checkCountriesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}`)
       ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}`))
@@ -672,6 +683,9 @@ const FormDropdown = ({
           className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
           onClick={() => {
             setShowLists((prev) => !prev)
+            if (fieldLabel.toLowerCase().includes('country')) {
+              checkIfItemIsCountry(item)
+            }
             if (fieldLabel.toLowerCase().includes('state')) {
               checkIfItemIsState(item)
             }
