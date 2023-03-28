@@ -30,13 +30,19 @@ const MatchModal = ({ setShowMatchModal, setFormCreationStarted, data }: props) 
           </div>
           <div className='flex flex-col text-center items-center mt-4'>
             <GreenCheckBig />
-            {/* <p className='text-[#2FB755] text-xl mt-2'>{data.percent}% match</p> */}
+            <p className='text-[#2FB755] text-xl mt-2'>{data.percent}% match</p>
             {parseFloat(data.percent) < 10 ? (
               <p className='text-xl text-[#667085]'>Proceed to fill other details</p>
             ) : (
               <>
                 <p>Proceed to fill other details</p>
-                <button className='border border-[#E5E9EB] mt-5 py-1 px-6 rounded-md text-[#667085]' onClick={() => setFormCreationStarted(true)}>
+                <button
+                  className='border border-[#E5E9EB] mt-5 py-1 px-6 rounded-md text-[#667085]'
+                  onClick={() => {
+                    closeModal()
+                    setFormCreationStarted(true)
+                  }}
+                >
                   Go to form
                 </button>
               </>
