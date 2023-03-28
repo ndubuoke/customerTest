@@ -23,6 +23,8 @@ import RequestModal from 'Components/CustomerManagement/RequestModal'
 import { UserProfileTypes } from '../redux/reducers/UserPersmissions/UserPersmissions'
 import CustomerAlertModal from '../components/CustomerManagement/customerAlertModal'
 import JustificationModal from '../components/CustomerManagement/justificationModal'
+import isValidUrl from 'Utilities/isValidUrl'
+import { camelize } from 'Utilities/convertStringToCamelCase'
 
 type CustomerManagementProcessSummaryType = {}
 
@@ -274,18 +276,45 @@ const CustomerManagementProcessSummary = ({}: CustomerManagementProcessSummaryTy
                     <h4 className='text-[#636363] text-[20px] mt-8'> {detail?.sectionName}</h4>
                     <div className='flex gap-20 mt-4  w-[70%]  text-[#636363]  '>
                       <div className=' font-bold   w-full items-end flex  flex-col '>
-                        {Object.keys(detail?.data).map((data, index) => (
-                          <p key={index} className='mb-2 text-[16px] font-normal'>
-                            {convertCamelCaseToTitleCaseText(data)}
-                          </p>
-                        ))}
+                        {Object.keys(detail?.data).map((data, index) => {
+                          if (data == '') {
+                            return (
+                              <p key={index} className='mb-2 text-[16px] font-normal '>
+                                Not Applicable
+                              </p>
+                            )
+                          } else {
+                            return (
+                              <p key={index} className='mb-2 text-[16px] font-normal '>
+                                {convertCamelCaseToTitleCaseText(data)}
+                              </p>
+                            )
+                          }
+                        })}
                       </div>
                       <div className=' font-[400] w-full flex flex-col items-start '>
-                        {Object.values(detail?.data).map((data, index) => (
-                          <p key={index} className='mb-2 text-[16px] font-normal'>
-                            {`${data ? data : 'Not Available'}`}
-                          </p>
-                        ))}
+                        {Object.values(detail?.data).map((data, index) => {
+                          if (isValidUrl(data)) {
+                            return (
+                              <p key={index} className='mb-2 text-[16px] font-normal gap-2 flex'>
+                                Uploaded
+                                <span className=' cursor-pointer'>(View) </span>
+                              </p>
+                            )
+                          } else if (data == '') {
+                            return (
+                              <p key={index} className='mb-2 text-[16px] font-normal '>
+                                Not Applicable
+                              </p>
+                            )
+                          } else {
+                            return (
+                              <p key={index} className='mb-2 text-[16px] font-normal '>
+                                {data}
+                              </p>
+                            )
+                          }
+                        })}
                       </div>
                     </div>
                   </div>
