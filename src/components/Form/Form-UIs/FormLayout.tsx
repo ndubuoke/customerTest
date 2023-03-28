@@ -76,9 +76,6 @@ const FormLayout = memo(
   }: Props) => {
     // const [isCollapsed, setCollapsed] = useState<boolean>(isCollapsed)
     const [detailsOfSpouseIsDisabled, setDetailsOfSpouseIsDisabled] = useState<boolean>(true)
-    console.log('isCollapsed', isCollapsed)
-    console.log('item.id', item.id)
-
     const handleSetCollapsedSection = (value?: boolean) => {
       setCollapsedSection((prev) => {
         return prev.map((section) => {
@@ -120,14 +117,10 @@ const FormLayout = memo(
       }
     }
 
-    // console.log({ item })
-
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
-    // console.log('setRequiredFormFieldsRedux', setRequiredFormFieldsRedux)
     useEffect(() => {
       if (isSpouseDetailsSection) {
         const customerDataBioDataSection = fillingFormState?.data?.customerData.find((section) => section.sectionName.toLowerCase() === 'bio-data')
-        // console.log('customerDataBioDataSection', customerDataBioDataSection)
         if (customerDataBioDataSection) {
           setDetailsOfSpouseIsDisabled(!(customerDataBioDataSection.data?.maritalStatus?.toLowerCase() === 'married'))
 
@@ -150,9 +143,6 @@ const FormLayout = memo(
         }
       }
     }, [fillingFormState])
-    // console.log('isCollapsed', isCollapsed)
-    // console.log('isCollapsed', isCollapsed)
-    // console.log('detailsOfSpouseIsDisabled', detailsOfSpouseIsDisabled)
     const isSpouseDetailsSection = useMemo(() => {
       return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
     }, [item])

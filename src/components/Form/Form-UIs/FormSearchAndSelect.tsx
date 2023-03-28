@@ -65,9 +65,6 @@ const FormSearchAndSelect = memo(
         ? importFromURLListValue
         : null
 
-    console.log('fieldLabel-FormSearchAndSelect', fieldLabel)
-    console.log('optionsField-FormSearchAndSelect', optionsField)
-
     const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
     const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
@@ -80,18 +77,11 @@ const FormSearchAndSelect = memo(
     const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
     const getRelationshipOfficersRedux = useSelector<ReducersType>((state: ReducersType) => state?.getRelationshipOfficers) as ResponseType
 
-    //   console.log(optionsField.split(",").map(function (value) {
-    //     return value.trim();
-    //  }))
-
     const handleRemoveFromRequired = () => {
       const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === theItemFieldNameCamelCase)
 
       if (requiredFieldsFromRedux) {
         const filterOutCosFillingStarted = setRequiredFormFieldsRedux?.list?.filter((x) => x.fieldLabel !== theItemFieldNameCamelCase)
-
-        // console.log({ filterOutCosFillingStarted })
-
         dispatch(setRequiredFormFieldsAction(filterOutCosFillingStarted) as any)
       }
     }
@@ -101,7 +91,6 @@ const FormSearchAndSelect = memo(
         dispatch(getRelationshipOfficersAction() as any)
       }
       if (fieldLabel.toLowerCase().includes('relationship officer')) {
-        console.log('relationshipOfficer-phew')
       }
     }, [])
 
@@ -140,7 +129,6 @@ const FormSearchAndSelect = memo(
           //     return { countryId: x?.countryId, countryName: x?.countryName }
           //   })
           // )
-          console.log({ getRelationshipOfficersRedux: getRelationshipOfficersRedux?.serverResponse })
         }
       }
     }, [getRelationshipOfficersRedux])
@@ -250,7 +238,6 @@ const FormSearchAndSelect = memo(
         } else {
           setSelectedDropdownItem('')
           setFillingFormState((prev: FormStructureType) => {
-            // console.log('prev', prev)
             const copiedPrev = { ...prev }
             const pageId = item?.pageId
 
