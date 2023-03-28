@@ -13,8 +13,8 @@ type Props = {
 }
 
 const ActivityLog = ({ customerId, mode }: Props) => {
-  const activityLog = useSelector<ReducersType>((state: ReducersType) => state?.customerActivityLog) as customersManagementResponseType
-  const logs = activityLog?.serverResponse?.data
+  const activityLog = useSelector<ReducersType>((state: ReducersType) => state?.customerActivityLog) as any
+  const logs = activityLog?.activityLogs?.data
   const dispatch = useDispatch()
   useEffect(() => {
     if (customerId === undefined) {
@@ -22,7 +22,7 @@ const ActivityLog = ({ customerId, mode }: Props) => {
     }
     dispatch(getActivityLogAction(customerId) as any)
   }, [customerId])
-  // console.log(activityLog)
+  //  console.log(activityLog)
 
   if (mode === 'creation') {
     return (
