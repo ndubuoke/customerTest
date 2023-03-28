@@ -27,10 +27,10 @@ const QuickLinks = ({ links }: quickLinksProps) => {
             key={link.urlName}
             className={classnames('flex flex-col justify-center items-center text-center', { disabled: link.disabled })}
           >
-            <a>
+            <>
               <img src={quicklink} alt='' className='w-20' />
               <span className='block mt-2 text-sm font-medium w-[80px] h-[40px] text-[#636363]'>{link.urlName}</span>
-            </a>
+            </>
           </Link>
         ))}
       </div>

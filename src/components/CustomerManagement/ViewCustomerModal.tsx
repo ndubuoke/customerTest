@@ -6,6 +6,7 @@ import getCustomerDetail from '../../utilities/getCustomerDetail'
 import { useNavigate } from 'react-router-dom'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import { AppRoutes } from 'Routes/AppRoutes'
+import convertCamelCaseToTitleCaseText from 'Utilities/convertCamelCaseToTitleCaseText'
 
 type props = {
   setShowCustomerModal: (e) => void
@@ -13,6 +14,7 @@ type props = {
 }
 
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
+  // console.log(customer)
   const navigate = useNavigate()
 
   const customerType = customer?.customerType
@@ -155,6 +157,13 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
             <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
               <div className='h-[80%] px-6 mt-6'>
                 <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
+                <div className=' font-bold   w-full items-end flex  flex-col '>
+                  {/* {Object.keys(customer?.customer_products).map((data, index) => (
+                    <p key={index} className='mb-2 text-[16px] font-normal'>
+                      {convertCamelCaseToTitleCaseText(data)}
+                    </p>
+                  ))} */}
+                </div>
               </div>
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
                 <div className='w-full flex   justify-between text-[#636363]'>
