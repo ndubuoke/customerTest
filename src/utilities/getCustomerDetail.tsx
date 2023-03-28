@@ -10,6 +10,12 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
       return profile.mobileNumber
     })
   }
+
+  if (field === 'accountNumber') {
+    return customer.customer_products.map((profile) => {
+      return profile.accountNumber
+    })
+  }
   if (field === 'firstName') {
     return customer.customer_profiles.map((profile) => {
       return profile.firstName

@@ -85,13 +85,15 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>Surname</p>
                   <p style={{ marginBottom: '18px' }}>First Name</p>
                   <p style={{ marginBottom: '18px' }}>Other Names</p>
-                  <p className='mb-6 '>Customer ID</p>
+                  <p className=' ' style={{ marginBottom: '18px' }}>
+                    Customer ID
+                  </p>
                   <p style={{ marginBottom: '18px' }}> Account Number</p>
                   <p style={{ marginBottom: '18px' }}>Customer BVN</p>
                   <p style={{ marginBottom: '18px' }}>Risk Status</p>
                   <p style={{ marginBottom: '18px' }}>Customer Groups</p>
                 </div>
-                <div className=' font-[400] w-full flex flex-col items-start text-[16px]  '>
+                <div className=' font-[400] w-[100%] flex flex-col items-start text-[16px]  '>
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'surname') !== '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}
                   </p>
@@ -101,9 +103,13 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
-                  <p>{getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}</p>
-                  <p>
-                    {getCustomerDetail(customer, 'accountNumber') != '' || null ? getCustomerDetail(customer, 'accountNumber') : 'Not Availables'}
+                  <p className='' style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}
+                  </p>
+                  <p style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'accountNumber') != '' || null
+                      ? `${getCustomerDetail(customer, 'accountNumber')},`
+                      : 'Not Availables'}
                   </p>
                   <p style={{ marginBottom: '18px' }}>
                     {' '}
