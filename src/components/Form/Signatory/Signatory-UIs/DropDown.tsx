@@ -11,6 +11,8 @@ import {
   getStatesAction,
   unfilledRequiredSignatoryListAction,
   unfilledRequiredSignatoryListButtonAction,
+  resetCitiesAction,
+  resetStatesAction,
 } from 'Redux/actions/FormManagement.actions'
 import Spinner from 'Components/Shareables/Spinner'
 import { camelize } from 'Utilities/convertStringToCamelCase'
@@ -48,8 +50,8 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
   useOnClickOutside(ref, () => setShowLists(false))
   // Save countries locally
   const [countries, setCountries] = useState<Array<{ countryName: string; countryId: string }>>([])
-  const [states, setStates] = useState<Array<{ countryName: string; countryId: string }>>([])
-  const [cities, setCities] = useState<Array<any>>([])
+  const [states, setStates] = useState<Array<{ stateName: string; stateId: string }>>([])
+  const [lgas, setLgas] = useState<Array<{ lgaName: string; lgaId: string }>>([])
 
   const getCountriesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getCountries) as ResponseType
   const getStatesRedux = useSelector<ReducersType>((state: ReducersType) => state?.getStates) as ResponseType
@@ -85,15 +87,22 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
         // console.log({ getCountriesRedux: getCountriesRedux?.serverResponse })
       }
     }
+    if (
+      (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('state') ||
+        camelize(replaceSpecialCharacters(text)).toLowerCase().includes('lga')) &&
+      !Object(getCountriesRedux.serverResponse).hasOwnProperty('data')
+    ) {
+      handleSelectedDropdownItem('')
+    }
   }, [getCountriesRedux])
 
   const handleSelectedDropdownItem = (selectedItem: string) => {
     console.log('selectedItem', selectedItem)
-    setShowLists((prev) => !prev)
+    // setShowLists((prev) => !prev)
     setSelectedDropdownItem((prev: any) => ({
       ...prev,
-      [text]: selectedItem.trim(),
-      // [camelize(replaceSpecialCharacters(text]: selectedItem.trim(),
+      // [text]: selectedItem.trim(),
+      [camelize(replaceSpecialCharacters(text))]: selectedItem.trim(),
     }))
     handleRedispatchOfRequiredFields()
   }
@@ -117,49 +126,56 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
     }
   }
 
+  const checkIfItemIsCountry = () => {
+    dispatch(resetStatesAction() as any)
+    dispatch(resetCitiesAction() as any)
+    dispatch(getCountriesAction() as any)
+  }
   const checkIfItemIsState = () => {
     const checkCountriesInStorage = sessionStorage.getItem('SIGNNATORIES--country')
       ? JSON.parse(sessionStorage.getItem('SIGNNATORIES--country'))
       : null
 
     if (checkCountriesInStorage) {
+      dispatch(resetCitiesAction() as any)
       dispatch(getStatesAction(checkCountriesInStorage?.country?.countryId) as any)
     }
   }
 
   const checkIfItemIsCity = () => {
-    const checkCountriesInStorage = sessionStorage.getItem('SIGNNATORIES--country')
-      ? JSON.parse(sessionStorage.getItem('SIGNNATORIES--country'))
-      : null
+    const checkStatesInStorage = sessionStorage.getItem('SIGNNATORIES--state') ? JSON.parse(sessionStorage.getItem('SIGNNATORIES--state')) : null
 
-    if (checkCountriesInStorage) {
-      dispatch(getCitiesAction(checkCountriesInStorage?.country?.countryId) as any)
+    if (checkStatesInStorage) {
+      dispatch(getCitiesAction(checkStatesInStorage?.state?.stateId) as any)
     }
   }
   // CHange this to state and not city
   useEffect(() => {
     if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('state') && getStatesRedux) {
       if (getStatesRedux?.success) {
-        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setOptionsField(getStatesRedux?.serverResponse?.data?.map((x) => x?.stateName))
         setStates(
           getStatesRedux?.serverResponse?.data?.map((x) => {
-            return { countryId: x?.countryId, countryName: x?.countryName, stateId: x?.cityId, stateName: x?.cityName }
+            return { stateId: x?.stateId, stateName: x?.stateName }
           })
         )
         // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
+    }
+    if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('lga') && !Object(getStatesRedux.serverResponse).hasOwnProperty('data')) {
+      handleSelectedDropdownItem('')
     }
   }, [getStatesRedux])
 
   //This is city
   useEffect(() => {
     // console.log(first)
-    if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('city') && getCitiesRedux) {
+    if (camelize(replaceSpecialCharacters(text)).toLowerCase().includes('lga') && getCitiesRedux) {
       if (getCitiesRedux?.success) {
-        setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.cityName))
+        setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.lgaName))
         setStates(
           getCitiesRedux?.serverResponse?.data?.map((x) => {
-            return { countryId: x?.countryId, countryName: x?.countryName, cityId: x?.cityId, cityName: x?.cityName }
+            return { lgaId: x?.lgaId, lgaName: x?.lgaName }
           })
         )
         // console.log({ getStatesRedux: getStatesRedux?.serverResponse })
@@ -183,10 +199,13 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
           className='flex items-center justify-between w-full gap-6 py-1 pb-[.3125rem] leading-6 border-b border-b-[#AAAAAA]  cursor-pointer'
           onClick={() => {
             setShowLists((prev) => !prev)
+            if (text.toLowerCase().includes('nationality')) {
+              checkIfItemIsCountry()
+            }
             if (text.toLowerCase().includes('state')) {
               checkIfItemIsState()
             }
-            if (text.toLowerCase().includes('city')) {
+            if (text.toLowerCase().includes('lga')) {
               checkIfItemIsCity()
             }
           }}
@@ -216,7 +235,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
                 zIndex: 999,
               }}
             >
-              {text.toLowerCase().includes('country') && getCountriesRedux?.loading ? (
+              {text.toLowerCase().includes('nationality') && getCountriesRedux?.loading ? (
                 <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
@@ -226,7 +245,7 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
                   <Spinner size='large' />
                 </div>
               ) : null}
-              {text.toLowerCase().includes('city') && getCitiesRedux?.loading ? (
+              {text.toLowerCase().includes('lga') && getCitiesRedux?.loading ? (
                 <div className='flex items-center justify-center w-full h-full'>
                   <Spinner size='large' />
                 </div>
@@ -244,6 +263,10 @@ const SignatoryDropDown = ({ required, text, id, _optionsField, colspan = 1, sel
                           const country = countries?.find((x) => x.countryName === selected)
                           if (country) {
                             sessionStorage.setItem(`SIGNNATORIES--country`, JSON.stringify({ selected, country }))
+                          }
+                          const state = states?.find((x) => x.stateName === selected)
+                          if (state) {
+                            sessionStorage.setItem(`SIGNNATORIES--state`, JSON.stringify({ selected, state }))
                           }
                           // }
                           setShowLists(false)

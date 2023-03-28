@@ -76,6 +76,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     identificationNumber: null,
     identityData: null,
   })
+  const [fileNotUploaded, setFileNotUploaded] = useState(true)
   const [localUpload, setLocalUpload] = useState<Array<UploadFile>>([])
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
@@ -100,7 +101,6 @@ const CustomerCreation = memo(({ customerType }: Props) => {
     },
     [formMode, creationMode]
   )
-
   const handleProceed = async () => {
     sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
@@ -233,8 +233,9 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                   setIdentificationDetails={setIdentificationDetails}
                   identificationDetails={identificationDetails}
                   setLocalUpload={setLocalUpload}
+                  setFileUploaded={setFileNotUploaded}
                 />
-
+                {console.log(!identificationDetails.identificationNumber, 'hey', identificationDetails.identificationNumber)}
                 {creationMode === CreationModeEnum.Single ? (
                   <div className='relative flex justify-center gap-1 mt-24'>
                     <div className='absolute right-3 top-1'>
@@ -247,11 +248,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                       />
                     </div>
                     <div style={{ marginTop: '2rem' }}>
-                      <Button
-                        text='Proceed'
-                        disabled={!identificationDetails.identificationNumber || !identificationDetails.identificationType}
-                        onClick={() => handleProceed()}
-                      />
+                      <Button text='Proceed' disabled={fileNotUploaded} onClick={() => handleProceed()} />
                     </div>
                   </div>
                 ) : null}

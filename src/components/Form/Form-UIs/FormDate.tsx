@@ -150,7 +150,6 @@ const FormDate = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // console.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -273,8 +272,6 @@ const FormDate = ({
       }
     }
   }, [publishedFormState, columnName])
-  console.log(helpText)
-
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} bg-transparent`}
@@ -307,7 +304,7 @@ const FormDate = ({
               ? 'week'
               : ''
           }
-          min={helpText === 'Expiry Date' ? new Date().toISOString().slice(0, 10) : ''}
+          min={helpText === 'Expiry Date' ? tomorrowsDate().toISOString().slice(0, 10) : ''}
           max={helpText === 'Issue Date' ? new Date().toISOString().slice(0, 10) : ''}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
@@ -315,6 +312,8 @@ const FormDate = ({
           onChange={(e) => handleChange(e, item)}
           value={text}
         />
+        {/* if the field is for expiry date, the selected date should be later than today. */}
+        {fieldNameInCaps(item) === 'EXPIRY DATE' && <div>{/* <>{console.log('selected date valuye is is ', text, 'helptext', helpText)}</> */}</div>}
       </div>
       {required.toLowerCase() === 'on' ? (
         <p className='text-red-500'>
@@ -326,3 +325,22 @@ const FormDate = ({
 }
 
 export default FormDate
+
+const fieldNameInCaps = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+  )?.toUpperCase()
+}
+
+const tomorrowsDate = () => {
+  let date = new Date()
+
+  // add one day
+  date.setDate(date.getDate() + 1)
+
+  return date
+}

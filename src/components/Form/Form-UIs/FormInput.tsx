@@ -40,8 +40,6 @@ const FormInput = ({
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
 
-  console.log('forminput-item', item.formControlProperties, 'Field label', 'Field label')
-
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
 
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
@@ -59,14 +57,10 @@ const FormInput = ({
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
-  // console.log(item)
-
   const [text, setText] = useState<string>('')
   const [columnName, setColumnName] = useState<string>('')
 
   // const [columnName, setColumnName] =
-  // console.log('columnName', columnName)
-  // console.log('getColumnMap?.serverResponse?', getColumnMap)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
     setText(e.target.value)
@@ -80,7 +74,6 @@ const FormInput = ({
     }
 
     setFillingFormState((prev: FormStructureType) => {
-      // console.log('prev', prev)
       const copiedPrev = { ...prev }
       const pageId = theItemFromChange?.pageId
 
@@ -150,7 +143,6 @@ const FormInput = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // console.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -184,7 +176,6 @@ const FormInput = ({
       setText(theData)
     } else {
       setFillingFormState((prev: FormStructureType) => {
-        // console.log('prev', prev)
         const copiedPrev = { ...prev }
         const pageId = item?.pageId
 
@@ -252,7 +243,6 @@ const FormInput = ({
     // if (fillingFormState?.data?.customerData?.length === 0) {
     //   const exists = fillingFormState[columnName]
 
-    //   console.log({exists})
     //   if (exists) {
     //     setText(exists)
     //   }
@@ -267,7 +257,6 @@ const FormInput = ({
     //   })
 
     //   const theData = theItemSectionOrPage?.data[columnName]
-    //   // console.log
 
     //   if (theData && theData?.length > 0) {
     //     setText(theData)
@@ -277,7 +266,6 @@ const FormInput = ({
 
   // Change the value of backup state with any new thing from filling for state
   useEffect(() => {
-    // console.log({ text })
     if (text) {
       setBackupForSwitchFormState((prev) => {
         const copiedPrev = { ...prev }
@@ -297,7 +285,6 @@ const FormInput = ({
       if (backup && backup?.length > 1) {
         setText(backup)
         setFillingFormState((prev: FormStructureType) => {
-          // console.log('prev', prev)
           const copiedPrev = { ...prev }
           const pageId = item?.pageId
 
@@ -372,7 +359,6 @@ const FormInput = ({
     //     } else {
     //       // setText('')
     //       setFillingFormState((prev: FormStructureType) => {
-    //         // console.log('prev', prev)
     //         const copiedPrev = { ...prev }
     //         const pageId = item?.pageId
 
@@ -452,47 +438,54 @@ const FormInput = ({
       }}
       title={helpText}
     >
+      {/* {helpText === 'BVN' && console.log(fieldsNames.NUMBERCOUNTER, 'hey', item.name)} */}
       <div className='relative w-fit'>
         {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
         {item.name === fieldsNames.NUMBERCOUNTER ? (
-          <input
-            className={`flex w-full  py-1 leading-6 bg-transparent`}
-            type='number'
-            required={required.toLowerCase() === 'on'}
-            placeholder={placeholder}
-            title={helpText}
-            onChange={(e) => handleChange(e, item)}
-            maxLength={Number(maximumNumbersOfCharacters)}
-            value={text}
-            min='0'
-          />
+          <>
+            <input
+              className={`flex w-full  py-1 leading-6 bg-transparent`}
+              type='number'
+              required={required.toLowerCase() === 'on'}
+              placeholder={placeholder}
+              title={helpText}
+              onChange={(e) => handleChange(e, item)}
+              maxLength={Number(maximumNumbersOfCharacters)}
+              value={text}
+              min='0'
+            />
+          </>
         ) : null}
         {item.name !== fieldsNames.NUMBERCOUNTER ? (
-          <input
-            className={`flex w-full  py-1 leading-6 bg-transparent`}
-            type={
-              item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
-                ? 'text'
-                : item.name === fieldsNames.PHONEINPUT
-                ? 'tel'
-                : item.name === fieldsNames.PASSWORD
-                ? 'password'
-                : item.name === fieldsNames.URL
-                ? 'url'
-                : item.name === fieldsNames.EMAIL
-                ? 'email'
-                : 'text'
-            }
-            required={required.toLowerCase() === 'on'}
-            placeholder={placeholder}
-            title={helpText}
-            onChange={(e) => handleChange(e, item)}
-            maxLength={Number(maximumNumbersOfCharacters)}
-            value={text}
-          />
+          <>
+            <input
+              className={`flex w-full  py-1 leading-6 bg-transparent`}
+              type={
+                isFieldBvn(item)
+                  ? 'number'
+                  : item.name === fieldsNames.INFOTEXT || item.name === fieldsNames.SHORTEXT
+                  ? 'text'
+                  : item.name === fieldsNames.PHONEINPUT
+                  ? 'tel'
+                  : item.name === fieldsNames.PASSWORD
+                  ? 'password'
+                  : item.name === fieldsNames.URL
+                  ? 'url'
+                  : item.name === fieldsNames.EMAIL
+                  ? 'email'
+                  : 'text'
+              }
+              required={required.toLowerCase() === 'on'}
+              placeholder={placeholder}
+              title={helpText}
+              onChange={(e) => handleChange(e, item)}
+              maxLength={Number(maximumNumbersOfCharacters)}
+              value={text}
+            />
+          </>
         ) : null}
 
         {item.name !== fieldsNames.NUMBERCOUNTER && maximumNumbersOfCharacters ? (
@@ -511,3 +504,25 @@ const FormInput = ({
 }
 
 export default FormInput
+
+const isFieldBvn = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    (getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+    )?.toUpperCase() === 'BVN'
+  )
+}
+
+const isFieldExpiry = (item: FormControlType | FormControlTypeWithSection) => {
+  return (
+    (getProperty(item.formControlProperties, 'Field label', 'value').text
+      ? getProperty(item.formControlProperties, 'Field label', 'value').text
+      : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
+      : 'Field Label'
+    )?.toUpperCase() === 'EXPIRY DATE'
+  )
+}

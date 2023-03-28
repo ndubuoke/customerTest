@@ -2,16 +2,17 @@ import React, { useEffect, useState } from 'react'
 import SignatoryDropDown from './DropDown'
 import TextInput from './TextInput'
 import { PrefillerIDTypeLengths, PrefillerIDTypeType, useIdFormPrefiller } from '../../../../hooks/useIdFormPrefiller'
-import { SignatoryDetailsType, SignatoryDetailType } from 'Components/Form/Types/SignatoryTypes'
+import { SignatoryDetailsType, SignatoryDetailType, SignatoryInitialDetailsType } from 'Components/Form/Types/SignatoryTypes'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from 'Redux/store'
 import { UnfilledRequiredSignatoryListReducerType } from 'Redux/reducers/FormManagement.reducers'
 import { unfilledRequiredSignatoryListAction, unfilledRequiredSignatoryListButtonAction } from 'Redux/actions/FormManagement.actions'
 
 type Props = {
+  signatoryDetails: SignatoryInitialDetailsType
   setSignatoryDetails: (prev: any) => void
 }
-const IdPrefiller = ({ setSignatoryDetails }: Props) => {
+const IdPrefiller = ({ setSignatoryDetails, signatoryDetails }: Props) => {
   const dispatch = useDispatch()
 
   const unfilledRequiredSignatoryList = useSelector<ReducersType>(
@@ -30,6 +31,18 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
   })
 
   useEffect(() => {
+    setSignatoryPrefillInput(() => ({
+      'Identification Method': signatoryDetails['meansOfIdentification'] as PrefillerIDTypeType,
+      'ID Number': signatoryDetails['iDNumber'],
+    }))
+  }, [])
+
+  useEffect(() => {
+    setSignatoryDetails((prev) => ({
+      ...prev,
+      iDNumber: signatoryPrefillInput['ID Number'],
+      meansOfIdentification: signatoryPrefillInput['Identification Method'],
+    }))
     if (signatoryPrefillInput['Identification Method'] === 'BVN' && signatoryPrefillInput['ID Number'].length === PrefillerIDTypeLengths.BVN) {
       getIdDetails({ idNumber: signatoryPrefillInput['ID Number'], idType: 'bvn' })
       console.log({ ID: signatoryPrefillInput, loading, success, error, response })
@@ -72,21 +85,37 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
     // console.log({ k: !k['man'] })
     setSignatoryDetails((prev: any) => {
       const copied = { ...prev }
-
-      const detailsList = Object.entries(details).forEach((x: Array<any>) => {
-        if (copied.hasOwnProperty([x[0]])) {
-          if (!copied[x[0]]) {
-            copied[x[0]] = x[1]
-            console.log(x[0])
-            handleRedispatchOfRequiredFields(x[0])
+      // const detailsList = Object.entries(details).forEach((x: Array<any>) => {
+      //   if (copied.hasOwnProperty([x[0]])) {
+      //     if (!copied[x[0]]) {
+      //       copied[x[0]] = x[1]
+      //       console.log(x[0])
+      //       handleRedispatchOfRequiredFields(x[0])
+      //     }
+      //   }
+      // })
+      if (response?.data) {
+        const keys = Object.keys(response.data)
+        keys.forEach((key) => {
+          if (key === 'mobile') {
+            copied['mobileNumber'] = response.data[key]
+          } else if (key === 'lastName') {
+            copied['surname'] = response.data[key]
+          } else if (key === 'lastName') {
+            copied['surname'] = response.data[key]
+          } else if (copied.hasOwnProperty(key)) {
+            copied[key] = response.data[key]
           }
-        }
-      })
+        })
+      }
+      console.log('copied', copied)
+      // console.log('detailsList', detailsList)
+      console.log('response', response?.data)
 
       // console.log({ copied })
       return copied
     })
-  }, [success])
+  }, [response])
 
   const handleRedispatchOfRequiredFields = (text: SignatoryDetailType) => {
     const isPresentInRequiredList = unfilledRequiredSignatoryList?.list?.find((x) => x[0] === text)
@@ -135,7 +164,7 @@ const IdPrefiller = ({ setSignatoryDetails }: Props) => {
             : 10
         }
         setValue={setSignatoryPrefillInput}
-        value={signatoryPrefillInput['ID Number']}
+        value={signatoryDetails['iDNumber'] || signatoryPrefillInput['ID Number']}
         text='ID Number'
         colspan={2}
         type='text'

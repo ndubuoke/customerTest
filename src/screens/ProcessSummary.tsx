@@ -180,7 +180,8 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
         <section
           className={` relative `}
           style={{
-            maxWidth: '70%',
+            maxWidth: '73%',
+            width: '70%',
           }}
         >
           <div className={`relative rounded-lg text-[#636363] font-[Inter] w-full h-full  min:h-full max:h-full  bg-white py-6`}>
@@ -226,7 +227,7 @@ const ProcessSummary = ({ headerText, customerType }: Props) => {
           </div>
           <ProcessActions mode={formMode} waiverType={processActionsMode} customerType={customerType} openWaiver={openWaiver} formType={formType} />
         </section>
-        <section className={`max-w-[30%] min-w-[370px]`}>
+        <section className={`max-w-[27%] min-w-[350px]`}>
           <div
             className={`rounded-lg text-[#636363] text-[16px] leading-6 font-medium font-[Inter] tracking-wide w-full h-full bg-white pt-[25px] px-[20px] overflow-y-auto`}
           >

@@ -5,6 +5,7 @@
     "dev": "npm run start:standalone",
     "tw": "npx tailwindcss build -i ./src/styles/start.css -o ./src/styles/final.css --watch",
     "start:standalone": "webpack serve --env standalone --https && https-server-S-C cert.pem -K key.pem",
+    "standalone:https": "yarn run start:standalone --https && https-server -S -C cert.pem -K key.pem",
     "build:dev": "concurrently yarn:build:types yarn:build:webpack:dev",
     "build:staging": "concurrently yarn:build:types yarn:build:webpack:staging",
     "build:production": "concurrently yarn:build:types yarn:build:webpack:production",

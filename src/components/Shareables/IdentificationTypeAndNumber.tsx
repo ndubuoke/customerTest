@@ -10,6 +10,7 @@ import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
 type Props = {
   customerType: CustomerType
   setIdentificationDetails: (value: IdentificationDetailsType) => void
+  setFileUploaded: any
 }
 
 enum VerificationModeEnum {
@@ -30,7 +31,7 @@ export type IdentificationTypeType = 'bvn' | 'nin' | 'cac' | 'tin' | null
 export type IdentificationNumberType = string | null
 type FieldStatus = 'loading' | 'success' | 'error'
 
-const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }: Props) => {
+const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails, setFileUploaded }: Props) => {
   const [selectedIdentificationType, setSelectedIdentificationType] = useState<IdentificationTypeType>(null)
   const [identificationNumber, setIdentificationNumber] = useState<IdentificationNumberType>('')
   const [isVerified, setIsVerified] = useState<boolean | null>(null)
@@ -41,6 +42,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
   // const MAX_FIELD_LENGTH = 12
 
   const handleVerification = async (ev: ChangeEvent<HTMLInputElement>) => {
+    setFileUploaded(true)
     const { value, validity } = ev.target
     // console.log('ev.target', ev)
     setIdentificationNumber((prev) => {
@@ -58,6 +60,7 @@ const IdentificationTypeAndNumber = ({ customerType, setIdentificationDetails }:
         // console.log('response.data', response.data)
         if (response.data && response.status == 200) {
           setIsVerified(true)
+          setFileUploaded(false)
           setStatus('success')
           if (selectedIdentificationType === 'bvn') {
             setIdentificationDetails({

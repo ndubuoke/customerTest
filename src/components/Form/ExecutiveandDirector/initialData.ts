@@ -25,7 +25,7 @@ export const executiveDetailsInitial = (): ExecutiveField[] => [
     required: 'off',
     colSpan: 2,
     placeholder: 'ID Number',
-    maxLength: 20,
+    maxLength: 20, 
   },
   {
     id: generateID(),
