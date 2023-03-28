@@ -11,9 +11,10 @@ import { UploadFile } from 'Components/Shareables'
 type Props = {
   identificationDetails?: IdentificationDetailsType
   setLocalUpload: (file: any) => void
+  setFileUploaded: any
 }
 
-const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => {
+const FileUploader = memo(({ identificationDetails, setLocalUpload, setFileUploaded }: Props) => {
   const [uploadedFiles, setuploadedFiles] = useState<Array<UploadFile>>([])
   const [isProcessing, setIsProcessing] = useState(false)
 
@@ -32,6 +33,8 @@ const FileUploader = memo(({ identificationDetails, setLocalUpload }: Props) => 
               imageUrl: signedUrlResponse.data.data,
               mimeType: response.data.data.mimeType,
             })
+            setFileUploaded(false)
+            console.log(true)
             // console.log('ocrVerificationResponse', ocrVerificationResponse.data)
             return {
               file,

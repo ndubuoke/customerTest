@@ -150,7 +150,6 @@ const FormDate = ({
 
   useEffect(() => {
     if (getColumnMap?.serverResponse?.status) {
-      // console.log({
       const _columnName = getColumnName({
         columns: getColumnMap?.serverResponse?.data,
         sectionId: item?.sectionId,
@@ -273,8 +272,6 @@ const FormDate = ({
       }
     }
   }, [publishedFormState, columnName])
-  console.log(helpText)
-
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} bg-transparent`}
@@ -289,7 +286,6 @@ const FormDate = ({
         <FieldLabel fieldItem={item} />
       </div>
       <div className='bg-transparent'>
-        {console.log('field name in capsssss', fieldNameInCaps(item))}
         <input
           className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]`}
           style={{
@@ -317,11 +313,7 @@ const FormDate = ({
           value={text}
         />
         {/* if the field is for expiry date, the selected date should be later than today. */}
-        {fieldNameInCaps(item) === 'EXPIRY DATE' && (
-          <div>
-            <>{console.log('selected date valuye is is ', text, 'helptext', helpText)}</>
-          </div>
-        )}
+        {fieldNameInCaps(item) === 'EXPIRY DATE' && <div>{/* <>{console.log('selected date valuye is is ', text, 'helptext', helpText)}</> */}</div>}
       </div>
       {required.toLowerCase() === 'on' ? (
         <p className='text-red-500'>

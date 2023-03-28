@@ -28,8 +28,6 @@ type Props = {
  */
 export const SearchDropdown = memo(
   ({ selected, placeholder, options, checkIfItemIsState, checkIfItemIsCity, item, handleChange, name, loadingOptions, noOptionsMessage }: Props) => {
-    console.log(item)
-
     const [searchInput, setSearchInput] = useState('')
     const [isOpen, setIsOpen] = useState(false)
 
@@ -66,8 +64,6 @@ export const SearchDropdown = memo(
     const clearSelectedIfSearchInputChanged = (selected) => {
       // if the search input was changed before closing, clear the selected value.
       if (searchInput !== selected && searchInput !== selected) {
-        console.log('it is cleared')
-
         clearSelected()
       } else {
         setSearchInput(selected)
@@ -86,7 +82,6 @@ export const SearchDropdown = memo(
         }}
         ref={dropdownRef}
       >
-        {console.log('selected ampmnn', selected)}
         <div className='border-b border-solid cursor-text pb-[10px] flex items-center justify-between border-common-title' role='searchbox'>
           <div className='flex items-center w-full'>
             <SearchIcon className='h-4 text-[#000000aa] mr-3 cursor-pointer' />

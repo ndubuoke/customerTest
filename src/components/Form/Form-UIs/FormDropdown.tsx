@@ -239,9 +239,6 @@ const FormDropdown = ({
     const checkStatesInStorage = sessionStorage.getItem(`${item?.sectionId || item?.pageId}-state`)
       ? JSON.parse(sessionStorage.getItem(`${item?.sectionId || item?.pageId}-state`))
       : null
-
-    console.log('checkStatesInStorage-checkIfItemIsCity', checkStatesInStorage)
-
     if (checkStatesInStorage?.sectionId === item?.sectionId || checkStatesInStorage?.pageId === item?.pageId) {
       dispatch(getCitiesAction(checkStatesInStorage?.state?.stateId) as any)
     }
@@ -260,7 +257,6 @@ const FormDropdown = ({
             return { stateId: x?.stateId, stateName: x?.stateName }
           })
         )
-        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
     if (fieldLabel.toLowerCase().includes('lga') && !Object(getStatesRedux.serverResponse).hasOwnProperty('data')) {
@@ -283,7 +279,6 @@ const FormDropdown = ({
 
   //This is city
   useEffect(() => {
-    // console.log(first)
     if (fieldLabel.toLowerCase().includes('lga') && getCitiesRedux) {
       if (getCitiesRedux?.success) {
         setOptionsField(getCitiesRedux?.serverResponse?.data?.map((x) => x?.lgaName))
@@ -292,7 +287,6 @@ const FormDropdown = ({
             return { lgaId: x?.lgaId, lgaName: x?.lgaName }
           })
         )
-        // `console`.log({ getStatesRedux: getStatesRedux?.serverResponse })
       }
     }
   }, [getCitiesRedux])
@@ -313,7 +307,6 @@ const FormDropdown = ({
       return
     }
     if (enableMultipleSelection.toLowerCase() === 'on') {
-      //   `console`.log(multipleSelectedDropdownItems)
       // if (multipleSelectedDropdownItems.length === 0) {
       //   return
       // } else {
@@ -798,8 +791,6 @@ const FormDropdown = ({
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)
               }
-              console.log(item)
-
               if (fieldLabel.toLowerCase().includes('lga')) {
                 checkIfItemIsCity()
               }
