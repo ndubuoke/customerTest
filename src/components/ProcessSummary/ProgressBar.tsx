@@ -25,11 +25,11 @@ const ProgressBar = ({
   if (mode === 'creation') {
     return (
       <section
-        className={`mb-8  w-full  max-w-[52.4375rem] h-[6.75rem] mx-auto rounded-[1.25rem] border border-[#d2d2d2] bg-transparent flex flex-col justify-center items-center relative`}
+        className={`mb-8  w-full h-[6.75rem] mx-auto rounded-[1.25rem] border border-[#d2d2d2] px-12 bg-transparent flex flex-col justify-center relative `}
       >
         <div className={`absolute bg-white border-none -top-3 left-7 px-2  `}>Processing Status</div>
 
-        <div className='relative w-full max-w-[43.75rem] h-fit flex justify-between'>
+        <div className='relative w-full h-fit flex justify-between'>
           <div
             className=' h-[.625rem] w-[80%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
             style={{
@@ -66,7 +66,7 @@ const ProgressBar = ({
       >
         <div className={`absolute bg-white border-none -top-3 left-7 px-2  `}>Processing Status</div>
 
-        <div className='relative w-full max-w-[43.75rem] h-fit flex justify-between'>
+        <div className='relative w-full h-fit flex justify-between'>
           <div
             className=' h-[.625rem] w-[85%] bg-[#d9d9d9] absolute top-[30%] left-0 right-0 mx-auto opacity-60'
             style={{
