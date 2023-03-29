@@ -63,6 +63,9 @@ const FormInput = ({
   // const [columnName, setColumnName] =
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>, theItemFromChange: FormControlType | FormControlTypeWithSection) => {
+    if (isFieldBvn(theItemFromChange) && e.target.value.length > Number(maximumNumbersOfCharacters)) {
+      return
+    }
     setText(e.target.value)
 
     const requiredFieldsFromRedux = setRequiredFormFieldsRedux?.list?.find((x) => x.fieldLabel === columnName)

@@ -30,7 +30,8 @@ const MatchModal = ({ setShowMatchModal, setFormCreationStarted, data }: props) 
           </div>
           <div className='flex flex-col text-center items-center mt-4'>
             <GreenCheckBig />
-            <p className='text-[#2FB755] text-xl mt-2'>{data.percent}% match</p>
+            {data.percent && <p className='text-[#2FB755] text-xl mt-2'>{data.percent}% match</p>}
+
             {parseFloat(data.percent) < 10 ? (
               <p className='text-xl text-[#667085]'>Proceed to fill other details</p>
             ) : (
