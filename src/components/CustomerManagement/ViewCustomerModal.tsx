@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import { AppRoutes } from 'Routes/AppRoutes'
 import convertCamelCaseToTitleCaseText from 'Utilities/convertCamelCaseToTitleCaseText'
+import truncateString from 'Utilities/truncateString'
 
 type props = {
   setShowCustomerModal: (e) => void
@@ -95,7 +96,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                 </div>
                 <div className=' font-[400] w-[100%] flex flex-col items-start text-[16px]  '>
                   <p style={{ marginBottom: '18px' }}>
-                    {getCustomerDetail(customer, 'surname') !== '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}
+                    {getCustomerDetail(customer, 'surname') != '' || null ? getCustomerDetail(customer, 'surname') : 'Not Available'}
                   </p>
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'firstName') != '' || null ? getCustomerDetail(customer, 'firstName') : 'Not Available'}
@@ -103,13 +104,13 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
-                  <p className='' style={{ textOverflow: 'ellipsis', whiteSpace: 'nowrap', marginBottom: '18px' }}>
-                    {getCustomerDetail(customer, 'customerId') != '' || null ? getCustomerDetail(customer, 'customerId') : 'Not Available'}
+                  <p className=' w-full ' style={{ marginBottom: '18px' }}>
+                    {getCustomerDetail(customer, 'customerId') != '' || null ? truncateString(customerId, 20) : 'Not Available'}
                   </p>
-                  <p style={{ marginBottom: '18px' }}>
+                  <p style={{ marginBottom: '18px' }} className=''>
                     {getCustomerDetail(customer, 'accountNumber') != '' || null
-                      ? `${getCustomerDetail(customer, 'accountNumber')},`
-                      : 'Not Availables'}
+                      ? `${getCustomerDetail(customer, 'accountNumber')}`
+                      : 'Not Available'}
                   </p>
                   <p style={{ marginBottom: '18px' }}>
                     {' '}
