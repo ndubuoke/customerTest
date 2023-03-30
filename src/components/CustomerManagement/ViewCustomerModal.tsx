@@ -165,7 +165,25 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
               <div className='h-[80%] px-6 mt-6'>
                 <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
                 <div className=' font-bold h-full flex w-full mt-6    '>
-                  <div className='w-[40%]'></div>
+                  <div className='w-[100%] flex justify-between'>
+                    <div className='w-[40%]'>
+                      <h2 className='text-base font-bold'>Deposit Products</h2>
+                    </div>
+                    <div className='w-[60%]'>
+                      {customer?.customer_products
+                        .filter((item) => item.productCategory === 'Deposit')
+                        .map((data, index) => (
+                          <span
+                            key={index}
+                            className='mb-2 text-[12px] text-[#16252A] cursor-pointer  flex font-bold  bg-[#E0E0E0] p-2 justify-center gap-2 items-center rounded-[20px] w-max px-5 py-2'
+                          >
+                            {data?.productName} [{data?.accountNumber}]
+                            <img src={View} alt='' className='pl-5' />
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                  {/* <div className='w-[40%]'></div>
                   <div className='w-[60%]'>
                     {customer?.customer_products.map((data, index) => (
                       <span
@@ -176,7 +194,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                         <img src={View} alt='' />
                       </span>
                     ))}
-                  </div>
+                  </div> */}
                 </div>
               </div>
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
