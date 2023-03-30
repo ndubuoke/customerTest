@@ -2,7 +2,7 @@ import { arrow, caret, chevron, Disable, Download, Edit, ellipse, Eye, Filter, g
 import CustomerManagementTable from 'Components/CustomerManagement/CustomerManagementTable'
 import DeactivationModal from 'Components/CustomerManagement/DeactivationModal'
 import { QuickLinks } from 'Components/Shareables'
-
+import axios from 'axios'
 import React, { memo, useEffect, useRef } from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -26,7 +26,6 @@ import * as XLSX from 'xlsx'
 import Spinner from 'Components/Shareables/Spinner'
 import SearchBarModal from '../components/CustomerManagement/searchBarModal'
 import ViewCustomerModal from 'Components/CustomerManagement/ViewCustomerModal'
-
 
 type Props = {}
 
@@ -70,7 +69,7 @@ const Main = (props: Props) => {
   const totalStatusCustomers = useSelector<ReducersType>((state: ReducersType) => state?.totalStatusCustomers) as customersManagementResponseType
   const allRequestsForChecker = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsForChecker) as customersManagementResponseType
   const customerByName = useSelector<ReducersType>((state: ReducersType) => state?.customerByName) as customersManagementResponseType
- 
+
   type userType = 'maker' | 'checker'
   const [showLists, setShowLists] = useState(false)
   const [customermanagementTableType, setCustomerManagementTableType] = useState<tableType>(null)
@@ -100,6 +99,7 @@ const Main = (props: Props) => {
   const [hideX1, setHideX1] = useState(true)
   const [hideX2, setHideX2] = useState(true)
   const [showSearchBarModal, setShowSearchBarModal] = useState(false)
+  const [quickLink, setQuickLink] = useState([])
 
   const customerStatusResponsedata = AllCustomers?.serverResponse?.data
 
@@ -367,7 +367,7 @@ const Main = (props: Props) => {
     }
     const timer = setTimeout(() => {
       dispatch(getCustomerByNameAction(searchTerm2) as any)
-     
+
       setShowSearchBarModal(true)
     }, 500)
     return () => clearTimeout(timer)
@@ -381,6 +381,34 @@ const Main = (props: Props) => {
     if (userRole === 'maker') {
       setNextLevelButtonId(1)
       setCustomerManagementTableType('All Customers')
+    }
+  }, [])
+  useEffect(() => {
+    const source = axios.CancelToken.source()
+
+    const fetchQuickLinks = async () => {
+      try {
+        const response = await axios.get(`https://utilities-api-dev.reventtechnologies.com/v1/quick-link/all/CustomerMgt`, {
+          cancelToken: source.token,
+        })
+        console.log(response)
+        if (response.status === 200) {
+          setQuickLink(response.data.data)
+          console.log(response.data.data)
+        }
+      } catch (error) {
+        if (axios.isCancel(error)) {
+          console.log('Request canceled')
+        } else {
+          console.log(error)
+        }
+      }
+    }
+
+    fetchQuickLinks()
+
+    return () => {
+      source.cancel('Component unmounted')
     }
   }, [])
 
@@ -417,7 +445,7 @@ const Main = (props: Props) => {
       }
     }
   }, [customerType, customermanagementTableType, nextLevelButtonId])
-    // console.log(AllCustomers)
+  // console.log(AllCustomers)
   //  console.log(allRequests)
   //  console.log(allRequestsForChecker)
   // console.log(user)
@@ -503,7 +531,6 @@ const Main = (props: Props) => {
             <SearchBar searchTerm={searchTerm2} setSearchTerm={setSearchTerm2} hideX={hideX2} setHideX={setHideX2} onChange={searchBar2Handler} />
             {showSearchBarModal && (
               <SearchBarModal
-              
                 searchBarModalRef={searchBarModalRef}
                 externalFunctionToDoSomething={viewCustomerModalHandler}
                 response={customerByName}
@@ -872,10 +899,11 @@ const Main = (props: Props) => {
             </div>
             <div className='hidden w-auto lg:block'>
               <QuickLinks
-                links={[
-                  { urlName: 'Customer 360', url: '/customer-management/customer-360' },
-                  { urlName: 'Link2', url: '/customer-management/customer-360', disabled: true },
-                ]}
+                // links={[
+                //   { urlName: 'Customer 360', url: '/customer-management/customer-360' },
+                //   { urlName: 'Link2', url: '/customer-management/customer-360', disabled: true },
+                // ]}
+                links={quickLink}
               />
             </div>
           </div>
