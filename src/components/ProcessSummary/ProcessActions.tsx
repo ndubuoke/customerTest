@@ -139,7 +139,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
 
   return (
     <div
-      className=' flex absolute    bottom-2 right-2   rounded-lg  px-4 py-2 mb-[1rem]'
+      className=' flex absolute    bottom-2 right-2   rounded-lg  px-4 py-4 mb-[1rem] bg-white'
       style={{
         justifyContent: 'space-between',
         width: '95%',

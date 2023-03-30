@@ -115,12 +115,30 @@ const CustomerCreation = memo(({ customerType }: Props) => {
       setFormCreationStarted(true)
     }
   }
-
+  console.log('localUpload', localUpload)
   useEffect(() => {
     if (formCreationStarted) {
       console.log('identificationDetails', identificationDetails)
-      if (identificationDetails.identityData) {
-        setBackupForSwitchFormState({ ...identificationDetails.identityData, bVN: identificationDetails.identityData.idNumber || '' })
+      console.log('localUpload', localUpload)
+      const findPassportUpload = localUpload.find((file) => file.verificationData.extractedData.includes('Pasport No./ Passeport N'))
+      if (identificationDetails.identityData || findPassportUpload) {
+        const passportDetailsList = findPassportUpload?.verificationData?.extractedData || []
+        console.log('passportDetailsList', passportDetailsList)
+        const passportFirstName = passportDetailsList[10]?.split(' ')[0]
+        const passportLastName = passportDetailsList[10]?.split(' ')[1]
+        const fields = {
+          bVN: identificationDetails?.identityData?.idNumber || '',
+          chooseAnID: findPassportUpload ? 'International Passport' : '',
+          dateOfBirth: identificationDetails?.identityData?.dateOfBirth || '',
+          firstName: identificationDetails?.identityData?.firstName || passportFirstName || '',
+          gender: identificationDetails?.identityData?.gender || '',
+          'ID Number': passportDetailsList[24] || '',
+          surname: identificationDetails?.identityData?.lastName || passportLastName || '',
+        }
+        console.log('fields', fields)
+        setBackupForSwitchFormState({
+          ...fields,
+        })
       }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
