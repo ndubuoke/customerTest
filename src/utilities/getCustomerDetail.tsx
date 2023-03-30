@@ -12,9 +12,7 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
   }
 
   if (field === 'accountNumber') {
-    return customer.customer_products.map((profile) => {
-      return profile.accountNumber
-    })
+    return customer.customer_products[0].accountNumber
   }
   if (field === 'firstName') {
     return customer.customer_profiles.map((profile) => {
