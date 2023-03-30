@@ -3,7 +3,7 @@ const getProductDetail = (product, field: string): any => {
     return product.product_category
   }
   if (field === 'product_type') {
-    return product.product_type
+    return product.product_type?.name
   }
   if (field === 'product_type_id') {
     return product.product_type_id

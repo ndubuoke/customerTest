@@ -38,7 +38,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
     dispatch(getCustomerProfileAction(customerId) as any)
     dispatch(getSingleProductAction(productId) as any)
   }, [productId,customerId])
-  // console.log(singleProduct)
+  //  console.log(singleProduct)
   // console.log(customerProfile)
  
   
