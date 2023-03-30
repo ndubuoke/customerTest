@@ -54,7 +54,7 @@ const ProductAssignment = () => {
     setSearchTerm(event.target.value)
   }
 
-  const selectProductsToBeAssigned = (data: { productId: ''; productName: ''; productCode: '' }) => {
+  const selectProductsToBeAssigned = (data: { productId: ''; productName: ''; productCode: ''; productCategory: '' }) => {
     // console.log(data)
     const existingProduct = toBeAssignedProducts.find((product) => product.productId === data.productId)
 
@@ -65,6 +65,7 @@ const ProductAssignment = () => {
           productId: data.productId,
           productCode: data.productCode,
           productName: data.productName,
+          productCategory: data.productCategory,
         },
       ])
     } else {
@@ -72,8 +73,11 @@ const ProductAssignment = () => {
     }
   }
 
-  const assignProductHandler = (data?: { productId: ''; productName: ''; productCode: '' }) => {
+  const assignProductHandler = (data?: { productId: ''; productName: ''; productCode: ''; productCategory: '' }) => {
+    console.log({ productData: [...toBeAssignedProducts] })
+
     if (data.productId === undefined || '') {
+      console.log({ productData: [...toBeAssignedProducts] })
       const body = {
         data: {
           productData: [...toBeAssignedProducts],
@@ -92,6 +96,7 @@ const ProductAssignment = () => {
         dispatch(assignProductAction(body, value, userData.user?.tenant_admin, customerId) as any)
       })
     } else {
+      console.log({ productData: [data] }, 'hey')
       const body = {
         data: {
           productData: [data],
@@ -184,7 +189,7 @@ const ProductAssignment = () => {
     }
   }, [toBeAssignedProducts])
 
-    //  console.log(customerProfile)
+  //  console.log(customerProfile)
   // console.log(toBeAssignedProducts)
   return (
     <>
@@ -248,7 +253,6 @@ const ProductAssignment = () => {
               </div>
               <div className=' w-full mt-6 '>
                 <ProductsTable
-                 
                   assignProductHandler={assignProductHandler}
                   selectProductsToBeAssigned={selectProductsToBeAssigned}
                   searchTerm={searchTerm}

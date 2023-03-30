@@ -10,8 +10,6 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
       return profile.mobileNumber
     })
   }
-  console.log(customer)
-
   if (field === 'accountNumber') {
     if (customer.customer_products.length === 0) {
       return 'Not Available'
