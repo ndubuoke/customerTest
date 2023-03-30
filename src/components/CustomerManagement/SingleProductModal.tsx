@@ -68,8 +68,8 @@ const SingleProductModal = ({ productId, setShowProductModal, assignProductHandl
                         <div className='w-[50%] '>
                           <h2 className='text-[1rem] text-[#636363;]'>Product Type</h2>
                           <p className='mt-[10px] text-[#636363]'>
-                            {getProductDetail(singleProduct, 'product_type') != '' || null
-                              ? getProductDetail(singleProduct, 'product_type')
+                            {getProductDetail(singleProduct, 'product_type').product_type != '' || null
+                              ? getProductDetail(singleProduct, 'product_type').product_type
                               : 'Not Available'}
                           </p>
                         </div>
