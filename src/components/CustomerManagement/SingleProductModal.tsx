@@ -4,22 +4,27 @@ import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { ReducersType } from '../../redux/store'
 import { customersManagementResponseType } from 'Redux/reducers/CustomerManagement.reducer'
-import { getSingleProductAction } from 'Redux/actions/CustomerManagement.actions'
+import { getCustomerProfileAction, getSingleProductAction } from 'Redux/actions/CustomerManagement.actions'
 import getProductDetail from 'Utilities/getProductDetail'
 import Spinner from '../Shareables/Spinner'
 import Button from 'Components/Shareables/Button'
 import formatMoney from 'Utilities/formatMoney'
+import { useParams } from 'react-router-dom'
 
 type props = {
   productId: string
   setShowProductModal: (e) => void
   assignProductHandler: (e) => void
+
 }
 
 const SingleProductModal = ({ productId, setShowProductModal, assignProductHandler }: props) => {
   const singleProductResponse = useSelector<ReducersType>((state: ReducersType) => state?.singleProduct) as customersManagementResponseType
   const dispatch = useDispatch()
+  const customerProfileResponse = useSelector<ReducersType>((state: ReducersType) => state?.customerProfile) as customersManagementResponseType
+const customerProfile = customerProfileResponse.serverResponse.data
   let product = { productId: '', productName: '', productCode: '' }
+  let { customerId } = useParams()
   const singleProduct = singleProductResponse.serverResponse.data
   const closeModal = () => {
     setShowProductModal(false)
@@ -30,9 +35,13 @@ const SingleProductModal = ({ productId, setShowProductModal, assignProductHandl
     assignProductHandler(data)
   }
   useEffect(() => {
+    dispatch(getCustomerProfileAction(customerId) as any)
     dispatch(getSingleProductAction(productId) as any)
-  }, [productId])
+  }, [productId,customerId])
   // console.log(singleProduct)
+  // console.log(customerProfile)
+ 
+  
   return (
     <div
       className={`fixed   z-50 top-0 right-0 left-0 bottom-0 flex items-center justify-center  `}
