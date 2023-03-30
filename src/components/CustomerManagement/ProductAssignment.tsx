@@ -184,7 +184,7 @@ const ProductAssignment = () => {
     }
   }, [toBeAssignedProducts])
 
-  //  console.log(customerProfile)
+    //  console.log(customerProfile)
   // console.log(toBeAssignedProducts)
   return (
     <>
@@ -201,7 +201,9 @@ const ProductAssignment = () => {
           closeModal={() => {
             setShowProductAssignmentCustomerAlertModal(false)
           }}
-          message={`${userData.user?.tenant_admin ? 'Product(s) Has Been Assigned To Customer' : 'Product Assignment Request Submitted For Approval'}`}
+          message={`${
+            userData.user?.tenant_admin ? 'Product(s) Has Been Assigned To Customer' : 'Product Assignment Request Submitted For Approval'
+          }`}
           isOpen={showProductAssignmentCustomerAlertModal}
           loading={assignProduct.loading}
           status={assignProduct.serverResponse.status === 'success' ? 'success' : 'error'}
@@ -246,6 +248,7 @@ const ProductAssignment = () => {
               </div>
               <div className=' w-full mt-6 '>
                 <ProductsTable
+                 
                   assignProductHandler={assignProductHandler}
                   selectProductsToBeAssigned={selectProductsToBeAssigned}
                   searchTerm={searchTerm}
