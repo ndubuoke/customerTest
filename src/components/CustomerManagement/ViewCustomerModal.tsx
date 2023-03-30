@@ -104,8 +104,10 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
-                  <p className=' w-full ' style={{ marginBottom: '18px' }}>
-                    {getCustomerDetail(customer, 'customerId') != '' || null ? truncateString(customerId, 20) : 'Not Available'}
+                  <p style={{ marginBottom: '18px' }} className=''>
+                    {getCustomerDetail(customer, 'customerEntityId') != '' || null
+                      ? `${getCustomerDetail(customer, 'customerEntityId')}`
+                      : 'Not Available'}
                   </p>
                   <p style={{ marginBottom: '18px' }} className=''>
                     {getCustomerDetail(customer, 'accountNumber') != '' || null ? `${getCustomerDetail(customer, 'accountNumber')}` : 'Not Available'}
