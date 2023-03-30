@@ -2,7 +2,7 @@ const getProductDetail = (product, field: string): any => {
   if (field === 'product_category') {
     return product.product_category
   }
-  if (field === 'product_types') {
+  if (field === 'product_type') {
     return product.product_type
   }
   if (field === 'product_type_id') {
@@ -29,14 +29,21 @@ const getProductDetail = (product, field: string): any => {
   if (field === 'payment_channel') {
     return product.payment_channel
   }
-  if (field === 'min_opening_balance') {
-    return product.product_operating_conditions.map(data=>{
-      return data.min_opening_balance
-    })
-  }
+  
   if (field === 'min_operating_balance') {
     return product.product_operating_conditions.map((data) => {
-      return data.min_operating_balance
+      return parseInt(data.min_opert_bal) 
+    })
+  }
+  if (field === 'min_opening_balance') {
+    return product.product_operating_conditions.map((data) => {
+      return parseInt(data.min_opening_bal)
+    })
+  }
+
+  if (field === 'min_cumulative_balance') {
+    return product.product_operating_conditions.map((data) => {
+      return parseInt(data.max_cum_bal)
     })
   }
    if (field === 'max_cumulative_transaction_amount') {
