@@ -38,7 +38,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
     dispatch(getCustomerProfileAction(customerId) as any)
     dispatch(getSingleProductAction(productId) as any)
   }, [productId,customerId])
-  //  console.log(singleProduct)
+    console.log(singleProduct)
   // console.log(customerProfile)
  
   
@@ -77,8 +77,8 @@ const customerProfile = customerProfileResponse.serverResponse.data
                         <div className='w-[50%] '>
                           <h2 className='text-[1rem] text-[#636363;]'>Product Type</h2>
                           <p className='mt-[10px] text-[#636363]'>
-                            {getProductDetail(singleProduct, 'product_type').product_type != '' || null
-                              ? getProductDetail(singleProduct, 'product_type').product_type
+                            {getProductDetail(singleProduct, 'product_type') != '' || null
+                              ? getProductDetail(singleProduct, 'product_type')
                               : 'Not Available'}
                           </p>
                         </div>
