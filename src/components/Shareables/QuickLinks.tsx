@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import classnames from 'classnames'
 type quickLinksProps = {
-  links: { path: string; name: string; disabled?: boolean }[]
+  links: { link: string; name: string; disabled?: boolean }[]
 }
 
 // THE LINKS ARE TIED TO THE LIVE PREVIEW, SO IT DOESN'T WORK ON LOCAL PCs
@@ -39,16 +39,16 @@ const QuickLinks = ({ links }: quickLinksProps) => {
 
       <div className=' flex flex-wrap justify-between py-2 px-6 gap-4 mt-4 '>
         {links.map((link) => (
-          <Link
-            to={link.path}
-            key={link.path}
+          <a
+            href={link.link}
+            key={link.link}
             className={classnames('flex flex-col justify-center items-center text-center', { disabled: link.disabled })}
           >
             <>
               <img src={quicklink} alt='' className='w-20' />
               <span className='block mt-2 text-sm font-medium w-[80px] h-[40px] text-[#636363]'>{link.name}</span>
             </>
-          </Link>
+          </a>
         ))}
       </div>
     </div>
