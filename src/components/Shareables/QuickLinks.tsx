@@ -37,7 +37,7 @@ const QuickLinks = ({ links }: quickLinksProps) => {
         </div>
       )}
 
-      <div className=' flex flex-wrap justify-between py-2 px-6 gap-4 mt-4'>
+      <div className=' flex flex-wrap justify-between py-2 px-6 gap-4 mt-4 '>
         {links.map((link) => (
           <Link
             to={link.path}

@@ -184,7 +184,7 @@ const ProductAssignment = () => {
     }
   }, [toBeAssignedProducts])
 
-  //  console.log(customerProfile)
+    // console.log(customerProfile)
   // console.log(toBeAssignedProducts)
   return (
     <>
