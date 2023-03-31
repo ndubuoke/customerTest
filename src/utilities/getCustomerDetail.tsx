@@ -10,9 +10,12 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
       return profile.mobileNumber
     })
   }
-
   if (field === 'accountNumber') {
-    return customer.customer_products[0].accountNumber
+    if (customer.customer_products.length === 0) {
+      return 'Not Available'
+    } else {
+      return customer.customer_products[0].accountNumber
+    }
   }
   if (field === 'firstName') {
     return customer.customer_profiles.map((profile) => {
@@ -61,7 +64,6 @@ const getCustomerDetail = (customer, field: string): string | string[] | '' => {
     })
   }
   if (field === 'initiator') {
-    
     return getRequestIntitiatorWithRecentDate(customer?.requests)
   }
 }

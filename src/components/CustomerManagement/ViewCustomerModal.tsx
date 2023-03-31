@@ -1,4 +1,4 @@
-import { add, Avatar, Close, customer360, Disable, Edit } from 'Assets/svgs'
+import { add, Avatar, Close, customer360, Disable, Edit, Eye, View } from 'Assets/svgs'
 
 import Button from 'Components/Shareables/Button'
 import React from 'react'
@@ -15,7 +15,7 @@ type props = {
 }
 
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
-  // console.log(customer)
+  console.log(customer)
   const navigate = useNavigate()
 
   const customerType = customer?.customerType
@@ -104,13 +104,13 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                   <p style={{ marginBottom: '18px' }}>
                     {getCustomerDetail(customer, 'otherNames') != '' || null ? getCustomerDetail(customer, 'otherNames') : 'Not Available'}
                   </p>
-                  <p className=' w-full ' style={{ marginBottom: '18px' }}>
-                    {getCustomerDetail(customer, 'customerId') != '' || null ? truncateString(customerId, 20) : 'Not Available'}
+                  <p style={{ marginBottom: '18px' }} className=''>
+                    {getCustomerDetail(customer, 'customerEntityId') != '' || null
+                      ? `${getCustomerDetail(customer, 'customerEntityId')}`
+                      : 'Not Available'}
                   </p>
                   <p style={{ marginBottom: '18px' }} className=''>
-                    {getCustomerDetail(customer, 'accountNumber') != '' || null
-                      ? `${getCustomerDetail(customer, 'accountNumber')}`
-                      : 'Not Available'}
+                    {getCustomerDetail(customer, 'accountNumber') != '' || null ? `${getCustomerDetail(customer, 'accountNumber')}` : 'Not Available'}
                   </p>
                   <p style={{ marginBottom: '18px' }}>
                     {' '}
@@ -164,12 +164,37 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
             <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
               <div className='h-[80%] px-6 mt-6'>
                 <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
-                <div className=' font-bold   w-full items-end flex  flex-col '>
-                  {/* {Object.keys(customer?.customer_products).map((data, index) => (
-                    <p key={index} className='mb-2 text-[16px] font-normal'>
-                      {convertCamelCaseToTitleCaseText(data)}
-                    </p>
-                  ))} */}
+                <div className=' font-bold h-full flex w-full mt-6    '>
+                  <div className='w-[100%] flex justify-between'>
+                    <div className='w-[40%]'>
+                      <h2 className='text-base font-bold'>Deposit Products</h2>
+                    </div>
+                    <div className='w-[60%]'>
+                      {customer?.customer_products
+                        .filter((item) => item.productCategory === 'Deposit')
+                        .map((data, index) => (
+                          <span
+                            key={index}
+                            className='mb-2 text-[12px] text-[#16252A] cursor-pointer  flex font-bold  bg-[#E0E0E0] p-2 justify-center gap-2 items-center rounded-[20px] w-max px-5 py-2'
+                          >
+                            {data?.productName} [{data?.accountNumber}]
+                            <img src={View} alt='' className='pl-5' />
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                  {/* <div className='w-[40%]'></div>
+                  <div className='w-[60%]'>
+                    {customer?.customer_products.map((data, index) => (
+                      <span
+                        key={index}
+                        className='mb-2 text-[12px] text-[#16252A] cursor-pointer  flex font-bold  bg-[#E0E0E0] p-2 justify-center gap-2 items-center rounded-[20px]'
+                      >
+                        {data?.productName} [{data?.accountNumber}]
+                        <img src={View} alt='' />
+                      </span>
+                    ))}
+                  </div> */}
                 </div>
               </div>
               <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>

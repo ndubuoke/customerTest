@@ -7,7 +7,7 @@ type Props = {
 }
 
 const Button = ({ text = 'Proceed', disabled, onClick }: Props) => {
-  console.log(text)
+  // console.log(text)
 
   return (
     <button

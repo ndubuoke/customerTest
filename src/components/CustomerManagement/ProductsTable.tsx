@@ -13,14 +13,15 @@ type props = {
   activeProductType: { name: string; id: string }
   searchTerm: string
   selectProductsToBeAssigned: (e) => void
-  assignProductHandler:(e)=> void
+  assignProductHandler: (e) => void
+ 
 }
 
-const ProductsTable = ({ data, activeProductType, selectProductsToBeAssigned, searchTerm, assignProductHandler }: props) => {
+const ProductsTable = ({ data, selectProductsToBeAssigned, searchTerm, assignProductHandler }: props) => {
   const [showProductModal, setShowProductModal] = useState(false)
   const [productId, setProductId] = useState(null)
-  const allProducts = data.serverResponse.data?.products.filter((product) => product.product_category  !=='Payment')
-    // console.log(allProducts)
+  const allProducts = data.serverResponse.data?.products.filter((product) => product.product_category !== 'Payment')
+ 
   const productFunctionsHandler = (productId) => {
     setProductId(productId)
     setShowProductModal(true)
@@ -29,7 +30,12 @@ const ProductsTable = ({ data, activeProductType, selectProductsToBeAssigned, se
   return (
     <>
       {showProductModal && (
-        <SingleProductModal assignProductHandler={assignProductHandler} productId={productId} setShowProductModal={setShowProductModal} />
+        <SingleProductModal
+         
+          assignProductHandler={assignProductHandler}
+          productId={productId}
+          setShowProductModal={setShowProductModal}
+        />
       )}
       <div className='overflow-y-scroll    h-[15rem]  '>
         <table className='w-full text-sm text-left  '>
