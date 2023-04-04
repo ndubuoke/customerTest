@@ -168,8 +168,8 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
               </div>
             </div>
             {assignedLevel === 'one' && (
-              <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
-                <div className='h-[80%] px-6 mt-6'>
+              <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363]  '>
+                <div className='h-[80%] px-6 mt-6 overflow-y-auto'>
                   <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
                   <div className=' font-bold h-full flex w-full mt-6    '>
                     <div className='w-[100%] flex flex-col justify-between'>
