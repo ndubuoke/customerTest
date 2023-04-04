@@ -84,6 +84,7 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   }
 
   const handleSubmit = () => {
+    console.log('activePageState', activePageState)
     setSubmit((prev) => prev + 1)
     let _allFields = []
     form?.builtFormMetadata?.pages?.forEach((x) => {
@@ -119,6 +120,13 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
             : null
         })
         .filter(Boolean)
+        .filter((f) => {
+          if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+            return true
+          } else {
+            return f.pageId === activePageState.id
+          }
+        })
 
       console.log('_fieldLabelsOfRequiredFields', { _fieldLabelsOfRequiredFields })
 
@@ -145,27 +153,33 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
           }
         }
       })
-
-      dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
-
-      const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
-        (x) => camelize(x.formType) !== camelize('File Upload')
-      )
-      // console.log({ fieldLabelsOfNotFilledRequiredFields })
-      // console.log({ checkIfUnfilledRequiredFieldsAreNotDocsOnly })
-
-      if (checkIfUnfilledRequiredFieldsAreNotDocsOnly) {
-        // dispatch to prevent proceeding
-        dispatch(statusForCanProceedAction(false) as any)
-      } else {
+      console.log('fieldLabelsOfNotFilledRequiredFields', fieldLabelsOfNotFilledRequiredFields)
+      const filterDocsOutOfrequiredFields = fieldLabelsOfNotFilledRequiredFields.filter((f) => camelize(f.formType) !== camelize('File Upload'))
+      console.log('filterDocsOutOfrequiredFields', filterDocsOutOfrequiredFields)
+      if (filterDocsOutOfrequiredFields.length) {
+        dispatch(setRequiredFormFieldsAction(fieldLabelsOfNotFilledRequiredFields) as any)
+      } else if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+        const checkIfUnfilledRequiredFieldsAreNotDocsOnly = fieldLabelsOfNotFilledRequiredFields.find(
+          (x) => camelize(x.formType) !== camelize('File Upload')
+        )
         // console.log({ fieldLabelsOfNotFilledRequiredFields })
-        if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
-          dispatch(showWaiverModalInFormAction('hide') as any)
-          sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('hide'))
-          handleProceedToProcessSummary()
+        // console.log({ checkIfUnfilledRequiredFieldsAreNotDocsOnly })
+
+        if (checkIfUnfilledRequiredFieldsAreNotDocsOnly) {
+          // dispatch to prevent proceeding
+          dispatch(statusForCanProceedAction(false) as any)
         } else {
-          handleShowModal()
+          // console.log({ fieldLabelsOfNotFilledRequiredFields })
+          if (fieldLabelsOfNotFilledRequiredFields.length === 0) {
+            dispatch(showWaiverModalInFormAction('hide') as any)
+            sessionStorage.setItem(STORAGE_NAMES.SHOW_WAIVER_MODAL_IN_FORM, JSON.stringify('hide'))
+            handleProceedToProcessSummary()
+          } else {
+            handleShowModal()
+          }
         }
+      } else {
+        handleActivePage('next')
       }
     }
   }
@@ -215,24 +229,36 @@ const ActionButtonsForForm = ({ setActivePageState, activePageState, fillingForm
   }
 
   const handleNextAndOtherAddOns = () => {
-    if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
-      handleSubmit()
-    } else {
-      if (customerType === 'sme' && flagCustomerStatus) {
-        if (
-          getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
-          'account services'
-        ) {
-          if (riskAssessment.riskScoreGuide?.score >= highRiskScore) {
-            handleShowEDDModal()
-          }
-        } else {
-          handleActivePage('next')
+    // if (findIndexOfObject(form, activePageState?.id) === form?.builtFormMetadata?.pages?.length - 1) {
+    //   handleSubmit()
+    // } else {
+    //   if (customerType === 'sme' && flagCustomerStatus) {
+    //     if (
+    //       getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
+    //       'account services'
+    //     ) {
+    //       if (riskAssessment.riskScoreGuide?.score >= highRiskScore) {
+    //         handleShowEDDModal()
+    //       }
+    //     } else {
+    //       handleActivePage('next')
+    //     }
+    //   } else {
+    //     handleActivePage('next')
+    //   }
+    // }
+    if (customerType === 'sme' && flagCustomerStatus) {
+      if (
+        getProperty(form?.builtFormMetadata?.pages[findIndexOfObject(form, activePageState?.id)].pageProperties, 'Page name').text.toLowerCase() ===
+        'account services'
+      ) {
+        if (riskAssessment.riskScoreGuide?.score >= highRiskScore) {
+          handleShowEDDModal()
+          return
         }
-      } else {
-        handleActivePage('next')
       }
     }
+    handleSubmit()
   }
 
   useEffect(() => {
