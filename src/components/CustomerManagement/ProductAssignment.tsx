@@ -77,10 +77,10 @@ const ProductAssignment = () => {
   }
 
   const assignProductHandler = (data?: { productId: ''; productName: ''; productCode: ''; productCategory: '' }) => {
-    console.log({ productData: [...toBeAssignedProducts] })
+    
 
     if (data.productId === undefined || '') {
-      console.log({ productData: [...toBeAssignedProducts] })
+      // console.log({ productData: [...toBeAssignedProducts] })
       const body = {
         data: {
           productData: [...toBeAssignedProducts],
@@ -99,7 +99,7 @@ const ProductAssignment = () => {
         dispatch(assignProductAction(body, value, userData.user?.tenant_admin, customerId) as any)
       })
     } else {
-      console.log({ productData: [data] }, 'hey')
+    
       const body = {
         data: {
           productData: [data],
