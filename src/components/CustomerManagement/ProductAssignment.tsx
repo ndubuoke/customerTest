@@ -1,7 +1,7 @@
 import GoBack from 'Components/MainScreenLayout/GoBack'
 import convertToUppercase from 'Utilities/convertToUppercase'
 import React from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useNavigate, useParams } from 'react-router-dom'
 import SearchAndSelect from './SearchAndSelect'
 import Dropdown from './Dropdown'
 import { useState, useEffect, useRef } from 'react'
@@ -41,8 +41,11 @@ const ProductAssignment = () => {
   const [selectedItem, setSelectedItem] = useState<productCategoryType>('All')
   const [activeProductType, setActiveProductType] = useState({ name: '', id: '' })
   const [searchTerm, setSearchTerm] = useState('')
+  const [showRedirectModal, setShowRedirectModal] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
+
+  // console.log(response.serverResponse?.data?.products)
 
   let { customerId } = useParams()
   const selectedItemHandler = (item: productCategoryType) => {
@@ -53,6 +56,8 @@ const ProductAssignment = () => {
   const searchBarHandler = (event) => {
     setSearchTerm(event.target.value)
   }
+
+  
 
   const selectProductsToBeAssigned = (data: { productId: ''; productName: ''; productCode: '' }) => {
     // console.log(data)
@@ -152,6 +157,19 @@ const ProductAssignment = () => {
     }
   }, [selectedItem, activeProductType])
 
+
+
+  // useEffect(() => {
+  //   console.log(response.serverResponse?.data?.products)
+  //   if (selectedItem === 'All') {
+
+  //     if (response.serverResponse?.data?.products?.length > 0) {
+  //       console.log(response.serverResponse?.data?.products)
+  //       setShowRedirectModal(true)
+  //     }
+  //   }
+  // }, [selectedItem])
+
   useEffect(() => {
     const checkIfClickedOutside = (e) => {
       // If the menu is open and the clicked target is not within the menu,
@@ -184,10 +202,40 @@ const ProductAssignment = () => {
     }
   }, [toBeAssignedProducts])
 
-    //  console.log(customerProfile)
+  //  console.log(customerProfile)
   // console.log(toBeAssignedProducts)
+  // console.log(response.serverResponse?.data?.products)
+  useEffect(() => {
+    
+    if (response.serverResponse?.data?.products?.length == 0) {
+     
+       setShowRedirectModal(true)
+    }
+  }, [response.serverResponse?.data])
   return (
     <>
+      {showRedirectModal && (
+        <AlertModal
+          leftClick={() => {
+            setShowRedirectModal(false)
+            navigate(AppRoutes.mainScreen)
+          }}
+          rightClick={() => {
+            setShowRedirectModal(false)
+            window.location.href = 'https://d1ogda68vfra0a.cloudfront.net/product/factory/dashboard/deposit'
+            
+          }}
+          rightClickText='Go to Product Factory'
+          closeModal={() => {
+          setShowRedirectModal(false)
+          navigate(AppRoutes.mainScreen)
+          }}
+          message={`${'No Products Available , Kindly go to product factory to create products'}`}
+          isOpen={showRedirectModal}
+          loading={response.loading}
+          status={response.serverResponse.status === 'success' ? 'success' : 'error'}
+        />
+      )}
       {showProductAssignmentCustomerAlertModal && (
         <AlertModal
           leftClick={() => {
@@ -248,7 +296,6 @@ const ProductAssignment = () => {
               </div>
               <div className=' w-full mt-6 '>
                 <ProductsTable
-                 
                   assignProductHandler={assignProductHandler}
                   selectProductsToBeAssigned={selectProductsToBeAssigned}
                   searchTerm={searchTerm}
