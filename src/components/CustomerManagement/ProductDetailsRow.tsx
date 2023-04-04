@@ -6,13 +6,13 @@ type props = {
   product: any
   index: number
   productFunctionsHandler: (e) => void
-  selectProductsToBeAssigned:(e)=> void
+  selectProductsToBeAssigned: (e) => void
 }
 
 const ProductDetailsRow = ({ product, index, productFunctionsHandler, selectProductsToBeAssigned }: props) => {
   const [checked, setChecked] = useState(false)
 
-  // console.log(product)
+  console.log(product)
   return (
     <tr key={index} className='bg-background-lightRed border-b text-text-secondary   '>
       <td className='py-2 px-2 flex justify-center items-center  font-medium    relative '>
@@ -23,6 +23,7 @@ const ProductDetailsRow = ({ product, index, productFunctionsHandler, selectProd
             productId: getProductDetail(product, 'product_id'),
             productName: getProductDetail(product, 'name'),
             productCode: getProductDetail(product, 'code'),
+            productCategory: getProductDetail(product, 'product_category'),
           })}
         />
       </td>

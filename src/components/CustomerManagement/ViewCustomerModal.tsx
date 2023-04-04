@@ -1,13 +1,14 @@
 import { add, Avatar, Close, customer360, Disable, Edit, Eye, View } from 'Assets/svgs'
 
 import Button from 'Components/Shareables/Button'
-import React from 'react'
+import React, { useState } from 'react'
 import getCustomerDetail from '../../utilities/getCustomerDetail'
 import { useNavigate } from 'react-router-dom'
 import { clearAllItemsInStorageForCustomerMGT, STORAGE_NAMES } from 'Utilities/browserStorages'
 import { AppRoutes } from 'Routes/AppRoutes'
 import convertCamelCaseToTitleCaseText from 'Utilities/convertCamelCaseToTitleCaseText'
 import truncateString from 'Utilities/truncateString'
+import { FaChevronLeft } from 'react-icons/fa'
 
 type props = {
   setShowCustomerModal: (e) => void
@@ -15,9 +16,8 @@ type props = {
 }
 
 const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
-  console.log(customer)
+  // console.log(customer)
   const navigate = useNavigate()
-
   const customerType = customer?.customerType
   const customerId = customer?.customerId
   const viewInCustomer360Handler = () => {
@@ -29,7 +29,6 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
   const closeModal = () => {
     setShowCustomerModal(false)
   }
-
   const viewActivityLogHandler = (customer) => {
     let request = new Promise(function (myResolve, myReject) {
       let request = customer?.requests.filter((request) => {
@@ -42,9 +41,7 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
     request.then(function (value) {
       navigate(`/customer-management/process-summary/${value}`)
     })
-    // console.log(request[0].requestId)
   }
-
   const modifyCustomerHandler = () => {
     clearAllItemsInStorageForCustomerMGT()
     sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_FORM_MODE_STATUS, JSON.stringify('modification'))
@@ -56,6 +53,15 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
     sessionStorage.setItem(STORAGE_NAMES.CUSTOMER_MANAGEMENT_MODIFICATION_DATA, JSON.stringify(customer))
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.setItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE, JSON.stringify(customer?.customer_profiles[0]))
+  }
+  const [assignedLevel, setassignedLevel] = useState('one')
+  const [selectedProduct, setselectedProduct] = useState<any>({})
+  const findSelecetedProduct = (id: string) => {
+    const selected = customer?.customer_products.find((item) => item.productId === id)
+    setselectedProduct(selected)
+    if (selected.accountNumber > 1) {
+      setassignedLevel('two')
+    }
   }
 
   return (
@@ -161,44 +167,96 @@ const ViewCustomerModal = ({ setShowCustomerModal, customer }: props) => {
                 </div> */}
               </div>
             </div>
-            <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
-              <div className='h-[80%] px-6 mt-6'>
-                <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
-                <div className=' font-bold h-full flex w-full mt-6    '>
-                  <div className='w-[40%]'></div>
-                  <div className='w-[60%]'>
-                    {customer?.customer_products.map((data, index) => (
+            {assignedLevel === 'one' && (
+              <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
+                <div className='h-[80%] px-6 mt-6'>
+                  <span className='text-[20px]  font-bold'>ASSIGNED PRODUCTS</span>
+                  <div className=' font-bold h-full flex w-full mt-6    '>
+                    <div className='w-[100%] flex justify-between'>
+                      <div className='w-[40%]'>
+                        <h2 className='text-base font-bold'>Deposit Products</h2>
+                      </div>
+                      <div className='w-[60%]'>
+                        {customer?.customer_products
+                          .filter((item) => item.productCategory === 'Deposit')
+                          .map((data, index) => (
+                            <span
+                              key={index}
+                              className='mb-2 text-[12px] text-[#16252A] cursor-pointer  flex font-bold  bg-[#E0E0E0] p-2 justify-center gap-2 items-center rounded-[20px] w-max px-5 py-2'
+                              onClick={() => findSelecetedProduct(data.productId)}
+                            >
+                              {data?.productName} [{data?.accountNumber}]
+                              <img src={View} alt='' className='pl-5' />
+                            </span>
+                          ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
+                  <div className='w-full flex   justify-between text-[#636363]'>
+                    <div className='flex gap-6 '>
+                      <span>Customer Status:</span>
                       <span
-                        key={index}
-                        className='mb-2 text-[12px] text-[#16252A] cursor-pointer  flex font-bold  bg-[#E0E0E0] p-2 justify-center gap-2 items-center rounded-[20px]'
+                        className={` ${
+                          customer?.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
+                        } px-1 rounded font-medium`}
                       >
-                        {data?.productName} [{data?.accountNumber}]
-                        <img src={View} alt='' />
+                        {customer?.status}
                       </span>
-                    ))}
+                    </div>
+                    <div className='flex gap-2 '>
+                      <span onClick={viewActivityLogHandler.bind(null, customer)} className='underline underline-offset-1 cursor-pointer'>
+                        View Activity Log
+                      </span>
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className='w-full py-2 px-6 flex flex-col justify-between border border-[#E5E9EB] h-[20%] rounded-md'>
-                <div className='w-full flex   justify-between text-[#636363]'>
-                  <div className='flex gap-6 '>
-                    <span>Customer Status:</span>
-                    <span
-                      className={` ${
-                        customer?.status === 'Active' ? 'bg-[#D4F7DC] text-[#15692A]' : 'bg-[#E5E5EA] text-[#1E0A3C]'
-                      } px-1 rounded font-medium`}
-                    >
-                      {customer?.status}
-                    </span>
+            )}
+            {assignedLevel === 'two' && (
+              <div className='border rounded w-full justify-between flex flex-col h-full  text-[#636363] '>
+                <div className='h-[80%] px-6 mt-6'>
+                  <span className='text-[20px]  font-bold flex items-center pb-[50px] uppercase'>
+                    <div className='pr-2'>
+                      <FaChevronLeft onClick={() => setassignedLevel('one')} />
+                    </div>
+                    PRODUCT : {selectedProduct.productName}
+                  </span>
+                  <ul className='pl-[22px] overflow-y-auto h-[80%]'>
+                    <li className='list-disc text-[16px] pb-[10px]'>
+                      <b>Product Code: </b>
+                      {selectedProduct.productCode}
+                    </li>
+                    <li className='list-disc text-[16px] pb-[10px]'>
+                      <b>Slogan: </b> {selectedProduct.productName}
+                    </li>
+                    <li className='list-disc text-[16px] pb-[10px]'>
+                      <b>Product category: </b>
+                      {selectedProduct.productCategory}
+                    </li>
+                    <li className='list-disc text-[16px] pb-[10px]'>
+                      <b>Customer Account Number: </b> {selectedProduct.accountNumber}
+                    </li>
+                  </ul>
+                </div>
+                <div className='w-full py-2 px-6 justify-between flex flex-wrap bg-white   border border-[#E5E9EB] h-[20%] text-[16px] text-[#636363] rounded-md'>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center '>
+                    <img src={Edit} />
+                    <span>View/edit Contract</span>
                   </div>
-                  <div className='flex gap-2 '>
-                    <span onClick={viewActivityLogHandler.bind(null, customer)} className='underline underline-offset-1 cursor-pointer'>
-                      View Activity Log
-                    </span>
+                  <div className='flex gap-2 cursor-pointer items-center justify-center '>
+                    <img src={Disable} />
+                    <span>View Standing Order</span>
+                  </div>
+
+                  <div className='flex gap-2 cursor-pointer items-center justify-center'>
+                    <img src={add} />
+                    <span>Terminate contract</span>
                   </div>
                 </div>
               </div>
-            </div>
+            )}
           </div>
         </div>
       </div>
