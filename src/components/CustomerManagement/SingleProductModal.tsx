@@ -123,7 +123,9 @@ const customerProfile = customerProfileResponse.serverResponse.data
                       </div>
                       <div className='w-[100%] '>
                         <h2 className='text-[1rem] text-[#636363] mt-[18px]'>Minimum Cumulative Balance</h2>
-                        <p className='mt-[10px] text-[#636363]'>{formatMoney(getProductDetail(singleProduct, 'min_cumulative_balance'))} NGN</p>
+                        <p className='mt-[10px] text-[#636363]'>
+                          {formatMoney(getProductDetail(singleProduct, 'min_cumulative_balance'))} {getProductDetail(singleProduct, 'currency')}
+                        </p>
                       </div>
                     </div>
                   </div>

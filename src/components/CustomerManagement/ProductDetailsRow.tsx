@@ -12,7 +12,7 @@ type props = {
 const ProductDetailsRow = ({ product, index, productFunctionsHandler, selectProductsToBeAssigned }: props) => {
   const [checked, setChecked] = useState(false)
 
-  console.log(product)
+  // console.log(product)
   return (
     <tr key={index} className='bg-background-lightRed border-b text-text-secondary   '>
       <td className='py-2 px-2 flex justify-center items-center  font-medium    relative '>
