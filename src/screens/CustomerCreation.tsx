@@ -18,7 +18,7 @@ import SkipToForm from 'Components/Shareables/SkipToForm'
 import Form from 'Components/Form'
 import { UploadFile } from 'Components/Shareables'
 import { useDispatch, useSelector } from 'react-redux'
-import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { getFormAction, getFormBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { validateCustomerAction, validateCustomerResultModalAction } from 'Redux/actions/ValidateCustomer.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 import { API } from 'Utilities/api'
@@ -141,6 +141,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
         })
       }
       dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+      dispatch(getFormBehaviourAction(customerType + capitalizeFirstLetter(formMode)) as any)
     }
   }, [formCreationStarted])
 
