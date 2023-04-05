@@ -38,7 +38,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
     dispatch(getCustomerProfileAction(customerId) as any)
     dispatch(getSingleProductAction(productId) as any)
   }, [productId,customerId])
-    console.log(singleProduct)
+    // console.log(singleProduct)
   // console.log(customerProfile)
  
   
@@ -111,15 +111,21 @@ const customerProfile = customerProfileResponse.serverResponse.data
                       </div>
                       <div className='w-[100%] '>
                         <h2 className='text-[1rem] text-[#636363] mt-[18px]'>Minimum Opening Balance</h2>
-                        <p className='mt-[10px] text-[#636363]'>{formatMoney(getProductDetail(singleProduct, 'min_opening_balance'))} NGN</p>
+                        <p className='mt-[10px] text-[#636363]'>
+                          {formatMoney(getProductDetail(singleProduct, 'min_opening_balance'))} {getProductDetail(singleProduct, 'currency')}
+                        </p>
                       </div>
                       <div className='w-[100%] '>
                         <h2 className='text-[1rem] text-[#636363] mt-[18px]'>Minimum Operating Balance</h2>
-                        <p className='mt-[10px] text-[#636363]'>{formatMoney(getProductDetail(singleProduct, 'min_operating_balance'))} NGN</p>
+                        <p className='mt-[10px] text-[#636363]'>
+                          {formatMoney(getProductDetail(singleProduct, 'min_operating_balance'))} {getProductDetail(singleProduct, 'currency')}
+                        </p>
                       </div>
                       <div className='w-[100%] '>
                         <h2 className='text-[1rem] text-[#636363] mt-[18px]'>Minimum Cumulative Balance</h2>
-                        <p className='mt-[10px] text-[#636363]'>{formatMoney(getProductDetail(singleProduct, 'min_cumulative_balance'))} NGN</p>
+                        <p className='mt-[10px] text-[#636363]'>
+                          {formatMoney(getProductDetail(singleProduct, 'min_cumulative_balance'))} {getProductDetail(singleProduct, 'currency')}
+                        </p>
                       </div>
                     </div>
                   </div>
@@ -190,6 +196,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
                           productId: getProductDetail(singleProduct, 'product_id'),
                           productName: getProductDetail(singleProduct, 'name'),
                           productCode: getProductDetail(singleProduct, 'code'),
+                          productCategory: getProductDetail(singleProduct, 'product_category'),
                         })}
                       />
                     </div>

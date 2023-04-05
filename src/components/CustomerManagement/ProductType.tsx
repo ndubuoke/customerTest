@@ -15,10 +15,10 @@ type props = {
 }
 
 const ProductType = ({ data, selectedItem, setActiveProductType, activeProductType, onChange, searchTerm }: props) => {
-  // const [activeProductType, setActiveProductType] = useState('')
+ 
   const productTypes = data.serverResponse.data
-  // useEffect(() => {}, [activeProductType])
-  // console.log(productTypes)
+ 
+  //  console.log(productTypes)
   return (
     <div className='my-4 flex justify-between  '>
       <div className='  flex '>
