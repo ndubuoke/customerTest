@@ -40,9 +40,13 @@ import {
   SUBMIT_FORM_SUCCESS,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
+  GET_FORM_BEHAVIOUR_REQUEST,
+  GET_FORM_BEHAVIOUR_SUCCESS,
+  GET_FORM_BEHAVIOUR_FAIL,
 } from 'Redux/constants/FormManagement.constants'
 import store, { ReducersType } from 'Redux/store'
 import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
+import { STORAGE_NAMES } from 'Utilities/browserStorages'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
@@ -341,6 +345,33 @@ export const getRelationshipOfficersAction = () => async (dispatch: Dispatch, ge
     console.log(error)
     dispatch({
       type: GET_RELATIONSHIP_OFFICERS_FAIL,
+      payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
+    })
+  }
+}
+
+export const getFormBehaviourAction = (formType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+  try {
+    dispatch({ type: GET_FORM_BEHAVIOUR_REQUEST })
+
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: {
+        form: formType,
+      },
+    }
+
+    const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form-behaviours-data`, config)
+
+    sessionStorage.setItem(STORAGE_NAMES.FORM_BEHAVIOUR_IN_STORAGE, JSON.stringify(data))
+    dispatch({ type: GET_FORM_BEHAVIOUR_SUCCESS, payload: data })
+  } catch (error) {
+    console.log(error)
+    sessionStorage.removeItem(STORAGE_NAMES.FORM_BEHAVIOUR_IN_STORAGE)
+    dispatch({
+      type: GET_FORM_BEHAVIOUR_FAIL,
       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
     })
   }
