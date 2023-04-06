@@ -146,6 +146,8 @@ const FormLayout = memo(
     const isSpouseDetailsSection = useMemo(() => {
       return getProperty(item?.formControlProperties, 'Section name', 'value').text.toLowerCase() === 'details of spouse'
     }, [item])
+    console.log(fillingFormState)
+
     return (
       <section className='max-w-[66.25rem] mx-4'>
         {isSection && (
@@ -198,14 +200,14 @@ const FormLayout = memo(
           </div>
         )}
         <div
-          className={` ${isCollapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}  `}
+          className={` ${isCollapsed ? 'max-h-0 overflow-hidden hidden' : 'min-h-[12.5rem] border-l-2 border-[#C22626]'}`}
           style={{
             display: 'grid',
             gridTemplateColumns: '1fr 1fr 1fr',
             gridGap: '1.25rem',
-            padding: '.625rem',
+            padding: '55px',
             paddingBottom: '0',
-            paddingTop: '0.2rem',
+            paddingTop: '31px',
             background: '#fff',
             fontFamily: 'Inter',
           }}
@@ -247,6 +249,7 @@ const FormLayout = memo(
                     fillingFormState={fillingFormState}
                     setBackupForSwitchFormState={setBackupForSwitchFormState}
                     backupForSwitchFormState={backupForSwitchFormState}
+                    customerDataSection={fillingFormState?.data?.customerData}
                   />
                 )
               }

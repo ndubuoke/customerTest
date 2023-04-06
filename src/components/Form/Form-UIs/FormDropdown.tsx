@@ -39,6 +39,7 @@ type Props = {
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
   backupForSwitchFormState: any
+  customerDataSection: any
 }
 
 const FormDropdown = ({
@@ -50,7 +51,10 @@ const FormDropdown = ({
   setFillingFormState,
   setBackupForSwitchFormState,
   backupForSwitchFormState,
+  customerDataSection,
 }: Props) => {
+  console.log(customerDataSection)
+
   const ref = useRef(null)
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
@@ -180,7 +184,6 @@ const FormDropdown = ({
         fieldId: item?.id,
         fieldName: theItemFieldNameCamelCase,
       })
-
       if (_columnName) {
         setColumnName(_columnName)
       }
@@ -707,6 +710,13 @@ const FormDropdown = ({
     return fieldLoadingStateMap[field?.toLowerCase().trim()]
   }
 
+  console.log(helpText)
+  // useEffect(() => {
+  //   if (helpText === 'LGA') {
+  //     setShowLists(false)
+  //   }
+  // }, [helpText])
+
   return (
     <div
       ref={ref}
@@ -787,7 +797,29 @@ const FormDropdown = ({
           <div
             className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
             onClick={() => {
-              setShowLists((prev) => !prev)
+              if (
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.assignDebitCard === 'off' &&
+                helpText === 'Card Product'
+              ) {
+              } else if (
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.electronicBanking === 'off' &&
+                optionsField.includes('Online Banking')
+              ) {
+              } else if (
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.token === 'off' &&
+                optionsField.includes('Hard Token')
+              ) {
+              } else if (
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+                helpText === 'Notification Channels'
+              ) {
+              } else if (
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+                helpText === 'Notification Rule'
+              ) {
+              } else {
+                setShowLists((prev) => !prev)
+              }
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)
               }

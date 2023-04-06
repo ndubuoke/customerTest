@@ -212,6 +212,9 @@ const Form = memo(
               style={{
                 maxWidth: '990px',
                 margin: 'auto',
+                border: ' 1px solid #EEEEEE',
+                padding: '40px',
+                borderRadius: '10px',
               }}
             >
               {activePageState?.sections?.length > 0

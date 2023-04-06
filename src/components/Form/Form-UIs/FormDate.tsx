@@ -272,7 +272,6 @@ const FormDate = ({
       }
     }
   }, [publishedFormState, columnName])
-  console.log(helpText)
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} bg-transparent`}
