@@ -196,6 +196,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
                           productId: getProductDetail(singleProduct, 'product_id'),
                           productName: getProductDetail(singleProduct, 'name'),
                           productCode: getProductDetail(singleProduct, 'code'),
+                          productCategory: getProductDetail(singleProduct, 'product_category'),
                         })}
                       />
                     </div>
