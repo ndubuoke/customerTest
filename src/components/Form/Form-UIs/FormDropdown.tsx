@@ -817,6 +817,10 @@ const FormDropdown = ({
                 customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
                 helpText === 'Notification Rule'
               ) {
+              } else if (
+                customerDataSection.find((item) => item.sectionName === 'bio-Data').data.dualCitizenship === 'No' &&
+                helpText === 'If yes specify'
+              ) {
               } else {
                 setShowLists((prev) => !prev)
               }
@@ -826,6 +830,8 @@ const FormDropdown = ({
               if (fieldLabel.toLowerCase().includes('lga')) {
                 checkIfItemIsCity()
               }
+
+              // If yes specify
             }}
             title={selectedDropdownItem && selectedDropdownItem}
           >
