@@ -36,7 +36,7 @@ export const smeCustomerCreationData = [
     link: AppRoutes.mainScreen,
   },
   {
-    text: 'SME CUSTOMER CREATION',
+    text: 'CORPORATE CUSTOMER CREATION',
     link: AppRoutes.individualCustomerCreationScreen,
   },
   {
@@ -51,7 +51,7 @@ export const smeCustomerModificationData = [
     link: AppRoutes.mainScreen,
   },
   {
-    text: 'SME CUSTOMER MODIFICATION',
+    text: 'CORPORATE CUSTOMER MODIFICATION',
     link: AppRoutes.individualCustomerCreationScreen,
   },
   {

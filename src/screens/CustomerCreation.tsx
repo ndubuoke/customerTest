@@ -62,8 +62,8 @@ const CustomerCreation = memo(({ customerType }: Props) => {
         ? 'INDIVIDUAL CUSTOMER CREATION'
         : 'INDIVIDUAL CUSTOMER MODIFICATION'
       : formModeStatusInStorage === 'creation'
-      ? 'SME CUSTOMER CREATION'
-      : 'SME CUSTOMER MODIFICATION'
+      ? 'CORPORATE CUSTOMER CREATION'
+      : 'CORPORATE CUSTOMER MODIFICATION'
   const {
     loading,
     showResultModal,

@@ -55,7 +55,7 @@ const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModa
               <div className='w-full  ' key={index}>
                 <p className='flex gap-1 text-[#AAAAAA]'>
                   <img src={searchCaret} alt='' />
-                  SME Customers
+                  Corporate Customers
                 </p>
                 <div className='mt-2 w-full flex gap-2 cursor-pointer' onClick={externalFunctionToDoSomething.bind(null, customer)}>
                   <img src={search} alt='' className='w-4' />
