@@ -47,6 +47,7 @@ import {
 import store, { ReducersType } from 'Redux/store'
 import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
+import { parseBehavior } from 'Utilities/parseFormbehaviours'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
@@ -67,10 +68,23 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
       },
     }
 
+    // const formBehaviours = await getFormBehaviourAction(formType)
+    const { data: formBehaviourData } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form-behaviours-data`, {
+      ...config,
+      params: {
+        form: formType,
+      },
+    })
+
+    const parsedBehaviour = parseBehavior(formBehaviourData?.data?.behaviours || [])
+
     const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form/customer/published/type/${formType}`, config)
     // const data = null
 
     // 74448975208 -bvn
+
+    console.log('parsedBehaviour', parsedBehaviour)
+    console.log('form', data)
 
     dispatch({ type: GET_FORM_SUCCESS, payload: data })
 
