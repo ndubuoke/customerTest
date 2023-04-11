@@ -247,7 +247,11 @@ const FormActionToggle = ({
       }
     }
   }, [publishedFormState])
-
+  console.log(helpText)
+  // Assign Debit Card
+  // Electronic Banking
+  // Token
+  // Enable Notifications
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} flex items-center`}
@@ -281,7 +285,7 @@ const FormActionToggle = ({
         <div className={` flex    w-full  h-fit gap-2 items-center`}>
           <input
             type='checkbox'
-            className={`accent-primay-main w-4 h-4 ${labelPosition === 'left' ? 'order-1' : 'order-2'}`}
+            className={`accent-primay-main w-4 h-4 ${labelPosition === 'left' ? 'order-1' : 'order-2'} border-blue-500`}
             checked={checked === 'on'}
             onChange={(e) => handleChange(e, item)}
           />

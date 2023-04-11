@@ -495,7 +495,7 @@ const Main = (props: Props) => {
                   {customerTypeoptions?.map((list, index) => {
                     return (
                       <div key={index} className='hover:bg-[#FFD4D2] cursor-pointer px-3 py-2' onClick={handleSelectForm.bind(null, list)}>
-                        {list}
+                        {list === 'SME' ? 'Corporate' : list}
                       </div>
                     )
                   })}
@@ -523,7 +523,7 @@ const Main = (props: Props) => {
               } ml-4`}
               onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
-              SMEs
+              Corporate Customers
             </button>
           </div>
 
