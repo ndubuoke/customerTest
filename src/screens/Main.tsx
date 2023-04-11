@@ -523,7 +523,7 @@ const Main = (props: Props) => {
               } ml-4`}
               onClick={highLevelButtonHandler.bind(null, 'SME')}
             >
-              Corporates
+              Corporate Customers
             </button>
           </div>
 
