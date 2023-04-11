@@ -790,8 +790,7 @@ const FormDropdown = ({
           />
         </div>
       )}
-      {/* end of new code for country dropdown */}
-
+      {console.log(customerDataSection)}
       {!isDropdownSearchable() && (
         <div className={`relative`}>
           <div
