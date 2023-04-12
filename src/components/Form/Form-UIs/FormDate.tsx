@@ -272,6 +272,16 @@ const FormDate = ({
       }
     }
   }, [publishedFormState, columnName])
+  console.log(helpText)
+  const tomorrowsDate = () => {
+    let date = new Date()
+
+    // add one day
+    date.setDate(date.getDate() + 1)
+
+    return date
+  }
+
   return (
     <div
       className={`${collapsed ? 'hidden' : ''} bg-transparent`}
@@ -304,7 +314,6 @@ const FormDate = ({
               ? 'week'
               : ''
           }
-          min={helpText === 'Expiry Date' ? tomorrowsDate().toISOString().slice(0, 10) : ''}
           max={helpText === 'Issue Date' || 'Date of Birth' ? new Date().toISOString().slice(0, 10) : ''}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
@@ -334,13 +343,4 @@ const fieldNameInCaps = (item: FormControlType | FormControlTypeWithSection) => 
       ? getProperty(item.formControlProperties, 'Field label', 'defaultState').text
       : 'Field Label'
   )?.toUpperCase()
-}
-
-const tomorrowsDate = () => {
-  let date = new Date()
-
-  // add one day
-  date.setDate(date.getDate() + 1)
-
-  return date
 }
