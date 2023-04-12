@@ -53,8 +53,6 @@ const FormDropdown = ({
   backupForSwitchFormState,
   customerDataSection,
 }: Props) => {
-  console.log(customerDataSection)
-
   const ref = useRef(null)
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
@@ -710,7 +708,6 @@ const FormDropdown = ({
     return fieldLoadingStateMap[field?.toLowerCase().trim()]
   }
 
-  console.log(helpText)
   // useEffect(() => {
   //   if (helpText === 'LGA') {
   //     setShowLists(false)
@@ -790,7 +787,6 @@ const FormDropdown = ({
           />
         </div>
       )}
-      {console.log(customerDataSection)}
       {!isDropdownSearchable() && (
         <div className={`relative`}>
           <div
