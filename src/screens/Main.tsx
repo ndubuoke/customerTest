@@ -897,7 +897,7 @@ const Main = (props: Props) => {
                 />
               </div>
             </div>
-            <div className='hidden w-auto lg:block'>
+            <div className='w-auto lg:block'>
               <QuickLinks
                 // links={[
                 //   { urlName: 'Customer 360', url: '/customer-management/customer-360' },

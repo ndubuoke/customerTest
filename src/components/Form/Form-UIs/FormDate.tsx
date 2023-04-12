@@ -305,7 +305,7 @@ const FormDate = ({
               : ''
           }
           min={helpText === 'Expiry Date' ? tomorrowsDate().toISOString().slice(0, 10) : ''}
-          max={helpText === 'Issue Date' || 'Date of Birth' ? new Date().toISOString().slice(0, 10) : ''}
+          max={helpText === 'Issue Date' || helpText === 'Date of Birth' ? new Date().toISOString().slice(0, 10) : ''}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}
           title={helpText}
