@@ -7,12 +7,14 @@ type Props = {
 }
 
 const MultipleSelectionItem = ({ handleMultipleSelectedDropdownItem, selected, multipleSelectedDropdownItems }: Props) => {
+  console.log(selected)
+
   return (
     <div className='flex gap-2 py-2 px-3 items-center text-[#636363] hover:bg-slate-100'>
       <div className='relative inline-flex items-center cursor-pointer'>
         <input
           type='checkbox'
-          id='hhh'
+          id={selected}
           className={`cursor-pointer accent-primay-main w-4 h-4 text-primay-main bg-gray-100 rounded border-gray-300 focus:ring-primay-main`}
           checked={typeof multipleSelectedDropdownItems.find((x) => x === selected) === 'string'}
           onChange={(e) => {
@@ -26,7 +28,7 @@ const MultipleSelectionItem = ({ handleMultipleSelectedDropdownItem, selected, m
           }}
         />
       </div>
-      <label className='text-sm' htmlFor='hhh'>
+      <label className='text-sm' htmlFor={selected}>
         {selected}
       </label>
     </div>

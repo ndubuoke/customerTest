@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
 import { formTypeSwitch as formTypeSwitchImage } from 'Assets/svgs'
-import { getFormAction } from 'Redux/actions/FormManagement.actions'
+import { getFormAction, getFormBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 import { useDispatch } from 'react-redux'
 import { formStruture } from 'Components/Form/formStructure'
@@ -49,6 +49,7 @@ const SwitchToFormType = ({
 
       if (formCreationStarted) {
         dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+        dispatch(getFormBehaviourAction(customerType + capitalizeFirstLetter(formMode)) as any)
       }
       return
     }
@@ -57,6 +58,7 @@ const SwitchToFormType = ({
       onSetFormMode(formMode)
       if (formCreationStarted) {
         dispatch(getFormAction(customerType + capitalizeFirstLetter(formMode)) as any)
+        dispatch(getFormBehaviourAction(customerType + capitalizeFirstLetter(formMode)) as any)
       }
       return
     }

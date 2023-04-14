@@ -35,6 +35,7 @@ import {
   getColumnMapReducer,
   createColumnMapReducer,
   getRelationshipOfficersReducer,
+  getFormBehaviourReducer,
 } from './reducers/FormManagement.reducers'
 
 import {
@@ -126,6 +127,7 @@ export type ReducersType = {
   customer360Rewards: ResponseType
   customer360ProductType: ResponseType
   getRelationshipOfficers: ResponseType
+  formBehaviour: ResponseType
 }
 
 const reducer = combineReducers<ReducersType>({
@@ -182,6 +184,7 @@ const reducer = combineReducers<ReducersType>({
   customer360Rewards: getCustomer360RewardReducer,
   customer360ProductType: getCustomer360ProductTypeReducer,
   getRelationshipOfficers: getRelationshipOfficersReducer,
+  formBehaviour: getFormBehaviourReducer,
 })
 
 const middleware = [thunk]

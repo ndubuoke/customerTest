@@ -39,6 +39,9 @@ import {
   SUBMIT_FORM_SUCCESS,
   UNFILLED_REQUIRED_SIGNATORY_LIST,
   UNFILLED_REQUIRED_SIGNATORY_LIST_BUTTON,
+  GET_FORM_BEHAVIOUR_REQUEST,
+  GET_FORM_BEHAVIOUR_SUCCESS,
+  GET_FORM_BEHAVIOUR_FAIL,
 } from 'Redux/constants/FormManagement.constants'
 import { getVisibleProperty } from 'Utilities/getProperty'
 
@@ -355,6 +358,21 @@ export const getRelationshipOfficersReducer = (state: ResponseType = initialStat
       return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
 
     case GET_RELATIONSHIP_OFFICERS_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+    default:
+      return state
+  }
+}
+
+export const getFormBehaviourReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_FORM_BEHAVIOUR_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_FORM_BEHAVIOUR_SUCCESS:
+      return { ...state, loading: false, success: true, serverResponse: action.payload, serverError: {} }
+
+    case GET_FORM_BEHAVIOUR_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
     default:
       return state

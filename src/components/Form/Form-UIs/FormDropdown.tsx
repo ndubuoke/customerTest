@@ -39,6 +39,7 @@ type Props = {
   fillingFormState: FormStructureType
   setBackupForSwitchFormState: (value: any) => void
   backupForSwitchFormState: any
+  customerDataSection: any
 }
 
 const FormDropdown = ({
@@ -50,6 +51,7 @@ const FormDropdown = ({
   setFillingFormState,
   setBackupForSwitchFormState,
   backupForSwitchFormState,
+  customerDataSection,
 }: Props) => {
   const ref = useRef(null)
   const dispatch = useDispatch()
@@ -180,7 +182,6 @@ const FormDropdown = ({
         fieldId: item?.id,
         fieldName: theItemFieldNameCamelCase,
       })
-
       if (_columnName) {
         setColumnName(_columnName)
       }
@@ -707,6 +708,12 @@ const FormDropdown = ({
     return fieldLoadingStateMap[field?.toLowerCase().trim()]
   }
 
+  // useEffect(() => {
+  //   if (helpText === 'LGA') {
+  //     setShowLists(false)
+  //   }
+  // }, [helpText])
+
   return (
     <div
       ref={ref}
@@ -780,20 +787,58 @@ const FormDropdown = ({
           />
         </div>
       )}
-      {/* end of new code for country dropdown */}
-
       {!isDropdownSearchable() && (
         <div className={`relative`}>
           <div
             className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
             onClick={() => {
-              setShowLists((prev) => !prev)
+              if (
+                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.assignDebitCard === 'off' &&
+                helpText === 'Card Product'
+              ) {
+                // do something
+              } else if (
+                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.electronicBanking === 'off' &&
+                optionsField.includes('Online Banking')
+              ) {
+                // do something
+              } else if (
+                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.token === 'off' &&
+                optionsField.includes('Hard Token')
+              ) {
+                // do something
+              } else if (
+                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+                helpText === 'Notification Channels'
+              ) {
+                // do something
+              } else if (
+                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+                helpText === 'Notification Rule'
+              ) {
+                // do something
+              } else if (
+                customerDataSection.find((item) => item.sectionName.includes('bio-Data')) &&
+                customerDataSection.find((item) => item.sectionName === 'bio-Data').data.dualCitizenship === 'No' &&
+                helpText === 'If yes specify'
+              ) {
+                // do something
+              } else {
+                setShowLists((prev) => !prev)
+              }
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)
               }
               if (fieldLabel.toLowerCase().includes('lga')) {
                 checkIfItemIsCity()
               }
+
+              // If yes specify
             }}
             title={selectedDropdownItem && selectedDropdownItem}
           >
