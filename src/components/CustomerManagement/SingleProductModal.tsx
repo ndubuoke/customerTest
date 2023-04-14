@@ -10,6 +10,8 @@ import Spinner from '../Shareables/Spinner'
 import Button from 'Components/Shareables/Button'
 import formatMoney from 'Utilities/formatMoney'
 import { useParams } from 'react-router-dom'
+import getApplicableCharges from 'Utilities/getApplicableCharges'
+import getApplicableTaxes from 'Utilities/getApplicableTaxes'
 
 type props = {
   productId: string
@@ -38,7 +40,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
     dispatch(getCustomerProfileAction(customerId) as any)
     dispatch(getSingleProductAction(productId) as any)
   }, [productId,customerId])
-    // console.log(singleProduct)
+  //  console.log(singleProduct)
   // console.log(customerProfile)
  
   
@@ -124,7 +126,7 @@ const customerProfile = customerProfileResponse.serverResponse.data
                       <div className='w-[100%] '>
                         <h2 className='text-[1rem] text-[#636363] mt-[18px]'>Minimum Cumulative Balance</h2>
                         <p className='mt-[10px] text-[#636363]'>
-                          {formatMoney(getProductDetail(singleProduct, 'min_cumulative_balance'))} {getProductDetail(singleProduct, 'currency')}
+                          {formatMoney(getProductDetail(singleProduct, 'max_cumulative_balance'))} {getProductDetail(singleProduct, 'currency')}
                         </p>
                       </div>
                     </div>
@@ -175,11 +177,11 @@ const customerProfile = customerProfileResponse.serverResponse.data
                                 <td className='pl-[1rem] text-[1rem] font-medium text-[#636363]'>{item?.debit_ledger_name} </td>
                                 <td className='pl-[1rem] text-[1rem] font-medium text-[#636363]'>{item?.credit_ledger_name}</td>
                                 <td className='pl-[1rem] text-[1rem] font-medium text-[#636363]'>
-                                  {singleProduct?.applicable_taxes?.length == 0 ? 'n/a' : 'taxes'}
+                                  {item?.applicable_taxes?.length == 0 ? 'n/a' : getApplicableTaxes(item?.applicable_taxes)}
                                 </td>
 
                                 <td className='pl-[1rem] text-[1rem] font-medium text-[#636363]'>
-                                  {singleProduct?.applicable_charges?.length == 0 ? 'n/a' : 'charges'}
+                                  {item?.applicable_charges?.length == 0 ? 'n/a' : getApplicableCharges(item?.applicable_charges)}
                                 </td>
                               </tr>
                             )
