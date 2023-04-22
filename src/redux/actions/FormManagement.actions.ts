@@ -1,5 +1,6 @@
 import axios from 'axios'
 import { FormStructureType } from 'Components/types/FormStructure.types'
+import { PageInstance } from 'Components/types/FormControl.types'
 import { Dispatch } from 'redux'
 import { SET_REQUIRED_FORM_FIELDS } from 'Redux/constants/CustomerManagement.constants'
 import {
@@ -20,6 +21,9 @@ import {
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
+  GET_DEFAULT_FORM_FAIL,
+  GET_DEFAULT_FORM_REQUEST,
+  GET_DEFAULT_FORM_SUCCESS,
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
@@ -48,6 +52,9 @@ import store, { ReducersType } from 'Redux/store'
 import { CustomerTypeType, FormTypeType } from 'Screens/ProcessSummary'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { parseBehavior } from 'Utilities/parseFormbehaviours'
+import { getProperty } from 'Utilities/getProperty'
+import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
+import { camelize } from 'Utilities/convertStringToCamelCase'
 
 // const SERVER_URL = 'https://retailcore-customerservice.herokuapp.com/'
 const SERVER_URL = 'https://customer-management-api-dev.reventtechnologies.com'
@@ -61,6 +68,7 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
   console.log('formtype', formType)
   try {
     dispatch({ type: GET_FORM_REQUEST })
+    dispatch({ type: GET_DEFAULT_FORM_REQUEST })
 
     const config = {
       headers: {
@@ -83,10 +91,17 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
 
     // 74448975208 -bvn
 
-    console.log('parsedBehaviour', parsedBehaviour)
+    // console.log('parsedBehaviour', parsedBehaviour)
+
+    parsedBehaviour.forEach((b) => {
+      if (b.condition === 'is Empty') {
+      }
+    })
+
     console.log('form', data)
 
     dispatch({ type: GET_FORM_SUCCESS, payload: data })
+    dispatch({ type: GET_DEFAULT_FORM_SUCCESS, payload: data })
 
     // localStorage.removeItem('form')
   } catch (error) {
@@ -95,8 +110,36 @@ export const getFormAction = (formType: string) => async (dispatch: Dispatch, ge
       type: GET_FORM_FAIL,
       payload: error?.response && error?.response?.data?.message,
     })
+    dispatch({
+      type: GET_DEFAULT_FORM_FAIL,
+      payload: error?.response && error?.response?.data?.message,
+    })
   }
 }
+// export const getDefaultFormAction = (formType: string) => async (dispatch: Dispatch, getState: (store: ReducersType) => ReducersType) => {
+//   console.log('formtype', formType)
+//   try {
+//     dispatch({ type: GET_DEFAULT_FORM_REQUEST })
+
+//     const config = {
+//       headers: {
+//         'Content-Type': 'application/json',
+//       },
+//     }
+
+//     const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form/customer/published/type/${formType}`, config)
+
+//     dispatch({ type: GET_DEFAULT_FORM_SUCCESS, payload: data })
+
+//     // localStorage.removeItem('form')
+//   } catch (error) {
+//     // localStorage.removeItem('form')
+//     dispatch({
+//       type: GET_DEFAULT_FORM_FAIL,
+//       payload: error?.response && error?.response?.data?.message,
+//     })
+//   }
+// }
 
 // https://retailcore-customerservice.herokuapp.com/v1/section/form/
 
@@ -389,4 +432,246 @@ export const getFormBehaviourAction = (formType: string) => async (dispatch: Dis
       payload: error?.response && error.response?.data?.message ? error?.response?.data?.message : error?.message,
     })
   }
+}
+
+export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType) => (dispatch: Dispatch, getState: (store: any) => ReducersType) => {
+  const { defaultPublishedForm, publishedForm, formBehaviour } = getState(store)
+  console.log('incoming-fillingFormState', fillingFormState)
+  console.log('defaultPublishedForm', defaultPublishedForm)
+  console.log('formBehaviour', formBehaviour)
+  // let defaultPublishedFormCopy = JSON.parse(JSON.stringify(defaultPublishedForm));
+  let formPages: PageInstance[] = defaultPublishedForm.serverResponse.data?.builtFormMetadata?.pages || []
+  const parsedBehaviour = parseBehavior(formBehaviour.serverResponse?.data?.behaviours || [])
+  const cleanText = (text: string) => text.replace(/[-\s?]/g, '').toLowerCase()
+  console.log('form-pages', formPages)
+  console.log('form-parsedBehaviour', parsedBehaviour)
+  parsedBehaviour.forEach((b) => {
+    const customerData = fillingFormState?.data?.customerData || []
+    const customerDataSection = customerData.find((c) => cleanText(c.sectionName) === cleanText(b.sectionName))
+    console.log('customerDataSection', customerDataSection)
+    if (customerDataSection) {
+      if (b.condition === 'is Empty' || b.condition === 'is Filled') {
+        // const isEmpty = !customerDataSection.data[camelize(replaceSpecialCharacters(b.fieldName))]
+        const status = !!customerDataSection.data[camelize(replaceSpecialCharacters(b.fieldName))]
+        const track = {
+          'is Empty': {
+            false: {
+              hide: 'Off',
+              show: 'On',
+            },
+          },
+          'is Filled': {
+            true: {
+              hide: 'Off',
+              show: 'On',
+            },
+          },
+        }
+        // console.log('isEmpty', isEmpty)
+        b.actions.forEach((action) => {
+          if (action.type === 'Show/Hide') {
+            if (action.pageName && !action.sectionName && !action.fieldName) {
+              formPages = formPages.map((p) => {
+                if (getProperty(p.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  p.pageProperties = p.pageProperties.map((property) => {
+                    if (property.name === 'Visibility') {
+                      // property.value = isEmpty ? 'Off' : 'On'
+                      if (track[b.condition][status.toString()]) {
+                        property.value = track[b.condition][status][action.option.split(' ')[0].toLowerCase()]
+                      } else {
+                        property.value = 'On'
+                      }
+                    }
+                    return property
+                  })
+                }
+                return p
+              })
+              console.log('filter-form', formPages)
+            } else if (action.pageName && action.sectionName && !action.fieldName) {
+              formPages = formPages.map((p) => {
+                if (getProperty(p.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  p.sections = p.sections.map((sect) => {
+                    console.log('sect', sect)
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.formControlProperties = sect.formControlProperties.map((property) => {
+                        if (property.name === 'Visibility') {
+                          if (track[b.condition][status.toString()]) {
+                            property.value = track[b.condition][status][action.option.split(' ')[0].toLowerCase()]
+                          } else {
+                            property.value = 'On'
+                          }
+                        }
+                        return property
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return p
+              })
+            } else if (action.pageName && action.sectionName && action.fieldName) {
+              formPages = formPages.map((page) => {
+                if (getProperty(page.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  page.sections = page.sections.map((sect) => {
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.fields = sect.fields.map((field) => {
+                        if (getProperty(field.formControlProperties, 'Field label', 'value').text.trim() === action.fieldName.trim()) {
+                          field.formControlProperties = field.formControlProperties.map((property) => {
+                            if (property.name === 'Visibility') {
+                              if (track[b.condition][status.toString()]) {
+                                property.value = track[b.condition][status][action.option.split(' ')[0].toLowerCase()]
+                              } else {
+                                property.value = 'On'
+                              }
+                            }
+                            return property
+                          })
+                        }
+                        return field
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return page
+              })
+            }
+          }
+        })
+
+        // console.log('check', check)
+        // const page = form.find((p) => getProperty(p.pageProperties, 'Page name', 'value').text === b.pageName)
+        // console.log('found-page', page)
+        // if (page) {
+        //   const section = page.sections.find((s) => getProperty(s.formControlProperties, 'Section name', 'value').text === b.sectionName)
+        //   console.log('found-section', section)
+        //   if (section) {
+        //     const field = section.fields.find((f) => getProperty(f.formControlProperties, 'Field label', 'value').text === b.fieldName)
+        //     console.log('found-field', field)
+        //   }
+        // }
+      } else if (b.condition === 'is Equal To' || b.condition === 'is Not Equal To') {
+        const isEqualTo = customerDataSection.data[camelize(replaceSpecialCharacters(b.fieldName))]?.toLowerCase() === b.value?.toLowerCase()
+        const track = {
+          'is Equal To': {
+            true: {
+              hide: 'Off',
+              show: 'On',
+            },
+          },
+          'is Not Equal To': {
+            false: {
+              hide: 'Off',
+              show: 'On',
+            },
+          },
+        }
+        console.log('isEqualTo', isEqualTo)
+        b.actions.forEach((action) => {
+          if (action.type === 'Show/Hide') {
+            if (action.pageName && !action.sectionName && !action.fieldName) {
+              formPages = formPages.map((p) => {
+                if (getProperty(p.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  p.pageProperties = p.pageProperties.map((property) => {
+                    if (property.name === 'Visibility') {
+                      // property.value = isEqualTo ? 'Off' : 'On'
+                      if (track[b.condition][isEqualTo.toString()]) {
+                        property.value = track[b.condition][isEqualTo][action.option.split(' ')[0].toLowerCase()]
+                      } else {
+                        property.value = 'On'
+                      }
+                    }
+                    return property
+                  })
+                }
+                return p
+              })
+              console.log('filter-form', formPages)
+            } else if (action.pageName && action.sectionName && !action.fieldName) {
+              formPages = formPages.map((p) => {
+                if (getProperty(p.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  p.sections = p.sections.map((sect) => {
+                    console.log('sect', sect)
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.formControlProperties = sect.formControlProperties.map((property) => {
+                        if (property.name === 'Visibility') {
+                          // property.value = isEqualTo ? 'Off' : 'On'
+                          if (track[b.condition][isEqualTo.toString()]) {
+                            property.value = track[b.condition][isEqualTo][action.option.split(' ')[0].toLowerCase()]
+                          } else {
+                            property.value = 'On'
+                          }
+                        }
+                        return property
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return p
+              })
+            } else if (action.pageName && action.sectionName && action.fieldName) {
+              formPages = formPages.map((page) => {
+                if (getProperty(page.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  page.sections = page.sections.map((sect) => {
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.fields = sect.fields.map((field) => {
+                        if (getProperty(field.formControlProperties, 'Field label', 'value').text.trim() === action.fieldName.trim()) {
+                          field.formControlProperties = field.formControlProperties.map((property) => {
+                            if (property.name === 'Visibility') {
+                              // property.value = isEqualTo ? 'Off' : 'On'
+                              if (track[b.condition][isEqualTo.toString()]) {
+                                property.value = track[b.condition][isEqualTo][action.option.split(' ')[0].toLowerCase()]
+                              } else {
+                                property.value = 'On'
+                              }
+                            }
+                            return property
+                          })
+                        }
+                        return field
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return page
+              })
+            }
+          }
+        })
+      }
+    }
+  })
+
+  dispatch({
+    type: GET_FORM_SUCCESS,
+    payload: {
+      ...publishedForm.serverResponse,
+      data: {
+        ...publishedForm.serverResponse.data,
+        builtFormMetadata: {
+          ...publishedForm.serverResponse.data?.builtFormMetadata,
+          pages: [...formPages],
+        },
+      },
+    },
+  })
+  console.log('parsedBehaviour', parsedBehaviour)
+  // dispatch({ type: GET_FORM_BEHAVIOUR_REQUEST })
+
+  // const config = {
+  //   headers: {
+  //     'Content-Type': 'application/json',
+  //   },
+  //   params: {
+  //     form: formType,
+  //   },
+  // }
+
+  // const { data } = await axios.get(`${SERVER_URL_PUBLISHED_FORM}/v1/form-behaviours-data`, config)
+
+  // sessionStorage.setItem(STORAGE_NAMES.FORM_BEHAVIOUR_IN_STORAGE, JSON.stringify(data))
+  // dispatch({ type: GET_FORM_BEHAVIOUR_SUCCESS, payload: data })
 }

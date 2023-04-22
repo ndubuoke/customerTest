@@ -185,55 +185,77 @@ const behaviorData = {
   },
 }
 
-export const parseBehavior = (data) => {
-  const conditions = []
-  const actions = []
-  data.map((behavior) => {
-    let { condition, actions: action } = behavior
-    conditions.push(condition)
-    actions.push(action)
-  })
-  const parsedConditions = parseCondition(conditions)
-  const parsedActions = parseActions(actions)
+interface IParsedBehaviour {
+  actions: {
+    fieldName: string
+    option: 'Hide Page'
+    pageName: string
+    sectionName: string
+    to: string
+    type: 'Show/Hide'
+  }[]
+  condition: 'is Empty' | 'is Filled' | 'is Equal To' | 'is Not Equal To'
+  fieldName: string
+  pageName: string
+  sectionName: string
+  value?: string
+}
 
-  return parsedConditions.map((condition, index) => {
+export const parseBehavior = (data): IParsedBehaviour[] => {
+  // const conditions = []
+  // const actions = []
+  // console.log('parseBehavior_data', data)
+  return data.map((behavior) => {
+    let { condition, actions } = behavior
+    // conditions.push(condition)
+    // actions.push(action)
+    const parsedCondition = parseCondition(condition)
+    const parsedActions = parseActions(actions)
     return {
-      ...condition,
-      action: parsedActions[index],
+      ...parsedCondition,
+      actions: parsedActions,
     }
   })
+  // const parsedConditions = parseCondition(conditions)
+  // const parsedActions = parseActions(actions)
+
+  // return parsedConditions.map((condition, index) => {
+  //   return {
+  //     ...condition,
+  //     actions: parsedActions,
+  //   }
+  // })
 }
 
 const parseCondition = (condition) => {
-  return condition.map((_res) => {
-    const { if: _condition, state, value } = _res
-    const [page, section, field] = _condition.split('>')
-    let pageName = '',
-      sectionName = '',
-      fieldName = ''
-    if (page) {
-      let [, name] = page.split(':')
-      pageName = name.trim()
-      if (section) {
-        let [, name] = section.split(':')
-        sectionName = name.trim()
-      }
-      if (field) {
-        let [, name] = field.split(':')
-        fieldName = name.trim()
-      }
+  const { if: _condition, state, value } = condition
+  const [page, section, field] = _condition.split('>')
+  let pageName = '',
+    sectionName = '',
+    fieldName = ''
+  if (page) {
+    let [, name] = page.split(':')
+    pageName = name.trim()
+    if (section) {
+      let [, name] = section.split(':')
+      sectionName = name.trim()
     }
-    return {
-      pageName,
-      sectionName,
-      fieldName,
-      condition: state,
+    if (field) {
+      let [, name] = field.split(':')
+      fieldName = name.trim()
     }
-  })
+  }
+  return {
+    pageName,
+    sectionName,
+    fieldName,
+    value,
+    condition: state,
+  }
 }
 
-const parseActions = (actions) => {
-  return actions[0].map((_action) => {
+const parseActions = (actions = []) => {
+  return actions.map((_action) => {
     const { type, option, formMember, to } = _action
     const [page, section, field] = formMember.split('>')
     let pageName = '',
@@ -262,6 +284,65 @@ const parseActions = (actions) => {
     }
   })
 }
+// const parseCondition = (condition) => {
+//   return condition.map((_res) => {
+//     const { if: _condition, state, value } = _res
+//     const [page, section, field] = _condition.split('>')
+//     let pageName = '',
+//       sectionName = '',
+//       fieldName = ''
+//     if (page) {
+//       let [, name] = page.split(':')
+//       pageName = name.trim()
+//       if (section) {
+//         let [, name] = section.split(':')
+//         sectionName = name.trim()
+//       }
+//       if (field) {
+//         let [, name] = field.split(':')
+//         fieldName = name.trim()
+//       }
+//     }
+//     return {
+//       pageName,
+//       sectionName,
+//       fieldName,
+//       value,
+//       condition: state,
+//     }
+//   })
+// }
 
-const parsedBehaviorData = parseBehavior(behaviorData.data.behaviours)
-console.log(parsedBehaviorData)
+// const parseActions = (actions) => {
+//   return (actions[0] || []).map((_action) => {
+//     const { type, option, formMember, to } = _action
+//     const [page, section, field] = formMember.split('>')
+//     let pageName = '',
+//       sectionName = '',
+//       fieldName = ''
+//     if (page) {
+//       let [, name] = page.split(':')
+//       pageName = name.trim()
+//       if (section) {
+//         let [, name] = section.split(':')
+//         sectionName = name.trim()
+//       }
+//       if (field) {
+//         let [, name] = field.split(':')
+//         fieldName = name.trim()
+//       }
+//     }
+
+//     return {
+//       pageName,
+//       sectionName,
+//       fieldName,
+//       type,
+//       option,
+//       to,
+//     }
+//   })
+// }
+
+// const parsedBehaviorData = parseBehavior(behaviorData.data.behaviours)
+// console.log(parsedBehaviorData)

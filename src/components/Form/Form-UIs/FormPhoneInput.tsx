@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, updateFormViaBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -128,7 +128,7 @@ const FormPhoneInput = ({
           })
         }
       }
-
+      dispatch(updateFormViaBehaviourAction(copiedPrev) as any)
       return copiedPrev
     })
   }

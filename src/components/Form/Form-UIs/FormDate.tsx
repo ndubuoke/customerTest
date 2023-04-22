@@ -1,7 +1,7 @@
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, updateFormViaBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -143,7 +143,7 @@ const FormDate = ({
           })
         }
       }
-
+      dispatch(updateFormViaBehaviourAction(copiedPrev) as any)
       return copiedPrev
     })
   }
@@ -184,14 +184,12 @@ const FormDate = ({
   }, [columnName])
 
   useEffect(() => {
-    if (text) {
-      setBackupForSwitchFormState((prev) => {
-        const copiedPrev = { ...prev }
-        copiedPrev[columnName] = text
+    setBackupForSwitchFormState((prev) => {
+      const copiedPrev = { ...prev }
+      copiedPrev[columnName] = text || ''
 
-        return copiedPrev
-      })
-    }
+      return copiedPrev
+    })
   }, [text])
 
   useEffect(() => {
@@ -266,7 +264,6 @@ const FormDate = ({
               })
             }
           }
-
           return copiedPrev
         })
       }

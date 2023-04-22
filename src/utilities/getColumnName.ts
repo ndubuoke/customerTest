@@ -21,5 +21,5 @@ export const getColumnName = ({ columns, pageId, sectionId, fieldId, fieldName }
     columnName = columnFound?.data?.find((x) => x?.fieldId === fieldId)?.columnName
   }
 
-  return columnName ? columnName : fieldName
+  return columnName ? columnName.trim() : fieldName.trim()
 }
