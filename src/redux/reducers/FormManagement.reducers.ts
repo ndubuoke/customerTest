@@ -19,6 +19,9 @@ import {
   GET_FORM_FAIL,
   GET_FORM_REQUEST,
   GET_FORM_SUCCESS,
+  GET_DEFAULT_FORM_FAIL,
+  GET_DEFAULT_FORM_REQUEST,
+  GET_DEFAULT_FORM_SUCCESS,
   GET_PUBLISHED_FORM_SECTION_FAIL,
   GET_PUBLISHED_FORM_SECTION_REQUEST,
   GET_PUBLISHED_FORM_SECTION_SUCCESS,
@@ -122,6 +125,56 @@ export const getFormReducer = (state: ResponseType = initialStateRequest, action
     // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }
 
     case GET_FORM_FAIL:
+      return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
+
+    //   case RESET_STATe:
+    //     return { ...state, loading: false, success: false, serverResponse: {}, serverError: {} }
+    default:
+      return state
+  }
+}
+export const getDefaultFormReducer = (state: ResponseType = initialStateRequest, action: { type: string; payload: any }) => {
+  switch (action.type) {
+    case GET_DEFAULT_FORM_REQUEST:
+      return { ...state, loading: true, success: false, serverResponse: {}, serverError: {} }
+
+    case GET_DEFAULT_FORM_SUCCESS:
+      // console.log('action.payload', action.payload)
+      let payload = { ...action.payload }
+
+      return {
+        ...state,
+        loading: false,
+        success: true,
+        serverResponse:
+          payload.data.formType === 'smeLegacy'
+            ? {
+                ...payload,
+                data: {
+                  ...payload.data,
+                  builtFormMetadata: {
+                    ...payload.data.builtFormMetadata,
+                    pages: [...payload.data.builtFormMetadata.pages],
+                  },
+                },
+              }
+            : payload.data.formType === 'individualLegacy'
+            ? {
+                ...payload,
+                data: {
+                  ...payload.data,
+                  builtFormMetadata: {
+                    ...payload.data.builtFormMetadata,
+                    pages: [...payload.data.builtFormMetadata.pages],
+                  },
+                },
+              }
+            : payload,
+        serverError: {},
+      }
+    // return { ...state, loading: true, success: false, serverResponse: action.payload, serverError: {} }
+
+    case GET_DEFAULT_FORM_FAIL:
       return { ...state, loading: false, success: false, serverResponse: {}, serverError: action.payload }
 
     //   case RESET_STATe:
