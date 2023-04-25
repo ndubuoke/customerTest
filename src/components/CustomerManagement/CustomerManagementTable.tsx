@@ -1108,7 +1108,10 @@ const CustomerManagementTable = ({
                       .filter((customer) => {
                         if (searchTerm === '') {
                           return customer
-                        } else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                        } else if (
+                          getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          getCustomerDetail(customer, 'surname').toString().toLowerCase().includes(searchTerm.toLowerCase())
+                        ) {
                           return customer
                         }
                       })
@@ -1136,7 +1139,10 @@ const CustomerManagementTable = ({
                       .filter((customer) => {
                         if (searchTerm === '') {
                           return customer
-                        } else if (getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase())) {
+                        } else if (
+                          getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                          getCustomerDetail(customer, 'surname').toString().toLowerCase().includes(searchTerm.toLowerCase())
+                        ) {
                           return customer
                         }
                       })
