@@ -286,6 +286,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
                 publishedFormState={publishedFormState}
                 setBackupForSwitchFormState={setBackupForSwitchFormState}
                 backupForSwitchFormState={backupForSwitchFormState}
+                mode={formMode}
               />
             </>
           )}
