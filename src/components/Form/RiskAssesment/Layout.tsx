@@ -57,11 +57,12 @@ const RiskAssessmentLayout = memo(({ title, fields }: Props) => {
           boxShadow: '0rem 0rem .625rem rgba(0, 0, 0, 0.25)',
           background: 'rgba(170, 170, 170, 0.07)',
         }}
+        onClick={handleCollapseSection}
       >
         <div className='flex items-center'>
           <h6>bleh</h6>
         </div>
-        <div className={`border-2 cursor-pointer border-[#C22626] p-2  `} onClick={handleCollapseSection}>
+        <div className={`border-2 cursor-pointer border-[#C22626] p-2  `}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             fill='none'
