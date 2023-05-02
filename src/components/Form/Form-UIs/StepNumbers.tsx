@@ -15,9 +15,12 @@ type Props = {
 const StepNumbers = ({ page, index, last, onClick, isActive }: Props) => {
   return (
     <div
-      className={`cursor-pointer w-[10.375rem] flex flex-col items-center  text-center relative z-10 after:absolute  after:left-[50%] after:bg-[#696767] after:h-[7px] after:top-[33%] after:-z-[2]  ${
-        index === 1 ? 'after:w-[100%]' : ''
-      } ${last ? '' : 'after:w-[100%]'}  text-[#636363] text-[.75rem] font-[300]  `}
+      // className={`z-50 cursor-pointer w-[9.375rem] justify-between min-h-[5.375rem] max-h-[5.375rem] flex flex-col items-center text-center relative after:absolute after:w-[100%] after:left-[50%] after:bg-[#CCCCCC] after:border after:border-[#CCCCCC] after:h-[.1rem] after:top-[50%] after:-z-[2]   ${
+      //   last ? 'after:w-0 after:hidden' : ''
+      // }  text-[#636363] text-[.75rem] font-[700]  `}
+      className={`cursor-pointer w-[10.375rem] flex flex-col items-center  text-center relative z-10 after:absolute  after:left-[50%] after:bg-[#696767] after:h-[7px] after:top-[33%] after:-z-[2] after:hidden    ${
+        last ? 'after:hidden' : 'after:w-[100%]'
+      }  text-[#636363] text-[.75rem] font-[300]  `}
       onClick={() => onClick(index)}
     >
       {/* {isActive ? (

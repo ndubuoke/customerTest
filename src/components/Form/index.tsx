@@ -23,6 +23,7 @@ import Signatories from './Signatory'
 import { PageInstance } from './Types'
 import RiskAssessment from './RiskAssesment'
 import { info } from 'Assets/svgs'
+import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
 
 type Props = {
   kind: 'new' | 'modification'
@@ -34,6 +35,7 @@ type Props = {
   setPublishedFormState: any
   backupForSwitchFormState: {}
   setBackupForSwitchFormState: (value: any) => any
+  mode: FormModeType
 }
 
 const Form = memo(
@@ -47,6 +49,7 @@ const Form = memo(
     setPublishedFormState,
     backupForSwitchFormState,
     setBackupForSwitchFormState,
+    mode: formMode,
   }: Props) => {
     const dispatch = useDispatch()
 
@@ -147,7 +150,19 @@ const Form = memo(
         setFillingFormState(newFillingFormInStorage)
       }
     }, [getColumnMap])
-
+    // useEffect(() => {
+    //   // if (formMode && fillingFormState?.data?.customerData?.length > 0) {
+    //   //   console.log('useeffect-form-mode', formMode)
+    //   //   if (canUpdateFormBehaviour.current) {
+    //   //     canUpdateFormBehaviour.current = false
+    //   //     dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
+    //   //   }
+    //   // }
+    //   if (formMode) {
+    //     canUpdateFormBehaviour.current = true
+    //     console.log('canUpdateFormBehaviour.current-effect', canUpdateFormBehaviour.current)
+    //   }
+    // }, [formMode])
     useEffect(() => {
       // console.log({ fillingFormState })
       // let count = 0
@@ -155,7 +170,7 @@ const Form = memo(
       //   count += 1
       //   dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
       // }
-
+      // console.log('canUpdateFormBehaviour.current', canUpdateFormBehaviour.current)
       if (fillingFormState?.data?.customerData?.length > 0 && activePageState) {
         if (canUpdateFormBehaviour.current) {
           canUpdateFormBehaviour.current = false
