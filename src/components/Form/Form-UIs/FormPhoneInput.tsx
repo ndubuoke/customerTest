@@ -45,7 +45,7 @@ const FormPhoneInput = ({
   const required = formGetProperty(item.formControlProperties, 'Set as Required', 'off')
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
-  const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
+  const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '11')
 
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)

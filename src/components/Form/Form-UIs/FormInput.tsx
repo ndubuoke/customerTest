@@ -442,7 +442,7 @@ const FormInput = ({
     >
       {/* {helpText === 'BVN' && console.log(fieldsNames.NUMBERCOUNTER, 'hey', item.name)} */}
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>
