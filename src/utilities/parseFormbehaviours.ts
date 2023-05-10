@@ -192,7 +192,7 @@ interface IParsedBehaviour {
     pageName: string
     sectionName: string
     to: string
-    type: 'Show/Hide'
+    type: 'Show/Hide' | 'Update/Calculate'
   }[]
   condition: 'is Empty' | 'is Filled' | 'is Equal To' | 'is Not Equal To'
   fieldName: string

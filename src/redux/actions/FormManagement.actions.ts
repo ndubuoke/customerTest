@@ -537,6 +537,25 @@ export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType
                 return page
               })
             }
+          } else if (action.type === 'Update/Calculate') {
+            if (action.pageName && action.sectionName && action.fieldName) {
+              if (fillingFormState) {
+                const fillingFormStateCopy = { ...fillingFormState }
+                const column = camelize(replaceSpecialCharacters(action.fieldName))
+                fillingFormStateCopy.data.customerData = fillingFormStateCopy.data.customerData.map((customerData) => {
+                  if (cleanText(customerData.sectionName) === cleanText(action.sectionName)) {
+                    if (b.condition === 'is Empty') {
+                      customerData.data[column] = status ? '' : action.to
+                    } else if (b.condition === 'is Filled') {
+                      customerData.data[column] = status ? action.to : ''
+                    }
+                  }
+                  return customerData
+                })
+                // sessionStorage.removeItem(STORAGE_NAMES.BACKUP_FOR_SWITCH_FORM_IN_STORAGE)
+                sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormStateCopy))
+              }
+            }
           }
         })
 
