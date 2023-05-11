@@ -391,7 +391,7 @@ const Main = (props: Props) => {
         const response = await axios.get(`https://utilities-api-dev.reventtechnologies.com/v1/quick-link/all/CustomerMgt`, {
           cancelToken: source.token,
         })
-        console.log(response)
+        // console.log(response)
         if (response.status === 200) {
           setQuickLink(response.data.data)
           console.log(response.data.data)
