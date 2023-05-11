@@ -28,9 +28,6 @@ const CustomerDetailsRow = ({
   customerFunctionHandler,
   userRole,
 }: customerDetailsRowType) => {
-  // console.log(customer)
-
-
   return (
     <tr key={customer?.customerId} className='bg-background-lightRed border-b text-text-secondary   '>
       <td scope='row' className='py-2 px-2 pl-6 flex flex-col font-medium  whitespace-nowrap '>

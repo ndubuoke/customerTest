@@ -154,6 +154,7 @@ const CustomerManagementTable = ({
   const [modificationRequestTypeOptionChecked, setModificationRequestTypeOptionChecked] = useState(false)
   const [reactivationRequestTypeOptionChecked, setReactivationRequestTypeOptionChecked] = useState(false)
   const [showCustomerAlertModal, setShowCustomerAlertModal] = useState(false)
+  const [searchTermCustomers, setSearchTermCustomers] = useState([])
   const [showActivateCustomerAlertModal, setShowActivateCustomerAlertModal] = useState(false)
   const [showDeactivateCustomerAlertModal, setShowDeactivateCustomerAlertModal] = useState(false)
   const [showActivateCustomerRequestModal, setShowActivateCustomerRequestModal] = useState(false)
@@ -560,9 +561,9 @@ const CustomerManagementTable = ({
   }, [customerStatus, tableType, requestStatus])
 
   // console.log(allCustomersByDate)
-  // console.log(AllCustomers)
+   console.log(AllCustomers)
   const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
-  //  console.log(userData)
+  //  console.log(customers)
 
   return (
     <>
@@ -1108,7 +1109,8 @@ const CustomerManagementTable = ({
                       .filter((customer) => {
                         if (searchTerm === '') {
                           return customer
-                        } else if (
+                        }
+                        if (
                           getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
                           getCustomerDetail(customer, 'surname').toString().toLowerCase().includes(searchTerm.toLowerCase())
                         ) {
