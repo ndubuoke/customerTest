@@ -1,7 +1,7 @@
 import { FormSectionType, FormStructureType } from 'Components/types/FormStructure.types'
 import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, updateFormViaBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -137,7 +137,7 @@ const FormInput = ({
           })
         }
       }
-
+      dispatch(updateFormViaBehaviourAction(copiedPrev) as any)
       return copiedPrev
     })
 
@@ -348,7 +348,6 @@ const FormInput = ({
               })
             }
           }
-
           return copiedPrev
         })
       }
@@ -443,7 +442,7 @@ const FormInput = ({
     >
       {/* {helpText === 'BVN' && console.log(fieldsNames.NUMBERCOUNTER, 'hey', item.name)} */}
       <div className='relative w-fit'>
-        {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
+        {required.toLowerCase() === 'on' ? <div className='absolute top-0 text-xl text-red-500 -right-3'>*</div> : null}
         <FieldLabel fieldItem={item} />
       </div>
       <div className='relative w-full border-b border-b-[#AAAAAA]'>

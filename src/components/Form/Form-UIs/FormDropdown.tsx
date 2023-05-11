@@ -10,6 +10,7 @@ import {
   setRequiredFormFieldsAction,
   resetStatesAction,
   resetCitiesAction,
+  updateFormViaBehaviourAction,
 } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
@@ -524,7 +525,7 @@ const FormDropdown = ({
               })
             }
           }
-
+          dispatch(updateFormViaBehaviourAction(copiedPrev) as any)
           return copiedPrev
         })
       } else {

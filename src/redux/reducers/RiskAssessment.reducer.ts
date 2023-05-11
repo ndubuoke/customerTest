@@ -58,6 +58,40 @@ export const initialStateRequest = {
             weight: 100,
           },
         },
+        {
+          parameter: 'Customer Persona',
+          impliedWeight: 5,
+          parameterOptions: [
+            {
+              status: 'High net worth',
+              weight: 60,
+            },
+            {
+              status: 'Upper Middle Class',
+              weight: 40,
+            },
+            {
+              status: 'Middle Class',
+              weight: 20,
+            },
+            {
+              status: 'Floating Middle Class',
+              weight: 10,
+            },
+            {
+              status: 'Low Income',
+              weight: 0,
+            },
+            {
+              status: 'Not verified',
+              weight: 100,
+            },
+          ],
+          selectedParameterOption: {
+            status: 'Not verified',
+            weight: 100,
+          },
+        },
       ],
       fields: [
         {
@@ -270,41 +304,6 @@ export const initialStateRequest = {
             },
             {
               status: 'No',
-              weight: 0,
-            },
-            {
-              status: 'Not verified',
-              weight: 100,
-            },
-          ],
-          selectedParameterOption: {
-            status: 'Not verified',
-            weight: 100,
-          },
-        },
-
-        {
-          parameter: 'Customer Persona',
-          impliedWeight: 5,
-          parameterOptions: [
-            {
-              status: 'High net worth',
-              weight: 60,
-            },
-            {
-              status: 'Upper Middle Class',
-              weight: 40,
-            },
-            {
-              status: 'Middle Class',
-              weight: 20,
-            },
-            {
-              status: 'Floating Middle Class',
-              weight: 10,
-            },
-            {
-              status: 'Low Income',
               weight: 0,
             },
             {

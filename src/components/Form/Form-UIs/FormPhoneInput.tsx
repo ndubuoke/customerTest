@@ -3,7 +3,7 @@ import React, { useEffect, useState } from 'react'
 import PhoneInput from 'react-phone-input-2'
 import 'react-phone-input-2/lib/style.css'
 import { useDispatch, useSelector } from 'react-redux'
-import { setRequiredFormFieldsAction } from 'Redux/actions/FormManagement.actions'
+import { setRequiredFormFieldsAction, updateFormViaBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -45,7 +45,7 @@ const FormPhoneInput = ({
   const required = formGetProperty(item.formControlProperties, 'Set as Required', 'off')
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
-  const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
+  const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '11')
 
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
@@ -128,7 +128,7 @@ const FormPhoneInput = ({
           })
         }
       }
-
+      dispatch(updateFormViaBehaviourAction(copiedPrev) as any)
       return copiedPrev
     })
   }

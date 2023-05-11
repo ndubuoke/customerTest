@@ -1,9 +1,15 @@
 import { AppAlert } from 'Components/Shareables'
 import Spinner from 'Components/Shareables/Spinner'
 import { FormStructureType } from 'Components/types/FormStructure.types'
-import React, { memo, useEffect, useState } from 'react'
+import React, { memo, useEffect, useState, useRef } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createColumnMapAction, getColumnMapAction, getPublishedFormSectionAction, activePageAction } from 'Redux/actions/FormManagement.actions'
+import {
+  createColumnMapAction,
+  getColumnMapAction,
+  getPublishedFormSectionAction,
+  activePageAction,
+  updateFormViaBehaviourAction,
+} from 'Redux/actions/FormManagement.actions'
 import { ResponseType } from 'Redux/reducers/FormManagement.reducers'
 import { ReducersType } from 'Redux/store'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
@@ -17,6 +23,7 @@ import Signatories from './Signatory'
 import { PageInstance } from './Types'
 import RiskAssessment from './RiskAssesment'
 import { info } from 'Assets/svgs'
+import { CustomerType, FormModeType } from 'Screens/CustomerCreation'
 
 type Props = {
   kind: 'new' | 'modification'
@@ -28,6 +35,7 @@ type Props = {
   setPublishedFormState: any
   backupForSwitchFormState: {}
   setBackupForSwitchFormState: (value: any) => any
+  mode: FormModeType
 }
 
 const Form = memo(
@@ -41,10 +49,13 @@ const Form = memo(
     setPublishedFormState,
     backupForSwitchFormState,
     setBackupForSwitchFormState,
+    mode: formMode,
   }: Props) => {
     const dispatch = useDispatch()
 
     const [activeFormSections, setActiveFormSections] = useState<any>([])
+
+    const canUpdateFormBehaviour = useRef(true)
 
     const publishedForm = useSelector<ReducersType>((state: ReducersType) => state?.publishedForm) as ResponseType
     const activePage = useSelector<ReducersType>((state: ReducersType) => state?.activePage) as { page: any; theIndex: number }
@@ -115,6 +126,7 @@ const Form = memo(
     }, [publishedForm])
 
     useEffect(() => {
+      // dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
       // console.log({ fillingFormState })
       // if (!fillingFormState.data?.formInfomation?.formId) {
       const fillingFormInStorage = sessionStorage.getItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
@@ -138,10 +150,36 @@ const Form = memo(
         setFillingFormState(newFillingFormInStorage)
       }
     }, [getColumnMap])
-
+    // useEffect(() => {
+    //   // if (formMode && fillingFormState?.data?.customerData?.length > 0) {
+    //   //   console.log('useeffect-form-mode', formMode)
+    //   //   if (canUpdateFormBehaviour.current) {
+    //   //     canUpdateFormBehaviour.current = false
+    //   //     dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
+    //   //   }
+    //   // }
+    //   if (formMode) {
+    //     canUpdateFormBehaviour.current = true
+    //     console.log('canUpdateFormBehaviour.current-effect', canUpdateFormBehaviour.current)
+    //   }
+    // }, [formMode])
     useEffect(() => {
       // console.log({ fillingFormState })
+      // let count = 0
+      // if (!count) {
+      //   count += 1
+      //   dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
+      // }
+      // console.log('canUpdateFormBehaviour.current', canUpdateFormBehaviour.current)
+      if (fillingFormState?.data?.customerData?.length > 0 && activePageState) {
+        if (canUpdateFormBehaviour.current) {
+          canUpdateFormBehaviour.current = false
+          dispatch(updateFormViaBehaviourAction(fillingFormState) as any)
+        }
+      }
+    }, [activePageState, fillingFormState])
 
+    useEffect(() => {
       if (fillingFormState?.data?.customerData?.length > 0) {
         sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormState))
       }

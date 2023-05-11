@@ -50,7 +50,7 @@ const RiskAssessmentLayout = memo(
 
     return (
       <>
-        <section className='max-w-[66.25rem] mx-4'>
+        <section className='max-w-[66.25rem] mx-4 mb-8'>
           <div
             className={`ControlUILayout  w-full  p-1 pr-3 gap-5   font-bold text-gray-500 text-sm text-center rounded-lg flex relative   justify-between
             {setRequiredFormFieldsRedux.} $
@@ -60,7 +60,10 @@ const RiskAssessmentLayout = memo(
               background: 'rgba(170, 170, 170, 0.07)',
               padding: '0.5rem 1rem',
               border: isCompleted === true ? '1px solid green' : isCompleted === false ? '1px solid red' : '',
+              cursor: 'pointer',
+              fontFamily: 'Inter',
             }}
+            onClick={handleCollapseSection}
           >
             <div className='flex items-center'>
               <h6
@@ -72,7 +75,7 @@ const RiskAssessmentLayout = memo(
                 {title}
               </h6>
             </div>
-            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `} onClick={handleCollapseSection}>
+            <div className={`border-2 cursor-pointer border-[#C22626] p-1  `}>
               <svg
                 xmlns='http://www.w3.org/2000/svg'
                 fill='none'
@@ -98,9 +101,11 @@ const RiskAssessmentLayout = memo(
                 display: 'grid',
                 gridTemplateColumns: '1fr 1fr 1fr',
                 gridGap: '1.25rem',
-                // color: '#636363',
-                // padding: `${collapsed ? '0' : '1.3rem 9rem 1rem 2.5rem'}`,
-                // background: 'rgb(250, 250, 250)',
+                padding: '55px',
+                paddingBottom: '0',
+                paddingTop: '31px',
+                background: '#fff',
+                fontFamily: 'Inter',
               }}
             >
               {fields.map((field) => {
