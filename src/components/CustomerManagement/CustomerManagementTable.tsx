@@ -177,6 +177,7 @@ const CustomerManagementTable = ({
   const requestsForChecker = allRequestsForChecker?.serverResponse?.data?.requests
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  
 
   const setDate = (value) => {
     setCurrentDate(value)
@@ -561,7 +562,7 @@ const CustomerManagementTable = ({
   }, [customerStatus, tableType, requestStatus])
 
   // console.log(allCustomersByDate)
-   console.log(AllCustomers)
+  //  console.log(AllCustomers)
   const allRequestsByDate = useSelector<ReducersType>((state: ReducersType) => state?.allRequestsByDate) as customersManagementResponseType
   //  console.log(customers)
 
@@ -1103,34 +1104,39 @@ const CustomerManagementTable = ({
             <>
               {AllCustomers && AllCustomers?.success ? (
                 <tbody className=' '>
-                  {tableType === 'All Customers' &&
-                    customers &&
-                    customers
-                      .filter((customer) => {
-                        if (searchTerm === '') {
-                          return customer
-                        }
-                        if (
-                          getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
-                          getCustomerDetail(customer, 'surname').toString().toLowerCase().includes(searchTerm.toLowerCase())
-                        ) {
-                          return customer
-                        }
-                      })
-                      .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
-                      .map((customer) => (
-                        <CustomerDetailsRow
-                          userRole={userRole}
-                          key={customer?.customerId}
-                          customerId={customerId}
-                          showCustomersFunctionHandler={showCustomersFunctionHandler}
-                          customer={customer}
-                          customerFunctionOptions={customerFunctionOptions}
-                          showCustomerFunctionOptions={showCustomerFunctionOptions}
-                          customerFunctionListRef={customerFunctionListRef}
-                          customerFunctionHandler={customerFunctionHandler}
-                        />
-                      ))}
+                  {tableType === 'All Customers' && customers
+                    ? customers
+                        .filter((customer) => {
+                          if (searchTerm === '') {
+                            return customer
+                          }
+                          if (
+                            getCustomerDetail(customer, 'firstName').toString().toLowerCase().includes(searchTerm.toLowerCase()) ||
+                            getCustomerDetail(customer, 'surname').toString().toLowerCase().includes(searchTerm.toLowerCase())
+                          ) {
+                            return customer
+                          }
+                        })
+
+                        .sort((a: { updatedAt: string }, b: { updatedAt: string }) => +b.updatedAt - +a.updatedAt)
+                        .map((customer) => {
+                          if (customer != undefined) {
+                            return (
+                              <CustomerDetailsRow
+                                userRole={userRole}
+                                key={customer?.customerId}
+                                customerId={customerId}
+                                showCustomersFunctionHandler={showCustomersFunctionHandler}
+                                customer={customer}
+                                customerFunctionOptions={customerFunctionOptions}
+                                showCustomerFunctionOptions={showCustomerFunctionOptions}
+                                customerFunctionListRef={customerFunctionListRef}
+                                customerFunctionHandler={customerFunctionHandler}
+                              />
+                            )
+                          }
+                        })
+                    : null}
                 </tbody>
               ) : null}
               {allCustomersByDate && allCustomersByDate?.success ? (
