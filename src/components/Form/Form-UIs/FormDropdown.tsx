@@ -117,6 +117,8 @@ const FormDropdown = ({
     ? getProperty(item.formControlProperties, 'Specify URL', 'defaultState').text
     : ''
 
+  // const defaultSelection = getProperty(item.formControlProperties, 'Default selection', 'value').text || ''
+
   const _optionsField =
     dropdownOptionsListValue.toLowerCase() === 'manual input'
       ? specifyOptionsListValue
@@ -141,7 +143,8 @@ const FormDropdown = ({
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
   const theVisualItemFieldNameCamelCase = camelize(fieldLabel)
-
+  // console.log('defaultSelection', defaultSelection)
+  // console.log('optionsField', optionsField)
   const [showLists, setShowLists] = useState<boolean>(false)
   const [selectedDropdownItem, setSelectedDropdownItem] = useState<any>(null)
   const [multipleSelectedDropdownItems, setMultipleSelectedDropdownItems] = useState<Array<string>>([])
@@ -793,45 +796,46 @@ const FormDropdown = ({
           <div
             className='flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA] cursor-pointer'
             onClick={() => {
-              if (
-                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
-                customerDataSection.find((item) => item.sectionName === 'accountServices').data.assignDebitCard === 'off' &&
-                helpText === 'Card Product'
-              ) {
-                // do something
-              } else if (
-                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
-                customerDataSection.find((item) => item.sectionName === 'accountServices').data.electronicBanking === 'off' &&
-                optionsField.includes('Online Banking')
-              ) {
-                // do something
-              } else if (
-                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
-                customerDataSection.find((item) => item.sectionName === 'accountServices').data.token === 'off' &&
-                optionsField.includes('Hard Token')
-              ) {
-                // do something
-              } else if (
-                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
-                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
-                helpText === 'Notification Channels'
-              ) {
-                // do something
-              } else if (
-                customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
-                customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
-                helpText === 'Notification Rule'
-              ) {
-                // do something
-              } else if (
-                customerDataSection.find((item) => item.sectionName.includes('bio-Data')) &&
-                customerDataSection.find((item) => item.sectionName === 'bio-Data').data.dualCitizenship === 'No' &&
-                helpText === 'If yes specify'
-              ) {
-                // do something
-              } else {
-                setShowLists((prev) => !prev)
-              }
+              // if (
+              //   customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'accountServices').data.assignDebitCard === 'off' &&
+              //   helpText === 'Card Product'
+              // ) {
+              //   // do something
+              // } else if (
+              //   customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'accountServices').data.electronicBanking === 'off' &&
+              //   optionsField.includes('Online Banking')
+              // ) {
+              //   // do something
+              // } else if (
+              //   customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'accountServices').data.token === 'off' &&
+              //   optionsField.includes('Hard Token')
+              // ) {
+              //   // do something
+              // } else if (
+              //   customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+              //   helpText === 'Notification Channels'
+              // ) {
+              //   // do something
+              // } else if (
+              //   customerDataSection.find((item) => item.sectionName.includes('accountServices')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'accountServices').data.enableNotifications === 'off' &&
+              //   helpText === 'Notification Rule'
+              // ) {
+              //   // do something
+              // } else if (
+              //   customerDataSection.find((item) => item.sectionName.includes('bio-Data')) &&
+              //   customerDataSection.find((item) => item.sectionName === 'bio-Data').data.dualCitizenship === 'No' &&
+              //   helpText === 'If yes specify'
+              // ) {
+              //   // do something
+              // } else {
+              //   setShowLists((prev) => !prev)
+              // }
+              setShowLists((prev) => !prev)
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)
               }

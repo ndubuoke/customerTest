@@ -55,6 +55,7 @@ const FormFileUpload = ({
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
   const required = formGetProperty(item.formControlProperties, 'Set as Required', 'off')
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
   const allowableFileTypes = formGetProperty(item.formControlProperties, 'Allowable File Types', 'png, jpg, pdf')
@@ -448,7 +449,7 @@ const FormFileUpload = ({
           </div>
         ) : (
           <div {...getRootProps()} className='relative h-full cursor-pointer '>
-            <input type={`file`} hidden {...getInputProps()} multiple={false} className='' />
+            <input disabled={isDisabled} type={`file`} hidden {...getInputProps()} multiple={false} className='' />
 
             <div className='absolute bottom-0 right-0 cursor-pointer' style={{ marginTop: 'auto' }}>
               <img src={add} className='inline mr-1' height='18px' width='18px' />

@@ -14,7 +14,7 @@ import DataListInput from 'react-datalist-input'
 import { ReducersType } from 'Redux/store'
 import { setRequiredFormFieldsAction, getRelationshipOfficersAction } from 'Redux/actions/FormManagement.actions'
 import { replaceSpecialCharacters } from 'Utilities/replaceSpecialCharacters'
-// https://api.staging.sterlingv2.prunedge.org/api/v1/users?page_size=100000
+
 type Props = {
   item: FormControlType | FormControlTypeWithSection
   collapsed: boolean
@@ -47,7 +47,7 @@ const FormSearchAndSelect = memo(
     const enableMultipleSelection = formGetProperty(item.formControlProperties, 'Enable multiple selection of options', 'off')
     const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
     const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
-
+    const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
     const dropdownOptionsListValue = formGetProperty(item.formControlProperties, 'Dropdown Options List', '')
     const specifyOptionsListValue = formGetProperty(item.formControlProperties, 'Specify Options List', '')
     const importFromFileListValue = formGetProperty(item.formControlProperties, 'Upload List', '')
@@ -321,6 +321,7 @@ const FormSearchAndSelect = memo(
         <div className='w-full border-b border-b-[#AAAAAA] relative mt-2 pl-2 '>
           <div className=' w-full   py-1 pl-2 ml-1`'>
             <DataListInput
+              disabled={isDisabled}
               placeholder={selectedDropdownItem || placeholder}
               items={items}
               onSelect={(theSelectedItem) => {

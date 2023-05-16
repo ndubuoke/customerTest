@@ -37,6 +37,7 @@ const FormTextArea = ({
   const dispatch = useDispatch()
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
     ? getProperty(item.formControlProperties, 'Field label', 'value').text
     : getProperty(item.formControlProperties, 'Field label', 'defaultState').text
@@ -269,6 +270,7 @@ const FormTextArea = ({
       </div>
       <div className='relative w-full border border-[#AAAAAA] h-fit pr-1 rounded-md'>
         <textarea
+          disabled={isDisabled}
           className={`flex w-full  p-1 leading-6 bg-transparent `}
           required={required.toLowerCase() === 'on'}
           placeholder={placeholder}

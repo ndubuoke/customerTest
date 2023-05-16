@@ -14,7 +14,7 @@ type ButtonType = 'Submit' | 'Reset' | 'Next Page' | 'Previous Page' | 'Custom'
 
 const FormButton = ({ item, collapsed }: Props) => {
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
-
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const fieldLabel = formGetProperty(item.formControlProperties, 'Field label', 'Field label')
   const required = formGetProperty(item.formControlProperties, 'Set as Required', 'off')
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
@@ -42,6 +42,7 @@ const FormButton = ({ item, collapsed }: Props) => {
     >
       <div className='relative w-fit'>
         <button
+          disabled={isDisabled}
           type={
             buttonType === 'Next Page' || buttonType === 'Previous Page' || buttonType === 'Custom'
               ? 'button'

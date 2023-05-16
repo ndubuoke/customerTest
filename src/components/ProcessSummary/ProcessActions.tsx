@@ -232,6 +232,7 @@ const ProcessActions = ({ openWaiver, mode, customerType, waiverType = 'both', f
             initiatorId={initiatorId}
             customerType={customerType}
             formType={formType}
+            mode={mode}
             setOpenModal={setOpenModal}
           />
         )

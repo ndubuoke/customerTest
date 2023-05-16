@@ -188,11 +188,11 @@ const behaviorData = {
 interface IParsedBehaviour {
   actions: {
     fieldName: string
-    option: 'Hide Page'
+    option: string
     pageName: string
     sectionName: string
     to: string
-    type: 'Show/Hide' | 'Update/Calculate'
+    type: 'Show/Hide' | 'Update/Calculate' | 'Enable/Require'
   }[]
   condition: 'is Empty' | 'is Filled' | 'is Equal To' | 'is Not Equal To'
   fieldName: string
