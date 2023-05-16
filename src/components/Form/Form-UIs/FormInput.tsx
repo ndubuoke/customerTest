@@ -47,13 +47,11 @@ const FormInput = ({
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '160')
-
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
   const getColumnMap = useSelector<ReducersType>((state: ReducersType) => state?.getColumnMap) as ResponseType
-
-  // const pageName = theForm?.builtFormMetadata?.pages?.find((x) => formGetProperty(x.pageProperties, "Page name", "Page Name") )
 
   const setRequiredFormFieldsRedux = useSelector<ReducersType>((state: ReducersType) => state?.setRequiredFormFields) as any
 
@@ -450,6 +448,7 @@ const FormInput = ({
           <>
             <input
               className={`flex w-full  py-1 leading-6 bg-transparent`}
+              disabled={isDisabled}
               type='number'
               required={required.toLowerCase() === 'on'}
               placeholder={placeholder}
@@ -465,6 +464,7 @@ const FormInput = ({
           <>
             <input
               className={`flex w-full  py-1 leading-6 bg-transparent`}
+              disabled={isDisabled}
               type={
                 isFieldBvn(item)
                   ? 'number'

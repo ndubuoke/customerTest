@@ -21,6 +21,7 @@ type Props = {
   initiatorId: string
   customerType: 'individual' | 'sme'
   formType: FormTypeType
+  mode: string
   setOpenModal: Dispatch<SetStateAction<boolean>>
 }
 
@@ -31,6 +32,7 @@ const WaiverRequestForm = ({
   initiatorId,
   customerType,
   formType,
+  mode,
   setOpenModal,
 }: Props) => {
   const dispatch = useDispatch()
@@ -46,6 +48,11 @@ const WaiverRequestForm = ({
     if (localUpload && localUpload.length > 0 && customerType === 'individual') {
       if (fillingFormInStorage.data.customerData.length > 0) {
         const updatedData = fillingFormInStorage.data.waiverData
+        fillingFormInStorage.data.requestData = {
+          initiator,
+          initiatorId,
+          requestType: mode,
+        }
         fillingFormInStorage.data.waiverData = [
           {
             // ...updatedData,

@@ -456,12 +456,14 @@ export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType
         const track = {
           'is Empty': {
             false: {
+              disable: 'true',
               hide: 'Off',
               show: 'On',
             },
           },
           'is Filled': {
             true: {
+              disable: 'true',
               hide: 'Off',
               show: 'On',
             },
@@ -556,6 +558,39 @@ export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType
                 sessionStorage.setItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE, JSON.stringify(fillingFormStateCopy))
               }
             }
+          } else if (action.type === 'Enable/Require') {
+            if (action.pageName && !action.sectionName && !action.fieldName) {
+            } else if (action.pageName && action.sectionName && !action.fieldName) {
+            } else if (action.pageName && action.sectionName && action.fieldName) {
+              formPages = formPages.map((page) => {
+                if (getProperty(page.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  page.sections = page.sections.map((sect) => {
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.fields = sect.fields.map((field) => {
+                        if (getProperty(field.formControlProperties, 'Field label', 'value').text.trim() === action.fieldName.trim()) {
+                          field.formControlProperties = field.formControlProperties.map((property) => {
+                            if (action.option === 'Disable Field') {
+                              if (property.name === 'Disable') {
+                                if (track[b.condition][status.toString()]) {
+                                  property.value = track[b.condition][status][action.option.split(' ')[0].toLowerCase()]
+                                } else {
+                                  property.value = 'false'
+                                }
+                              }
+                            }
+
+                            return property
+                          })
+                        }
+                        return field
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return page
+              })
+            }
           }
         })
 
@@ -575,12 +610,14 @@ export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType
         const track = {
           'is Equal To': {
             true: {
+              disable: 'true',
               hide: 'Off',
               show: 'On',
             },
           },
           'is Not Equal To': {
             false: {
+              disable: 'true',
               hide: 'Off',
               show: 'On',
             },
@@ -644,6 +681,38 @@ export const updateFormViaBehaviourAction = (fillingFormState: FormStructureType
                                 property.value = track[b.condition][isEqualTo][action.option.split(' ')[0].toLowerCase()]
                               } else {
                                 property.value = 'On'
+                              }
+                            }
+                            return property
+                          })
+                        }
+                        return field
+                      })
+                    }
+                    return sect
+                  })
+                }
+                return page
+              })
+            }
+          } else if (action.type === 'Enable/Require') {
+            if (action.pageName && !action.sectionName && !action.fieldName) {
+            } else if (action.pageName && action.sectionName && !action.fieldName) {
+            } else if (action.pageName && action.sectionName && action.fieldName) {
+              formPages = formPages.map((page) => {
+                if (getProperty(page.pageProperties, 'Page name', 'value').text === action.pageName) {
+                  page.sections = page.sections.map((sect) => {
+                    if (getProperty(sect.formControlProperties, 'Section name', 'value').text.trim() === action.sectionName.trim()) {
+                      sect.fields = sect.fields.map((field) => {
+                        if (getProperty(field.formControlProperties, 'Field label', 'value').text.trim() === action.fieldName.trim()) {
+                          field.formControlProperties = field.formControlProperties.map((property) => {
+                            if (action.option === 'Disable Field') {
+                              if (property.name === 'Disable') {
+                                if (track[b.condition][isEqualTo.toString()]) {
+                                  property.value = track[b.condition][isEqualTo][action.option.split(' ')[0].toLowerCase()]
+                                } else {
+                                  property.value = 'false'
+                                }
                               }
                             }
                             return property

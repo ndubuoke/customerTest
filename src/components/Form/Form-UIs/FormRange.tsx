@@ -49,7 +49,7 @@ const FormRange = ({
   const maximumNumericInput = formGetProperty(item.formControlProperties, 'Maximum numeric input', '100000')
   const minimumNumericInput = formGetProperty(item.formControlProperties, 'Minimum numeric input', '0')
   const stepSize = formGetProperty(item.formControlProperties, 'Step size', '1')
-
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   // const displayType = formGetProperty(item.formControlProperties, 'Type', 'checkbox') as DisplayTypeType
   let _labelPosition = getProperty(item.formControlProperties, 'Swap label position', 'value').text
     ? getProperty(item.formControlProperties, 'Swap label position', 'value').text
@@ -195,6 +195,7 @@ const FormRange = ({
       <div className={` flex    w-full  h-fit gap-2 items-center`}>
         <input
           type='range'
+          disabled={isDisabled}
           className={`accent-primay-main  `}
           // min={Number(minimumNumericInput)} max={Number(minimumNumericInput)} step={stepSize}
           min={`${minimumNumericInput}`}

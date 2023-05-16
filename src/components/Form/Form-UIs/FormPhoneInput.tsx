@@ -46,7 +46,7 @@ const FormPhoneInput = ({
   const placeholder = formGetProperty(item.formControlProperties, 'Placeholder', `Enter ${fieldLabel}`)
   const helpText = formGetProperty(item.formControlProperties, 'Help text', fieldLabel)
   const maximumNumbersOfCharacters = formGetProperty(item.formControlProperties, 'Maximum Number of characters', '11')
-
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const theFieldLabelWithoutSpecialCase = replaceSpecialCharacters(fieldLabel)
   const theItemFieldNameCamelCase = camelize(theFieldLabelWithoutSpecialCase)
 
@@ -252,6 +252,7 @@ const FormPhoneInput = ({
       </div>
       <div className='relative w-full '>
         <PhoneInput
+          disabled={isDisabled}
           country={'ng'}
           value={text.length <= Number(maximumNumbersOfCharacters) ? text : text.slice(0, Number(maximumNumbersOfCharacters))}
           onChange={(phone) => handleChange(phone, item)}

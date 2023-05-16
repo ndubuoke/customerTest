@@ -13,6 +13,15 @@ type Props = {
   fillingFormState: FormStructureType
 }
 
+const convertToIntOrDecimal = (value: number, decimalPlace = 2): number => {
+  const isInteger = Number.isInteger(value)
+  if (isInteger) {
+    return value
+  } else {
+    return Number(parseFloat(value.toString()).toFixed(decimalPlace))
+  }
+}
+
 const RiskAssessment = memo(({ fillingFormState }: Props) => {
   const dispatch = useDispatch()
   const { riskAssessmentData, riskScoreGuide } = useSelector<ReducersType>((state: ReducersType) => state?.riskAssessment) as any
@@ -167,7 +176,7 @@ const RiskAssessment = memo(({ fillingFormState }: Props) => {
                 overflow: 'hidden',
               }}
             >
-              {riskScoreGuide.rating} {'(' + riskScoreGuide.score + ')'}
+              {riskScoreGuide.rating} {'(' + convertToIntOrDecimal(riskScoreGuide.score) + ')'}
             </span>
           ) : (
             ''

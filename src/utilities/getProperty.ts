@@ -60,6 +60,7 @@ export type PagePropertyName =
   | 'Time format'
   | 'Lowerbound (Min)'
   | 'Upperbound (Max)'
+  | 'Disable'
 
 export type PagePropertyItemType =
   | 'value'
@@ -117,6 +118,7 @@ export enum PagePropertyNameEnum {
   TimeFormat = 'Time format',
   Lowerbound = 'Lowerbound (Min)',
   Upperbound = 'Upperbound (Max)',
+  Disable = 'Disable',
 }
 
 export enum PagePropertyItemTypeEnum {
@@ -150,4 +152,9 @@ export const getVisibleProperty = (properties: PageProperties) => {
   return getProperty(properties, 'Visibility', 'value').text
     ? getProperty(properties, 'Visibility', 'value').text === 'On'
     : getProperty(properties, 'Visibility', 'defaultState').text === 'On'
+}
+export const getDisableProperty = (properties: PageProperties) => {
+  return getProperty(properties, 'Disable', 'value').text
+    ? getProperty(properties, 'Disable', 'value').text === 'On'
+    : getProperty(properties, 'Disable', 'defaultState').text === 'On'
 }

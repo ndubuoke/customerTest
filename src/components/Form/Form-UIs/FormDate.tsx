@@ -36,6 +36,7 @@ const FormDate = ({
   backupForSwitchFormState,
 }: Props) => {
   const dispatch = useDispatch()
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const theForm = publishedFormState?.serverResponse?.data as Form
   const span = getProperty(item.formControlProperties, 'Col Span', 'value').text
   const fieldLabel = getProperty(item.formControlProperties, 'Field label', 'value').text
@@ -284,6 +285,7 @@ const FormDate = ({
       </div>
       <div className='bg-transparent'>
         <input
+          disabled={isDisabled}
           className={`flex items-center justify-between w-full gap-6 py-1 leading-6 border-b border-b-[#AAAAAA]`}
           style={{
             background: 'transparent',

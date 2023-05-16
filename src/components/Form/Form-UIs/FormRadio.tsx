@@ -34,6 +34,7 @@ const FormRadio = ({ item, collapsed }: Props) => {
   const handleSelect = (selectedItem, action: 'remove' | 'add') => {
     // setText(selectedItem)
   }
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
 
   return (
     <div
@@ -45,7 +46,7 @@ const FormRadio = ({ item, collapsed }: Props) => {
       title={helpText}
     >
       <div className={` flex    w-full  h-fit gap-2 items-center`}>
-        <input type='radio' className={`accent-primay-main w-4 h-4 `} />
+        <input type='radio' disabled={isDisabled} className={`accent-primay-main w-4 h-4 `} />
         <div className={`relative w-fit ${labelPosition === 'left' ? 'order-2' : 'order-1'}`}>
           {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
           <FieldLabel fieldItem={item} />

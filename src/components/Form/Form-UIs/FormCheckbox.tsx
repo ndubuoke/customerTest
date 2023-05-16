@@ -27,7 +27,7 @@ const FormCheckbox = ({ item, collapsed }: Props) => {
     : getProperty(item.formControlProperties, 'Swap label position', 'defaultState').text
 
   let labelPosition = _labelPosition.toLowerCase() === 'on' ? 'right' : 'left'
-
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   const [text, setText] = useState<string>('')
   const [checked, setChecked] = useState(false)
 
@@ -45,7 +45,7 @@ const FormCheckbox = ({ item, collapsed }: Props) => {
       title={helpText}
     >
       <div className={` flex    w-full  h-fit gap-2 items-center`}>
-        <input type='checkbox' className={`accent-primay-main w-4 h-4 `} />
+        <input disabled={isDisabled} type='checkbox' className={`accent-primay-main w-4 h-4 `} />
         <div className={`relative w-fit ${labelPosition === 'left' ? 'order-2' : 'order-1'}`}>
           {required.toLowerCase() === 'on' ? <div className='absolute text-red-500 -right-3 top-0 text-xl'>*</div> : null}
           <FieldLabel fieldItem={item} />
