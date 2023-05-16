@@ -10,7 +10,7 @@ type props = {
 }
 
 const SearchBarModal = ({ response, externalFunctionToDoSomething, searchBarModalRef }: props) => {
-  // console.log(response)
+  //  console.log(response)
   return (
     <div
       ref={searchBarModalRef}
