@@ -32,8 +32,24 @@ type Props = {}
 const customerTypeoptions = ['Individual', 'SME']
 const customersDropdownStatusOptionsMaker = ['Created by me', 'Created by my team', 'Created system-wide']
 const customersDropdownStatusOptionsChecker = ['Approved by me', 'Approved by my team', 'Approved system-wide']
+const adminCustomersDropdownStatusOptions = [
+  'Created by me',
+  'Created by my team',
+  'Created system-wide',
+  'Approved by me',
+  'Approved by my team',
+  'Approved system-wide',
+]
 const requestsDropdownStatusOptionsMaker = ['Initiated by me', 'Initiated by my team', 'Initiated system-wide']
 const requestsDropdownStatusOptionsChecker = ['Sent to me', 'Sent to my team', 'Sent system-wide']
+const adminRequestsDropdownStatusOptions = [
+  'Initiated by me',
+  'Initiated by my team',
+  'Initiated system-wide',
+  'Sent to me',
+  'Sent to my team',
+  'Sent system-wide',
+]
 type DropdownSelectedStatusType =
   | 'Created by me'
   | 'Created by my team'
@@ -719,11 +735,14 @@ const Main = (props: Props) => {
                           <div>
                             {customermanagementTableType === 'All Customers' && (
                               <span className={`text-[#252C32]`}>
-                                {userRole === 'maker' && (
+                                {userRole === 'maker' && !userData.user?.tenant_admin && (
                                   <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsMaker[0]}</>
                                 )}
                                 {userRole === 'checker' && (
                                   <>{customersSelectedStatus ? customersSelectedStatus : customersDropdownStatusOptionsChecker[0]}</>
+                                )}
+                                {userData.user?.tenant_admin && userRole === 'maker' && (
+                                  <>{customersSelectedStatus ? customersSelectedStatus : adminCustomersDropdownStatusOptions[0]}</>
                                 )}
                               </span>
                             )}
@@ -732,8 +751,11 @@ const Main = (props: Props) => {
                                 {userRole === 'checker' && (
                                   <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsChecker[0]}</>
                                 )}
-                                {userRole === 'maker' && (
+                                {userRole === 'maker' && !userData.user?.tenant_admin && (
                                   <>{requestsSelectedStatus ? requestsSelectedStatus : requestsDropdownStatusOptionsMaker[0]}</>
+                                )}
+                                {userData.user?.tenant_admin && userRole === 'maker' && (
+                                  <>{requestsSelectedStatus ? requestsSelectedStatus : adminRequestsDropdownStatusOptions[0]}</>
                                 )}
                               </span>
                             )}
@@ -746,7 +768,23 @@ const Main = (props: Props) => {
                           <div ref={statusListRef} className=' w-[180px]  absolute z-20 right-4  bg-background-paper  flex flex-col  border '>
                             {customermanagementTableType === 'All Customers' && (
                               <>
-                                {userRole === 'maker' && (
+                                {userData.user?.tenant_admin && userRole === 'maker' && (
+                                  <>
+                                    {' '}
+                                    {adminCustomersDropdownStatusOptions?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'maker' && !userData.user?.tenant_admin && (
                                   <>
                                     {customersDropdownStatusOptionsMaker?.map((status, index) => {
                                       return (
@@ -780,7 +818,22 @@ const Main = (props: Props) => {
                             )}
                             {customermanagementTableType === 'Requests' && (
                               <>
-                                {userRole === 'maker' && (
+                                {userRole === 'maker' && userData.user?.tenant_admin && (
+                                  <>
+                                    {adminRequestsDropdownStatusOptions?.map((status, index) => {
+                                      return (
+                                        <div
+                                          key={index}
+                                          className='hover:bg-lists-background cursor-pointer px-3 py-2 text-[#252C32]'
+                                          onClick={statusSelectForm.bind(null, status)}
+                                        >
+                                          {status}
+                                        </div>
+                                      )
+                                    })}
+                                  </>
+                                )}
+                                {userRole === 'maker' && !userData.user?.tenant_admin && (
                                   <>
                                     {requestsDropdownStatusOptionsMaker?.map((status, index) => {
                                       return (
