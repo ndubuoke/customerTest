@@ -4,7 +4,7 @@ import { formTypeSwitch as formTypeSwitchImage } from 'Assets/svgs'
 import { getFormAction, getFormBehaviourAction } from 'Redux/actions/FormManagement.actions'
 import { capitalizeFirstLetter } from 'Utilities/capitalizeFirstLetter'
 import { useDispatch } from 'react-redux'
-import { formStruture } from 'Components/Form/formStructure'
+import { formStruture, getFormStructure } from 'Components/Form/formStructure'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import SwitchFormModal from './SwitchFormModal'
@@ -38,7 +38,7 @@ const SwitchToFormType = ({
 
   const handleSetFormType = () => {
     const formMode = mode === 'accelerated' ? 'legacy' : 'accelerated'
-    setFillingFormState(formStruture)
+    setFillingFormState(getFormStructure())
     sessionStorage.removeItem(STORAGE_NAMES.FILLING_FORM_IN_STORAGE)
     sessionStorage.removeItem(STORAGE_NAMES.PUBLISHED_FORM_IN_STORAGE)
     setPublishedFormState(null)

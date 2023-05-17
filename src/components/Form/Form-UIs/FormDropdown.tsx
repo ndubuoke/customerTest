@@ -117,6 +117,7 @@ const FormDropdown = ({
     ? getProperty(item.formControlProperties, 'Specify URL', 'defaultState').text
     : ''
 
+  const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
   // const defaultSelection = getProperty(item.formControlProperties, 'Default selection', 'value').text || ''
 
   const _optionsField =
@@ -835,6 +836,9 @@ const FormDropdown = ({
               // } else {
               //   setShowLists((prev) => !prev)
               // }
+              if (isDisabled) {
+                return
+              }
               setShowLists((prev) => !prev)
               if (fieldLabel.toLowerCase().includes('state')) {
                 checkIfItemIsState(item)

@@ -25,7 +25,7 @@ import { API } from 'Utilities/api'
 import ExtractInfoModal from 'Components/Shareables/ExtractInfoModal'
 import { validateCustomerResponseType } from 'Redux/reducers/ValidateCustomer.reducer'
 import { ReducersType } from 'Redux/store'
-import { formStruture } from 'Components/Form/formStructure'
+import { getFormStructure } from 'Components/Form/formStructure'
 import { FormStructureType } from 'Components/types/FormStructure.types'
 import { STORAGE_NAMES } from 'Utilities/browserStorages'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
@@ -81,9 +81,10 @@ const CustomerCreation = memo(({ customerType }: Props) => {
   // changing state to identification type and file upload(formCreationstarted)
   const [formCreationStarted, setFormCreationStarted] = useState<boolean>(false)
 
-  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(() => JSON.parse(JSON.stringify(formStruture)))
+  // const [fillingFormState, setFillingFormState] = useState<FormStructureType>(() => JSON.parse(JSON.stringify(formStruture)))
+  const [fillingFormState, setFillingFormState] = useState<FormStructureType>(() => getFormStructure())
   const [newFillingFormState, setNewFillingFormState] = useState<any>(null)
-  console.log('formStruture', formStruture)
+  // console.log('formStruture', formStruture)
   const [publishedFormState, setPublishedFormState] = useState<ResponseType>(null)
   const [backupForSwitchFormState, setBackupForSwitchFormState] = useState<{}>(null)
   const [showGraceModal, setShowGraceModal] = useState(false)
@@ -162,7 +163,7 @@ const CustomerCreation = memo(({ customerType }: Props) => {
 
     if (clearFormStatus) {
       setBackupForSwitchFormState(null)
-      setFillingFormState(formStruture)
+      setFillingFormState(getFormStructure())
 
       setPublishedFormState(null)
       sessionStorage.removeItem(STORAGE_NAMES.STOP_FORM_FILLING_STATUS)

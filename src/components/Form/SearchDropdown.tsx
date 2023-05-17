@@ -5,6 +5,7 @@ import { useListenForOutsideClicks } from './../../hooks/useListenForOutsideClic
 import { FormControlType, FormControlTypeWithSection } from './Types'
 
 import { caret } from 'Assets/svgs'
+import { formGetProperty } from './Form-UIs/formGetProperty'
 
 type Props = {
   selected?: string
@@ -30,6 +31,8 @@ export const SearchDropdown = memo(
   ({ selected, placeholder, options, checkIfItemIsState, checkIfItemIsCity, item, handleChange, name, loadingOptions, noOptionsMessage }: Props) => {
     const [searchInput, setSearchInput] = useState('')
     const [isOpen, setIsOpen] = useState(false)
+
+    const isDisabled = formGetProperty(item.formControlProperties, 'Disable') === 'true' ? true : false
 
     const clearSelected = () => {
       handleChange('')
@@ -93,6 +96,7 @@ export const SearchDropdown = memo(
               placeholder={placeholder}
               role='search'
               className='w-full text-sm text-text-secondary font-normal light-placeholder cursor-text'
+              disabled={isDisabled}
             />
           </div>
           <img src={caret} width={15} height={10} className='cursor-pointer' onClick={openDropdown} />
@@ -108,6 +112,7 @@ export const SearchDropdown = memo(
           name={name}
           emptyOptionsMessage={loadingOptions ? 'Loading' : noOptionsMessage || 'No search results'}
           isSearchDropdown={true}
+          disabled={isDisabled}
         />
       </div>
     )
