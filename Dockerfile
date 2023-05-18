@@ -1,15 +1,15 @@
 # Stage 1 - Build the application
-FROM node:14-alpine AS build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
 COPY package*.json ./
 
-RUN npm install
+RUN npx tailwindcss -i ./src/styles/start.css -o ./src/styles/final.css
+RUN npm install --legacy-peer-deps
+RUN npm run build:dev
 
 COPY . .
-
-RUN npm run build
 
 
 # Stage 2 - Serve the application using Nginx

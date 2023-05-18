@@ -1,89 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-input[type='search']::-ms-clear {
-  display: none;
-  width: 0;
-  height: 0;
-}
 
-input[type='search']::-ms-reveal {
-  display: none;
-  width: 0;
-  height: 0;
-}
-
-/* clears the 'X' from Chrome */
-
-input[type='search']::-webkit-search-decoration,
-input[type='search']::-webkit-search-cancel-button,
-input[type='search']::-webkit-search-results-button,
-input[type='search']::-webkit-search-results-decoration {
-  display: none;
-}
-
-body {
-  scroll-behavior: smooth;
-  /* color: #db353905 */
-}
-
-input {
-  outline: none;
-}
-
-input {
-  outline: none;
-}
-
-.disabled {
-  pointer-events: none;
-}
-
-/* 
-html {
+/* html {
   font-size: 10px;
 } */
 
-.modal-holder {
-  position: fixed;
-  left: 0;
-  top: 0;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  background: rgba(255, 255, 255, 0.782);
-  backdrop-filter: blur(0.1875rem);
-  min-height: 100vh;
-  width: 100%;
-  z-index: 99999999;
+* {
+  transition: all 0.4s ease;
+  box-sizing: border-box;
+  /* transition: all .5s ease; */
+  outline: none;
+  /* border: none; */
 }
-
-.cus-m-close {
-  position: absolute;
-  right: 2.5rem;
-  top: 2.5rem;
-  cursor: pointer;
+body {
+  scroll-behavior: smooth;
 }
 
 @layer base {
   h1 {
     @apply font-bold text-5xl;
   }
+
   h2 {
     @apply font-bold text-3xl;
   }
+
   h3 {
     @apply font-semibold text-2xl;
   }
+
   h4 {
     @apply font-semibold text-xl;
   }
+
   h5 {
     @apply font-semibold text-lg;
   }
+
   h6 {
     @apply font-semibold text-lg;
   }
+
   img {
     @apply max-w-fit;
   }
@@ -93,8 +51,26 @@ html {
   .subtitle1 {
     @apply font-semibold text-base;
   }
+
   .subtitle2 {
     @apply font-semibold text-sm;
+  }
+
+  /* custom checkbox input */
+
+  /* Show the checkmark when checked */
+  input:checked ~ .checkbox:after {
+    @apply block left-[1px] top-[-3px] w-[5px] h-[10px] border-r-[1px] border-b-[1px] border-solid border-white relative;
+    content: '';
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+
+  /* color checkbox when checked */
+  input:checked ~ div.checkbox {
+    /* @apply bg-primay-main border-none; */
+    @apply bg-primary-main border-none;
   }
 }
 
@@ -106,16 +82,15 @@ html {
 } */
 
 /* Scroll bar custom styles */
-
 ::-webkit-scrollbar {
-  width: 0.5625rem;
+  width: 0.3125rem;
   height: 0.25rem;
 }
 
-@media (max-width: 30rem) {
+@media (max-width: 480px) {
   ::-webkit-scrollbar {
     width: 0;
-    height: 0.25rem;
+    height: 4px;
   }
 }
 
@@ -126,7 +101,7 @@ html {
 
 ::-webkit-scrollbar-thumb {
   background: #e48b8b;
-  border-radius: 0.625rem;
+  border-radius: 10px;
 }
 
 /* ::-webkit-scrollbar-thumb:hover {
@@ -134,18 +109,17 @@ html {
 } */
 
 *:hover::-webkit-scrollbar {
-  /* width: 6.25rem; */
-  height: 0.5rem;
+  /* width: 100px; */
+  height: 8px;
 }
 
 /* hide scroll bar */
-
 .hide-scrollbar::-webkit-scrollbar {
   width: 0;
   height: 0;
 }
 
-@media (max-width: 30rem) {
+@media (max-width: 480px) {
   .hide-scrollbar::-webkit-scrollbar {
     width: 0;
     height: 0;
@@ -162,71 +136,89 @@ html {
   border-radius: 0;
 }
 
-/* .hide-scrollbar:hover::-webkit-scrollbar {
+.hide-scrollbar:hover::-webkit-scrollbar {
   height: 0;
-} */
+}
 
 /* Handle collapsing of section... This is to reduce the amount useState being used */
-
 .collapsed-section {
-  height: 2.5rem;
+  height: 40px;
 }
 
 .collapsed-section > * {
   height: 0;
   opacity: 0;
 }
-
 /* End collapsing of section */
 
 /* Handle show plus button in form control */
-
 .parent-button:hover .show-button {
   display: inline-block;
 }
 
-/* Style Datalist */
-
-.datalist-input {
-  color: #363636 !important;
+/* react datepicker styles */
+.react-datepicker__day--in-range,
+.react-datepicker__day--selected {
+  @apply bg-[#F9E5E5];
 }
 
-.datalist-input .datalist-active-item {
-  background: #ebe9e9 !important;
-  color: #363636 !important;
+.react-datepicker__day {
+  @apply text-sm font-normal leading-6 tracking-[-0.5px] text-text-tertiary m-0 px-[9px] py-[4px] rounded-none w-[36px] h-[32px] inline-flex items-center font-inter justify-center;
 }
 
-.datalist-input .default-datalist-items {
-  max-height: 11.875rem;
-  overflow-y: scroll;
+.react-datepicker__day:hover,
+.react-datepicker__day--in-range:hover {
+  @apply bg-[#F9E5E5] rounded-none;
 }
 
-.stub {
-  max-height: 300px !important;
-  min-height: 250px !important;
+.react-datepicker__day--weekend {
+  @apply text-primary-main;
 }
 
-.cursor-not-allowed {
-  background-color: #fff;
-  border: 1px solid #d8dae5;
-  color: #667085;
-  cursor: not-allowed;
-}
-.previous-btn {
-  background-color: #fff;
-  border: 1px solid #d8dae5;
-  color: #667085;
+.react-datepicker__header {
+  @apply bg-transparent border-none py-0;
 }
 
-/* End Style datalist */
-
-/* apex chart */
-
-/* .apexcharts-pie-area apexcharts-donut-slice-0 {
-  background-color: red !important;
-  stroke-width: 24px !important;
+.react-datepicker__day-name {
+  @apply text-common-title text-[10px] leading-[16px] font-normal font-inter text-center  tracking-[-0.5px] w-[36px]  m-0 px-[9px] py-[4px];
 }
 
-.apexcharts-series apexcharts-pie-series {
-  stroke-width: 24px !important;
-} */
+.react-datepicker {
+  @apply w-full;
+}
+
+.react-datepicker__day-names,
+.react-datepicker__week {
+  @apply flex justify-between;
+}
+
+.react-datepicker__day--keyboard-selected {
+  @apply bg-transparent;
+}
+
+/*stephen main shadow :)*/
+
+.shadow-st-main {
+  box-shadow: 0px 0px 4px rgba(0, 0, 0, 0.25);
+}
+
+/***toastify*****/
+.Toastify .Toastify__toast-body {
+  @apply items-start p-0;
+}
+
+.Toastify .Toastify__toast-icon {
+  @apply w-8;
+}
+
+.Toastify .Toastify__toast-container {
+  @apply w-[398px];
+}
+
+.Toastify .Toastify__toast {
+  @apply px-4 pt-5 pb-7 rounded-8;
+}
+
+.Toastify .Toastify__progress-bar--error {
+  @apply bg-primary-main;
+}
