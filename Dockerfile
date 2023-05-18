@@ -9,6 +9,8 @@ COPY . .
 
 RUN npm install --legacy-peer-deps
 
+CMD ["npx", "tailwindcss", "-i", "./src/styles/start.css", "-o", "./src/styles/final.css"]
+
 # Stage 2 - Serve the application using Nginx
 
 FROM nginx:1.21-alpine
@@ -21,4 +23,4 @@ RUN npm run build:dev
 
 EXPOSE 80
 
-CMD ["npx", "tailwindcss", "-i", "./src/styles/start.css", "-o", "./src/styles/final.css", "nginx", "-g", "daemon off;"]
+CMD ["nginx", "-g", "daemon off;"]
