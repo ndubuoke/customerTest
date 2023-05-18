@@ -11,10 +11,12 @@ COPY . .
 
 RUN npx tailwindcss -i ./src/styles/start.css -o ./src/styles/final.css
 
+RUN npm run build:dev
+
 # Stage 2 - Serve the application using Nginx
 FROM nginx:1.21-alpine
 
-COPY --from=build /app/build /usr/share/nginx/html
+COPY --from=build /app/dist /usr/share/nginx/html
 
 EXPOSE 80
 
