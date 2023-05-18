@@ -5,11 +5,11 @@ WORKDIR /app
 
 COPY package*.json ./
 
-COPY . .
-
 RUN npm install --legacy-peer-deps
 
 CMD ["npx", "tailwindcss", "-i", "./src/styles/start.css", "-o", "./src/styles/final.css"]
+
+COPY . .
 
 # Stage 2 - Serve the application using Nginx
 
