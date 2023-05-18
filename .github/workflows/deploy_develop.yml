@@ -1,30 +1,26 @@
-name: Deploy Development
+name: Build Docker Image
 
 on:
   push:
-    branches: [ dev ]
+    branches:
+      - main
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - run: npm install --legacy-peer-deps
-      - run: npx tailwindcss -i ./src/styles/start.css -o ./src/styles/final.css      
-      - run: npm run build:dev
-        env:
-          PRODUCTION_DOMAIN: ${{ secrets.DEV_DOMAIN }}
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-      - uses: shinyinc/action-aws-cli@v1.2
-      - run: aws s3 sync dist s3://${{ secrets.AWS_S3_DEV_BUCKET_NAME }}/customer-management
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
+      - name: Build Docker image
+        run: docker build -t customer-test:latest .
 
-      - run: aws cloudfront create-invalidation --distribution-id ${{ secrets.AWS_DEV_DISTRIBUTION_ID }} --paths "/*"
-        env:
-          AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-          AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          AWS_EC2_METADATA_DISABLED: true
+      # - name: Log into Docker Hub
+      #   uses: docker/login-action@v1
+      #   with:
+      #     username: ${{ secrets.DOCKER_USERNAME }}
+      #     password: ${{ secrets.DOCKER_PASSWORD }}
+
+      # - name: Push Docker image
+      #   run: docker push your-image-name:latest
